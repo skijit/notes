@@ -1,0 +1,1 @@
+[online book here](http://music.columbia.edu/cmc/MusicAndComputers/)
