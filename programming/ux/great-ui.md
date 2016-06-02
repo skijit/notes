@@ -53,9 +53,10 @@
             - This is more useful for creating a good pallete of colors
             - General technique is to keep the Hue at one level and then to adjust the saturation and lightness.
             - **TODO**: Look more into this...
-            - kuler.adobe.com :
-                - good tool to create a color pallete
-                - **TODO**: there's also some material design color palette...
+            - Two good color-pallete-selection tools:
+                - [kuler.adobe.com](https://color.adobe.com/create/color-wheel/)
+                - [material pallete](http://www.materialpalette.com/) (this is part of material design)
+                - good tool to create a color pallete                
             - Use saturation like contrast: more important info should have a higher saturation
         - Work with a very limited pallete
     - Motion
@@ -66,13 +67,13 @@
     - Proximity
         - Don't force the user to make lots of visual round trips to find out what corresponds with what?
 
-    - Clarity: Adjust these to match information relevance...
-        - Size
-        - Contrast
-        - Saturation
-        - Opacity
-        - Example:
-            - make the labels more low-contrast than the actual value
-            - make keywords bold
-            
+- Clarity: Adjust these to match information relevance...
+    - Size
+    - Contrast
+    - Saturation
+    - Opacity
+    - Example:
+        - make the labels more low-contrast than the actual value
+        - make keywords bold
+
 
