@@ -1,4 +1,6 @@
-#CSS Pre-Processors Are Awesome
+CSS Pre-Processors Are Awesome
+============
+Notes from a talk at DevConnections Spring 2016, "CSS Pre-Processors Are Awesome"
 
 - Challenges
     - Inherent weaknesses off CSS
@@ -25,14 +27,14 @@ h1 {
     - Support global variables
     - Be DRY
     - Simplify complicated style hierarchies
-    - Easier maintainability
+    - Other general improvements to maintainability
     
 - Methodology:
     1. Write Preprocess syntax
     2. Compile to plain old CSS
-    3. Deploy to a browser
-        - Dynamic (for debugging less than production)
-        - ... ?
+        - Server Side On-Demand: Better for Debugging/Test environment
+        - Server Side AOT / Precompile: Best for Production
+        - Client-Side: Not used very often, so best for Debugging, but since it requires javascript and print-views don't execute javascript, you can have problems with this.
         
 - Technologies
     - Sass
@@ -53,8 +55,10 @@ h1 {
     - Does not prevent you from writing bad CSS
 
 - Some "playground" sites:
-    - lesscssismore.com
-    - sassmeister.com
+    - [lesscssismore.com](http://lesscssismore.com/)
+    - [sassmeister.com](http://www.sassmeister.com/)
+
+## Language Contructs
 
 - Variables
     - can be defined once
@@ -80,13 +84,15 @@ h1 {
 - Operations
     - Math operations can be applied
         - e.g. for setting gradients
-        - + , /, ...
+        - \+ , /, ...
     - Remember though that these are **not runtime calculated**
 
 - Mix-ins
     - Define a reusable collection of rules that can be used anywhere in the stylesheet
+    - So in many cases, you might only need to get the mix-ins, set the standard variables and apply those classes.
+    - Bootstrap's CSS is essentially a variety of LESS mixins
     
-    - (these is less...)
+    - (less...)
     
     ```(less)
     .border-radius(@radius) {
@@ -145,25 +151,18 @@ h1 {
     - Gives you some css namespacing
     - Simplifies readability
     
-```(less)
-#header {
+    ```(less)
+        #header {
+            
+            color: black;
+            
+            // ...
+            
+            .logo {
+                       
+            }
+        }
+    ```
 
-    color: black;
-    
-    // ...
-    
-    .logo {
-        // ...       
-    }
-
-    
-}
-``` 
-    
 - There's lots more syntactical sugar... check the docs
 
-
-    
-    
-
-    

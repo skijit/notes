@@ -1,4 +1,4 @@
-#C#6 (and a bit of 7)
+# C# 6 (and a bit of 7)
 
 - **Auto-Property Initializer**
 
@@ -11,7 +11,7 @@
     }
     ```
 
-- **You can have a read-only property that is set once ONLY by the constructor**
+- **You can have a getter-only auto-property that is set once ONLY by the constructor**
 
     ```(C#)
     public class Customer
@@ -89,8 +89,8 @@
     ```
     
 - **Expression Body**
-    - You can do this with properties (this example), indexers, operators, etc.
-    
+    - You can use lambda syntax (aka expression syntax) with get-only properties (this example), methods, indexers, operators, etc.
+
     ```(C#)
     public string FullName() => FirstName + " " + LastName;
     ```
@@ -120,8 +120,10 @@
 - **Nameof Expressions**
     - Gives you access to the program element (class name, method name, parameter name, etc.).
     - This might be useful when clarifying the name of an element that has a problem
-        - Like when you catch an exception and you want to output the name of the offending element.
-        - So you don't depend on some "magic string".
+        - Like when you catch an exception and you want to output the name of the offending element (such as the property name).
+        - So you don't depend on some "magic string", like "Prop1", because maybe you've changed the name of the offending property
+    - Also useful when getting an enum's ToString() value.
+    - Basically it's a reflection-shortcut.
 
     ```(C#)
     void ThrowArgumentNullExceptionUsingNameOf(string param1)
