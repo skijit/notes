@@ -1,4 +1,5 @@
-#Gulp
+Gulp
+===============
 
 - Basics
     - It is a command line tool that provides task sequencing functionality.
