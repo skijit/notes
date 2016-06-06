@@ -1,20 +1,15 @@
 
 Visual Studio 2015
 ==================
-
 These are some notes on new or useful features in Visual Studio 2015 (or old features I wasn't aware of)
 
--------
-
-Node Tools
---------------
+## Node Tools
 - Video [here](https://channel9.msdn.com/Events/Visual-Studio/Visual-Studio-2015-Final-Release-Event/Nodejs-Tools-for-Visual-Studio)
 - Install the Node Tools Extension and when that finishes, you'll be prompted to install node.js and other required packages.
 > The **npm** appears most useful for managing packages related to node.js projects.  I thought **npm** would be also used to manage other, non-node.js packages/dependencies, but I haven't see that yet.
 
-IntelliTrace
--------------
-
+## IntelliTrace
+#### Test
 - Video [here](https://channel9.msdn.com/Events/Visual-Studio/Visual-Studio-2015-Final-Release-Event/IntelliTrace-in-Visual-Studio-2015-DEMO-ONLY)
 - Intellitrace is a recorder for your debugger
 	- It monitors for 'interesting' user or system events
@@ -30,8 +25,7 @@ IntelliTrace
 - You can do this on remote/prod machines in addition to locally
 > The big benefit appears to be that you get some breakpoint-like functionality by default (along with associated data).
 
-Typescript and Angular 2 Integration
------------------------------
+## Typescript and Angular 2 Integration
 - Video [here](https://channel9.msdn.com/Events/Visual-Studio/Visual-Studio-2015-Final-Release-Event/TypeScript-and-Angular-2-in-Visual-Studio-2015)
 - 3 features in Typescript which make it work well with modern frameworks/libraries
 	- Classes
@@ -52,10 +46,7 @@ Typescript and Angular 2 Integration
 			```<script>System.import("app");</script>```
 			<i class="icon-help"></i> Apparently this is the system.js module loader in action.  I'm not clear on whether that's provided via angular, typescript, or something else.
 
-BreakPoint Configuration
------------------------------------
-
-
+## BreakPoint Configuration
 - Video [here](https://channel9.msdn.com/Events/Visual-Studio/Visual-Studio-2015-Final-Release-Event/Breakpoint-Configuration-Experience-in-Visual-Studio-2015)
 - Toolbar appears when setting breakpoints, which lets you set conditions or actions.  (Appears in the 'Peek' view)
 	- Condition Types:
@@ -72,10 +63,8 @@ BreakPoint Configuration
 	- Immediate Window:
 		- Lambda Expressions can now be evaluated!  (also in the watch windows)
 	- When you hit a breakpoint, you can use 'Edit and Continue' to make debug-time changes active.
-	
-	Exception Settings Changes
-	-----------------------
 
+## Exception Settings Changes
 - Video [here](https://channel9.msdn.com/Events/Visual-Studio/Visual-Studio-2015-Final-Release-Event/Revamped-Exception-Settings-Experience-in-Visual-Studio-2015)
 - Problem is that you're handling an exception but you're not sure where.  You don't want to put a breakpoint in all catch clauses, nor do you want to comment out try/catch clauses.
 - Debug-> Windows -> Exception Settings: 
@@ -86,10 +75,10 @@ BreakPoint Configuration
 	- So you can re-do something if you want
 	- This is especially useful if you want to change your code inline, then step back to re-execute something which had previously failed.
 
-#Visual Studio 2015: Essentials to the Power-User
+# Visual Studio 2015: Essentials to the Power-User
 (from series on Pluralsight)
 
-##Video 1: Getting Started
+## Video 1: Getting Started
 - The internal organization of a native vs managed exe or dll is different (as expected)
 - Each project in a solution is an independently buildable thing
 - Each project can only have 1 language
@@ -109,15 +98,13 @@ BreakPoint Configuration
 	- Simplifies signing into Visual studio ONline (TFS online)
 	- Registers Licenses for your MSDN subscription
 
-##Video 2: Projects and Solutions
-
+## Video 2: Projects and Solutions
 - An empty solution is created (by default) when you create a project
 - You can always create a blank solution and add projects to it later
 - There is a setting (under options) that will hide the solution node in solution explorer
 - By default, projects under the same solution won't know about each other.  You'll need to add references to them.
 
-##Video 3: Namespaces, Folders, Files
-
+## Video 3: Namespaces, Folders, Files
 - Solution folder
 	- Project folder
 		- bin (anything you built or assemblies you referenced)
@@ -131,8 +118,7 @@ BreakPoint Configuration
 	- has item groups (ie the files included in the project)
 - In application tab or project properties, you can change the name of the assembly that's compiled
 
-##Video 4: Understanding and Personalizing the UI Components
-
+## Video 4: Understanding and Personalizing the UI Components
 - Start Page
 	- Recent solutions
 		- If you right-click on a recent solution:
@@ -154,8 +140,7 @@ BreakPoint Configuration
 	- Zoom out: ctrl + shift + comma
 	- Zoom in:  ctrl + shift + period
 
-##Video 5: Exploring Relationships in your code
-
+## Video 5: Exploring Relationships in your code
 - Class view
 	- lets you look at your project's classes' hierarchy, members, etc
 	- right-click on the lower surface lets you filter the types of members it shows you
@@ -189,8 +174,7 @@ BreakPoint Configuration
 		- And more...
 	-You can also use a scrollbar on map mode, which will show the high level view (like sublime text)
 
-##Video 6:   Using Search and Find Effectively
-
+## Video 6:   Using Search and Find Effectively
 - To go to next search result: F3
 - To go to previous search result: Ctrl+F3
 - For normal find (ctrl+f), you can search for whole word or toggle case sensitivity
@@ -199,8 +183,7 @@ BreakPoint Configuration
 	- it only searches the content that is typically shown in solution explorer
 	- 
 
-##Video 7: Letting Visual Studio Help You
-
+## Video 7: Letting Visual Studio Help You
 - Letting VS fix your errors for you:
 	- The lightbulb in the right margin indicates that VS sees an error and it has an idea of what should be done.  Each possibility is a 'Quick Action'.  To expand the list of Quick Actions, hover over the lightbulb or Ctrl+period
 	- Example: If you reference a method that doesn't exist, a quick action will show up that asks whether you want VS to create it automatically (w/ a not implemented exception).
@@ -222,7 +205,7 @@ BreakPoint Configuration
 	- Help-> Code Samples are a good way of building starter projects.
 	- The quick launch (Ctrl+Q) bar in the upper right hand corner lets you search the menus, options, commands available in VS... and it will let you select/execute them.
 
-##Video 8: Basic Debugging Features
+## Video 8: Basic Debugging Features
 - Build Configurations
 	- Default configurations are Debug and Release
 	- Project Properties ->  [Choose Build Configuration in the upper part of the menu] -> Choose any tab like Debug or Build, etc. -> You can see all the build configuration settings available, and what their values are.
@@ -231,7 +214,7 @@ BreakPoint Configuration
 				code
 			#endif
 
-##Video 9: Additional Debugging Features
+## Video 9: Additional Debugging Features
 - You can pin a data tip (that's the window that appears when you hover over a variable at runtime
 - If you want to momentarily hide the data tip window (ie so you can see code behind it), press Ctrl
 - Autos window shows you variables involved in previous and next lines.
@@ -259,7 +242,7 @@ BreakPoint Configuration
 		- Really good when you need to back up or you want to skip some action
 - 'Run to Cursor' is useful (Ctrl+F10)
 
-##Video 11: Useful Extensions
+## Video 11: Useful Extensions
 - VS Extensions are plugins to extend / improve VS
 	- www.visualstudiogallery.com	
 	- add keystrokes, windows, etc.
@@ -286,7 +269,7 @@ BreakPoint Configuration
 	- Disable the extension if you want
 - If you installed an extension as exe or msi, you would just need to uninstall
 
-##Video 12: Intellitrace and Code map
+## Video 12: Intellitrace and Code map
 - Code Map
 	- Code Map button should appear in the debug toolbar while debugging
 	- Visually shows you who calls what, and where the new breakpoints
@@ -306,7 +289,7 @@ BreakPoint Configuration
 
 - **TODO: Tips for Expanding / Lambdas During Debugging**
 
-##Useful Tool Tips (Recap)
+## Useful Tool Tips (Recap)
 - View / Outline / Hide
 	- Zoom in: **Ctrl + shift + period**
 	- Zoom out: **Ctrl + shift + comma**
@@ -330,14 +313,3 @@ BreakPoint Configuration
 	- Switch: **switch + tab + tab**
 	
 	
-
-
-	
-
-	
-
-
-
-
-
-
