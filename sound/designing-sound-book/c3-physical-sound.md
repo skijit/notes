@@ -1,21 +1,22 @@
-#Physical Sound#
+Physical Sound
+===================
 
-##Elementary Physics##
+## Elementary Physics
 
-###Energy (E):###
+### Energy (E):
  * There are various kinds of Energy
 	* Kinetic, Potential, Heat, etc.
  * Can be contained by an object, or a property of an object
  * __Unit__ = Joule (J)
 	* Can only be measured by observing changes in Energy 
 
-###Force (F):###
+### Force (F):
 * A force is the attemp of energy to move
 * __Unit__ = Newtons (N)
 * Just because a force is exerted on an object doesn't mean any Energy changes.
 	* A dam in _Equilibrium_: bc although the water exerts a force, the dam holds.
 
-###Pressure (_p_):###
+### Pressure (_p_):
 * A force acting on a surface
 * __Unit__ = Pascals (Pa)
 	* 1 Pa = 1 N/m<sup>2</sup>
@@ -23,19 +24,19 @@
 * At sea level on earth, there is an ambient pressure of 101325 Pa
 	* Acoustic pressure is usually measured relative to this value, rather than dealing in absolutes.
 
-###Work (W):###
+### Work (W):
 * The ability to cause a change in Energy
 * __Unit__ = Joules (J)
 * Energy might conversely be thought of as the ability to do work
 * $ W = \Delta E $
 
-###Power:### 
+### Power: 
 * The rate at which work is done
 * __Unit__ = Wass (W)
 * 1 W = 1 J / sec
 	* A perfect 100 W amplifier converts 100 J of electrical energy to sound each second.
 
-###Laws of Thermodynamics and Motion:###
+### Laws of Thermodynamics and Motion:
 * Thermodynamics:
 	* Second Law (Entropy)
 		* Energy is always trying to go from a high state to a low one.
@@ -43,20 +44,20 @@
 	* Third Law (Action / Reaction)
 		* If object A exerts a force on object B, object B will exert an equal and opposite reaction on A.
 		* When the forces are balanced, we call it _equilibrium_
-		* **TODO**: VERIFY THIS
+		* **TODO**: Verify that newton's third law of thermodynamics is actually "action/reaction"
 * Motion:
 	* Second Law
 		* F = _ma_
-	* **TODO**
+	* **TODO: More details on newton's second law of motion**
 
-###Matter and Mass:###
+### Matter and Mass: 
 * Matter is a condensed form of Energy
 * Has mass (M) measured in kg and has weight while in a gravitational field
 * Most matter exist as compounds or molecules: groups of different atoms
 	* Exception might be some monatomic crystals
 * You can visualize sound propagating through matter as the result of collisions between small points of mass.
 
-###Force, Distance, and Accelleration###
+### Force, Distance, and Accelleration
 * W = F x _d_ , where _d_ is distance
 * Velocity (v) is the rate of change of distance
 	* __Unit__ = m/s
@@ -67,7 +68,7 @@
 	* Explain how simple hormonic motion occurs
 * 1 N will accelerate a 1 kg object at 1ms<sup>-2</sup>
 
-###Sound-Related Terms###
+### Sound-Related Terms 
 * We measure displacement in m, relative to an objects _rest point_ or _equilibrium position_, where it is undisturbed by any vibrations.
 * _Degrees of Freedom_ refer to how many ways an object can move.
 	* Translational Movement:
@@ -82,7 +83,7 @@
 * Excitation Point: where power is transmitted to an object	
 	* Characteristics of both the Exciter and the Excited contribute to a sound
 
-##Materials##
+## Materials
 * The state or phase of matter that an object is in reflects the type of bonds that are active.
 * There are lots of different kinds of bonds, with different strengths
 * Each molecule is held in space by a balance of electrostatic bonding forces that mutually attract and repel it from its neighbors. 
@@ -97,7 +98,7 @@
 	* Heterogenous materials (e.g. wood) less pure tones
 	* glass and ceramics are somewhere between metals and wood
 
-##Waves##
+## Waves
 * Waves are a pattern of change that propagates through a medium
 	* Note that the velocity of the medium is separate from velocity of the wave.
 		* e.g. water in a pool does not move at the speed of the wave.
@@ -131,7 +132,7 @@
 	* 20mm for highest frequencies
 	* 17m for lowest frequencies
 
-##Boundaries##
+## Boundaries
 * A __boundary__ occurs when a wave propagates from one material to a different kind.
 	* The resulting __boundary behavior__ depends largely on the ratio of the elasticity and density of the materials involved, called a __boundary modulus__.
 	* The resulting behavior may include:
@@ -151,7 +152,7 @@
 * As sounds decay, their __Entropy__ increases, until ultimately, the energy is too spread out and random to do work.
 
 
-### <span id="standingWaves">Standing Waves and Modes</span>###
+### Standing Waves and Modes
 
 Natural Frequency
 :   The frequency that an object vibrates at when struck.  All objects have one or more natural frequencies.
@@ -176,7 +177,7 @@ Standing Wave
 Modes
 : This is just an alternate way of classifying the different standing wave patterns, like harmonics.  Each mode has a particular number of nodes.
 
-##Analogues##
+## Analogues 
   
  
 

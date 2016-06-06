@@ -1,6 +1,6 @@
 Colors: Stuff I Didn't Realize 
 ===========
 
-**TODO**
+**TODO: begin notes**
 
 **Especially HSL**

@@ -82,7 +82,7 @@ General nodejs Notes
     
 ## LibUV
 
-- **TODO** : don't really understand this
+- **TODO: give a little more information on LibUV and it's relationship to nodejs** : 
     
 ## Shelljs
 

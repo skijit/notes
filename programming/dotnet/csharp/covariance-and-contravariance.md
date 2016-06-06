@@ -1,4 +1,4 @@
 Covariance and Contravariance in C#
 ===========
 
-**TODO**
+**TODO**: begin this page of notes

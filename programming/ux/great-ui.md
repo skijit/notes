@@ -52,7 +52,6 @@
         - Use HSL instead of RGB
             - This is more useful for creating a good pallete of colors
             - General technique is to keep the Hue at one level and then to adjust the saturation and lightness.
-            - **TODO**: Look more into this...
             - Two good color-pallete-selection tools:
                 - [kuler.adobe.com](https://color.adobe.com/create/color-wheel/)
                 - [material pallete](http://www.materialpalette.com/) (this is part of material design)

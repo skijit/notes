@@ -1,3 +1,4 @@
-TODO
+Spatialization
+===========
 
-Notes on spatialization techniques
+TODO: Begin notes on spatialization techniques / categories

@@ -304,8 +304,7 @@ BreakPoint Configuration
 		- Debug the application straight through, generating trace files
 		- View the Historical Events (in Diagnotist tools)
 
-- TODO
-	- Tips for Expanding / Lambdas During Debugging
+- **TODO: Tips for Expanding / Lambdas During Debugging**
 
 ##Useful Tool Tips (Recap)
 - View / Outline / Hide

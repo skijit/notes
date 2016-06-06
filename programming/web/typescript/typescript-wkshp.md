@@ -235,7 +235,6 @@ function setDetails(make = 'None', model = 'None') { ... }```
     
 ### Lambdas and Using **this**
 - **this** can often change depending on the context of the caller
-- **TODO**: elaborate on this...
 - See [this](https://basarat.gitbooks.io/typescript/content/docs/arrow-functions.html) ref
 - Not sure if this is a feature of Typescript or ES6, though...
 - you don't have to do self = this, then reference 'self' inside a nested function.

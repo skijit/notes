@@ -52,7 +52,7 @@ Express
         app.engine('handlebars', handlebars.engine);
         app.set('view engine', 'handlebars');
         
-        //TODO: More Imports
+        //More Imports would go here...
         
         app.set('port', process.env.PORT || 3000);
         
@@ -155,6 +155,6 @@ Express
         - Basically, use() responds to any HTTP verb, but get() only responsd to GET.
         - Also use() has a variety of middleware applications, such as designating a subapplication, etc.
     - [Documentation](http://expressjs.com/en/guide/using-middleware.html) Notes
-        - **TODO**
+        - **TODO: Expand on Middleware documentation notes**
 
 

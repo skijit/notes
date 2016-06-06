@@ -6,7 +6,8 @@ A Moogfest 2016 workshop by [Dave and Gabe](http://www.daveandgabe.care/)
 - Workflow:
     - Interface (midi) -> Live + Max4L -> Jack -> Max (standalone) + SPAT -> Multichannel
     - One issue with this approach is using Ableton -> Jack -> Max all on one computer.
-        - A better approach would be to find some streaming audio approach and offload the work to another machine. **TODO**
+        - A better approach would be to find some streaming audio approach and offload the work to another machine. 
+        - **TODO: find a good way to stream audio between machines**
 - SPAT
     - Developed by IRCAM
     - Supports lots of panning algorithms

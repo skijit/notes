@@ -1,6 +1,9 @@
-#Exponents#
+Exponents
+=====================
 
-##Correcting Some Misconceptions##
+**TODO: Update my mathjax delimeters**
+
+## Correcting Some Misconceptions
 
 * Consider the following example:
 ![enter image description here](https://raw.githubusercontent.com/skijit/Notes/master/Resources/Images/Math/LinearVsExponential.png)
@@ -34,8 +37,8 @@
 		[this is not a knee](http://www.abarry.org/knee.htm)
 		
 
-##Exponential Growth Models##
-###General Form###
+## Exponential Growth Models
+### General Form
 * Exponential growth is just a way of scaling some original value...
 
 	>	**origVal** * **GrowthFactor** = **newVal**
@@ -50,7 +53,7 @@
 
 * How these intuitive concepts compose **GrowthFactor** is dependent on the **type** of Exponential Growth Model.  
 
-###Growth Model Taxonomy###
+### Growth Model Taxonomy
 * Exponential Growth Models can be classified based on the _granularity_ (i.e. continuous or discrete) of 2 factors:
 	1. **GROWTH**
 	2. **COMPOUNDING**
@@ -81,7 +84,7 @@
 	* At continuous compounding, we hit an upper limit on growth.  As you will see, this involves using *e* as the `GrowthBase`.	
 	
 	
-##Non-Exponential Growth##
+## Non-Exponential Growth
 * A common analogy for exponential growth is to use _Compound interest_.
 * Conversely, there is the scenario of _Simple Interest_...
 > _Simple Interest_ is NOT an exponential growth scenario!
@@ -95,9 +98,9 @@
  ![enter image description here](https://github.com/skijit/Notes/blob/master/Resources/Images/Math/simple_interest_trajectory.png?raw=true)
 
 
-##Discrete Growth and Compounding##
+## Discrete Growth and Compounding
 
-###Simple Exponential Growth###
+### Simple Exponential Growth
 * In simple exponential growth, compounding only occurs at _TimeInterval_.
 * Mapping:
 	* **GrowthRate** -> `GrowthBase`
@@ -143,9 +146,10 @@
 		* **Exponential Growth** -> **GrowthFactor** scales by `GrowthBase`!	
 		* **Linear Growth** -> **GrowthFactor** scales by **Duration**.
 		
-* If it's not intuitive why scaling by **GrowthFactor** is better than **Duration**, consider the functions: 
+* If it's not intuitive why scaling by **GrowthFactor** is better than **Duration**, consider the functions:
+**TODO: Make sure marked is rendering tables correctly- see that tables: true in setOptions() and check out [this](https://guides.github.com/features/mastering-markdown/) **
 	> f(_x_) = 2 * _x_ 
-	> g(_x_) = _2_<sup>_x_</sup>
+	> g(_x_) = _2_<sup>_x_</sup>    
 		
 	| _x_ | f(_x_) expanded | g(_x_) expanded | f(_x_) | g(_x_) |
 	----| ------- | -----| ---- | ----
@@ -170,7 +174,7 @@
 	* **TODO**: More examples...
  
 
-##Continuous Growth and Discrete Compounding##
+## Continuous Growth and Discrete Compounding
 * You can compound more frequently than *TimeInterval* to consolidate intervening growth.
 * Let's see what happens to **GrowthFactor** over a single *TimeInterval* as we progressively increase compounding frequency.
 
@@ -214,11 +218,11 @@
 	* Discrete growth is only when the value is evaluated at time interval.
 
 
-**TODO** Derivation of e
+**TODO** Clarify the Derivation of e
 
 
 
-##Continuous Growth and Compounding##
+## Continuous Growth and Compounding
 
 f(x) = m(x - x1) + y1
   ---
@@ -232,19 +236,19 @@ f(x) = m(x - x1) + y1
 
 
 
-##e and Exponential Growth##
-###Simple Exponential Growth##
+## e and Exponential Growth
+### Simple Exponential Growth
 
 * This is called 'Simple' bc the $ percentGrowth $ occurs over one increment of the duration value.
 
 * **todo**- graphs and relate to interest
 
-###Compounding Exponential Growth###
+### Compounding Exponential Growth
 
 
 
-##Some Interesting Explanations##
-###Why negative exponents work as they do###
+## Some Interesting Explanations
+### Why negative exponents work as they do
 * If you think $ x^2 = 1 * x * x $, then $ x^{-2} = 1 / x / x = 1/x^2 $.
 	* Because the inverse of multiplication is division.
 	* **But wait!** The inverse of 2 is not -2 but 1/2, so shouldn't $ x^{1/2} = 1/x^2 $ ? 
@@ -254,20 +258,20 @@ f(x) = m(x - x1) + y1
 			* Multiplicative inverse (aka reciprocal) of 2 is 1/2.
 				* _Centered_ on 1 (b/c 2 * 1/2 = 1)
 			* Inverse function of $f(x) = y $ is $ f^{-1}(y) = x $
-				* **TODO**: Expand on this
-			* **TODO**: Clarify this _Centered_ idea.  Is it legit?
+				* **TODO**: Expand on how the inverse of a function works
+			* **TODO**: Clarify this _Centered_ idea.  Is it legit way to see various types of inverses (or reciprocals)?
 		* So we use the additive inverse in the exponent to produce a multiplicative inverse (reciprocal).
 			* This seems pretty common: operations on exponents are additive, even though their ultimate evaluation is multiplicative in domain.
 
-###Why fractional exponents work as they do###
+### Why fractional exponents work as they do
 
 * This is derived from the "Law of Exponents" which tells us $ x^4*x^4 = x^8 $ (bc we can add the exponents together)		
 * Once this is established, then we can deduce that a fractional exponent is a root b/c $$ x^{1/4} * x^{1/4} * x^{1/4} * x^{1/4} = x^{1/1} = x $$ and so $ x^{1/4} $ must mean the 4th root bc that's the only number multiplied by itself 4 times that will render x.			
 * But also know that $ x^{4/3} $ is like saying take the cube root of $ x^4 $.  This is proved by decomposing it into a whole number and fractional part: $$ x^{4/3} = x^{(4 * 1/3)} = (x^4)^{1/3} $$  That is ok b/c of another law of exponents:  $ x^{mn} = (x^m)^n $ .
 		
-###Why the 0th Exponent is 1###
+### Why the 0th Exponent is 1
 * Here's a cool proof about why the 0th exponent is 1: $$ 1 = 3^4 / 3^4 = 3^{(4-4)} = 3^0 $$
 
-###TODO Graphing Stuff###
+### TODO Add more Graphical explanations of these concepts
 
 

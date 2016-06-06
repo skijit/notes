@@ -1,6 +1,11 @@
-#Polynomials
+Polynomials
+=====================
 
-##Basics
+**TODO: Update my mathjax delimeters**
+**TODO: Make sure marked is rendering tables correctly- see that tables: true in setOptions() and check out [this](https://guides.github.com/features/mastering-markdown/) **
+**TODO: Add more (comparative) Graphs of Polynomials**
+
+## Basics
 
 * __Polynomial__ means 'many terms'.
 
@@ -24,7 +29,7 @@
 	* The category for 'polynomial' is a little artificial.  It is based on grouping algebraic forms which have similar properties.  These exceptional cases vioilate those properties, so they're not considered polynomials.
 
 ----
-##Properties
+## Properties
 
 __Given:__   $ 4xy^{2}+{3x}-5 $
 Part        | Example
@@ -64,7 +69,7 @@ If you divide polynomials, you might not get a polynomial
 
 ---
 
-##Polynomial Degree##
+## Polynomial Degree
 
 There are different properties to each polynomial, depending on the degree.
 
@@ -93,10 +98,10 @@ $ \sqrt{x} $ | 1/2
 
 ---
 
-###The Fundamental Theory of Algebra###
+### The Fundamental Theory of Algebra
 Any polynomial of *n* degrees has *n* roots.
 
 
 ---
 
-TODO: Graphs of Polynomials
+

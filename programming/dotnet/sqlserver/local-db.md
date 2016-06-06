@@ -28,9 +28,9 @@ LocalDB
 	```
 
 - Other use cases (than developer)
-	- Not sure... maybe nothing... TODO...
+	- Not sure... maybe nothing... 
 
-##Refs
+## Refs
 [This](https://blogs.msdn.microsoft.com/sqlexpress/2011/07/12/introducing-localdb-an-improved-sql-express/)
 [This](http://stackoverflow.com/questions/13571331/is-it-normal-to-use-localdb-in-production)
 [This](https://blogs.msdn.microsoft.com/sqlexpress/2011/12/08/using-localdb-with-full-iis-part-1-user-profile/)

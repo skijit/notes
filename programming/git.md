@@ -1,10 +1,10 @@
 Git
------------------------------
-![enter image description here](/Resources/Images/Programming/git_merge_commit_1.png)
-###Git Beginner's Guide For Dummies###
+=====================
+
+### Git Beginner's Guide For Dummies
 [Online book here](https://backlogtool.com/git-guide/en/intro/intro1_1.html)
 
-##Basics##
+## Basics
 - There are two types of Git repositories:
 	- **Local**: Lives on local machines of individuals on the team
 	- **Remote**: lives on a remote server that is shared by team members
@@ -18,17 +18,17 @@ Git
 	- Only the (possibly subset of) files from the working tree that are also in the index will be commited to the repo.
 	- The point of theindex to give you better control on what files get committed.
 	
-##Share A Repo##
+## Share A Repo
 - **Push** means to upload your local repo into the remote one.
 - **Pull** means to copy the changes from the remote repo onto your local repo.
 	- This also copies the latest revision history from the remote.
 	
-##Merge Histories##
+## Merge Histories
 - Pushing to a remote repo might be rejected if your local repo is out of date (i.e. intervening changes have occurred since you last pulled into local)
 - Git may try to merge automatically, but it's possible that a conflict will be generated, in which case your local repo will have a new version of the file that has standard diff/merge texts.
 
-##Working With Git##
-###Branches
+## Working With Git
+### Branches
 - Branch is an independent line of development.  You can create them when you have:
 	- New features
 	- Bug fixes
@@ -36,7 +36,7 @@ Git
 - When you first make a commit to the repo, Git will automatically create a **master branch** by default.
 	- Subsequent commits go into the master branch until you decide to create and switch over to another branch.
 
-###How to use a Branch
+### How to use a Branch
 - There are generally 2 types of branches:
 	- **Integration Branch**
 		- Should be kept stable at all times
@@ -46,7 +46,7 @@ Git
 		- Typically created from an integration branch
 		- Will eventually be merged back into the integration branch
 
-###Switching Branches
+### Switching Branches
 - **checkout** command switches branches.
 	- it will update the files in your working tree to match the version stored in the branch you want.
 - **HEAD** is a pointer to the current position of a branch.
@@ -54,7 +54,7 @@ Git
 	- commit the changes
 	- **stash** the changes  (keeps them on the side without committing)
 
-###Integrating Branches
+### Integrating Branches
 - When you're done with a topic branch and you want to merge it into an integration branch, there are two possible ways to do this:
 	- **merge**
 		- There are two types of merges available, depending on the scenario:
@@ -82,7 +82,7 @@ Git
 		- However, the HEAD of your branch will not be advanced.  For this, you would do a fast forward merge.
 		![enter image description here](https://github.com/skijit/Notes/blob/master/Resources/Images/Programming/git_rebase_3.png?raw=1)
 
-###Tag
+### Tag
 - A tag is used to label and mark a specific commit in the history.  
 - Typically this is used to mark release points.
 - Two types of tags in Git:
@@ -97,7 +97,7 @@ Git
 		- Has a signature
 		- Typically used to mark a comit for a release
 
-#Short Introduction To git-flow
+# Short Introduction To git-flow
 Screencast [here](https://vimeo.com/16018419)
 
 - git-flow are extensions based for git based on a [popular git branching model](http://nvie.com/posts/a-successful-git-branching-model/).
@@ -207,7 +207,7 @@ Screencast [here](https://vimeo.com/16018419)
 		> - Will NOT merge the hotfix into any of your feature branches.  For this, you would want to rebase.
 
 	
-#General Git Commands
+# General Git Commands
 > To create a local repo, create a directory and then run this:
 	```
 	git init
@@ -268,7 +268,7 @@ Screencast [here](https://vimeo.com/16018419)
 	```
 
 
-#Example GitHub Pull Request Scenario
+# Example GitHub Pull Request Scenario
 A user wants to make a change to a repo they can't directly modify. So they...
 
 - Make a fork of the repo, which creates a personal copy.  
@@ -283,8 +283,8 @@ A user wants to make a change to a repo they can't directly modify. So they...
 - **Git Convention**: 
 	- make all commits/changes in branch. 
 	
-#Git Concepts
-##Usability / General
+# Git Concepts
+## Usability / General
 
 - Primarily a command-line tool
 - Very opinionated tool
@@ -293,7 +293,7 @@ A user wants to make a change to a repo they can't directly modify. So they...
 - there's no 'locking', so checkout is only switching the branches
 - The fundamental design concept seems to be making branching and offline work easy.  The former is very useful, the latter, less so.
 
-##Design
+## Design
 - It's distributed, so you have to keep in mind whether you're performing an operation on the local or remote copy of the repo.
 - Because it's distributed, it can't have *monotonically* incrementing version numbers for files or changesets, bc otherwise it would get conflicts.  
 	- Instead of versions, commits keep a sha1 hash (40 digits of hex) of just the changes.  Usually the first 7 of the hash is enough to identify the commit.
@@ -310,14 +310,14 @@ A user wants to make a change to a repo they can't directly modify. So they...
 	- **.gitignore**: what files to ignore in your repo
 	- **.gitattributes**: tells git things like which files should be treated as binary and how line endings should be handled.
 	- **Heads directory**: tells you the different branches in the repo
-	- TODO
+	- TODO: Add more details about the different parts of the filesystem git db (ie what's in .git)
 - Git tracks 2 different kinds of things:
 	- **trees**: directories (basically containers)
 	- **blobs**: files
 - Branches live in the global namespace, hence the typical convention of using a hierarchy: type/name (e.g. feature/myNewFeature).
 
 
-#Git Commands for .NET Developers
+# Git Commands for .NET Developers
 - There is no Source Control Explorer for TFS Team Projects using Git.
 	- There are probably other 3rd party explorers, but [SourceTree](https://www.sourcetreeapp.com/) from Atlassian is one.
 - One way to get to the Command line from Team Explorer:
@@ -397,7 +397,7 @@ A user wants to make a change to a repo they can't directly modify. So they...
 	```
 from [this](http://www.developerhandbook.com/git/git-for-net-developers/) blog post
 
-#Installing GIT and GitFlow on Windows and Using Commandline GIT
+# Installing GIT and GitFlow on Windows and Using Commandline GIT
 
 - Since GIT originated on linux, there are lots of different ports available for windows.
 	- Many involve GUI clients (GitHub for Windows, External Git Tools for VS, posh-git, etc.)
@@ -445,7 +445,7 @@ from [this](http://www.developerhandbook.com/git/git-for-net-developers/) blog p
 			- For example:
 			> git clone --recursive  http://:@ricnmittfs01prd:8080/tfs/defaultcollection/_git/AftonPublicSite test-tfs-clone
 
-#Containers: Team Project Collection vs Team Project vs GIT Repos
+# Containers: Team Project Collection vs Team Project vs GIT Repos
 
 - Team Project Collections: 
 	- Generally, you want to create projects within the same Team Project Collection.
@@ -465,7 +465,7 @@ from [this](http://www.developerhandbook.com/git/git-for-net-developers/) blog p
 		- If your Team Project is likely to have more than 1 solution file, **DO NOT USE THIS** repo!
 	- You can create as many repos as you want within a Team Project.
 
-#Managing Containers in TFS
+# Managing Containers in TFS
 - Creating Team Projects:
 	- You can do this from Team Explorer (VS 2015 only) or the Web Interface
 	- See [here](https://msdn.microsoft.com/en-us/library/vs/alm/overview/create-team-project) for instructions.
@@ -485,7 +485,7 @@ from [this](http://www.developerhandbook.com/git/git-for-net-developers/) blog p
 		- TFS_ROOT/TEAM_PROJECT_COLLECTION/TEAM_PROJECT/_admin/_versioncontrol
 		- Example: http://ricnmittfs01prd:8080/tfs/DefaultCollection/NewMarket/_admin/_versioncontrol
 
-#Migrating a TFSVC Project To the TFS GIT
+# Migrating a TFSVC Project To the TFS GIT
 - From a high-level, you have two approaches available:
 	- Local Repo First (i.e. Fill a local repo, then push to remote)
 	- Remote Repo First  (i.e. Clone an empty repo from remote, fill, then push back up)
@@ -573,9 +573,12 @@ git push -u origin --all
 	```
 	
 
-- Other TODOS:
-	- Merging / Merge tools
-	- Branching with git-flow
-	- Better examples with the .gitignore
-    - Stage vs Clean
- 
+**NEXT STEPS**
+	- **TODO: document Merging / Merge tools**
+	- **TODO: more documentation of Branching with git-flow**
+	- **TODO: Better examples with the .gitignore.  Do you check it in with your repo? See the github repo of various .gitignore files**
+    - **TODO: Stage vs Clean and how to manage that**
+      **TODO: add note about configuring msysgit - using long file names**
+      **TODO: add notes about staging deleted files: http://stackoverflow.com/questions/12373733/staging-deleted-files  **
+      **TODO: can you have one repo pointing at multiple remotes?  eg one on azure, one on gh? and what if you're using multiple accounts for them?**        
+    - **TODO**: add this tip about moving files: first, copy to the new location, then execute this on the old file ```git rm -f filename``` which removes it from git and the filesystem, finally git add the new file.  It should usually figure out that it's the same file, just moved.  To prove it, execute a ```git status```.
