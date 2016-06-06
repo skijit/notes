@@ -9,7 +9,6 @@ These are some notes on new or useful features in Visual Studio 2015 (or old fea
 > The **npm** appears most useful for managing packages related to node.js projects.  I thought **npm** would be also used to manage other, non-node.js packages/dependencies, but I haven't see that yet.
 
 ## IntelliTrace
-#### Test
 - Video [here](https://channel9.msdn.com/Events/Visual-Studio/Visual-Studio-2015-Final-Release-Event/IntelliTrace-in-Visual-Studio-2015-DEMO-ONLY)
 - Intellitrace is a recorder for your debugger
 	- It monitors for 'interesting' user or system events

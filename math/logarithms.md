@@ -20,13 +20,13 @@
 	* Richter
 	* Google Page Rank
 * Graphs which use logarithmic scales make an exponential curve linear.
-![enter image description here](https://github.com/skijit/Notes/blob/master/Resources/Images/Math/image002.jpg?raw=1)
+![enter image description here](https://github.com/skijit/Notes/blob/master/resources/images/math/image002.jpg?raw=1)
 * Simplified large multiplication back in the day, b/c you could decompose it into an expression where the terms were mostly logs, which could be evaluated by checking a table.
 * Algorithm complexity analysis:
 	* __Binary Sort__ is O(log n) because the number of operations is, at worst, proportional to the order of magnitude of the size of the input (assuming base 2).
 		* Recall: You take a sorted array, check the middle element.  Then if the target is larger, take the middle element of the top half, repeat.
 	* __Merge Sort__ is O(n log n) because as a divide and conquer algorithm, it's divide step is proportional to the order of magnitude of n (again, base 2) and each conquer/merge/recombine step (of which there are log n) is linearly proportional to n.  So you have O(n log n).
-	![enter image description here](https://github.com/skijit/Notes/blob/master/Resources/Images/Math/Merge_sort_algorithm_diagram.svg.png?raw=1)
+	![enter image description here](https://github.com/skijit/Notes/blob/master/resources/images/math/Merge_sort_algorithm_diagram.svg.png?raw=1)
 * References:
 	* [Better Explained](http://betterexplained.com/articles/using-logs-in-the-real-world/)
 

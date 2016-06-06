@@ -6,7 +6,7 @@ Exponents
 ## Correcting Some Misconceptions
 
 * Consider the following example:
-![enter image description here](https://raw.githubusercontent.com/skijit/Notes/master/Resources/Images/Math/LinearVsExponential.png)
+![enter image description here](https://raw.githubusercontent.com/skijit/Notes/master/resources/images/math/LinearVsExponential.png)
 **Burgundy:** f(_x_) = (3/2)_x_ + 1
 **Blue:** g(_x_) = 2<sup>_x_</sup>
 
@@ -72,15 +72,15 @@ Exponents
 
 * **What this looks like (Nutshell Version)**
 
-	![enter image description here](https://raw.githubusercontent.com/skijit/Notes/master/Resources/Images/Math/ExpGrowth/Slide1.PNG)
+	![enter image description here](https://raw.githubusercontent.com/skijit/Notes/master/resources/images/math/exp-growth/Slide1.PNG)
 
 	* Growth is only evaluated on the multiples of *TimeInterval*
 	
-	![enter image description here](https://raw.githubusercontent.com/skijit/Notes/master/Resources/Images/Math/ExpGrowth/Slide2.PNG)
+	![enter image description here](https://raw.githubusercontent.com/skijit/Notes/master/resources/images/math/exp-growth/Slide2.PNG)
 	* Growth is updated continuously, and it is steeper as compounding frequency increases.  
 	* Compounding consolidates the recent growth so that it can be the basis for still further growth (like feedback).
 
-	![enter image description here](https://raw.githubusercontent.com/skijit/Notes/master/Resources/Images/Math/ExpGrowth/Slide3.PNG)
+	![enter image description here](https://raw.githubusercontent.com/skijit/Notes/master/resources/images/math/exp-growth/Slide3.PNG)
 	* At continuous compounding, we hit an upper limit on growth.  As you will see, this involves using *e* as the `GrowthBase`.	
 	
 	
@@ -95,7 +95,7 @@ Exponents
 	* To put this into our original formula: **GrowthFactor** = **GrowthRate** * **Duration**
 * The interest you earn is never _fed back_ or _rolled_ into the principal.
 * Your balance (total money earned) keeps the same slope or trajectory throughout!
- ![enter image description here](https://github.com/skijit/Notes/blob/master/Resources/Images/Math/simple_interest_trajectory.png?raw=true)
+ ![enter image description here](https://github.com/skijit/Notes/blob/master/resources/images/math/simple_interest_trajectory.png?raw=true)
 
 
 ## Discrete Growth and Compounding
@@ -129,7 +129,7 @@ Exponents
 > Compared to the linear equation, we've changed **Duration** from a **_multiplier_** to an **_exponent_**	
 
 
-![enter image description here](https://raw.githubusercontent.com/skijit/Notes/master/Resources/Images/Math/ReallySimpleExponentialGrowth.png)
+![enter image description here](https://raw.githubusercontent.com/skijit/Notes/master/resources/images/math/ReallySimpleExponentialGrowth.png)
 **In this image- Various Exponential Growth:**
 - `Continuous growth`: solid line, `Discrete growth`: dashed line
 - `Burgundy`: No Growth: $ f(x) = 1^x $
@@ -201,7 +201,7 @@ Exponents
 
 
 	  
-![enter image description here](https://raw.githubusercontent.com/skijit/Notes/master/Resources/Images/Math/SimpleVsCompoundedTwice.png)
+![enter image description here](https://raw.githubusercontent.com/skijit/Notes/master/resources/images/math/SimpleVsCompoundedTwice.png)
 **In this image:**
 - `Continuous growth`: solid line, `Discrete growth`: dashed line
 - `Burgundy`: f(_x_) = 1 * (1 + 1)<sup>x</sup> 
