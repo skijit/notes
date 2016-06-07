@@ -583,3 +583,4 @@ git push -u origin --all
       **TODO: can you have one repo pointing at multiple remotes?  eg one on azure, one on gh? and what if you're using multiple accounts for them?**        
     - **TODO**: add this tip about moving files: first, copy to the new location, then execute this on the old file ```git rm -f filename``` which removes it from git and the filesystem, finally git add the new file.  It should usually figure out that it's the same file, just moved.  To prove it, execute a ```git status```.
     - **TODO**: instructions on changing case / moving folders in git.  see [here](http://stackoverflow.com/questions/11183788/in-a-git-repository-how-to-properly-rename-a-directory)
+    - **TODO**: discuss stashing stuff per [this](https://git-scm.com/book/en/v2/Git-Tools-Stashing-and-Cleaning) page

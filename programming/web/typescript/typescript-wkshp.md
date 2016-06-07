@@ -90,6 +90,9 @@ class Auto {
     console.log(foobar.foo);```
 - Unlike ES5, symbols are no longer visible outside of their given compilation unit (i.e. file), UNLESS you export them.
 
+### Block-Level Scoping
+    - **TODO:** Add info about ES6 Block-level scoping features
+
 ### Maps:
 - These are dictionaries (key/values), where keys must be unique
     ```(javascript)

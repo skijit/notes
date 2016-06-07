@@ -2,25 +2,32 @@ Angular2 Workshop
 =====================
 Notes from a Spring 2016 Dev Intersections workshop with John Papa and Dan Wahlin
 
-[Here's](jpapa.me/a2ps1stlook) a pluralsight course on Angular2 (A first look)
+## Useful Links
+- [Here's](jpapa.me/a2ps1stlook) a pluralsight course on Angular2 (A first look)
+- Dan Wahlin's [Angular2-JumpStart](https://github.com/DanWahlin/Angular2-Jumpstart) project on github
+- Dan Wahlin's [Angular2 Bare bones project](github.com/danwahlin/angular2-barebones) on github *might compare to similar yeoman options before investing heavily*
+- [Angular2 home page](https://angular.io/)
+- Angular Team's [Quick Start](https://github.com/angular/quickstart) project
+- Angular Team [Docs](angular.io/docs/ts/latest/api)
 
+## Technical Overview
+    - Modules/Components/Templates
+    - Data Binding and Directives
+    - Services and DI
+    - Http  - how you GET/POST
+    - Routing
+    - **Note**: Angular2 requires TypeScript
 
-Modules/Components/Templates
-Binding and Directives
-Services and DI
-Http  - how you GET/POST
-Routing
+## Project Status
+    - Currently in RC2 (as of May 7th)
+    - RTM: Hopefully in the next few months. (?)
+    - Basically works
+    - Tooling and build process are still getting improved
 
-The DI functionality is WAY different in NG2.
-
-RTM: Not said.  Currently in Beta.  Hopefully in the next few months.
-    Basically works
-    Tooling and build process are still getting improved
-    
-Modules:
-    This is how we organize our code
-    Supports lazy-loading out of the box
-    Not strictly an ng thing
+## Modules:
+    - This is how we organize our code
+    - Supports lazy-loading out of the box
+    - Not strictly an ng thing
 
 Components:
     Like controllers
@@ -37,14 +44,8 @@ Data Binding
 Performances
     Much much faster
 
-Angular Quick Start Project:  
-    git clone https://github.com/angular/quickstart ab16
-    cd ab16
-    npm i  (doesn't work in git shell- only cmd)
-    npm start  (doesn't work in git shell- only cmd)
 
------------
-github.com/DanWahlin/Angular2-JumpStart
+
 
 -----------
 Angular 1 to 2 Differences
@@ -73,14 +74,6 @@ Now you just use classes
 
 ---------
 Modules, Components, and Templates
-
-quick note about docs:
-angular.io/docs/ts/latest/api
-
-    TODO:
-        Quick start
-        Case Study / Tour of Heros
-        Check out the cheat sheet
 
 
 walking through: github.com/danwahlin/angular2-barebones
@@ -198,38 +191,6 @@ IF YOU WANT THEM TO SHARE THE SAME SERVICE, JUST REGISTER THE INJECTABLE AT THE 
 
 In the future tooling, you'll be able to see the Dependency tree
 
-AV REMINDER:
-    VIEWS FOR APP & USER NOTIFICATIONS & LOGGING (WITH SEND ERROR)
-    ERROR Messages as TOAST, rather than requiring a large footer
-    
-    QUESTION: Sidebar-enabled navigation
-    
-    PROJECT:
-        WHAT ARE WE PROJECTING?
-        FILTER PROFILES: By dept, SBU, ETC
-
-    Report Definition
-        Input collection type (eg inventory Numbers, fluid codes, etc) 
-        Configurations / Views
-        Shared configuration:
-            output type
-    
-    What is saveable?
-        project
-        search results
-        report configuration
-        
-    Can you batch search + report?
-         
-    Std Progress Indicators
-    Report Error
-    
-    Saved Queries
-        Reusing saved queries in existing searches
-        They can be publicly shareable - but not necessarily workable due to security context
-
-    Full Screen Navigation on homepage?
-
 ---------------------------------------
 I/O
 
@@ -294,7 +255,7 @@ subscribing to observables:
     how is it different from promises?
         if you want, you can unsubscribe / cancel
             why is this important: in case you want to communicate with something other than simple http, such as WebSockets!
-        TODO: investigate into these differences.  see more about this rx.js...
+        TODO: investigate into these differences between observables and promises...  see more about this rx.js...
 
 Remember to catch exceptions!
 
@@ -341,11 +302,6 @@ Angular Routing
       
       TODO: clarify all this routing stuff!
 
----------------------
-
-test runner discount code:
- anglebrackets_wallaby
- 
 
 
 
