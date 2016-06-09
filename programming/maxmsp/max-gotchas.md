@@ -30,3 +30,6 @@ Max/MSP Gotchas and Misc Notes
 
 ## Misc
 - ```pack``` requires you to define the exact types in each inlet (e.g. symbols, ints, list, etc).  If you're not sure, ```join``` is a nice alternative that is type-agnostic
+
+## Parameter Automation in Max4Live
+- You can automate any live UI object directly OR you can expose pattr objects for automation.  See [here](https://docs.cycling74.com/max5/vignettes/core/live_parameters.html)
