@@ -37,7 +37,8 @@ JavaScript Gotchas and Misc Notes
         };
 
         //me2 *is* visible out here
-    };```
+    };
+    ```
 
 **TODO**  [this](http://stackoverflow.com/questions/2485423/is-using-var-to-declare-variables-optional) javascript scoping page
 **TODO**  more about closures and this ambiguities

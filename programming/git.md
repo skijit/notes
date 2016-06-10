@@ -125,147 +125,133 @@ Screencast [here](https://vimeo.com/16018419)
 		- When complete, merge the hotfix branch into *develop* and *master* and retag master.
 	- git-flow are a bunch of git commands which you can install to help execute this model.
 	- **Examples**:
-		> Create the local repo
-	```
-	mkdir gitflowtest
-	cd gitflowtest
-	git init
-	```
-		> Now create some files and make some changes
-	```
-	git add somefile.txt
-	git commit -a -m "testing first commit"
-	git flow init
-	``` 
-		> This last command:
-		
-		> - Creates the master (if necessary), dev, etc. branches and updates your .git/config file.  
-		> - Asks you the names of the different branches you want to create.  
-		> - Issues a checkout on the development branch.
-		> If you use a decent git-flow client, it will tell you the name of the current branch you are on in the prompt.
-		>
-		> Now make some changes to somefile.txt (remember, you're now on develop)
-		```
-		git commit -a -m "next commit"
-		git flow feature start feature-001
-		```
-		> This last command:
-		
-		> - Creates a new branch 'feature/feature-001', based on develop.
-		> - Checks you out on that feature branch.
-		>
-		> When you're ready to integrate back to development, you use: 
-		```
-		git flow feature finish feature-001
-		```
-		> This will:
-		
-		> - Merge the feature branch into the development branch
-		> - Assuming there are no conflicts, it will delete the feature branch
-		> 
-		> To release:
-		```
-		git flow release start 1.0
-		```
-		> This will:
-		
-		> - Create a new branch, 'release/1.0', based on develop
-		> - Check you out on release/1.0
-		> It would be customary to add a 'Release' file to this branch, indicating intent, notes, etc.
-		> 
-		> To "finish" the release:
-		```
-		git flow release finish 1.0
-		```
-		> This will:
-		
-		> - Prompt you for a tag name and comment
-		> - Merges the release branch into **master**.  Recall, only the release branch is able to put content on the master branch bc you want master to contain only production ready code.
-		> - Merges the release branch back into development
-		> - Checks you out on development
-		> - Deletes the release branch
-		>
-		> To do a hotfix on production:
-		```
-		git flow hotfix start someNameForTheIssue
-		```
-		> This will:
-		
-		> - Creates a new branch, 'hotfix/someNameForTheIssue', off of master.
-		> - Checks you out on the new hotfix branch
-		> 
-		> To finish the hotfix:
-		```
-		git flow hotfix finish someNameForTheIssue
-		```
-		> This will:
+        -  Create the local repo
+            ```
+            mkdir gitflowtest
+            cd gitflowtest
+            git init
+            ```
+        - Now create some files and make some changes
+        ```
+        git add somefile.txt
+        git commit -a -m "testing first commit"
+        git flow init
+        ``` 
+        - This last command:
+            - Creates the master (if necessary), dev, etc. branches and updates your .git/config file.  
+            - Asks you the names of the different branches you want to create.  
+            - Issues a checkout on the development branch.
+            - If you use a decent git-flow client, it will tell you the name of the current branch you are on in the prompt.
+        - Now make some changes to somefile.txt (remember, you're now on develop)
+        ```
+        git commit -a -m "next commit"
+        git flow feature start feature-001
+        ```
+        - This last command:
+            - Creates a new branch 'feature/feature-001', based on develop.
+            - Checks you out on that feature branch.
+        - When you're ready to integrate back to development, you use: 
+        ```
+        git flow feature finish feature-001
+        ```
+        - This will:
+            - Merge the feature branch into the development branch
+            - Assuming there are no conflicts, it will delete the feature branch
+        - To release:
+        ```
+        git flow release start 1.0
+        ```
+        - This will:
+            - Create a new branch, 'release/1.0', based on develop
+            - Check you out on release/1.0
+                -It would be customary to add a 'Release' file to this branch, indicating intent, notes, etc.
+        - To "finish" the release:
+        ```
+        git flow release finish 1.0
+        ```
+        - This will:
+            - Prompt you for a tag name and comment
+            - Merges the release branch into **master**.  Recall, only the release branch is able to put content on the master branch bc you want master to contain only production ready code.
+            - Merges the release branch back into development
+            - Checks you out on development
+            - Delete the release branch
+        - To do a hotfix on production:
+        ```
+        git flow hotfix start someNameForTheIssue
+        ```
+        - This will:
+            - Creates a new branch, 'hotfix/someNameForTheIssue', off of master.
+            - Checks you out on the new hotfix branch
+        - To finish the hotfix:
+        ```
+        git flow hotfix finish someNameForTheIssue
+        ```
+        - This will:
+            - Merge the hotfix branch into master
+            - The hotfix will be tagged, and you add some tag comments
+            - Hotfix branch is merged into development
+            - Deletes the hotfix branch
+            - Will NOT merge the hotfix into any of your feature branches.  For this, you would want to rebase.
 
-		> - Merge the hotfix branch into master
-		> - The hotfix will be tagged, and you add some tag comments
-		> - Hotfix branch is merged into development
-		> - Deletes the hotfix branch
-		> - Will NOT merge the hotfix into any of your feature branches.  For this, you would want to rebase.
-
-	
 # General Git Commands
 > To create a local repo, create a directory and then run this:
-	```
-	git init
-	```
+```
+git init
+```
 
 > To check the status of files which are (and aren't) associated with the repo, and what branch you're currently on:
-	```
-	git status
-	```
+```
+git status
+```
 > To add new files to git:
-	```
-	git add
-	```
+```
+git add
+```
 
 > To save your changes as a new version in the **LOCAL** repo:
-	```
-	git commit -m 'your comment'
-	```
+```
+git commit -m 'your comment'
+```
 
 > To use a different branch on the repo,
-	```
-	git checkout branchname
-	```
+```
+git checkout branchname
+```
 
 > To get latest changes from a **REMOTE** repo:
-	```
-	git pull
-	```
+```
+git pull
+```
 
 > To submit changes from local to a **REMOTE** repo:
-	```
-	git push
-	```
+```
+git push
+```
 
 > To do both a push And a pull to/from a **REMOTE** repo:
-	```
-	git sync
-	```
+```
+git sync
+```
 
 > To associate a local repo with a **REMOTE** repo:
-	```
-	git remote add origin <url>
-	```
+```
+git remote add origin <url>
+```
 
 > To create a local repo based on a **REMOTE** repo:
-	```
-	git clone
-	```
+```
+git clone
+```
 
 > If you only have read-permissions on a repo, and you want to make changes, this is how you create your own, separate, writeable copy:
-	```
-	git fork
-	```
-	
+```
+git fork
+```
+
 > To see a graphical representation of the commit/branch history:
-	```
-	git log --graph
-	```
+```
+git log --graph
+```
 
 
 # Example GitHub Pull Request Scenario
@@ -417,33 +403,32 @@ from [this](http://www.developerhandbook.com/git/git-for-net-developers/) blog p
 - Git for Windows
 	- Download and [install](https://git-for-windows.github.io/)
 		
-- Configure Git-Bash					
+- Configure Git-Bash
 	- This was installed by Git for Windows (see install location): git-bash.exe
 	- Put a shortcut to the taskbar on this executable
 	- Putting configuration files in your home directory:
-			- To find out your home directory, run git-bash.exe and type:
-			```echo ~
-			```											
-			- Probably something like //c//Users//skjeit
-			- Now cd to that directory and type:
-			```touch ~/.bashrc
-			```
-			- Then open this file in a text editor and type in some useful aliases:
-				```alias tfs_repos='cd /c/tfsgit_workspace/'
-				alias gh_repos='cd /c/GitWorkspace' ```
-			- This will allow you to quickly navigate to your various roots for TFS and GitHub (if that's how you've chosen to set it up)
-			- The first time you rerun git-bash.exe (as admin - *always*), it might give you a message about needing to create a profile that will load your .bashrc.  That's fine.  Then you can close and rerun, and you should be good.
-										
+        - To find out your home directory, run git-bash.exe and type: ```echo ~```
+        - Probably something like //c//Users//skjeit
+        - Now cd to that directory and type: ```touch ~/.bashrc```
+        - Then open this file in a text editor and type in some useful aliases:
+        ```
+        alias tfs_repos='cd /c/tfsgit_workspace/'
+		alias gh_repos='cd /c/GitWorkspace' 
+        ```
+            - This will allow you to quickly navigate to your various roots for TFS and GitHub (if that's how you've chosen to set it up)
+            - The first time you rerun git-bash.exe (as admin - *always*), it might give you a message about needing to create a profile that will load your .bashrc.  That's fine.  Then you can close and rerun, and you should be good.
+
 - Set up Git-Flow
 	- Follow [these](https://github.com/nvie/gitflow/wiki/Windows#git-for-windows-previously-msysgit) instructions exactly
-	- Rather than a sym link, I created an alias for git-flow:
-	```alias git-flow='/C/Program Files/Git/bin/git-flow'```
+	- Rather than a sym link, I created an alias for git-flow: ```alias git-flow='/C/Program Files/Git/bin/git-flow'```
 	
 - Attempt to interact with TFS via Cmdline
 	- See [these](https://github.com/git-for-windows/git/wiki/FAQ#how-do-i-access-a-repository-hosted-on-a-microsoft-team-foundation-server-inside-a-windows-domain) instructions
 	- You can get the url from the remotes info in the .git/config file, under [remote "origin"]
-			- For example:
-			> git clone --recursive  http://:@ricnmittfs01prd:8080/tfs/defaultcollection/_git/AftonPublicSite test-tfs-clone
+        - For example: 
+        ```
+        git clone --recursive  http://:@ricnmittfs01prd:8080/tfs/defaultcollection/_git/AftonPublicSite test-tfs-clone
+        ```
 
 # Containers: Team Project Collection vs Team Project vs GIT Repos
 
@@ -574,13 +559,13 @@ git push -u origin --all
 	
 
 **NEXT STEPS**
-	- **TODO: document Merging / Merge tools**
-	- **TODO: more documentation of Branching with git-flow**
-	- **TODO: Better examples with the .gitignore.  Do you check it in with your repo? See the github repo of various .gitignore files**
-    - **TODO: Stage vs Clean and how to manage that**
-      **TODO: add note about configuring msysgit - using long file names**
-      **TODO: add notes about staging deleted files: http://stackoverflow.com/questions/12373733/staging-deleted-files  **
-      **TODO: can you have one repo pointing at multiple remotes?  eg one on azure, one on gh? and what if you're using multiple accounts for them?**        
-    - **TODO**: add this tip about moving files: first, copy to the new location, then execute this on the old file ```git rm -f filename``` which removes it from git and the filesystem, finally git add the new file.  It should usually figure out that it's the same file, just moved.  To prove it, execute a ```git status```.
-    - **TODO**: instructions on changing case / moving folders in git.  see [here](http://stackoverflow.com/questions/11183788/in-a-git-repository-how-to-properly-rename-a-directory)
-    - **TODO**: discuss stashing stuff per [this](https://git-scm.com/book/en/v2/Git-Tools-Stashing-and-Cleaning) page
+- **TODO: document Merging / Merge tools**
+- **TODO: more documentation of Branching with git-flow**
+- **TODO: Better examples with the .gitignore.  Do you check it in with your repo? See the github repo of various .gitignore files**
+- **TODO: Stage vs Clean and how to manage that**
+- **TODO: add note about configuring msysgit - using long file names**
+- **TODO: add notes about staging deleted files: http://stackoverflow.com/questions/12373733/staging-deleted-files  **
+- **TODO: can you have one repo pointing at multiple remotes?  eg one on azure, one on gh? and what if you're using multiple accounts for them?**        
+- **TODO**: add this tip about moving files: first, copy to the new location, then execute this on the old file ```git rm -f filename``` which removes it from git and the filesystem, finally git add the new file.  It should usually figure out that it's the same file, just moved.  To prove it, execute a ```git status```.
+- **TODO**: instructions on changing case / moving folders in git.  see [here](http://stackoverflow.com/questions/11183788/in-a-git-repository-how-to-properly-rename-a-directory)
+- **TODO**: discuss stashing stuff per [this](https://git-scm.com/book/en/v2/Git-Tools-Stashing-and-Cleaning) page
