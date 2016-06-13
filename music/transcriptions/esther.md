@@ -96,3 +96,52 @@ I => V
     - Up a m3: This is a legit key change
         - If we we modulated to G, we'd be hitting a lot of the same chord/roots
         - Ab has 4 of the same notes a F
+
+### Histogram
+- Over the 16 bars:
+    - I :   8
+    - V:    4
+    - ii:   2
+    - IV:   1
+    - iv:   1
+
+### Repetitions
+- None
+
+## Section C
+
+### Phrase 1
+- Length: 4 bars
+- I - #Io - ii - V
+
+### Intersection of Phrase 1 & 2
+- Instead of the V of Phrase 1 resolving to a I, we go back to IV
+    - By not going to I, we can return back to V and extend that V sound
+
+### Phrase 2
+- Length: 4 bars
+- IV - IV - V - V
+
+### Histogram
+- Over the 8 bars:
+    - V:    3
+    - IV:   2
+    - I:    1
+    - #Io:  1
+    - ii:   1
+
+## Section D
+
+### Intersection of Section C and D
+- Recall the basic point of sec. C was to create a V sound.  That sets up a strong expectation of returning to I, but instead, it's modulates to the key of E (a half step up from the V root!)
+
+### Phrase 1
+- Length: 20 bars
+- Melodic phrases are broken up in 4 bars
+- I (x4) - i (x4) - ii (x4) - II (x4) - V
+- Good for solos:
+    - harmonic rhythm is slower
+    - lots of root movement in 4ths
+    - final chord is a V, so there's a nice resolution with each repeat 
+- i =>  ii : since the i is dorian, you could also see this as a ii => iii
+- ii => II : the ultimate destination is to the V, and the II is just a V of V, so that's ok
