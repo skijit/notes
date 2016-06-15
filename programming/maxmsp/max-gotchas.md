@@ -3,7 +3,9 @@ Max/MSP Gotchas and Misc Notes
 
 ## Misc
 - ```pack``` requires you to define the exact types in each inlet (e.g. symbols, ints, list, etc).  If you're not sure, ```join``` is a nice alternative that is type-agnostic
-- If ```loadmess``` or ```loadbang``` aren't working as expected, be sure to freeze the M4L device... that seems to have some type of impact??!!!
+- M4L Loadbang stuff:  ```loadmess``` or ```loadbang``` may not work as expected in a M4L device. 
+    - be sure to freeze the M4L device
+    - consider using ```live.thisdevice``` to send bangs on device loaded or saved events
 - [Max 7 Documentaion online](https://docs.cycling74.com/max7)
 
 ## JavaScript Execution

@@ -194,61 +194,61 @@ Screencast [here](https://vimeo.com/16018419)
             - Will NOT merge the hotfix into any of your feature branches.  For this, you would want to rebase.
 
 # General Git Commands
-> To create a local repo, create a directory and then run this:
+- To create a local repo, create a directory and then run this:
 ```
 git init
 ```
 
-> To check the status of files which are (and aren't) associated with the repo, and what branch you're currently on:
+- To check the status of files which are (and aren't) associated with the repo, and what branch you're currently on:
 ```
 git status
 ```
-> To add new files to git:
+- To add new files to git:
 ```
 git add
 ```
 
-> To save your changes as a new version in the **LOCAL** repo:
+- To save your changes as a new version in the **LOCAL** repo:
 ```
 git commit -m 'your comment'
 ```
 
-> To use a different branch on the repo,
+- To use a different branch on the repo,
 ```
 git checkout branchname
 ```
 
-> To get latest changes from a **REMOTE** repo:
+- To get latest changes from a **REMOTE** repo:
 ```
 git pull
 ```
 
-> To submit changes from local to a **REMOTE** repo:
+- To submit changes from local to a **REMOTE** repo:
 ```
 git push
 ```
 
-> To do both a push And a pull to/from a **REMOTE** repo:
+- To do both a push And a pull to/from a **REMOTE** repo:
 ```
 git sync
 ```
 
-> To associate a local repo with a **REMOTE** repo:
+- To associate a local repo with a **REMOTE** repo:
 ```
 git remote add origin <url>
 ```
 
-> To create a local repo based on a **REMOTE** repo:
+- To create a local repo based on a **REMOTE** repo:
 ```
 git clone
 ```
 
-> If you only have read-permissions on a repo, and you want to make changes, this is how you create your own, separate, writeable copy:
+- If you only have read-permissions on a repo, and you want to make changes, this is how you create your own, separate, writeable copy:
 ```
 git fork
 ```
 
-> To see a graphical representation of the commit/branch history:
+- To see a graphical representation of the commit/branch history:
 ```
 git log --graph
 ```

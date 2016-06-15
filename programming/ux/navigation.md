@@ -40,4 +40,4 @@ Notes on a collection of articles on nav from [Smashing Magazine](https://www.sm
 
 ## Bootstrap
 - Here's a list of [navbar examples](http://getbootstrap.com/getting-started/#examples-navbars)
-
+- Searching on [Bootply](http://www.bootply.com/search?kw=nav) reveals a lot of interesting options
