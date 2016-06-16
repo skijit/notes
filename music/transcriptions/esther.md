@@ -3,6 +3,8 @@ Esther Transcription Notes
 
 ## SECTION A
 
+![esther section a transcription](/resources/docs/music/esther-sec-a.png)
+
 ### Phrase 1: 
 - Length: 5 bars (1-5)
 - Starts D (I), Ends G (IV)
@@ -68,6 +70,8 @@ Esther Transcription Notes
 
 ## Section B
 
+![esther section b transcription](/resources/docs/music/esther-sec-b.png)
+
 ### Intersection of Section A and B
 - Section A starts D maj and ends D min.  Then section B picks up at D-'s relative major: F.
 
@@ -110,6 +114,8 @@ I => V
 
 ## Section C
 
+![esther section c transcription](/resources/docs/music/esther-sec-c.png)
+
 ### Phrase 1
 - Length: 4 bars
 - I - #Io - ii - V
@@ -131,6 +137,8 @@ I => V
     - ii:   1
 
 ## Section D
+
+![esther section d transcription](/resources/docs/music/esther-sec-d.png)
 
 ### Intersection of Section C and D
 - Recall the basic point of sec. C was to create a V sound.  That sets up a strong expectation of returning to I, but instead, it's modulates to the key of E (a half step up from the V root!)
