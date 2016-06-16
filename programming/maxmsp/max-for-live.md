@@ -11,9 +11,10 @@ A Collection of Notes for making sense of M4L API objects and the LOM
 - **live.thisdevice**:  loadbang for m4l devices.  also fires whenever the device is saved (which reloads it in Live) 
 - **live.param~**: this lets you receive automation data from Max at signal rate
 - **live.observer**:
-- **live.remote~**: this allows you to change certain class of objects called 'DeviceParameter's in *real-time* (which I take to mean signal rate)
+- **live.remote~**: this allows you to change certain class of objects called 'DeviceParameter's at audio rate
     - DeviceParameters are child object of the more prominent LOM classes like Device, MixerDevice (which is a child of Track), or ChainMixerDevice
-    - You can change these values without affecting the Undo history    
+    - You can change these values without affecting the Undo history
+    - ```live.remote``` is way faster than message rate, but also much more resource intensive, so use it wisely.    
 - **live.path**:
 - **live.object**:
 
@@ -28,6 +29,9 @@ A Collection of Notes for making sense of M4L API objects and the LOM
 ## LiveAPI Abstractions
 - Right-click on a patcher and select 'Paste From' => 'C74' => 'Live API Abstractions'
     - **TODO** add some of the abstractions you get for M4L
+    - **Device.DeviceParameter**:  **TODO**
+    - **Device.DeviceParameterRemote**: **TODO**
+    - **Track.ChangeTrackVolume**: **TODO**
 
 ## Exposing a M4L Device Parameter for Automation
 - [this](https://docs.cycling74.com/max5/vignettes/core/live_parameters.html)
