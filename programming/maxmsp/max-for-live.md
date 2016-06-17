@@ -37,10 +37,40 @@ For more info on the parameter system, check [here](https://docs.cycling74.com/m
     - **Device.DeviceParameterRemote**: **TODO**
     - **Track.ChangeTrackVolume**: **TODO**
 
-## Exposing a M4L Device Parameter for Automation
-- [this](https://docs.cycling74.com/max5/vignettes/core/live_parameters.html)
-- [and this](https://docs.cycling74.com/max5/vignettes/core/live_automation.html)
-**TODO** clarify the different ways of exposing the parameters to the parameter system and whether names with spaces matter, etc.
+## Exposing a M4L Device Parameter System And Automation
+- 2 good documentation links
+    - [Parameter System Info](https://docs.cycling74.com/max5/vignettes/core/live_parameters.html)
+    - [Automation](https://docs.cycling74.com/max5/vignettes/core/live_automation.html)
+- Parameter use cases:
+    - User input
+    - Incoming MIDI data mapped to a parameter
+    - Live Automation
+- live UI objects (e.g. live.text, etc) have default parameter system capabilities:
+    - Value initialization when deviced is saved/loaded
+    - MIDI mapping
+    - Automation
+- **Parameter Name Attributes**
+    - **Scripting Name** is for using the ```pattr``` system for preset recall.  You'll need to use this in conjunction with the ```autopattr``` and ```pattrstorage``` objects.  For details, see [this](https://docs.cycling74.com/max5/tutorials/max-tut/pattrchapter02.html) max tutorial.
+    - **Short Name** is used with the *Display Parameter Name* attribute for labelling ```live.dial``` and ```live.slider``` objects.
+    - **Long Name** is the name referenced when dealing with automation and MIDI mapping
+- Parameter Modulation modes
+    - There are 4 different *modulation modes* you might use when you want to automate a parameter via clip envelopes
+    - The behavior also depends on the min/max range you set via the *Modulation Range* attribute
+    - The specifics of each mode are murky: review [this](https://docs.cycling74.com/max5/vignettes/core/live_parameters.html) page for details (section titled 'Parameter Modulation')
+- You can label the units of your parameter by entering a value in the *Custom Units* attribute.  If you param is integer typed, and your custom unit is 'McNuggets', a value of 20 will display '20 McNuggets'
+- The **Parameter Visibility** Attribute
+    - *Automated and Stored* value: 
+        - the param value will be stored in the Live Set AND presets,
+        - the param can be automated
+    - *Stored Only* value:
+        - the param value will be stored in the Live Set AND presets ONLY
+    - *Hidden* value:
+        - Will NOT be stored in Live set or presets
+        - No automation
+- Parameter changes, unless driven by ```live.remote~```, seem to affect both:
+    - The undo buffer
+    - Preset storage (if they're not set to hidden)
+
 
 ## Basic Ideas about Navigating the LOM
 - 2 kinds of paths can be:
@@ -69,4 +99,7 @@ For more info on the parameter system, check [here](https://docs.cycling74.com/m
 - Each object also has a ```canonical_parent``` child which can be useful. 
     - example: ```path this_device canonical_parent``` gets the track object
 
+
+## Best Practices with M4L
+**TODO** Add collection of best practices / gotchas / including what I learn from the C74 snippets
 **TODO** comment on the different m4l gui elements
