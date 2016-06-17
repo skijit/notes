@@ -248,7 +248,7 @@ Misc Notes from reading through the tutorials
 - ```transport``` object is the central metrical organizing object
     - start/stop by sending it a 1/0 (good for toggles)
     - send it a bang will cause it to output the time in bars/beats/ticks
-        - there are 480 ticks per beat
+        - there are 480 'ticks' (i.e. pulses) per quarter note, i.e. 480 ppq 
     - you can specify the tempo for the transport in the inspector
     - will broadcast metrical information to all metros and timing objects
     - then you can use timing values like 4n, 4nt, 4nd, etc.
@@ -264,83 +264,89 @@ Misc Notes from reading through the tutorials
 ## Tutorial 20: Adding Objects to Presentation Mode
 - Use presentation mode and add objects (w inspector) wherever appropriate
 
-Tutorial 21  (Controlling Data Flow)
-	-radiogroup object defines a group of radio buttons which output their index (starting with 0).  you specify the number of buttons in its inspector.
-	-router object is often paired with matrixctrl object
-		-in matrixctrl:
-			-vertical lines are input and horizontal lines are output
-			-you can observe the communication between matrixctrl and router by checking the max window
-				0 3 0  -> inlet 0, outlet 3, state 0 (off)
-				0 3 1  -> inlet 0, outlet 3, state 1 (on)
+## Tutorial 21: Controlling Data Flow
+- ```radiogroup``` defines a group of radio buttons which output their index (starting with 0).  you specify the number of buttons in its inspector.
+- ```router``` is often paired with ```matrixctrl```
+    - in ```matrixctrl```:
+        - vertical lines are input and horizontal lines are output
+        - you can observe the communication between matrixctrl and router by checking the max window
+            0 3 0  -> inlet 0, outlet 3, state 0 (off)
+            0 3 1  -> inlet 0, outlet 3, state 1 (on)
 
-Tutorial 21 (Designing Equations)
-	-expr object lets you design complicated math formulas
-	-you can reference standard c math library functions here and reference inputs like so:
-		$f1 : inlet 1, a floating point
+## Tutorial 21: Designing Equations
+- ```expr``` lets you design complicated math formulas
+- you can reference standard c math library functions here
+    - To reference an input...
+        - ```$f1``` : inlet 1, a floating point
 
-Tutorial 22 (MIDI Basics)
-	-notein / noteout ignore everything but note messages
-	-notein returns 3 pieces of data:
-		-note number
-		-velocity
-		-channel
-	-note off is usually the same note with a velocity of 0
-	-ctlin / ctlout are specifically for dealing with midi controller messages
+## Tutorial 22: MIDI Basics
+- ```notein``` / ```noteout``` ignore everything but note messages
+- ```notein``` returns 3 pieces of data:
+    1. note number
+    2. velocity
+    3. channel
+- note off is usually the same note with a velocity of 0
+- ```ctlin``` / ```ctlout``` are specifically for dealing with midi controller messages
 
-Tutorial 23 (MIDI Note Management)
-	-makenote will generate pairs of on/off messages for the specified note, velocity, and duration
-	-stripnote object will eliminate the corresponding note off, so we can generate it programmatically
-	-flush object accumulates a table of notes that are sent to it, and then when it receives a bang, it will generate note off messages
-	-sustain object simulates the sustain pedal- rightmost inlet toggles it on and off.
+## Tutorial 23: MIDI Note Management
+- ```makenote``` will generate pairs of on/off messages for the specified note, velocity, and duration
+- ```stripnote``` will eliminate the corresponding note off, so we can generate it programmatically
+- ```flush``` accumulates a table of notes that are sent to it, and then when it receives a bang, it will generate note off messages
+- ```sustain``` simulates the sustain pedal- rightmost inlet toggles it on and off.
 
-Tutorial 24 (MIDI Parsing)
-	-midiparse object lets us see the raw components of the midi stream
-		-basically a midi listener
-		-outlets return different data types depending on the data:
-			-notes, poly pressure, and control changes are lists (use unpack)
-			-program change, aftertouch, pitch bend are integers
+## Tutorial 24: MIDI Parsing
+- ```midiparse``` lets us see the raw components of the midi stream
+    - basically a midi listener
+    - outlets return different data types depending on the data:
+        - notes, poly pressure, and control changes are lists (use unpack)
+        - program change, aftertouch, pitch bend are integers
+- ```midiformat``` helps us build up midi messages
+    - basically, the inverse of midiparse
+    - be sure you're not overwhelming a midi device with messages!
+- ```speedlim``` slows down how often some data updates (if its overwhelming)
+    - the argument specifies the number of milliseconds per message
 
-	-midiformat object helps us build up midi messages
-		-basically, the inverse of midiparse
-		-be sure you're not overwhelming a midi device with messages!
+## Tutorial 25: MIDI Basic Sequencing
+- ```seq``` will play the a midi sequence
+    - it might be helpful to connect it to a ```midiflush``` (not sure how this is different from ```flush```) to terminate hanging notes
+    - you can send it messages like 'start' or 'stop'
+    - the first argument can be the midi file to sequence
+    - if you pass seq a message like 'start 1024', the sequence will be played at normal speed.  twice the speed is start 2048, and so forth.
+    - if you pass the seq a message 'start -1', the internal transport is disengaged and it depends on incoming tick messages (note that is a tick message- not object)
+- ```tempo``` will generate bangs on a fixed bpm: you specify arguments for the bpm, a multiplier (default is 1), and the number of ticks per beat.
+    - you can connect an object to set the bpm...
+        - use a line object to ramp up the bpm
+        - do a wobble playback
 
-	-speedlim object slows down how often some data updates (if its overwhelming)
-		-the argument specifies the number of milliseconds per message
+## Tutorial 26: Advanced MIDI Sequencing
+- you can record a MIDI sequence with the ```seq``` object
+- the right outlet produces a bang when the playback concludes, so you can use this to loop it.
+- all sorts of messages you can send to seq:
+    record / start / stop / write / read / read yourfilename.midi	
 
-Tutorial 25 (MIDI Basic Sequencing)
-	-seq object will play the a midi sequence
-		-it might be helpful to connect it to a midiflush (not sure how this is different from flush) to terminate hanging notes
-		-you can send it messages like 'start' or 'stop'
-		-the first argument can be the midi file to sequence
-		-if you pass seq a message like 'start 1024', the sequence will be played at normal speed.  twice the speed is start 2048, and so forth.
-		-if you pass the seq a message 'start -1', the internal transport is disengaged and it depends on incoming tick messages (note that is a tick message- not object)
-	-The tempo object will generate bangs on a fixed bpm: you specify arguments for the bpm, a multiplier (default is 1), and the number of ticks per beat.
-		-you can connect an object to set the bpm...
-			-use a line object to ramp up the bpm
-			-do a wobble playback
+## Tutorial 27: Data Viewing
+- you can use a ```multislider``` for a step sequencer: each slider has 127 values and you create lots of steps.
+    - set message will initialize the steps
+    - fetch message will get the value at a given step
+    - you can also use a multislider for data output: set it slider style to 'scroll' and it will output data.
 
-Tutorial 26 (Advanced MIDI Sequencing)
-	-you can record a MIDI sequence with the seq object
-	-the right outlet produces a bang when the playback concludes, so you can use this to loop it.
-	-all sorts of messages you can send to seq:
-		record / start / stop / write / read / read yourfilename.midi	
+## Tutorial 28: Data Scaling
+- ```iter``` helps you tokenize a list into individual parts and generate a trigger for each
+- ```peak``` sends a trigger when there's a new max value in a stream
+- ```trough``` does the opposite of ```peak```
+- ```slide``` lets you smooth upward and downward movement by independent smoothing factors (can be arguments)
+    - 1: no smoothing
+    - 50: lots of smoothing
+- often good to get the min/max of a dataset before you graph or display it on a multislider (there are usually initialization messages you can send to these objects w min/max too)
 
-Tutorial 27 (Data Viewing)
-	-you can use a multislider for a step sequencer: each slider has 127 values and you create lots of steps.
-		-set message will initialize the steps
-		-fetch message will get the value at a given step
-		-you can also use a multislider for data output: set it slider style to 'scroll' and it will output data.
+## Tutorial 29: Gesture Capture
+- you can also interactively write to a ```coll``` object
+- if you want to use a ```counter```, but don't know how high it might go, use a combination of integer objects
 
-Tutorial 28 (Data Scaling)
-	-iter object helps you atomize (tokenize) a list into individual parts and generate a trigger for each
-	-peak object sends a trigger when there's a new max value in a stream
-	-trough object does the opposite of peak
-	-slide object lets you smooth upward and downward movement by independent smoothing factors (can be arguments)
-		1: no smoothing
-		50: lots of smoothing
-	-often good to get the min/max of a dataset before you graph or display it on a multislider (there are usually initialization messages you can send to these objects w min/max too)
-
-Tutorial 29 (Gesture Capture)
-	-you can also interactively write to a coll object
-	-if you want to use a counter object, but don't know how high it might go, use a combination of integer objects
-
+## Tutorial X: BPatcher
+- BPatcher is wrapper object for an abstraction where you can display it's visual interface
+- You could open the file corresponding to a bpatcher by sending it the message 'open'
+    - Alternately, you could right-click on the object, select 'Object' (last item in the context menu)
+- When you open Bpatchers, usually they Patcher inspector will have the 'Open in Presentation Mode' setting checked
+- You can insert a ```thispatch``` into a bpatcher and the parent patch can send it offset messages to quicky scroll to different segments of the view of the patcher
+- You can specify arguments/parameters for the abstraction/bpatcher by setting them in the bpatcher's inspector.  Then inside the abstraction, you refer to them via the #1, #2, etc. notation.

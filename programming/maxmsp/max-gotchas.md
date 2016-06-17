@@ -20,6 +20,32 @@ Max/MSP Gotchas and Misc Notes
 
 ## General Performance
 - See [my old thread](https://cycling74.com/forums/topic/event-scheduler-interval-vs-execution-time/) on the forum about intentional latency (e.g. I'm windowing a signal) vs computational overhead (e.g. inefficient algorithm)
+- [this](https://cycling74.com/2004/09/09/event-priority-in-max-scheduler-vs-queue/#.V2Q7GeYrIW0) link has useful notes about execution.  Here are some notes...
+    - Event examples:
+		- External sources: midi note, keypress, mouse click
+		- Internal sources: metronome, delay, pipe
+	- Event is a fundamental unit of execution
+	- Note in preferences, there is a setting, 'Scheduler Interval (ms)' which you can set... typically to 1ms.
+	- Events are triggers... but they are not the object-to-object messaging
+	- Events are processed off a scheduler, which, I think operates at control-rate.
+		- Therefore, I think you can regard the sequence of control message processing to happen within a control rate cycle, rather than one message per cycle.
+		- This is also supported by the idea that events are the fundamental unit of execution.
+	- Some events have timing associated with them: metronome, midi note, delay, pipe, etc.  Others (e.g. mouseclick) do not.
+		- If they do have timing associated with them, and **overdrive** is selected, there are two scheduling queues:
+            - high-priority 
+            - low priority.  
+        - high-priority will also interrupt the low priority execution.
+		- If overdrive is not selected, events are processed in the same queue.
+		- This also means that you have a shared patcher state which might be operated on by out-of-order processing (e.g. if a high-priority event interrupts an incomplete low-priority event)
+	- Sometimes you have a high-priority thread that tries to do something that is not safe at a high priority, like redrawing, file i/o, user-input, etc.  For these circumstances, you can use the following objects to transfer execution to the low priority queue:
+		- ```defer```: moves to the head of the low-priority queue
+		- ```deferlow```: moves to the tail of the low-priority queue
+	- to promote a sequence from low-priority to hi-priority, use pipe or delay on the message.
+	- this also explains the conditions in which feedback/recursion works:
+		- you need to interject a delay or pipe or deferlow because then it creates a new event to schedule, rather than just processing depth-first until stack-overflow.
+	- you can start to overflow the scheduler if new events are added faster than they can be serviced.  e.g. a rapid metronome or a snapshot~ updating every ~1ms
+		- in this case, use the ```qlim``` or ```speedlim``` object.
+
 
 ## M4L Folder
 - To register a M4L Device with Ableton, you drop it into a track and it will populate in the Ableton Browser.
