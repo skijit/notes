@@ -13,7 +13,7 @@
 
 - **You can have a getter-only auto-property that is set once ONLY by the constructor**
 
-    ```(C#)
+    ```(javascript)
     public class Customer
     {
         //constructor
@@ -24,8 +24,7 @@
         
         //note property only has get
         public string Name { get; }
-    }
-    ```
+    }```
     
 - You can combine these last two features for some lean code.
 - Notice in the example below that the class definition is merged with the constructor definition.
