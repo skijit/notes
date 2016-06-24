@@ -12,7 +12,7 @@ Git
 	- Create a new repo from scratch
 	- **Clone** an existing remote repo
 - **Commit** command is how you create new versions of files/directories in the repository
-	- Each commit is identified by a unique 40-char checksum hash
+    - Each commit is identified by a unique 40-char checksum hash
 - **Working Tree** consists of all the files you're working on (i.e. have changed)
 - **Index** is the staging area where new commits are prepared.
 	- Only the (possibly subset of) files from the working tree that are also in the index will be commited to the repo.
@@ -569,3 +569,4 @@ git push -u origin --all
 - **TODO**: add this tip about moving files: first, copy to the new location, then execute this on the old file ```git rm -f filename``` which removes it from git and the filesystem, finally git add the new file.  It should usually figure out that it's the same file, just moved.  To prove it, execute a ```git status```.
 - **TODO**: instructions on changing case / moving folders in git.  see [here](http://stackoverflow.com/questions/11183788/in-a-git-repository-how-to-properly-rename-a-directory)
 - **TODO**: discuss stashing stuff per [this](https://git-scm.com/book/en/v2/Git-Tools-Stashing-and-Cleaning) page
+- **TODO**: find the order in which .gitignore is applied... suppose you've ```git add``` ed some dlls... do you need to remove them manually
