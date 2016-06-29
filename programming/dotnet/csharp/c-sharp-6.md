@@ -2,7 +2,7 @@
 
 - **Auto-Property Initializer**
 
-    ```(C#)
+    ```(csharp)
     public class Customer
     {
         public DateTime FirstOrder { get; set; } = DateTime.Today;
@@ -13,7 +13,7 @@
 
 - **You can have a getter-only auto-property that is set once ONLY by the constructor**
 
-    ```(javascript)
+    ```(csharp)
     public class Customer
     {
         //constructor
@@ -29,7 +29,7 @@
 - You can combine these last two features for some lean code.
 - Notice in the example below that the class definition is merged with the constructor definition.
 
-    ```(C#)
+    ```(csharp)
     class Pair<T>(T first, T second)
     {
     public T First { get; } = first;
@@ -41,7 +41,7 @@
 
 - **There's a way of just importing static members of a class / namespace**
 
-    ```(C#)
+    ```(csharp)
     using static System.Math;
     // ...
 
@@ -56,7 +56,7 @@
 
 - **Dictionary Initializer**
 
-    ```(C#)
+    ```(csharp)
     var customers = new Dictionary<int, Customer>()
     {
         [1] = new Customer("Joe"),
@@ -72,7 +72,7 @@
 
 - **Conditional Exception Catching**
 
-    ```(C#)
+    ```(csharp)
     try
     {
         // ...
@@ -90,20 +90,20 @@
 - **Expression Body**
     - You can use lambda syntax (aka expression syntax) with get-only properties (this example), methods, indexers, operators, etc.
 
-    ```(C#)
+    ```(csharp)
     public string FullName() => FirstName + " " + LastName;
     ```
     
 - **Null Conditional Operator**
 
-    ```(C#)
+    ```(csharp)
     //If Value is null, don't try to eval Name.  Just return null rather than the exception.
     Console.WriteLine(cust.Value?.Name);
     ```
     
 - **Default Parameters**
     
-    ```(C#)
+    ```(csharp)
     public SomeMethod(int val1 = 10)
     {
         // ...    
@@ -112,7 +112,7 @@
     
 - **String Interpolation**
 
-    ```(C#)
+    ```(csharp)
     Console.WriteLine($"First Name: {FirstName}, Last Name: {LastName}");
     ```
 
@@ -124,7 +124,7 @@
     - Also useful when getting an enum's ToString() value.
     - Basically it's a reflection-shortcut.
 
-    ```(C#)
+    ```(csharp)
     void ThrowArgumentNullExceptionUsingNameOf(string param1)
     {
     throw new ArgumentNullException(nameof(param1));
@@ -144,7 +144,7 @@
         - the await'ed method needs to return a Task
         
     - Example:
-    ```(C#)
+    ```(csharp)
     public async DoWork()
     {
         //start by executing synchronously
