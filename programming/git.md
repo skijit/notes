@@ -61,26 +61,26 @@ Git
 			- **merge commit**:
 				- You create a topic branch off master, and by the time you're ready to merge back to master, it has received some intervening commits.  A *merge commit* is created which creates a new commit on master that is the merged results of topic and master branches.
 				**Feature Branch Pre-Merge**
-				![enter image description here](https://github.com/skijit/Notes/blob/master/resources/images/programming/git_merge_commit_1.png?raw=1)
+                ![commit 1 merge](/resources/images/programming/git_merge_commit_1.png)
 				**Post-Merge, with new commit in master**
-				![enter image description here](https://github.com/skijit/Notes/blob/master/resources/images/programming/git_merge_commit_2.png?raw=1)
+				![enter image description here](/resources/images/programming/git_merge_commit_2.png)
 			- **fast forward commit**:
 				- In this case, the master branch has not recieved any intervening commits by the time you're ready to merge into it.  In this case, the master HEAD now just points at your most recent commit on your branch.  In other words, no new commit is created on the master branch.
 				**Feature Branch Pre-Merge**
-				![enter image description here](https://github.com/skijit/Notes/blob/master/resources/images/programming/git_ff_merge_1.png?raw=1)
+				![enter image description here](/resources/images/programming/git_ff_merge_1.png?raw=1)
 				**Post-Merge, with no new commit in master**
-				![enter image description here](https://github.com/skijit/Notes/blob/master/resources/images/programming/git_ff_merge_2.png?raw=1)
+				![enter image description here](/resources/images/programming/git_ff_merge_2.png?raw=1)
 				- In some cases, this is not preferable, and so there are ways to force a merge commit in a fast forward scenario.
 				- Reasons why it might not be preferable:
 					- So you can see where the topic branch starts and ends.
 	- **rebase**
 		- When you rebase a topic branch into an integration branch, it will **replay** the changes (recall, git is only keeping the diffs for each commit, so this is a reasonable description) of your topic branch to the HEAD of the integration branch (making it appear like they originally performed directly on the integration branch).
 		**Feature branch Pre-Rebase**
-		![enter image description here](https://github.com/skijit/Notes/blob/master/resources/images/programming/git_rebase_1.png?raw=1)
+		![enter image description here](/resources/images/programming/git_rebase_1.png?raw=1)
 		**Post rebasing**
-		![enter image description here](https://github.com/skijit/Notes/blob/master/resources/images/programming/git_rebase_2.png?raw=1)
+		![enter image description here](/resources/images/programming/git_rebase_2.png?raw=1)
 		- However, the HEAD of your branch will not be advanced.  For this, you would do a fast forward merge.
-		![enter image description here](https://github.com/skijit/Notes/blob/master/resources/images/programming/git_rebase_3.png?raw=1)
+		![enter image description here](/resources/images/programming/git_rebase_3.png?raw=1)
 
 ### Tag
 - A tag is used to label and mark a specific commit in the history.  
@@ -102,7 +102,7 @@ Screencast [here](https://vimeo.com/16018419)
 
 - git-flow are extensions based for git based on a [popular git branching model](http://nvie.com/posts/a-successful-git-branching-model/).
 - Branching Model:
-![enter image description here](https://raw.githubusercontent.com/skijit/Notes/master/resources/images/programming/git_branching_model.png?raw=1)
+![enter image description here](/resources/images/programming/git_branching_model.png?raw=1)
 	- **Master Branch**:	 
 		- matches what is always in production 
 		- contains the least code changes
