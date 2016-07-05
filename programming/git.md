@@ -34,7 +34,7 @@ Git
 	- Bug fixes
 - Different branches can be merged into any one branch provided they belong to the same repo.
 - When you first make a commit to the repo, Git will automatically create a **master branch** by default.
-	- Subsequent commits go into the master branch until you decide to create and switch over to another branch.
+	- Subsequent commits go int the master branch until you decide to create and switch over to another branch.
 
 ### How to use a Branch
 - There are generally 2 types of branches:
@@ -383,6 +383,31 @@ A user wants to make a change to a repo they can't directly modify. So they...
 	```
 from [this](http://www.developerhandbook.com/git/git-for-net-developers/) blog post
 
+# A .gitignore file for .NET projects
+
+- Copy these contents into the .gitignore file in your root directory.
+- Make sure that this file is committed the repo.
+    ```
+    */obj/*
+    */bin/*
+    */uploads/*
+    *.suo
+    **/*.suo
+    node_modules/
+    [Oo]bj/
+    [Bb]in/
+    .nuget/
+    _ReSharper.*
+    packages/
+    artifacts/
+    *.user
+    *.suo
+    *.userprefs
+    *DS_Store
+    *.sln.ide
+    .vs/```
+
+
 # Installing GIT and GitFlow on Windows and Using Commandline GIT
 
 - Since GIT originated on linux, there are lots of different ports available for windows.
@@ -561,12 +586,8 @@ git push -u origin --all
 **NEXT STEPS**
 - **TODO: document Merging / Merge tools**
 - **TODO: more documentation of Branching with git-flow**
-- **TODO: Better examples with the .gitignore.  Do you check it in with your repo? See the github repo of various .gitignore files**
 - **TODO: Stage vs Clean and how to manage that**
-- **TODO: add note about configuring msysgit - using long file names**
 - **TODO: add notes about staging deleted files: http://stackoverflow.com/questions/12373733/staging-deleted-files  **
 - **TODO: can you have one repo pointing at multiple remotes?  eg one on azure, one on gh? and what if you're using multiple accounts for them?**        
 - **TODO**: add this tip about moving files: first, copy to the new location, then execute this on the old file ```git rm -f filename``` which removes it from git and the filesystem, finally git add the new file.  It should usually figure out that it's the same file, just moved.  To prove it, execute a ```git status```.
-- **TODO**: instructions on changing case / moving folders in git.  see [here](http://stackoverflow.com/questions/11183788/in-a-git-repository-how-to-properly-rename-a-directory)
 - **TODO**: discuss stashing stuff per [this](https://git-scm.com/book/en/v2/Git-Tools-Stashing-and-Cleaning) page
-- **TODO**: find the order in which .gitignore is applied... suppose you've ```git add``` ed some dlls... do you need to remove them manually

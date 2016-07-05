@@ -40,4 +40,27 @@ Notes from a pluralsight [course](https://app.pluralsight.com/library/courses/en
     - To help working on smaller devices, the API will be broken into smaller pieces
     - Will run on client devices
     - Will support non-relational DBs
+    
+## Code-First Walkthrough
+- Create a class library project to hold the POCOS
+- Then create a second class library project to hold the EF / data model
+    - Install nuget package for EF
+    - Create a Context class, which inherities from ```DbContext```
+    - The derived Context class will:
+        - Have your ```DbSet<T>``` objects, where T is a POCO class.  Your queries will target these DbSets.
+            - Note: YOu can have entities in your Model that aren't in a DbSet, but are reachable through relationships in a DbSet.
+    - The base DbContext functionality includes:
+        - Provide query tracking and execution
+        - Track changes
+        - Execute updates
+        - Map classes to the DB schema
+- At runtime, EF will use your Context and Model Poco's to create the runtime in-memory model
+    - There's a power tool for EF where you can visualize the in-memory model at design time, to validate it works as you expect.
+- Relationship Definition Tips
+    - If you have a FK relationship, the parent class should have a reference to both:
+        1. The corresponding type (e.g. MyThing) 
+        2. An int property referencing it's Id (e.g. int myThingId)
+    - You can use the ```[Required]``` data annotation / attribute on a DbSet's property to mark it as required (although this isn't necessary if you use the better tip above)
+        - You can also use EF Fluent API to add all the data annotations to your Poco classes from within the Context (that way your Poco's aren't dependent on any EF stuff)
+
 
