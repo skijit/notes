@@ -43,3 +43,27 @@ A Collection of Misc Gotchas About Git
 ## .gitignore and file add order
 - If Git is already tracking a a file which you then later reference (directly or indirectly) in your .gitignore file, it will not be automatically removed.  You need to manually remove it: ```git rm --cached <file>```
 - [reference](http://stackoverflow.com/questions/1274057/making-git-forget-about-a-file-that-was-tracked-but-is-now-in-gitignore)
+
+## Stashing Changes
+- ```git stash``` lets you save and discard work, with the possibility to return to it later.
+- This could be useful if you changes you want to address, but have to be deferred to do something like:
+    - Change branches
+    - etc.  ?
+- Make sure whatever changes you want to stash are already in added into the index
+- To save your stash with a name, run:
+    ```
+    git stash save "my_stash_name"```
+- This will push your stash to the stash stack
+- To see what changes are currently stashed, use:
+    ```
+    git stash list```
+- To apply a stash (once), use:
+    ```
+    git stash pop stash@{n}```
+    - where *n* is the index number of the change in the stash
+- To apply a stash and keep it in the stash stack, use:
+    ```
+    git stash apply stash@{n}```
+    
+## Discarding Changes
+- Whether on index or not??
