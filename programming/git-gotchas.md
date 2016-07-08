@@ -44,26 +44,136 @@ A Collection of Misc Gotchas About Git
 - If Git is already tracking a a file which you then later reference (directly or indirectly) in your .gitignore file, it will not be automatically removed.  You need to manually remove it: ```git rm --cached <file>```
 - [reference](http://stackoverflow.com/questions/1274057/making-git-forget-about-a-file-that-was-tracked-but-is-now-in-gitignore)
 
-## Stashing Changes
-- ```git stash``` lets you save and discard work, with the possibility to return to it later.
-- This could be useful if you changes you want to address, but have to be deferred to do something like:
-    - Change branches
-    - etc.  ?
-- Make sure whatever changes you want to stash are already in added into the index
-- To save your stash with a name, run:
+
+## Git State / Workflow
+- Pulled from [here](https://git-scm.com/book/en/v2/Getting-Started-Git-Basics)
+- 2 types of files:
+    1. **Tracked**: The database knows about them and is recording changes to its contents
+    2. **Untracked**: The database is not retaining any history or recording changes to these files.  
+        - This could be permanent/intentional or temporary (i.e. they'll soon be tracked)
+- Tracked Files have 3 possible states
+    1. **Committed**: Has no changes
+    2. **Modified**: There are changes, but they not scheduled for the next commit
+    3. **Staged**: There are changes and they will be included in the next commit 
+- 3 Sections of a Git project:
+    1. The .git Directory
+        - This IS the Repository
+        - Stores metadata and primary databse
+    2. Working Directory
+        - Basically the root project folder and all its contents (files and subfolders), excluding the .git directory        
+        - These contents represent a single checkout of one version of the project, which could correspond to any version and branch plus whatever untracked files have been added.
+        - These files are created by uncompressing data stored in the .git directory's database        
+    3. Staging Area
+        - Also called the *index*, which corresponds to the name of a file in the .git directory
+        - Contains whatever added or modified files are to be included in the next commit 
+
+## Discarding or Saving Files
+- ```git stash``` is a set of commands that lets you:
+    - Saves work in a stack
+    - Cleans your working directory
+    - Gives you the possibility to return to the saved state later.  Otherwise, it's effectively discarded.
+- Saving Or Discarding Work:
+    -  Staged AND UnStaged Files:
     ```
-    git stash save "my_stash_name"```
-- This will push your stash to the stash stack
-- To see what changes are currently stashed, use:
+    git stash save "my_stash_name"
+    ```
+    - Only UnStaged Files:
+    ```
+    git stash save --keep-index "my_stash_name"
+    ```
+        - Alternately, this will clear out any modified (unstaged) changes:
+        ```
+        git checkout -- .
+        ```        
+            - This is saying get the HEAD version on the branch I'm currently on for the current directory
+    - Only Staged Files:
+        - There are lots of possibilities here.  Some involve commiting then doing an ```git commit --amend``` or a ```git rebase```.
+        - Here is a simple procedure that uses more familiar functionality:
+            1. ```git stash -save --keep-index "these are just my unstaged changes"``` : stashes your unstaged changes, but keeps your staged content
+            2. ```git stash -save "now this is just the staged changes"
+            3. ```git stash pop ...``` (or something like) to restore just thos unstaged changes
+    - Staged, Unstaged, and Untracked Files
+    ```
+    git stash save --include-untracked "my_stash_name"
+    ```
+- View The Stash Stack:
     ```
     git stash list```
-- To apply a stash (once), use:
+- Applying a stash
+    - To apply and **remove** from stack
     ```
     git stash pop stash@{n}```
-    - where *n* is the index number of the change in the stash
-- To apply a stash and keep it in the stash stack, use:
+        - where *n* is the index number of the change in the stash
+    - To apply and **keep** in stack
     ```
     git stash apply stash@{n}```
-    
-## Discarding Changes
-- Whether on index or not??
+
+## A file could be listed as Both Staged and Modified
+- Suppose you...
+    - Make changes to file X and then stage the file, using ```git add X``` 
+    - Now you make some more changes to X without committing it
+    - If you run ```git status```, you'll see it marked as both modified and staged!
+    - Solution: just rerun ```git add X```
+- **Why did this happen?**
+    - Bc when you run ```git add```, the file is staged exactly as it is.  Any changes occuring before the commit will not be tracked.
+
+## Managing Remotes
+- A remote is a version of a repository that is available through a network.
+- You can have any number of remotes configured for your repository.
+- Running ```git remote -v``` lets you see the names and address of each remote that's currently configured and for what operations (fetch/push)
+    - When you clone a repository, git automatically assigns the source as a remote named *origin*
+- To add a remote: ```git remote add <shortName> <url>```
+- When you do a ```git fetch <remoteName>``` on a remote, it will copy those branches into <remoteName>/<branchName>
+    - So the master branch of a remote named 'foo' will be copied into foo/master.
+    - Recall ```git pull``` is just a combination of ```git fetch``` and ```git merge```
+- To push to a remote, use ```git push <remoteName> <branchName>```
+- To get more information about a remote, use ```git remote show```.  It will tell you:
+    - Which remote branch is automatically pushed to when you run ```git push```
+    - Which local branches are merged into when you run ```git pull```
+    - What remote branches you dont have locally
+    - What local branches you have that've been removed from the remote 
+- ```git remote rename <oldName> <newName>``` will change a remotes short name
+- ```git remote rm <shortName>``` removes a remote
+
+## Git Configuration
+- Git stores it's configurations in a hierarchy of files (in order of precedence)
+    1. System Level: /etc/gitconfig
+    2. User Level: ~/.gitconfig OR ~/.config/git/config
+    3. Repository Level: <repoFolder>/.git/config
+- These files have different names (and obviously location) but the same format
+- You can change your configurations by modifying these text files or by running ```git config```
+    - To target system-level config: add param --global
+    - To target user-level config: add param ???
+    - To target repo-level config: add param ???
+- There are tons of configuration settings.  [Here's](http://git-scm.com/docs/git-config.html) a complete list.
+- core.editor
+    - Set the editor for your commit and tag messages
+    - Ex:  ```git config --global core.editor <editorName>```
+    - By default it uses the editor pointed at by the environment variables $VISUAL or $EDITOR, using vi as a fallback.
+- commit.template
+    - Set a commit template (a text file that has all the fields you want entered in a commit message)
+    - Ex: ```git config --global commit.template ~/.gitmessage.txt``` 
+- core.pager
+    - Sets the pager, ie the program 'more' or alternately 'less'
+    - Ex.  git config --global core.pager 'less'
+- user.signingkey
+    - lets you sign the tags you create
+- core.excludesfile
+    - like a system-level .gitignore file.
+    - Ex: git config --global core.excludesfile ~/.gitignore_global
+- External Merge and Diff Tools
+    - Google or see documentation
+- Converting Whitespace
+    - core.autocrlf : see documentation
+
+
+
+**TODO** .git directory [design](http://www.gitguys.com/topics/the-git-directory/)
+**TODO** git [branching](https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell#_git_branching)
+**TODO** remote configuration and the refspec
+    [see](http://www.gitguys.com/topics/the-configuration-file-remote-section/)
+    [see](http://www.gitguys.com/topics/the-configuration-file-branch-section)
+    [see](https://git-scm.com/book/en/v2/Git-Internals-The-Refspec)
+**TODO**  git server [setup](https://git-scm.com/book/en/v2/Git-on-the-Server-Getting-Git-on-a-Server#_git_on_the_server)
+
+

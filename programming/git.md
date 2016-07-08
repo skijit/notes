@@ -586,8 +586,4 @@ git push -u origin --all
 **NEXT STEPS**
 - **TODO: document Merging / Merge tools**
 - **TODO: more documentation of Branching with git-flow**
-- **TODO: Stage vs Clean and how to manage that**
-- **TODO: add notes about staging deleted files: http://stackoverflow.com/questions/12373733/staging-deleted-files  **
-- **TODO: can you have one repo pointing at multiple remotes?  eg one on azure, one on gh? and what if you're using multiple accounts for them?**        
-- **TODO**: add this tip about moving files: first, copy to the new location, then execute this on the old file ```git rm -f filename``` which removes it from git and the filesystem, finally git add the new file.  It should usually figure out that it's the same file, just moved.  To prove it, execute a ```git status```.
-- **TODO**: discuss stashing stuff per [this](https://git-scm.com/book/en/v2/Git-Tools-Stashing-and-Cleaning) page
+        
