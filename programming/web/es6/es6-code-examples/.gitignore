@@ -1,0 +1,9 @@
+bin
+obj
+*.suo
+packages
+*.mdf
+*.ldf
+node_modules
+samples/js/*.js
+samples/js/*.js.map
