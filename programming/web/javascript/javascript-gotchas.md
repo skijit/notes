@@ -42,5 +42,36 @@ JavaScript Gotchas and Misc Notes
 
 **TODO**  [this](http://stackoverflow.com/questions/2485423/is-using-var-to-declare-variables-optional) javascript scoping page
 **TODO**  more about closures and this ambiguities
+**TODO**  new Error() vs throw Exception
 
 ## This
+
+## for..of vs for..in
+- for..of:
+    - new in ES7
+    - Uses the iterable convention to iterate over an object (presumably a collection of some kind)
+- for..in:
+    - Lets you loop of the enumerable property names of an object
+    - Will include properties inherited via the prototype chain.  
+        - To filter them out, use hasOwnProperty()
+    ```(javascript)
+    let triangle = {a:1, b:2, c:3};
+
+    function ColoredTriangle() {
+        this.color = "red";
+    }
+
+    ColoredTriangle.prototype = triangle;
+
+    let obj = new ColoredTriangle();
+
+    for (let prop in obj) {
+        if( obj.hasOwnProperty( prop ) ) {
+            console.log("obj." + prop + " = " + obj[prop]);
+        } 
+    }
+
+    // Output:
+    // "obj.color = red"```
+        
+    

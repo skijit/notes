@@ -1,5 +1,12 @@
 Intro to TypeScript Modules and Namespaces
 ============
+- Notes collected while working on a Node/TypeScript project.  
+- The challenges I needed to address included:
+    - Including code from other files:
+        - Some 3rd party libraries
+        - Some written by me
+    - Getting intellisense to work in VSCode
+    - Figuring out how to structure my code across diff files / dir structure & hierarchy
 
 ## Modules and Namespaces
 - Comparison of Intent: 
@@ -14,19 +21,19 @@ Intro to TypeScript Modules and Namespaces
     - More appropriate in web applications (since that's where \<script\> tags will occur).
 - You shouldn't use BOTH namespaces and modules
     - Modules cover the logical grouping on their own
-    - Typescript requires that consumers of a module assign a name / alias to the module, so there's no chance of scope/namespace collisions.
+    - Typescript requires that consumers of a module assign a name / alias to the module, so there's no chance of scope/namespace collisions. (see import statements below)
 - Modules are part of the ECMA2015/ES6 standard, whereas namespaces are NOT.
     - Prior JS versions had no system definition of modules, but there are various polyfills (e.g. ComonJs, AMD, etc.).
 - TypeScript has 3 ways to 'import' code from other files:
     1. Namespaces + \<script\> tags
     2. Import/Export (Modules)
-    3. Compiler Directives ```/// <reference> node.d.ts``` (Ambient Modules or Ambient Namespaces) 
+    3. *Design Time Only*: Compiler Directives ```/// <reference> node.d.ts``` (Ambient Modules or Ambient Namespaces) 
 - [Decent short discussion of Modules vs Namespaces](https://github.com/Microsoft/TypeScript-Handbook/blob/master/pages/Namespaces%20and%20Modules.md)
 
 
 ## ES6 Modules
 ### Why?
-- Module loading in TypeScript seems a little overwrought but I think this is bc it's a superset of ES6 module syntax:
+- Module loading in TypeScript seems a little overwrought but I think this is bc it's a **superset** of ES6 module syntax:
     A. ES6 part makes it future proof => Obvious Win!
     B. Extra stuff is for compatibility with older-style modules or ECMA versions (that's where it gets a little ugly)
         - Remember that all the pre-ES6 module stuff was not part of the language spec, so the new ES6 module stuff doesn't have to be backwards compatibility.
@@ -81,8 +88,8 @@ Intro to TypeScript Modules and Namespaces
     - TypeScript needs to be able to support ES6 modules as well as it's various predecessors (CommonJS, AMD, etc.)
     - The way you import modules in TypeScript is dependent on:
         - The type of module
-        - It's structure
-- Per [the handbook](https://www.typescriptlang.org/docs/handbook/modules.html), a module is any file containing a top-level ```import``` or ```export```.
+        - It's (export) structure
+- Per [the TypeScript docs](https://www.typescriptlang.org/docs/handbook/modules.html), a module is any file containing a top-level ```import``` or ```export```.
     - 'Top-Level' bc namespaces use embdedded ```export``` statements.  This doesn't count as a module.
 - Modules are executed in their own scope- not the global scope.
 - Objects in a module are not visible unless they are exported by the producer and imported by the consumer.
@@ -121,7 +128,7 @@ Intro to TypeScript Modules and Namespaces
             
         - So...
             - Individual exports can be renamed
-            - Logical grouping is applied by **import**
+            - Logical grouping (ie alias or container obj) is applied by **import**
                 - For the producer, the exports don't have a container or namespace applied to them (most of the time)
     B. Default Exports:
         1. Normal Way
@@ -134,49 +141,37 @@ Intro to TypeScript Modules and Namespaces
             - Export Statement
             ```export default app;```
             
+            - There can only be 1 default export in a module
+            
         2. For Non-ES6 Modules
             ```export = ZipCodeValidator;```
+            - This is because CommonJS and AMD methods implment default exports differently.
     
 - Import Methods
     1. Importing Named Export(s) Explicitly
         - No rename, no container:
-        ```import { ZipCodeValidator } from "./ZipCodeValidator";```
+        ```(javascript) 
+        import { ZipCodeValidator } from "./ZipCodeValidator";```
         
         - Rename, no container:
-        ```import { ZipCodeValidator as ZCV } from "./ZipCodeValidator";```
+        ```(javascript) 
+        import { ZipCodeValidator as ZCV } from "./ZipCodeValidator";```
     
     2. Importing All Named Exports into a container
-        ```import * as validator from "./ZipCodeValidator";```
+    ```(javascript) 
+    import * as validator from "./ZipCodeValidator";```
                 
     3. Importing an ES6 Default Export
-    ```import $ from "JQuery";```
+    ```(javascript) 
+    import $ from "JQuery";```
     
     4. Importing a Non-ES6 Default Export
-    ```import cookieParser = require('cookie-parser');```
-   
+    ```(javascript) 
+    import cookieParser = require('cookie-parser');```    
 
-     
-- TODO: Discuss Module Producer/Consumer Scenarios:
-    1. Exporter: **Type**Script, Importer: **Type**Script
-    2. Exporter: **Java**Script, Importer: **Type**Script
-    3. Exporter: **Type**Script, Importer: **Java**Script
-### 3 Ways to Import
-1. Standard
-    ```import * as express from 'express';```
-    - We're assigning the type an alias/handle ```express```
-    - Compiles to... (in ES5 / Common)
-        ```var express = require('express')```
-        - This is the typical node require/import style 
-2. Pulling a single export from a module
-    ```import {join} from 'path'```
-    - No alias here!  We're just pulling out the ```join``` export from the 'path' module.
-    - Compiles to...
-        ```(javascript)
-        var path_1 = require('path');
-        //all subsequent references to join are through path_1.join```
-3. Non-ES6 
-
-    
+## How Do You Know Which Import to Use:
+- If it's a local module... it should be easy
+- If it's a 3rd party module, try using the typescript intellisense
 
 ## Notes on Runtime Module Loaders:
 - ECMA2015 : Language supported
@@ -187,29 +182,51 @@ Intro to TypeScript Modules and Namespaces
 - Live in the global scope
 - Can span multiple files (use the ```reference``` compiler directive)
 
-## Ambient Namespaces and Ambient Modules
-- Describe a (typically 3rd party) API using typescript syntax
+## Type Definition Files
+- The purpose of Type Definition files is:
+    - So the TypeScript compiler can type-check your usage of non-TS JS sources (typically 3rd party libs)
+    - To support the intellisense from the TypeScript compiler
+- It's entirely **Design Time** functionality
+    - Remember, even if the TS compiler flags errors, it will still emit JS
+- Describes an API using typescript syntax
 - File Extension is .d.ts
 - Analogous to a header file insofar as it specifies the interface without the implementation
 - Included via compiler directives ``` /// <reference> node.d.ts ```
     - These directives can be bundled in a single file and then added to a top level file
 - They're called 'ambient' because they're always available in the background
-    - 'Ambient' is probably a better term than 'global' bc these are design-time constructs exclusively
+    - 'Ambient' is probably a better term than 'global' bc (again) these are design-time constructs
 - npm project ```typings``` lets you install these 3rd party 'typings' files from a variety of repository mirrors
 - Not totally clear when Ambient namespace is preferred to Ambient module but namespace *might* be preferable when...
     1. The library is primarily loaded via \<script\> tags
     2. The library only exports a few high level objects
 
-## How do you alias types (under namespaces)?
+## Ambient Namespaces and Ambient Modules
+- TODO: What is the difference here?
+
 
 ## Other Best Practices / AntiPatterns
 - dont [namespace + modules](https://github.com/Microsoft/TypeScript-Handbook/blob/master/pages/Namespaces%20and%20Modules.md#needless-namespacing)
+- If you're only exporting one class or function, use ```export default```
+- Assign an alias / container / namespace when you're importing a lot of things
 
 
-- TODO:    
-    - Write up notes
-    - Update code
-    - possibly write my www start script in TS also... for consistency
-    - Update project structure
-    - gulp
+## TypeScript TypeDefs
+- Are supported. 
+- Called 'Type Aliases'
+```(javascript)
+type PrimitiveArray = Array<string|number|boolean>;
+type MyNumber = number;
+type NgScope = ng.IScope;
+type Callback = () => void;```
+- Can be combined with generics:
+```(javascript)
+type switcharoo<T, U> = (u: U, t:T)=>T;
+var f: switcharoo<number, string>;
+f("bob", 4);```
+
+
+- TODO:
+    - Update project structure    
     - refactor code
+    - possibly write my www start script in TS also... for consistency
+    - udate gulp / npm start script
