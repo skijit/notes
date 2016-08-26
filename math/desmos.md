@@ -1,5 +1,6 @@
 
-# Desmos
+Desmos
+======================
 
 * Good interactive tutorials [here](http://learn.desmos.com/)
 
