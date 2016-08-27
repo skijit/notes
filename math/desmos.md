@@ -25,7 +25,7 @@ Desmos
 	- But 'Convert to Table' makes it hard to edit your function, so you might want to duplicate it first.
 - If you define your functions with function notation:
 	- So $$ y = x^2 / 2 \rightarrow f(x) = x^2 / 2 $$  
-	- Now you can call $ f(x) $ throughout the graph.
+	- Now you can call \\( f(x) \\) throughout the graph.
 		- You can graph individual lines
 		- You can convert to table
 		- ...
