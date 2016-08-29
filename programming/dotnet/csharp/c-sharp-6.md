@@ -1,4 +1,5 @@
-# C# 6 (and a bit of 7)
+C# 6 (and a bit of 7)
+==============
 
 - Primary reference [here](https://msdn.microsoft.com/en-us/magazine/dn802602.aspx)
 

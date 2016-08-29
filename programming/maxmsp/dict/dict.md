@@ -77,7 +77,8 @@ Max Dictionaries
     - You can use the embed (=1) attribute to save the data with the patcher
         
     
-### Dictionaries POTD [Thread](https://cycling74.com/forums/topic/dictionary-patch-of-the-day-potd-thread/) from Max/MSP Forums
+### Dictionaries POTD Thread
+- [Thread](https://cycling74.com/forums/topic/dictionary-patch-of-the-day-potd-thread/) from Max/MSP Forums
 - Patch One: dict.nameshare
     - You can share the same dict across all boundaries: patch, subpatch, abstraction, bpatcher, etc.
 - Patch Two: dict.filesaves

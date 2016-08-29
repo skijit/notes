@@ -23,9 +23,9 @@ LocalDB
 	- Local DB reference: (localdb)\\version
 		- (localdb)\\v11.0		
 - You can have it attach to an .mdf in the connection string:
-		```
-	Data Source=(localdb)\v11.0; Integrated Security=true; AttachDbFileName=C:\MyData\Database1.mdf
-	```
+```
+Data Source=(localdb)\v11.0; Integrated Security=true; AttachDbFileName=C:\MyData\Database1.mdf
+```
 
 - Other use cases (than developer)
 	- Not sure... maybe nothing... 

@@ -1,3 +1,6 @@
+Max/MSP Preset System
+==============
+
 presets:
 		the live UI objects will work normally with Live's preset system, but other non-live max UI elements wont (eg the function object)
 		to get these to work, you need to use the pattr (patcher attribute) system
