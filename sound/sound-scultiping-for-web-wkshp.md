@@ -2,7 +2,7 @@ Sound Sculpting in a Website
 ===========================
 A Moogfest 2016 workshop given by Matt Ganucheau about p5.js
 
-
+## Info
 - [Github link](https://github.com/mganucheau/Sound-sculpting-with-p5.js) to workshop materials
     - Lots of p5 examples involving setup, 2d animation, and audio processing
 - P5 is a more portable, javascript implementation of Processing
@@ -29,29 +29,32 @@ A Moogfest 2016 workshop given by Matt Ganucheau about p5.js
     - Touch events are handled in the API
    
 ## Hello world
+- this is a `- test`
+- this is a `normal codespan`
+- same as this `normal codespan` ?
 
-```(javascript)
+```(js)
 function setup() {
-createCanvas(640, 480);
+    createCanvas(640, 480);
 }
 
 function draw() {
-ellipse(100,100,80,80);
+    ellipse(100,100,80,80);
 }```
 
 ## Some more drawing
 
 ```(js)
 function setup() {
-createCanvas(640, 480);
+    createCanvas(640, 480);
 }
 
 function draw() {
-if (mouseIsPressed) {
-    fill(0);
-} else {
-    fill(random(255));
-}
-ellipse(mouseX,mouseY,80,80);
+    if (mouseIsPressed) {
+        fill(0);
+    } else {
+        fill(random(255));
+    }
+    ellipse(mouseX,mouseY,80,80);
 }```
  
