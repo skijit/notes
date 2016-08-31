@@ -3,6 +3,21 @@ Sample Title
 - There's only one title
 - You can add some general info in bullets underneath if you want
 - This content won't be collapsed like stuff underneath a heading
+- Assuming you have headings in your file, then anything you put in between the title and the first headings gets placed in this panel, called the 'manifest'.
+    - It supports lists and links.
+    - For example, you can make a table of contents and link to other files...
+    
+**Math Files**  
+- [Desmos](/math/desmos)  
+- [Exponents](/math/exponents)  
+- [Logarithms](/math/logarithms)  
+- [Polynomials](/math/polynomials)  
+  
+**Music Files**
+- [Something](/math/desmos)  
+- [Something Else](/math/exponents)  
+- [Yadda](/math/logarithms)  
+
 
 ## Headings
 - Most content will go under a Heading
@@ -44,7 +59,7 @@ Sample Title
 - Images hosted locally
     - ![this is the alt title](/resources/images/programming/git_merge_commit_1.png)
 - Images remotely hosted
-    - ![this is the alt title](///upload.wikimedia.org/wikipedia/commons/0/02/Simple_sine_wave.svg)
+    - ![this is the alt title](http://upload.wikimedia.org/wikipedia/commons/0/02/Simple_sine_wave.svg)
 
 ## Block Quotes
     All you have to do is start typing with a single indentation
@@ -120,13 +135,13 @@ public class Customer
 | G- | G- | Bb | Bb |
 | Eb | Eo | F - Bb | F |
 | C- | C- | G- | G- |
-| A0 | A0 | D  | D7 |
+| A0 | `other stuff` |  `- \log_{10} 1000 - \log_{10} 10 = 3 - 1 = 2`  | [Desmos](/math/desmos)  |
 
 - **Note**: You need to put a line break between the table and whatever precedes it.
 
 
-## A Table-of-Contents for multiple files
-- You can use a fenced block quote as the basis for a table of contents
+## A Pseudo-Table-of-Contents
+- You can use a fenced block quote as the basis for something else that looks like a table of contents
 - You can link to items in the current file or other files
 - Be sure to follow the trailing blanks rule to get breaks where you want.
 
