@@ -26,7 +26,8 @@ Notes on a collection of articles on nav from [Smashing Magazine](https://www.sm
     - If Drop downs are used, you need to have some iconography to indicate it can be expanded
 - Put "Actions" (login, search, etc.) links on the upper right
 
-## [Best Practices for Tabbed Navigation](https://www.smashingmagazine.com/2009/04/showcase-of-well-designed-tabbed-navigation/)
+## Best Practices for Tabbed Navigation
+- [Link](https://www.smashingmagazine.com/2009/04/showcase-of-well-designed-tabbed-navigation/)
 - One nice thing about tabs is that you get navigation plus it's it's own breadcrumb
 - Typically used as a secondary navigation tool
 - Good to break up a content-heavy page, but make sure you don't have too many tabs

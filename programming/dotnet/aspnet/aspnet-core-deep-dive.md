@@ -36,7 +36,7 @@ Notes from a talk at DevConnections Spring 2016 with Glen Condron
         - Apache
     - Recommended Hosting Configurations:
         - Running on Windows Server:  ReverseProxy:IIS -> Kestrel or WebListener
-        - Running on Linux Server: ReverseProxy:IIS or Nginx -> Kestrel  
+        - Running on Linux Server: ReverseProxy:Nginx -> Kestrel  
         - Running in cloud (i.e. App Service): Kestrel or WebListener
 
 - Overriding dependencies

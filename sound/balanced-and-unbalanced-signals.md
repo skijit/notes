@@ -1,13 +1,14 @@
 
-Misc Signal Level Information
+Misc Signal Level & Type Info
 ==============================
 
-Some general information regarding signal level, type, etc.
+## Signal Level
+TODO About signal levels
 
------------------------------------
+## Signal Type
+TODO About signal types
 
-Balanced Vs Unbalanced Connections
-----------------------------------------
+## Balanced Vs Unbalanced Connections
 - **Balanced Signals**:
 	-  **3 components**:
 		- Main Signal
@@ -23,37 +24,36 @@ Balanced Vs Unbalanced Connections
 	- **2 Connection Types**
 		- XLR (ie from mics)
 		- 1/4" cable with a TRS (Tip-ring-sleeve) connection.  This will have the tip and two rings, as opposed to the Unbalanced TS connection which just has the tip and a single ring.
-
-- **Unbalanced Signals**:
-	- 
+- **TODO** Explain unblanaced signals
 
 
-- **DI Boxes**:
-	- "Direct Insertion" Box
-	- **3 Functions**:
-		- **Connector Matching**
-			- Outputs an XLR connection which is typically what you need to plug into a PA or speaker
-		- **Impedance Matching**
-			- Impedance is resistance to electrical flow.  
-			- All instruments have an output impedance.
-				- If they don't have an onboard preamp, instruments (e.g. most electric guitars) are most likely high-impedance.
-				- If you have an impedance mismatch between instrument and sound reinforcement or recording equipment, you'll experience hi-frequency loss.
-			- The DI box has:
-				-  High Impedance INPUT (to match with instrument)
-				- Low Impedance OUTPUT (to match with recording/sound reinforcement technology)
-		- **Signal Balancing**
-			- Unbalanced signals can only be transported up to 15 feet before they risk degradation through:
-				- Hum / Buzz
-				- Interference / Acting as an antenna
+## **DI Boxes**:
+- "Direct Insertion" Box
+- **3 Functions**:
+    - **Connector Matching**
+        - Outputs an XLR connection which is typically what you need to plug into a PA or speaker
+    - **Impedance Matching**
+        - Impedance is resistance to electrical flow.  
+        - All instruments have an output impedance.
+            - If they don't have an onboard preamp, instruments (e.g. most electric guitars) are most likely high-impedance.
+            - If you have an impedance mismatch between instrument and sound reinforcement or recording equipment, you'll experience hi-frequency loss.
+        - The DI box has:
+            -  High Impedance INPUT (to match with instrument)
+            - Low Impedance OUTPUT (to match with recording/sound reinforcement technology)
+    - **Signal Balancing**
+        - Unbalanced signals can only be transported up to 15 feet before they risk degradation through:
+            - Hum / Buzz
+            - Interference / Acting as an antenna
  - **When to Use**:
 	 - Running an unbalanced signal greater than 15 feet
 	 - If you have a ground loop
 		 - Typically a 50-60 Hz hum in the line
 		 - Caused when the interconnected musical equipment draws power from different circuits, which have incompatible ground references.
 		 - The DI box contains an Audio Transformer which breaks the coupling of the different circuits.
-- **Passive vs Direct**:
+##  **Passive vs Direct**
 
-- **Explain Noise / Interference**:
+## Noise & Interference
+- TODO Explain noise and interference
 
 
 

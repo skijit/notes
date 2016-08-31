@@ -8,13 +8,9 @@ Waltz 2 - Elliot Smit
 | 1 | 2 | 3 | 4 |
 | :---: | :---: | :---: | :---: |
 | G- | G- | Bb | Bb |
-|||||
 | Eb | Eo | F - Bb | F |
-|||||
 | C- | C- | G- | G- |
-|||||
 | A0 | A0 | D  | D7 |
-|||||
 
 - Harmonic Phrases:
     - 2 of 8 bars

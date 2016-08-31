@@ -1,4 +1,7 @@
-# C# 6 (and a bit of 7)
+C# 6 (and a bit of 7)
+==============
+
+- Primary reference [here](https://msdn.microsoft.com/en-us/magazine/dn802602.aspx)
 
 - **Auto-Property Initializer**
 
@@ -26,16 +29,19 @@
         public string Name { get; }
     }```
     
-- You can combine these last two features for some lean code.
-- Notice in the example below that the class definition is merged with the constructor definition.
-
+- In this next example, we're combining both the previous two features with what are called *Primary Constructors*.  
+    - See [here](http://odetocode.com/blogs/scott/archive/2014/08/14/c-6-0-features-part-ii-primary-constructors.aspx)
+    - Bascially, it involves adding the standard, required constructor parameters to the first line in the class definition.  
+    - You can reference those properties elsewhere in the class definition.
+    - Other contructors will call the Primary Constructor with ```this()```
+    - Note that the syntax highlighting needs to be updated for this scenario.
     ```(csharp)
-    class Pair<T>(T first, T second)
+    public class Pair<T>(T first, T second)
     {
-    public T First { get; } = first;
-    public T Second { get; } = second;
-    
-    //this would be especially good for DTO's and immutable classes
+        public T First { get; } = first;
+        public T Second { get; } = second;
+        
+        // this would be especially good for DTO's and immutable classes
     }
     ```
 
@@ -166,7 +172,7 @@
     }
     ```
 
-
+**TODO: review the following url https://msdn.microsoft.com/en-us/magazine/dn879355.aspx**
 
 
 

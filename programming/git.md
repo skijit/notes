@@ -1,7 +1,7 @@
 Git
 =====================
 
-### Git Beginner's Guide For Dummies
+## Git Beginner's Guide For Dummies
 [Online book here](https://backlogtool.com/git-guide/en/intro/intro1_1.html)
 
 ## Basics
@@ -34,7 +34,7 @@ Git
 	- Bug fixes
 - Different branches can be merged into any one branch provided they belong to the same repo.
 - When you first make a commit to the repo, Git will automatically create a **master branch** by default.
-	- Subsequent commits go into the master branch until you decide to create and switch over to another branch.
+	- Subsequent commits go int the master branch until you decide to create and switch over to another branch.
 
 ### How to use a Branch
 - There are generally 2 types of branches:
@@ -97,7 +97,7 @@ Git
 		- Has a signature
 		- Typically used to mark a comit for a release
 
-# Short Introduction To git-flow
+## Short Introduction To git-flow
 Screencast [here](https://vimeo.com/16018419)
 
 - git-flow are extensions based for git based on a [popular git branching model](http://nvie.com/posts/a-successful-git-branching-model/).
@@ -193,7 +193,7 @@ Screencast [here](https://vimeo.com/16018419)
             - Deletes the hotfix branch
             - Will NOT merge the hotfix into any of your feature branches.  For this, you would want to rebase.
 
-# General Git Commands
+## General Git Commands
 - To create a local repo, create a directory and then run this:
 ```
 git init
@@ -254,7 +254,7 @@ git log --graph
 ```
 
 
-# Example GitHub Pull Request Scenario
+## Example GitHub Pull Request Scenario
 A user wants to make a change to a repo they can't directly modify. So they...
 
 - Make a fork of the repo, which creates a personal copy.  
@@ -269,8 +269,8 @@ A user wants to make a change to a repo they can't directly modify. So they...
 - **Git Convention**: 
 	- make all commits/changes in branch. 
 	
-# Git Concepts
-## Usability / General
+## Git Concepts
+### Usability / General
 
 - Primarily a command-line tool
 - Very opinionated tool
@@ -279,7 +279,7 @@ A user wants to make a change to a repo they can't directly modify. So they...
 - there's no 'locking', so checkout is only switching the branches
 - The fundamental design concept seems to be making branching and offline work easy.  The former is very useful, the latter, less so.
 
-## Design
+### Design
 - It's distributed, so you have to keep in mind whether you're performing an operation on the local or remote copy of the repo.
 - Because it's distributed, it can't have *monotonically* incrementing version numbers for files or changesets, bc otherwise it would get conflicts.  
 	- Instead of versions, commits keep a sha1 hash (40 digits of hex) of just the changes.  Usually the first 7 of the hash is enough to identify the commit.
@@ -303,7 +303,7 @@ A user wants to make a change to a repo they can't directly modify. So they...
 - Branches live in the global namespace, hence the typical convention of using a hierarchy: type/name (e.g. feature/myNewFeature).
 
 
-# Git Commands for .NET Developers
+## Git Commands for .NET Developers
 - There is no Source Control Explorer for TFS Team Projects using Git.
 	- There are probably other 3rd party explorers, but [SourceTree](https://www.sourcetreeapp.com/) from Atlassian is one.
 - One way to get to the Command line from Team Explorer:
@@ -383,7 +383,32 @@ A user wants to make a change to a repo they can't directly modify. So they...
 	```
 from [this](http://www.developerhandbook.com/git/git-for-net-developers/) blog post
 
-# Installing GIT and GitFlow on Windows and Using Commandline GIT
+## A .gitignore file for .NET projects
+
+- Copy these contents into the .gitignore file in your root directory.
+- Make sure that this file is committed the repo.
+    ```
+    */obj/*
+    */bin/*
+    */uploads/*
+    *.suo
+    **/*.suo
+    node_modules/
+    [Oo]bj/
+    [Bb]in/
+    .nuget/
+    _ReSharper.*
+    packages/
+    artifacts/
+    *.user
+    *.suo
+    *.userprefs
+    *DS_Store
+    *.sln.ide
+    .vs/```
+
+
+## Installing GIT and GitFlow on Windows and Using Commandline GIT
 
 - Since GIT originated on linux, there are lots of different ports available for windows.
 	- Many involve GUI clients (GitHub for Windows, External Git Tools for VS, posh-git, etc.)
@@ -430,7 +455,7 @@ from [this](http://www.developerhandbook.com/git/git-for-net-developers/) blog p
         git clone --recursive  http://:@ricnmittfs01prd:8080/tfs/defaultcollection/_git/AftonPublicSite test-tfs-clone
         ```
 
-# Containers: Team Project Collection vs Team Project vs GIT Repos
+## Containers: Team Project Collection vs Team Project vs GIT Repos
 
 - Team Project Collections: 
 	- Generally, you want to create projects within the same Team Project Collection.
@@ -450,7 +475,7 @@ from [this](http://www.developerhandbook.com/git/git-for-net-developers/) blog p
 		- If your Team Project is likely to have more than 1 solution file, **DO NOT USE THIS** repo!
 	- You can create as many repos as you want within a Team Project.
 
-# Managing Containers in TFS
+## Managing Containers in TFS
 - Creating Team Projects:
 	- You can do this from Team Explorer (VS 2015 only) or the Web Interface
 	- See [here](https://msdn.microsoft.com/en-us/library/vs/alm/overview/create-team-project) for instructions.
@@ -470,7 +495,7 @@ from [this](http://www.developerhandbook.com/git/git-for-net-developers/) blog p
 		- TFS_ROOT/TEAM_PROJECT_COLLECTION/TEAM_PROJECT/_admin/_versioncontrol
 		- Example: http://ricnmittfs01prd:8080/tfs/DefaultCollection/NewMarket/_admin/_versioncontrol
 
-# Migrating a TFSVC Project To the TFS GIT
+## Migrating a TFSVC Project To the TFS GIT
 - From a high-level, you have two approaches available:
 	- Local Repo First (i.e. Fill a local repo, then push to remote)
 	- Remote Repo First  (i.e. Clone an empty repo from remote, fill, then push back up)
@@ -557,16 +582,8 @@ git push -u origin --all
 	git push
 	```
 	
-
+-------------------------------
 **NEXT STEPS**
 - **TODO: document Merging / Merge tools**
 - **TODO: more documentation of Branching with git-flow**
-- **TODO: Better examples with the .gitignore.  Do you check it in with your repo? See the github repo of various .gitignore files**
-- **TODO: Stage vs Clean and how to manage that**
-- **TODO: add note about configuring msysgit - using long file names**
-- **TODO: add notes about staging deleted files: http://stackoverflow.com/questions/12373733/staging-deleted-files  **
-- **TODO: can you have one repo pointing at multiple remotes?  eg one on azure, one on gh? and what if you're using multiple accounts for them?**        
-- **TODO**: add this tip about moving files: first, copy to the new location, then execute this on the old file ```git rm -f filename``` which removes it from git and the filesystem, finally git add the new file.  It should usually figure out that it's the same file, just moved.  To prove it, execute a ```git status```.
-- **TODO**: instructions on changing case / moving folders in git.  see [here](http://stackoverflow.com/questions/11183788/in-a-git-repository-how-to-properly-rename-a-directory)
-- **TODO**: discuss stashing stuff per [this](https://git-scm.com/book/en/v2/Git-Tools-Stashing-and-Cleaning) page
-- **TODO**: find the order in which .gitignore is applied... suppose you've ```git add``` ed some dlls... do you need to remove them manually
+        
