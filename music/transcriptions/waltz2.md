@@ -36,9 +36,7 @@ Waltz 2 - Elliot Smit
 | 1 | 2 | 3 | 4 |
 | :---: | :---: | :---: | :---: |
 | G- | Bb | Eb | G- |
-|||||
 | Eb | G- | D  | D |
-|||||
 
 - 8 bar phrase repeated twice with an elision on first/last chord
 - This works nicely bc the song is in 3 and the harmonic rhythm doubles from the verse
@@ -48,11 +46,8 @@ Waltz 2 - Elliot Smit
 | 1 | 2 | 3 | 4 |
 | :---: | :---: | :---: | :---: |
 | C- | C- | Eb | Eb |
-|||||
 | Bb | F  | G- | G- |
-|||||
 | C- | C- | Eb | Eb (Fermata) |
-|||||
 
 - Classic pop song bridge centered on the iv
 - mirrors the i-III-bVII-IV progression in the verse, but starting at the iv to get land on F (the i's bVII).
