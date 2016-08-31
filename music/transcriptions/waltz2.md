@@ -20,7 +20,7 @@ Waltz 2 - Elliot Smit
     - 2 of 8 bars
     1. i - III - VI - #VI - VII
         - About the F
-            - A bVII !  And like most/all bVII's, it's a secondary IV, resolving to the iv (or IV)  
+            - A bVII !  it's a secondary IV, resolving to the iv (or IV)  
         - About the Eb:
             - Has 2 great uses:
                 1. Use a passing chord (#VI) to step into VII  OR
