@@ -1,8 +1,9 @@
 Kontakt 5
 ==========
-- Notes collected mainly from the manual
+- Notes collected mainly from the [manual](/resources/docs/music/manuals/Kontakt%205%20Application%20Reference%20English.pdf)
 - Probably not good introductory material, but more useful to reinforce/refresh existing knowledge
 - KSP reference [here](/music/kontakt/ksp)
+
 
 ## Hierarchy
 - Multi (collection of instruments)
