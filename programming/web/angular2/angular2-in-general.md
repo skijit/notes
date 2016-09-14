@@ -942,6 +942,6 @@ export class AppComponent {
 - Many Angular Libraries are packaged as Modules (FormsModule, HttpModule, RouterModule)
 - They can encapsulate Components, Pipes, Services, etc.
 - Can be loaded eagerly or lazily
-- TODO 
+- TODO More on Angular Modules...
 
 
