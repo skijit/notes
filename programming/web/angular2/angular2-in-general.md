@@ -5,6 +5,13 @@ Angular2 in General
     - [Sample Application here](https://github.com/DeborahK/Angular2-GettingStarted.git)
         - My local (PC) clone is `other-angular2/Angular2-GettingStarted`
     - [Documentation Basics Section](https://angular.io/docs/ts/latest/guide/)
+    - [Quick Start Guide](https://angular.io/docs/ts/latest/quickstart.html) : good for getting latest plumbing correct
+    - **TODO**:
+        - change detection
+        - misc javascript:
+            - rxjs
+            - event system
+            - throwing errors / exceptions - theory and practice
 
 ## General Setup
 - Application Scaffolding / Setup
@@ -22,7 +29,7 @@ Angular2 in General
         - You can also use CLI tooling, [AngularCli](https://github.com/angular/angular-cli)
             - **BUT** current this is still in beta (6/22/2016)
         - There are also some **yeoman** templates out there too
-- Modules
+- Javascript Modules
     - Angular2 uses ES 2015 Modules
     - ES2015 says a file === module
         - Incidentally, TypeScript says a module is any file with an `export` in it
@@ -55,6 +62,7 @@ Angular2 in General
 
 ## App Anatomy 
 - App = Components + Services
+    - *oversimplification*: there are other class types that may be used, as well as Modules 
 - Component = Template + Class + Metadata
     - Template has the HTML view (and possibly associated CSS)
     - Class = Properties + Methods (portable)
@@ -69,7 +77,7 @@ Angular2 in General
         - css
         - IE-related polyfills
         - system.js
-        - rx.js (NOT SURE WHAT THIS IS)
+        - rx.js (reactive extensions for javascript: needed by Html module and event system)
         - angular2.dev.js
     - Module Loader code
         - Configuration
@@ -81,10 +89,12 @@ Angular2 in General
     - imports 
         - the bootstrap service from angular
         - executes bootstrap, passing in the App component
-    ```(typescript)
-        import { bootstrap } from 'angular2/platform/browser';
-        import { AppComponent } from './app/component';
-        bootstrap(AppComponent);```    
+    - example:
+        ```(typescript)
+        import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+        import { AppModule } from './app.module';
+
+        platformBrowserDynamic().bootstrapModule(AppModule);```   
 - **App Component**
     - `app.component.ts`
     - Top level container component
@@ -107,7 +117,7 @@ Angular2 in General
 
 ```(typescript)
 // you need to import the Component decorator from angular
-import { Component } from 'angular2/core';
+import { Component } from '@angular2/core';
 
 //decorator
 //selector is the directive name, {{pageTitle}} is a binding
@@ -200,7 +210,7 @@ export class AppComponent {
         - **OnDestroy**: cleanup
     - Each lifecycle hook has a corresponding interface.  To implement...
     ```(typescript)
-    import { Component, OnInit } from 'angular2/core'
+    import { Component, OnInit } from '@angular2/core'
     
     export class ProductListComponent implements OnInit {
         // ...
@@ -208,7 +218,10 @@ export class AppComponent {
             console.log('this is OnInit');
         }        
     }```
-
+- Debugging technique:
+    `<pre> {{ thing | json }} </pre>`
+- Request interceptors to have uniform spinners on any async / http call:
+    - [see here](http://stackoverflow.com/questions/35498456/what-is-httpinterceptor-equivalent-in-angular2)
 
 ### Nested Components
 - When to nest a component
@@ -220,7 +233,7 @@ export class AppComponent {
     - child -> parent : Events
 - If the parent changes a property in the child, then the child will want to call `OnChanges`
 - **Input properties example**
-    - Nested Component
+    - Container Component
     ```(typescript)
     @Component({
         selector: 'pm-products',
@@ -233,7 +246,7 @@ export class AppComponent {
     })
     export class ProductListComponent { ... }```
         - Note that you can **only** use property-binding on an input property
-    - Container Component
+    - Nested Component
     ```(typescript)
     @Component({
         selector: 'ai-star',
@@ -251,7 +264,7 @@ export class AppComponent {
     - Also see the `inputs` array for bulk designation of input properties
 - **Event Example** (Child -> Parent communication)
     - Child component exposes an event with the @Output decorator which it can use to communicate data to it's container
-    - Property decorated by @Output must be an event, but it's payload can be specified with the EventEmitter generic
+    - Property decorated by @Output must be an event, but it's payload can be specified with the `EventEmitter<>` generic
     - Here's the child component:
      ```(typescript)
     @Component({
@@ -296,6 +309,44 @@ export class AppComponent {
         }
      }```
 
+## Angular Modules
+- Good for:
+    - Organizing application
+    - Integrating External Libraries
+- Many Angular Libraries are packaged as Modules (FormsModule, HttpModule, RouterModule)
+- They can encapsulate Components, Pipes, Directives, etc.
+- Modules are like gatekeepers that define 
+    - the dependencies (e.g. services, other modules, etc) the current module needs
+        - those other modules or services will be imported as a javascript module, and then registered with Angular in it's @NgModule decorator.
+    - which of it's components can be viewed in other modules
+- Declared with the JavaScript class and decorator `@NgModule`
+    - The class is usually empty
+    - The decorator specifies everthing contained in the module:
+        - `declarations`: the component, directive, and pipe classes the module needs
+        - `exports`: the declarations (from above) that should be usable to other modules
+        - `imports`: other modules whose exported classes are needed by the component templates in this module
+        - `providers`: services used in the module
+        - `bootstrap`: if this is the *root module*, the corresponding *root component*
+- All Angular applications have at least one module, the *root module*, named `AppModule`
+- Most apps have feature modules, they bundle related features together
+    - The components won't have any reference to their associated module in their file
+    - But any reference to them will occur through their associated module class.
+- To launch an application, you bootstrap the root module.
+- Example module declaration.
+    ```(typescript)
+    import { NgModule }      from '@angular/core';
+    import { BrowserModule } from '@angular/platform-browser';
+
+    @NgModule({
+        imports:      [ BrowserModule ],
+        providers:    [ Logger ],
+        declarations: [ AppComponent ],
+        exports:      [ AppComponent ],
+        bootstrap:    [ AppComponent ]
+    })
+    export class AppModule { }```
+
+
 ## Path Gotchas
 - Module Loading:
     - Ex: `import { AppComponent } from  './app.component';`
@@ -319,7 +370,7 @@ export class AppComponent {
     - Suffix with 'Component'
 - File-naming convention:
     - <feature-name>.<type>.ts
-        - type = { component | service | ... }
+        - type = { component | service | module | ... }
     - use lowercase
     - dash-case: separate words with a hyphen `-`
     - live underneath the 'app' directory
@@ -341,7 +392,7 @@ export class AppComponent {
         - [Style Binding](#Data-Binding-Style-Binding)
         - [Class Binding](#Data-Binding-Class-Binding)
     - View to Data source
-        - Event Binding
+        - [Event Binding](#Data-Binding-Event-Binding)
 - Two Way
     - Just syntactic sugar for two one-way bindings
 - Bind to **DOM Properties and Events** 
@@ -360,14 +411,13 @@ export class AppComponent {
             - Not a Component **Input** or **Output**
                 - It's a **Binding Source**
             - Refers to the property/method in the current component, i.e. the one whose template it appears in.
+                - `deleteHero()` is a `<Source>` in the **current** component (i.e. the parent, i.e. one that references hero-detail in it's template). 
+                ```(html)
+                <hero-detail (deleteRequest)="deleteHero($event)" [hero]="currentHero"></hero-detail>```
             - Example Sources are `iconUrl` and `onSave()`
             ```(html)
             <img [src]="iconUrl"/>
             <button (click)="onSave()">Save</button>```
-            - The source refers to the **current** component
-                - `deleteHero()` is a `<Source>` in the current component (i.e. the parent, i.e. one that references hero-detail in it's template). 
-                ```(html)
-                <hero-detail (deleteRequest)="deleteHero($event)" [hero]="currentHero"></hero-detail>```
         - `<Target>`            
             - Is a DOM Property/Event or Directive Property
                 - Remember: All Components Are Directives
@@ -498,7 +548,7 @@ export class AppComponent {
         - `target.value`
         - See [this](https://developer.mozilla.org/en-US/docs/Web/Events) for more info on DOM events
     - **Custom Events**
-        - Components can raise custom evevents with `EventEmitter`
+        - Components can raise custom events with `EventEmitter`
         - Event Emitter:
             - Specifies the type represented by `$event`
             - Provides an `emit()` method which fires the event (presumably to be consumed by another Angular component)
@@ -686,7 +736,7 @@ export class AppComponent {
 - The angular Injector will provide the instance to the component as an argument to it's constructor
 - Example service:
     ```(typescript)
-    import { Injectable } from 'angular2/core'
+    import { Injectable } from '@angular2/core'
 
     @Injectable()
     export class ProductService {
@@ -694,7 +744,6 @@ export class AppComponent {
             //...
         }   
     }```
-- The service file name should be servicename.service.ts
 - **Registering the Service**
     - Since it's a singleton, we only want to register it once.
         - Therefore, we register it at the **root component**.
@@ -724,17 +773,6 @@ export class AppComponent {
         //you can use public or private accessors here, btw.
     }
     ```
-    
-## Angular2 Library Design
-- Angular has a variety of decorators:
-    - @Component :
-    - ...
-- Angular is modular, and so the different pieces can be imported
-    - angular2/core
-    - angular2/animate
-    - angular2/http
-    - angular2/router
-- TODO: MORE here!
 
 
 ## Reactive Extensions and Observables
@@ -758,6 +796,8 @@ export class AppComponent {
 - Recommended Usage:
     - Encapsulate Http functionality in a service
     - Expose Observable for use by any class/component that needs it
+- **Alternately**, you could inject the jQuery ajax library into a service.
+    - TODO- find examples of this
 - Set up:
     - include Http script tag: `<script src='node_modules/angular2/bundles/http.dev.js'></script>`
     - script tag for rxjs should already be in your index.html
@@ -821,7 +861,7 @@ export class AppComponent {
             subscribe(
                 products => this.products = products,
                 error => this.errorMessage = <any>error);
-    }
+    }```
 
 ## Navigation and Routing
 - Nutshell
@@ -833,13 +873,13 @@ export class AppComponent {
 - Router library is an external module
 - Set up
     - Include Angular2 Router Script
-    `<script src='node_modules/angular2/bundles/router.dev.js'></script>
+    `<script src='node_modules/angular2/bundles/router.dev.js'></script>`
     - Define the Base Element (within HTML Head tag)
         - I think this is an HTML5 thingy 
     `<base ref='/'>`
     - Register ROUTER_PROVIDERS in the root component
     ```(typescript)
-    import { ROUTER_PROVIDERS } from 'angular2/router';
+    import { ROUTER_PROVIDERS } from '@angular2/router';
     
     @Component({
         //...
@@ -935,13 +975,5 @@ export class AppComponent {
         }
     }```
 
-## Angular Modules
-- Good for:
-    - Organizing application
-    - Integrating External Libraries
-- Many Angular Libraries are packaged as Modules (FormsModule, HttpModule, RouterModule)
-- They can encapsulate Components, Pipes, Services, etc.
-- Can be loaded eagerly or lazily
-- TODO More on Angular Modules...
 
 
