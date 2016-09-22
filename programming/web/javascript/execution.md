@@ -28,6 +28,11 @@ Javascript Execution
             - DOM
             - XMLHttpRequest
             - setTimeout
+            - GeoLocation
+            - SQLite
+            - IndexedDB
+            - WebWorkers
+            - WebAudio
     - Callback Queues
         - Bridges the native, typically async, Web API actions with the JavaScript call stack
         - Typically code which leverages these Web APIs follows an event/callback-based model such that if the action is *blocking* (i.e. entails some waiting, possible bottleneck) like network or disk I/O, the action will execute on a separate thread in the Web API (separate from the JavaScript stack), and upon completion add a callback function to one of many callback queues.
