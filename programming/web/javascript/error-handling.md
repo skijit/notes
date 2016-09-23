@@ -1,11 +1,17 @@
 Error Handling
 ====================
+- Some notes on JavaScript exception handling best practices
 - Sources
     - [this](http://www.javascriptkit.com/javatutors/trycatch2.shtml)
     - [and this](https://www.nczonline.net/blog/2009/03/10/the-art-of-throwing-javascript-errors-part-2/)    
  
- ## Basics Stuff  
-- Throwing an exception unwinds the stack to the nearest catch block 
+## Basics Stuff  
+- Semantics of try-catch are pretty similar to that of C# 
+    - Unwinds the stack in the same way
+    - **BUT** no exception type in JavaScript.  
+        - You can throw an Exception or any object, string, etc.
+        - You won't have multiple catch blocks
+        - Selective catching leans on `instanceof`
 - **Syntax**:
     ```(javascript)
     try {
@@ -15,7 +21,7 @@ Error Handling
     } finally {
         
     }```
-- throwing:
+- **throwing**:
     ```(javascript)
     throw new Error("some message!");```
     - The exception can be a string, number, boolean, or object:
@@ -24,7 +30,7 @@ Error Handling
     throw 500;          // throw a number```
     - Why to use the `Error` constuctor?
         - populates a `stack` property with the stack trace
-- *Selectively Catching*
+- **Selectively Catching**:
     - Creating an exception type
     ```(javascript)
     function InputError(message) {
@@ -47,7 +53,7 @@ Error Handling
         else
         throw e;
     }```
-- Uncaught Exceptions
+- **Uncaught Exceptions**
     - Reported to the console
     - Terminate that line of execution
     - alternately, you can assign a handler to `window.onerror` event:
@@ -69,7 +75,7 @@ Error Handling
     // Internet Explorer) will be suppressed.
     return suppressErrorAlert;
     };```
-- Assertions
+- **Assertions**:
     - Create AssertionFailed Exception
     ```(javascript)
     function AssertionFailed(message) {
@@ -88,12 +94,10 @@ Error Handling
         assert(array.length > 0, "empty array in lastElement");
         return array[array.length - 1];
     }```
-- You can use Exceptions **without** throwing them
+- **GOOD IDEA**: You can use Exceptions **without** throwing them
     - new up the `Error` but send it as the return value
     - do an `instanceof Error` test against the return value and handle accordingly
-    
-## Try-Catch Performance
-
-- Avoid Try-Catch in performance-critical functions and loops
-- The additional overhead of a try-catch block in which an exception is not thrown is pretty small
-    - It's the Exception that is thrown that makes thing much slower.
+-  **Try-Catch Performance**:
+    - Avoid Try-Catch in performance-critical functions and loops
+    - Marginal overhead is almost negligible unless an Exception is actually thrown.
+   
