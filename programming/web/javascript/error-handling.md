@@ -5,7 +5,7 @@ Error Handling
     - [this](http://www.javascriptkit.com/javatutors/trycatch2.shtml)
     - [and this](https://www.nczonline.net/blog/2009/03/10/the-art-of-throwing-javascript-errors-part-2/)    
  
-## Basics Stuff  
+## Basics
 - Semantics of try-catch are pretty similar to that of C# 
     - Unwinds the stack in the same way
     - **BUT** no exception type in JavaScript.  

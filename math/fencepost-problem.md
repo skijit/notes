@@ -1,10 +1,13 @@
 The Fencepost Problem
 ==================
+**TODO**: MORE INFO / EXAMPLES / BETTER EXPLAIN This
+&nbsp;  
+&nbsp;
+**Sources**:  
+- [see this](https://betterexplained.com/articles/learning-how-to-count-avoiding-the-fencepost-problem/) 
+- [this](https://en.wikipedia.org/wiki/Off-by-one_error)
 
-TODO - MORE INFO / EXAMPLES / BETTER EXPLAIN THIS
-[see this](https://betterexplained.com/articles/learning-how-to-count-avoiding-the-fencepost-problem/) and [this](https://en.wikipedia.org/wiki/Off-by-one_error)
-
-
+## Basics
 - When counting, we need to determine whether we are looking for:
     - Span
     - Number of Points involved
