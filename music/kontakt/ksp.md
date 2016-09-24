@@ -291,7 +291,7 @@ declare ui_knob $myName(myparams)
     - [noisepages tutorial](http://kore.noisepages.com/2008/12/21/dive-into-kore-scripting-a-gentle-introduction-plus-script-downloads/)
     - [article in askaudiomag](http://www.askaudiomag.com/articles/introduction-to-scripting-in-kontakt-part-4)
     - [kvr thread](http://www.kvraudio.com/forum/viewtopic.php?t=324805)
-    - [youtube video](https://www.youtube.com/watch?v=FvBntBshcM4)
+    
 
 
 
