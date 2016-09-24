@@ -40,9 +40,6 @@ JavaScript Gotchas and Misc Notes
     };
     ```
 
-**TODO**  [this](http://stackoverflow.com/questions/2485423/is-using-var-to-declare-variables-optional) javascript scoping page
-**TODO**  more about closures and this ambiguities
-**TODO**  new Error() vs throw Exception
 
 ## This
 
@@ -74,4 +71,21 @@ JavaScript Gotchas and Misc Notes
     // Output:
     // "obj.color = red"```
         
+        
+## "use strict"
+- See [John Resig's post](http://ejohn.org/blog/ecmascript-5-strict-mode-json-and-more/)
+- Also [this](http://www.2ality.com/2011/10/strict-mode-hatred.html) post is useful
+- new in ECMA Script 5
+- enables "strict" mode
+- It can be applied globally or at a function scope
+- Strict mode helps out in a couple ways:
+    - It catches some common coding bloopers, throwing exceptions.
+    - It prevents, or throws errors, when relatively "unsafe" actions are taken (such as gaining access to the global object).
+    - It disables features that are confusing or poorly thought out.
     
+---------------------------
+**TODO**  
+- [this](http://stackoverflow.com/questions/2485423/is-using-var-to-declare-variables-optional) javascript scoping page
+- more about closures and this ambiguities
+- "use strict"
+
