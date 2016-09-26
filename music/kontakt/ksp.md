@@ -5,16 +5,39 @@ KSP Basics
 - KSP Manual is [manual](/resources/docs/music/manuals/KSP%20Reference%20Manual.pdf)
 - Excellent tutorial [here](http://www.nilsliberg.se/ksp/scripts/tutorial/)
 
-
-
-## General 
-- KSP Scripts are like MIDI effects, but different insofar as they let you:
+## General / Caveats
+- KSP Scripts let you respond to various audio engine events and perform some action.
+    - audio engine events could involve incoming midi or other internal kontakt-oriented events
+- **CAVEAT 1**: There's a tempation to see KSP scripts as intended to support a plugin model for Kontakt libraries (analogous to MIDI scripts) but they're primarily for library developers.
+    - They allow library developers to have more control over the playback/routing/configuration logic
+    - There's no way to create a completely portable KSP plugin bc of the variations in Kontakt libraries' internal logic
+    - For simple libraries, a KSP script might work correctly, but for really sophisticated (presumably commercial) libraries, the same script probably won't work.
+        - Script slots process left-to-right
+        - If you place the script in the furthest left slot, you give it a better chance of succeeding.
+- Examples of things you can change:
     - change volume/panning/tuning of a specific note
     - fade in/out a specific note
     - specify which groups should be used for playing back a specific note
     - start playback of a note at any sample offset (only in Sampler mode)
     - control a wide range of Kontakt parameters (maybe in the Kontakt 2.1 update)
-- **NEVER ENTER IN Ctrl+Z in the Kontakt script editor or you may loose everything!!!**
+- **CAVEAT 2**: KSP is an extremely limited scripting language
+    - It lacks:
+        - floating points
+        - functions with parameters
+        - non-linear operations (exponents, logs, etc.)
+        - etc.
+    - The KSP community has developed tools and libraries to improve this dearth of functionality.
+        - Functions w/ parameters
+        - A math library
+        - include/require statements to pull in reusable code 
+        - A scripting development environment with compilation
+    - **This helps... but programming in KSP is still pretty limited**
+- Best Practices
+    - Use Sublime 3 with the Sublime KSP [plugin](http://nilsliberg.se/ksp/SublimeKSP_1.1.zip) for development / compilation.
+        - [Parent page](http://nilsliberg.se/ksp/)
+        - Follow directions to set it up.
+    - Use the community-built [Math Library](http://www.bigbobsmusicworld.com/kontakt-scripts/math-library)
+    - Include Math Library in the same directory as your current KSP file. 
 
 ## Language
 - KSP Numerics are limited to integers
@@ -291,7 +314,7 @@ declare ui_knob $myName(myparams)
     - [noisepages tutorial](http://kore.noisepages.com/2008/12/21/dive-into-kore-scripting-a-gentle-introduction-plus-script-downloads/)
     - [article in askaudiomag](http://www.askaudiomag.com/articles/introduction-to-scripting-in-kontakt-part-4)
     - [kvr thread](http://www.kvraudio.com/forum/viewtopic.php?t=324805)
-    - [youtube video](https://www.youtube.com/watch?v=FvBntBshcM4)
+    
 
 
 

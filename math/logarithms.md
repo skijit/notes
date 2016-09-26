@@ -1,5 +1,6 @@
 Logarithms
 =========================== 
+**Status**: Needs more graphs, explanations, and examples.  
 
 ## Why have logarithms?
 
@@ -10,11 +11,11 @@ Logarithms
 	* __Ex__: How do you explain having $100 grow to $150 in 5 years?
 		* Since we know interest is a primarily exponential function, we get:  \\( \ln {\frac{150 / 100}{5}} = 8.1\%  \\) growth.
 * Logarithms help us __count steps__ in an exponential growth scenario:
-	* 10 grew to 1,000 in 2 steps because \\( \log_{10} 1000 \\) \\( - \log_{10} 10 = 3 - 1 = 2 \\)   
+	* 10 grew to 1,000 in 2 steps because `-  \log_{10} 1000  - \log_{10} 10 = 3 - 1 = 2 `   
 	* Another way to say this is that logs are helping us count _steps of multiplication_.
 * Helps us address human _number blindness_ for large numbers.
-	* \\( 0 = \log_{10} 1 \\)
-	* \\( 80 = \log_{10} 10^{80} \\) [ which equals the number of molecules in the universe ]
+	* `- 0 = \log_{10} 1 `
+	* `- 80 = \log_{10} 10^{80} ` [ which equals the number of molecules in the universe ]
 	* So a 0-80 range is more easy to understand
 * Some common scales which are logarithmic:
 	* Decibels
@@ -37,17 +38,14 @@ Logarithms
 	* In logarithmic terms, the .5 means square root, not divide by 2.  
 	* If you calculate the log, it turns out \\( \log_{10} 500,000 = 5.7 \\) !
 * Interesting Property:
-	* \\( \log_x y * \log_y x = 1 \\)
-		* **Ex 1**:  \\( x = 2, y = 3 \\)
-			* \\( \log_2 {8} = 3 \\)
-			* \\( \log_8 {2} = 1/3 \\)
-			* \\( 3 * 1/3 = 1 \\)
-		* **Ex 2**:  \\( x = 5, y = 103 \\)
-			* \\( \log_5 10 = 1.43068 \\)
-			* \\( \log_{10} 5 = 0.69897 \\)
-			* \\( 1.43068 * 0.69897 = 1 \\)
-
- 
+	- `- \log_x y * \log_y x = 1 `
+		- **Ex 1**:  `- x = 2, y = 3 `
+			- `- \log_2 {8} = 3 `
+			- `- \log_8 {2} = 1/3 `
+			- `- 3 * 1/3 = 1 `
+		- **Ex 2**:  \\( x = 5, y = 103 `
+			- `- \log_5 10 = 1.43068 `
+			- `- \log_{10} 5 = 0.69897 `
+			- `- 1.43068 * 0.69897 = 1 `
 
 
-## Some Interesting Graphs

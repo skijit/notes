@@ -1,5 +1,10 @@
 Exponents
 =====================
+**Objective**: Clarify varieties of exponential growth and *e* so that it's all simple and intuitive. 
+&nbsp;  
+&nbsp;  
+**Current Status**: Document needs a bunch of work... `IN PROGRESS!`
+
 
 ## Correcting Some Misconceptions
 
@@ -21,21 +26,20 @@ Exponents
         - If the curve doesn't have an inflection point, but you think there are different properties across its range, it might be knee.  
         - Knees are a less rigorously defined characteristic than an inflection point.  But alas...
 		- \\( g(x) = 2^{x} \\) has **no knee either**!
-		- For proof, check out [this](http://www.abarry.org/knee.htm) page, which animates a zoom-out of \\( g(x) \\) in the y-axis only.  It shows that the **_knee_ is purely a function of the scale chosen**.  It does shift/translate across on the x-axis, but the shape is the same.  So clearly, **this is not a knee bc it's not localized!**
+		- For proof, check out [this page](http://www.abarry.org/knee.htm), which animates a zoom-out of \\( g(x) \\) in the y-axis only.  It shows that the **_knee_ is purely a function of the scale chosen**.  It does shift/translate across on the x-axis, but the shape is the same.  So clearly, **this is not a knee bc it's not localized!**
 
 - So what's really going on?
 	- The Line chosen is just a random line that happens to intersect in two locations with the exponential curve.
 		- The fact that it is initially growing faster than the \\( g(x) \\) is only because \\( g(x) \\) is starting with basically no growth!  It has to _exponentially multiply to catch up_, whereas \\( f(x) \\) is given this slope from the very beginning.  
-        - \\( f(x) \\) is like a trust-fund kid while \\( g(x) \\) has to pull itself up by its boostraps.  And does it ever!
-	- **It's basically a visual illusion!**
+	- **It's almost a visual illusion!**
 		- The shape is a function of the scale/units chosen.  Therefore the following attributes have **no special significance**:
 			- When the derivative exceeds some value (e.g. 1)
 			- When the curve achieves a 45 degree angle. 
 		- Something about the transition from small to big makes us think the knee exists.
 	- For more info, see the following links: 
-		[what-inflection-point?](http://alexmehr.com/2013/06/05/what-inflection-point/)
-		[we dont understand the exponential function](http://www.kazabyte.com/2011/12/we-dont-understand-exponential-functions.html)
-		[this is not a knee](http://www.abarry.org/knee.htm)
+		- [what-inflection-point?](http://alexmehr.com/2013/06/05/what-inflection-point/)
+		- [we dont understand the exponential function](http://www.kazabyte.com/2011/12/we-dont-understand-exponential-functions.html)
+		- [this is not a knee](http://www.abarry.org/knee.htm)
 		
 ## Exponential Growth Models
 ### General Form
@@ -84,7 +88,7 @@ Exponents
 - Conversely, there is the scenario of _Simple Interest_...
 > _Simple Interest_ is NOT an exponential growth scenario!
  
-- Simple Interest is calculated as: $$ Balance = Principal \ast Rate \ast Duration $$
+- Simple Interest is calculated as: `- Balance = Principal \ast Rate \ast Duration `
 	- Notice there is no exponent in here!
 	- To put this into our original formula: **GrowthFactor** = **GrowthRate** * **Duration**
 - The interest you earn is never _fed back_ or _rolled_ into the principal.
@@ -137,15 +141,15 @@ Exponents
 		* **Linear Growth** \\( \rightarrow GrowthFactor \\) scales by \\( Duration \\) .		
 - If it's not intuitive why scaling by \\( GrowthFactor \\) is better than \\( Duration \\), consider the functions:
 - **TODO: Make sure marked is rendering tables correctly- see that tables: true in setOptions() and check out [this](https://guides.github.com/features/mastering-markdown/) **
-> \\( f(x) = 2 * x \\)      
-> \\( g(x) = 2^x \\)       
+> `- f(x) = 2 * x ` 
+> `-( g(x) = 2^x `       
     
 | _x_ | f(_x_) expanded | g(_x_) expanded | f(_x_) | g(_x_) |
 | ----| ------- | -----| ---- | ---- |
-| 1 | 2 * 1  | 2  | 2  | 2  |
-| 2 | 2 + 2  | 2 * 2  | 4  | 4  |
-| 3 | 2 + 2 + 2  | 2 * 2 * 2  | 6  | 8  |
-| 4 | 2 + 2 + 2 + 2  | 2 * 2 * 2 * 2  | 8  | 16  |
+| 1 | 2 \* 1  | 2  | 2  | 2  |
+| 2 | 2 + 2  | 2 \* 2  | 4  | 4  |
+| 3 | 2 + 2 + 2  | 2 \* 2 \* 2  | 6  | 8  |
+| 4 | 2 + 2 + 2 + 2  | 2 \* 2 \* 2 \* 2  | 8  | 16  |
 
 - Or put differently...
     - **Exponential Growth** -> stacks multiplications
@@ -206,7 +210,7 @@ Exponents
 
 ## Continuous Growth and Compounding
 
-$$ f(x) = m(x - x1) + y1 $$
+`- f(x) = m(x - x1) + y1 `
 
 - **Growth Rate**: 
 	- In some models of exponential growth, the growth rate is factored into the growthBase.
@@ -243,15 +247,13 @@ $$ f(x) = m(x - x1) + y1 $$
 - This is derived from the "Law of Exponents" which tells us \\( x^4 \ast x^4 = x^8 \\) (bc we can add the exponents together)		
 - Once this is established, then we can deduce that a fractional exponent is a root b/c \\( x^{1/4} \ast x^{1/4} \ast x^{1/4} \ast x^{1/4} = x^{1/1} = x \\) and so \\( x^{1/4} \\) must mean the 4th root bc that's the only number multiplied by itself 4 times that will render x.			
 - But also know that \\( x^{4/3} \\) is like saying take the cube root of \\( x^4 \\).  This is proved by decomposing it into a whole number and fractional part: 
-$$ x^{4/3} = x^{(4 * 1/3)} = (x^4)^{1/3} $$  
+`- x^{4/3} = x^{(4 * 1/3)} = (x^4)^{1/3} `  
 That is ok b/c of another law of exponents:  \\( x^{mn} = (x^m)^n \\) .
 
 ### Why the 0th Exponent is 1
-- Here's a cool proof about why the 0th exponent is 1: $$ 1 = 3^4 / 3^4 = 3^{(4-4)} = 3^0 $$
+- Here's a cool proof about why the 0th exponent is 1: `- 1 = 3^4 / 3^4 = 3^{(4-4)} = 3^0 `
 
-------------------------------------------
-**TODO Add more Graphical explanations of these concepts**
-**TODO: Update my mathjax delimeters**
+
 
 
 
