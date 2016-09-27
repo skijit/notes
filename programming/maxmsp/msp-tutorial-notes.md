@@ -303,17 +303,15 @@ MSP Tutorial Notes
 
 
 ## 23 - Viewing Signal Data
-- number~ and meter~ are updating every 250 ms by default, but you can change this with it's 'interval' attribute
-- you can use the number~ inspector to allow/block its different modes:
-    -signal monitor mode
-    -signal output mode
--number~ can also recieve a number in it's right inlet which tells it how quickly to 'interpolate'- it step up into the new value (like line~)
-    -once you've set this number, it will remember it for all value changes
--snapshot~ will take intervals messages also
--capture~:
-    double click on this and it will show you the most recent frame
--delta~:
-    good for not only getting the direction (magnitude of output), but also reconstructing the previous signal (current signal - delta).
+- `number~` and `meter~` are updating every 250 ms by default, but you can change this with it's 'interval' attribute
+- you can use the `number~` inspector to allow/block its different modes:
+    - signal monitor mode
+    - signal output mode
+- `number~` can also recieve a number in it's right inlet which tells it how quickly to 'interpolate'- it step up into the new value (like `line~`)
+    - once you've set this number, it will remember it for all value changes
+- `snapshot~` will take intervals messages also
+- `capture~`: double click on this and it will show you the most recent frame
+- `delta~`: good for not only getting the direction (magnitude of output), but also reconstructing the previous signal (current signal - delta).
 
 Tutorial 24: Oscilloscope
     Important parameters for scope~:
