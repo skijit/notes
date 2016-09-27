@@ -1,6 +1,8 @@
 CSS Pre-Processors Are Awesome
 ============
-Notes from a talk at DevConnections Spring 2016, "CSS Pre-Processors Are Awesome"
+- Notes from a talk at DevConnections Spring 2016, "CSS Pre-Processors Are Awesome"
+
+## CSS Preprocessors
 
 - Challenges
     - Inherent weaknesses off CSS

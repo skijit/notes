@@ -2,6 +2,9 @@
 LocalDB
 =====================
 
+
+## LocalDB
+
 - It is a version of SQL Server that runs on your local machine instead of a server.
 - This is related to SQL Server Express, but different because:
 	- SQL Server Express targets FREE over Full SQL feature parity

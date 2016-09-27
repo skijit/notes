@@ -1,9 +1,10 @@
 LLVM Intro
 ==================
 
+## LLVM
+
 - Typical Compiler Pipeline
 http://www.drdobbs.com/architecture-and-design/the-design-of-llvm/240001128?pgno=3
-
 - LLVM
 	- Set of low-level compiler toolchain components
 	- Has a modular design, differentiated from historic compilers
@@ -43,15 +44,8 @@ http://www.drdobbs.com/architecture-and-design/the-design-of-llvm/240001128?pgno
 	- LLVM IR Optimizer
 		- Python is often compiled to C, then gcc compiles to machine code
 	
-	#Comparison To Java
-	
-	- Java Bytecode is analogous to LLVM IR insofar as it is the input to the optimizer
+## Comparison To Java
+- Java Bytecode is analogous to LLVM IR insofar as it is the input to the optimizer
 
 - Typically in an LLVM-based compiler, the FE output is an AST which will ultimately get converted into LLVM IR
 - Code Generator: the thing that translates the LLVM IR into native machine code
-
-
-- TODO: understand the CLR better
-	- GC
-	- Can you have some memory managed components (e.g. audio server) in memory managed, runtime-wrapped languages
-- TODO: role

@@ -24,6 +24,8 @@ MSP Tutorial Notes
 - Overdrive setting lets you run the event scheduler at interrupt-level.  These are control-events.  Generally entails much faster performance.
 - If you have selected Overdrive, you can also select 'Scheduler in Audio Interrupt' which runs the event schedulededuler before processing each signal vector's audio content.  This can improve timing of audio events that are triggered by control events.
 - "Mixer Crossfade" lets you introduce some latency for live patching, such that changing the signal nw will not result in clicks (bc old new output will be xfaded with new)
+- [Audio Rate Sequencing Tutorial](https://cycling74.com/wiki/index.php?title=MSP_Sequencing_Tutorial_1:_Audio-Rate_Sequencing)
+
 
 ## 1 - Wavetable Synthesis
 - `cycle~` is a wavetable synthesis routine:
@@ -190,7 +192,7 @@ MSP Tutorial Notes
     - message box -> `line~` -> `play~ <buffername>`
     - you could also replace the line~ with a curve~ to get an exponential curve or an appropriately scaled cycle~ object
 
-## 14 - pPayback with loops
+## 14 - Playback with loops
 - `groove~` is the most versatile way to handle `buffer~`-based playback
 - specify:
     - buffer
@@ -313,314 +315,245 @@ MSP Tutorial Notes
 - `capture~`: double click on this and it will show you the most recent frame
 - `delta~`: good for not only getting the direction (magnitude of output), but also reconstructing the previous signal (current signal - delta).
 
-Tutorial 24: Oscilloscope
-    Important parameters for scope~:
-        bufsize: the number of pixels in each redraw
-            by default this is 128
-        calcount: the number of samples to map to each pixel in the bufsize
-            this is an integer value which goes into the left inlet
-            smaller values: make the scope~ update more rapidly, give more detail
-            larger values: make the scope~ update less rapidly
-
-        Example: if you set calcount to 344, and bufsize 128, and 44.1kHz SR, you're displaying ~1 sec of signal bc 344*128 = 44,032
-
-        to tweak values for scope~, I suggest working in this order:
-            -use the default bufsize of 128
-            -adjust the calcount and window-size of the scope~
-                changing the window-size won't affect the shape which is drawn, it will just make it change size.
-            -if necessary, adjust the bufsize
-
-        analogy:
-            bufsize is like bit-depth and calcount is like SR
-
-        signal -> resampling to scope~ buffer -> resampling to draw window
-
-One thing which is peculiar: The (variation in )phase of different sinusoids being added can dramatically change the shape of the waveform, although it may not be a huge difference in terms of sound
-
-Tutorial 25: Using the FFT
-    DFT: time domain -> freq domain
-    IDFT: freq domain -> time domain
-    If you use window sizes which are multiples of 2, you can use the FFT algorithm, which is implemented by the fft~ object
-        typical window size is 512 samples and since at 44.1kHz, each ms has about 44.1 samples, this means you're about 11.6 ms per window
-        ifft~ has to be connected to the fft~
-    The Short-term Fourier Transform is when you use fft for spectral processing and then use the ifft~ to transform back to time domain
-        -I think pfft~ is generally better for these purposes than fft~
-        -STFT uses overlapping windows and and an envelope function (e.g. triangular (not so great) window or hanning (best) window)
-    The output of fft~ is a signal of the freq-domain (so not suitable for audio).  
-        -each output is the same size as its windowed input: so presumably 512 samples
-        -each sample index is the same indexed harmonic of a fundamental (index 0) frequency, which is the window frequency's sr (so in this case, 44.1k / 512)
-    One problem with the fft~ is that it assumes that each window will contain exactly 1 cycle of the input frequency
-        -its not so bad if you have an input signal which is a multiple of the windowing frequency, but this is seldom the case
-        -to resolve this, we use STFT with its:
-            -overlapping windows
-            -envelope (windowing function): which helps filter out the false frequencies introduced by discontinuities at the signal endpoints due to the signal's cycle not being a strict multiple of the window length
-    This is how the tutorial implements the STFT:
-        -uses a cycle~ referring to a triangular wave buffer~, which is driven at the frequency of 44.1kHz/512 (ie the windowing frequency)
-            -not that this envelope function has to be multiplied by the input signal (pre fft~) and the output signal (post ifft~), so we use the sqrt of this
-        -we're using two overlapping fft~'s which are phase offset by half a cycle, which is specified in sample length (and must be a multiple of signal vector buffer size)
-            -this means there needs to be two cycles which, although referring to the same buffer~, are also offset by 0.5
-        -since we have two overlapping fft~/ifft~'s running the output must also be multiplied by the triangular envelope function
-            -it smooths out the discontinuties in both input and output of data
-            -i think we still will see some spurious energy coming back though
-    fft~ arguments:
-        input window (or frame) size
-        output window (or frame) size
-        offset (in number of samples, must be a multiple of signal vector)
-
-Tutorial 26: Frequency Domain signal processing with pfft~
-    terminology:
-        frame: set of samples that are input to the fft
-        bins or frequency bins: the output of the fft.  these are the pairs of real and imaginary numbers which contain information about the amplitude and phase.  these exact values are not the amplitude and phase, but they can be derived from them. 
-        fft size or point size: the number of samples in a frame.  can be any power of 2.
-
-    tradeoff in time vs frequency resolution:
-        frequency resolution: means you want larger frame size, so you lose timing information
-        timing resolution: means you have a smaller frame size, but less frequency bins / resolution
-
-    pfft~ is more convenient for spectral processing than fft~/ifft~ because it allows you to abstract away from frame size, overlap, and windowing function and focus a subpatch on spectral processing.
-        -recall for overlaps, we had to specify multiple instances of fft~/ifft~ which was very inconvenient.
-
-    pfft~ arguments:
-        subpatch name, which contains fftin~ and fftout~ objects
-        frame size, in samples (must be a power of 2)
-        overlap factor (hop size in samples = framesize / overlap_factor) (overlap_factor must be a power of 2)
-
-    pfft~ inlets:
-        depend on the number of fftin~ objects in the corresponding subpatch
-
-    pfft~ outlets:
-        probably the same as above- except based on the fftout~ objects
-
-    you can also use an 'in' object in pfft~-based patches for other inputs
-
-    fftin~/fftout~ arguments:
-        what windowing function to use: 1=hanning (sine), hamming, blackman, triangle, and square
-        which you choose depends on the sound you're looking at
-        Computer Music Tutorial by Roads is a good introduction to FFT analysis
-
-        nofft argument allows the raw, unwindowed time-domain signal to be passed in, for debugging/diagnostics
-
-    fftin~ oulets:
-        real:
-            This output frame is only half the size of the parent pfft~ object's FFT size because the spectrum of a real input signal is symmetrical and therefore half of it is redundant. The real and imaginary pairs for one spectrum are called a spectral frame.  
-            this represents the amplitude of each bin
-
-        imaginary:
-            imaginary values, corresponding to the real data.  again, the frame size is halved b/c the output of the fft is symmetrical
-        bin index:
-            A stream of samples corresponding to the index of the current bin whose data is being sent out the first two outlets. This is a number from 0 - (frame size - 1). The spectral frame size inside a pfft~ object's subpatch is equal to half the FFT window size.
-            range: 0 - (windowsize/2)-1
-            to get the frequency this represents, multiply the signal (called the sync signal) by the base frequency, or fundamental, of the FFT (= SR / fft frame size).  This base frequency is the lowest frequency the fft can analyze.
-
-
-    fftout~ inlets:
-        real
-        imaginary
-
-    convolution: multiplication of signals in the frequency domain
-
-    fftinfo~:
-        accessible inside the pfft~ subpatch
-        will give you fft framesize, half-frame-size (ie number of bins), and the hopsize
-        you can get the fft base frequency by using this information in combination with the dspstate~ object to get the sr
-
-    Dealing with Phase and Amplitude Values returned by fftin~:
-        SHOCKER: They are not raw phase and amplitude values.  Instead we need to convert them to a different scale (and convert back before sending into fftout~)
-
-        Units returned by fftin~:	Cartesian
-        Units we like to work with:	Polar
-
-        Cartesian:
-            The amplitude/phase values are like x,y coordinates where the x dimension is real number (amplitude) and the y dimension is imaginary (phase)
-        Polar:  (the naming here doesn't make a lot of sense to me)
-            amplitude: the length of the line segment traced from origin to the x,y pair
-            phase: the angle of the line from origin to x,y pair
-
-        How to convert: cartopol~ and poltocar~
-
-    Interesting Examples of Convolution (and an optimized version) in this tutorial
-
-    Phase Vocoder Example:
-        Original algorithm for time stretching: playback converted spectral data at a different rate
-
-    The calculations for storing spectral data involve a few different pieces of info, which are slightly complicated when you're dealing with overlapping data:
-        Things you might want to know:
-            Buffer Space allocation for spectral data
-            Number of Frames
-
-        Examples:
-        Given 1000 ms at 44.1kHz, we need 44100 samples
-        If your FFT size is 1024 with no overlap then your number of frames is:
-            44100 / (1024/2) = 86 frames
-            (1024/2) bc spectral frame size is half of the fft size 
-        
-    -----
-    We know that a larger FFT size increases frequency resolution, bc the amount of spectral bins will be increased.
-    But, that also means decreased timing resolution.
-    The compromise is to use overlapping windows- 
-        pfft~ abstracts away from the windowing details
-
-    FFT Fundamental is determine by the point-size and represents the lowest note possible:
-            FFT Fundamental= SR / PointSize
-            Ex: 
-                44100 / 1024 = 43 Hz
-                44100 / 512 = 86 Hz
-
-    Processing/Sampling pipline for pfft~:
-        This is important so you can set Buffer sizes and # of Frames appropriately
-
-        Parent Patch: Processing at SR
-        pfft~:
-            Sampling Rate determined by Point Size
-            Spectral frame size will be half the Point Size
-            Overlapping factor of X means each frame will correspond to Point Size / X input samples
-
-            SR / Overlap / PointSize = Size of Input Frame (in samples)
-            Size of Input Frame / 2 = Size of Corresponding Spectral Frame (in samples)
-
-            Input Audio Length (IAT) (ms) => Size of Spectral Frame (samples) for a buffer
-            IAT / 1000 / SR = Length of Audio (IAS) (samples)
-            IAS / Overlap / PointSize = Windowed Size of Input Frame (FI) (samples)
-            IAS / FI = Number of Input Frames (NFI)
-            FI / 2 = Size of Spectral Frame (FS) (samples)
-            NFI * FS = Sie of Spectral Frame (samples) for a buffer
-            (I think this is correct)
-
-
-    THere are objects which can be overlapping-frame-aware for you pfft~ patch:
-        framedelta~ will calculate the delta for corresponding frequency bins for successive frames
-        frameaccum~ does the inverse to recalculate the accurate phase for overlapping windows
-
-
-Tutorial 27: Delay Lines
-    delay amounts of 100ms create a 'slapback' effect and delays of longer will eventually sound like independent events
-    very short delay times can create comb filters
-
-Tutorial 28: Delay Lines with Feedback
-    alternative to clip~ could be normalize~, which will normalize a signal in real time, such that you specify a max amp to output and it will scale everything based on the maximum input (so far).  
-    although sometimes this makes quiet sounds way too quiet, so you send it a 'reset' message.
-
-    delayed signals emulate a reflection, but since acoustics are complicated, you want multiple reflection sources and a good way to approximate that is via feeback on a delay line
-
-Tutorial 29: Flanging
-    When a signal with a time-varying delay (especially a very short delay) is added together with the original undelayed signal, the result is a continually varying comb filter effect known as flanging. Flanging can create both subtle and extreme effects, depending on the rate and depth of the modulation.
-
-    so basically, we're just using an lfo on the delay time.  the key parameters are modulation rate and depth.
-
-Tutorial 30: Chorus
-    Instead of a regular delay amout like in the flanging example, we can change the delay amount randomly and get a chorus effect.
-    noise~ generates white noise, but this would not be a good modulation source for the chorusing becuase it would change so quickly that it would just sound like added noise.
-    rand~ also chooses a random number between -1 and 1, but it does so less frequencly and linearly interpolates between all of those values.
-        rand~ is like a low-frequency noise bc the spectral energy will typically be concentrated most in the freqs below it's own
-    adding feedback also adds some nice chorusy effects
-
-TUtorial 31: Comb Filter
-    The MINIMUM delay time that a tapin can use is set by the signal vector size
-    Effects which rely on shorter durations need to use special msp objects, like comb~
-    A comb filter accentuates and attenuates the input signal at regularly spaced frequency intervals -- that is, at integer multiples of some fundamental frequency.
-        this makes is sound like a harmonic sound
-        best to use a comb filter on a harmonically rich sound source
-    comb~ output is a single signal
-    comb~ input is a combination of 4 params:
-        base delay time
-        gain of input signal
-        gain of delay
-        feedback gain
-    so the fundamental frequency of the comb filter is set by the base delay time
-    A band-limited pulse has a harmonic spectrum with equal energy at all harmonics, but has a limited number of harmonics in order to prevent aliasing. 
-
-    the gain~ object can be really useful in scaling a linear amplitude range (eg 0-127) into an exponential one so that perceived amplitude conforms with the linearly-ranged input value.  it also takes an interpolation time so there are no sudden discontinuities.  (see mapping tutorials and the inspector for this object)
-
-    you can modulate the signals sent into a comb filter and do any number of wackadoodle things!
-
-Compression Tutorial:  What is compression
-    -THere are two circuits in a compressor:
-        1) Threshold/Level Detection
-        2) Gain Adjustment
-    -The level detection circuit is using average~ in rms mode with frames of 1000 samples long.  I guess this is to smooth any spurious values exceeding the threshold, so that we know no gain adjustments will take place unless it's true- this equals about 22ms of response time.
-    -The attack and release times use rampsmooth~: this records a rampup and rampdown time (set by messages).  then whenever the incoming message value changes, it begins to ramp up/down linearly according to the ramp up/down times set.
-    -Remember, its the absolute amplitude we're interested in: we compare abs(signal_val) to the threshold
-    -Typically, compressors respond to average levels whereas limiters respond to peak levels
-    -meter~ will show you some levels.  i think there are live meters out there too.
-    -omx.peaklim~ gives you a brick wall limiter
-    -omx.Comp~
-    -One way to get stronger transients is to set the makeup gain high and when
-    -omx.4band~ is a multiband compresson
-    -good idea to put a noise gate in front of any compressor for raw recordings
-    -
-
-
-
-
-
-"rotation normalized": when you take radians and scale them to a 0-1 value
-
-				-change the calcount to 
-
-		You can get the current SR from middle/left outlet of dspstate~ object
-			
--Edge~ to snapshot~: will this really work?  Probably not!  
-  https://cycling74.com/forums/topic/how-to-generate-a-bang-when-signal-reaches-peak-amplitude/
-  Suggested that delta~ based approach might be the best
-
-
-Audio Rate Sequencing Tutorial:
-https://cycling74.com/wiki/index.php?title=MSP_Sequencing_Tutorial_1:_Audio-Rate_Sequencing
-sync~ :
-    just like phasor~ except that it understands speed in BPM, not Hz
-    you can set the BPM through tapping or direct number box entry
-    used for synchronizing events
-rate~ :
-    takes a (typically raming) signal input (like from sync), and you specify a scaling factor as an argument and it will time scale it
-	    2: double the period
-	    0.25: quarter the period
-using line~ to simulate an envelope: you can send line~ a message of pairs of values and it will simulate an envelope:
-    eg "0 0 1 1 0 5" will set it to 0 immediately, ramp it to 1 in 1 ms, and then back down to 0 in 5ms
-listfunnel~:
-    parses a list and then sends out each element prepended by it's index number
-    eg "foo bar snack time" -> 0 foo, 1 bar, 2 snack, 3 time
-techno~:
-    audio-rate step sequencer
-    3 outputs:
-                    -midi freq of note for current step (AS A SIGNAL - so use mtof~)
-                    -amplitude of each note
-                    -current step
-    inputs:
-                    -ramp signal (such as provided by phasor~ or sync~)
-                    -messages:
-                                    -"length x" : how many steps in the sequence
-                                    -"pitch <step_ind> <val>"
-                                    -"amplitude <step_ind> <val>"
-                                    -"attack <step_ind> <val>"
-                                    -"decay <step_ind> <val>"
-                                    -"curve <step_ind> <val>"  amount of portamento/glide
-    you can wire it up to a multislider for steps and amps (+ listfunnel and prepend if you like)
-seq~ object:
-    can record and playback sequences of numbers timestamped according to a master clock signal.
-    typically this master clock signal would be a signal ramp, but it could be signal outside 0 to 1 or be a curve of some kind
-    records and returns (max) numbers instead of signals, so this would typically be midi data.
-               
-
-
-
-
-
-
-
-
-
--------------
-Tapin~ / Tapout~
-
-Tapin argument is the size of the buffer (in ms)
-	-it's a moving buffer- it only has the most recent X millisconds that it has received
-
-You can have any number of delay lines associated with the same tapout~ source.
-	-they can have different delay amounts
-	-specify a series of arguments (delay amts) for each delay line and you'll get that many outlets
-		(this is like a multitap delay- multiple delays from the same source)
-
-Sending a signal input into a tapout~:
-	-This uses a continuous delay algorithm
-	-Useful for pitch shifting (see delicious max tutorial on youtube - #7, maybe)
-		-Why that works in general: doppler effect.  the pitch shifting is only possible while the distance is between source and observer is changing.  (see notes)
+
+## 24 - Oscilloscope
+- Important parameters for `scope~`:
+    - **bufsize**: the number of pixels in each redraw
+        - by default this is 128
+    - **calcount**: the number of samples to map to each pixel in the bufsize
+        - this is an integer value which goes into the left inlet
+        - smaller values: make the `scope~` update more rapidly, give more detail
+        - larger values: make the `scope~` update less rapidly
+    - **Example**
+        - if you set calcount to 344, and bufsize 128, and 44.1kHz SR, you're displaying ~1 sec of signal bc 344*128 = 44,032
+    - to tweak values for `scope~`, I suggest working in this order:
+        - use the default bufsize of 128
+        - adjust the calcount and window-size of the `scope~`
+            - changing the window-size won't affect the shape which is drawn, it will just make it change size.
+        - if necessary, adjust the bufsize    
+    - signal -> resampling to scope~ buffer -> resampling to draw window
+
+
+## 25 - Using the FFT
+- DFT: time domain -> freq domain
+- IDFT: freq domain -> time domain
+- If you use window sizes which are multiples of 2, you can use the FFT algorithm, which is implemented by the fft~ object
+    - typical window size is 512 samples and since at 44.1kHz, each ms has about 44.1 samples, this means you're about 11.6 ms per window
+    - ifft~ has to be connected to the fft~
+- The Short-term Fourier Transform is when you use fft for spectral processing and then use the ifft~ to transform back to time domain
+    - **I think `pfft~` (NEXT TUTORIAL) is generally better for these purposes than `fft~`**
+    - STFT uses overlapping windows and and an envelope function (e.g. triangular (not so great) window or hanning (best) window)
+- The output of `fft~` is a signal of the freq-domain (so not suitable for audio).  
+    - each output is the same size as its windowed input: so presumably 512 samples
+    - each sample index is the same indexed harmonic of a fundamental (index 0) frequency, which is the window frequency's sr (so in this case, 44.1k / 512)
+- One problem with `fft~` is that it assumes that each window will contain exactly 1 cycle of the input frequency
+    - its not so bad if you have an input signal which is a multiple of the windowing frequency, but this is seldom the case
+    - to resolve this, we use STFT with its:
+        - overlapping windows
+        - envelope (windowing function): which helps filter out the false frequencies introduced by discontinuities at the signal endpoints due to the signal's cycle not being a strict multiple of the window length
+- This is how the tutorial implements the STFT:
+    - uses a `cycle~` referring to a triangular wave `buffer~`, which is driven at the frequency of 44.1kHz/512 (ie the windowing frequency)
+        - not that this envelope function has to be multiplied by the input signal (pre fft~) and the output signal (post ifft~), so we use the sqrt of this
+    - we're using two overlapping fft~'s which are phase offset by half a cycle, which is specified in sample length (and must be a multiple of signal vector buffer size)
+        - this means there needs to be two cycles which, although referring to the same buffer~, are also offset by 0.5
+    - since we have two overlapping fft~/ifft~'s running the output must also be multiplied by the triangular envelope function
+        - it smooths out the discontinuties in both input and output of data
+        - i think we still will see some spurious energy coming back though
+- `fft~` arguments:
+    - input window (or frame) size
+    - output window (or frame) size
+    - offset (in number of samples, must be a multiple of signal vector)
+
+
+## 26 - Spectral Processing with pfft~
+- terminology:
+    - **frame**: set of samples that are input to the fft
+    - **bins** or **frequency bins**: the output of the fft.  these are the pairs of real and imaginary numbers which contain information about the amplitude and phase.  these exact values are not the amplitude and phase, but they can be derived from them. 
+    - **fft size** or **point size**: the number of samples in a frame.  can be any power of 2.
+- tradeoff in time vs frequency resolution:
+    - frequency resolution: means you want larger frame size, so you lose timing information
+    - timing resolution: means you have a smaller frame size, but less frequency bins / resolution
+- `pfft~` is more convenient for spectral processing than fft~/ifft~ because it allows you to abstract away from frame size, overlap, and windowing function and focus a subpatch on spectral processing.
+    - recall for overlaps, we had to specify multiple instances of fft~/ifft~ which was very inconvenient.
+- `pfft~` arguments:
+    - subpatch name, which contains fftin~ and fftout~ objects
+    - frame size, in samples (must be a power of 2)
+    - overlap factor (hop size in samples = framesize / overlap_factor) (overlap_factor must be a power of 2)
+- `pfft~` inlets:
+    - depend on the number of fftin~ objects in the corresponding subpatch
+- `pfft~` outlets:
+    - probably the same as above- except based on the fftout~ objects
+- you can also use an 'in' object in pfft~-based patches for other inputs
+- `fftin~`/`fftout~` arguments:
+    - what windowing function to use: 1=hanning (sine), hamming, blackman, triangle, and square
+    - which you choose depends on the sound you're looking at
+    - Computer Music Tutorial by Roads is a good introduction to FFT analysis
+    - nofft argument allows the raw, unwindowed time-domain signal to be passed in, for debugging/diagnostics
+- `fftin~` oulets:
+    - real:
+        - This output frame is only half the size of the parent `pfft~`'s FFT size because the spectrum of a real input signal is symmetrical and therefore half of it is redundant. The real and imaginary pairs for one spectrum are called a spectral frame.  
+        - this represents the amplitude of each bin
+    - imaginary:
+        - imaginary values, corresponding with the real data.  again, the frame size is halved b/c the output of the fft is symmetrical
+    - bin index:
+        - A stream of samples corresponding to the index of the current bin whose data is being sent out the first two outlets. This is a number from 0 - (frame size - 1). The spectral frame size inside a pfft~ object's subpatch is equal to half the FFT window size.
+        - range: 0 - (windowsize/2)-1
+        - to get the frequency this represents, multiply the signal (called the sync signal) by the base frequency, or fundamental, of the FFT (= SR / fft frame size).  This base frequency is the lowest frequency the fft can analyze.
+- fftout~ inlets:
+    - real
+    - imaginary
+- convolution: multiplication of signals in the frequency domain
+- `fftinfo~`:
+    - accessible inside the pfft~ subpatch
+    - will give you fft framesize, half-frame-size (ie number of bins), and the hopsize
+    - you can get the fft base frequency by using this information in combination with the `dspstate~` object to get the sr
+- Dealing with Phase and Amplitude Values returned by `fftin~`:
+    - **SHOCKER**: They are not raw phase and amplitude values.  Instead we need to convert them to a different scale (and convert back before sending into fftout~)
+    - Units returned by `fftin~`:	Cartesian
+    - Units we like to work with:	Polar
+    - **Cartesian:**
+        - The amplitude/phase values are like x,y coordinates where the x dimension is real number (amplitude) and the y dimension is imaginary (phase)
+    - **Polar**:  (the naming here doesn't make a lot of sense to me)
+        - amplitude: the length of the line segment traced from origin to the x,y pair
+        - phase: the angle of the line from origin to x,y pair
+    - How to convert: `cartopol~` and `poltocar~`
+- Interesting Examples of Convolution (and an optimized version) in this tutorial
+    - Phase Vocoder Example:
+        - Original algorithm for time stretching: playback converted spectral data at a different rate
+    - The calculations for storing spectral data involve a few different pieces of info, which are slightly complicated when you're dealing with overlapping data:
+        - Things you might want to know:
+            - Buffer Space allocation for spectral data
+            - Number of Frames
+        - Examples:
+            - Given 1000 ms at 44.1kHz, we need 44100 samples
+            - If your FFT size is 1024 with no overlap then your number of frames is:
+                - 44100 / (1024/2) = 86 frames
+                - (1024/2) bc spectral frame size is half of the fft size 
+- We know that a larger FFT size increases frequency resolution, bc the amount of spectral bins will be increased.
+- But, that also means decreased timing resolution.
+- The compromise is to use overlapping windows- 
+    - pfft~ abstracts away from the windowing details
+- FFT Fundamental is determine by the point-size and represents the lowest note possible:
+    - FFT Fundamental= SR / PointSize
+    - **Ex**: 
+        - 44100 / 1024 = 43 Hz
+        - 44100 / 512 = 86 Hz
+- Processing/Sampling pipline for pfft~:
+    - This is important so you can set Buffer sizes and # of Frames appropriately
+    - Parent Patch: Processing at SR
+    -  `pfft~`:
+        - Sampling Rate determined by Point Size
+        - Spectral frame size will be half the Point Size
+        - Overlapping factor of X means each frame will correspond to Point Size / X input samples
+        - SR / Overlap / PointSize = Size of Input Frame (in samples)
+        - Size of Input Frame / 2 = Size of Corresponding Spectral Frame (in samples)
+        - Input Audio Length (IAT) (ms) => Size of Spectral Frame (samples) for a buffer
+        - IAT / 1000 / SR = Length of Audio (IAS) (samples)
+        - IAS / Overlap / PointSize = Windowed Size of Input Frame (FI) (samples)
+        - IAS / FI = Number of Input Frames (NFI)
+        - FI / 2 = Size of Spectral Frame (FS) (samples)
+        - NFI * FS = Sie of Spectral Frame (samples) for a buffer
+        (I think this is correct)
+    - THere are objects which can be overlapping-frame-aware for you `pfft~` patch:
+        - `framedelta~` will calculate the delta for corresponding frequency bins for successive frames
+        - `frameaccum~` does the inverse to recalculate the accurate phase for overlapping windows
+
+
+## 27 - Delay Lines
+- delay amounts of 100ms create a 'slapback' effect and delays of longer will eventually sound like independent events
+- very short delay times can create comb filters
+
+
+## 28 - Delay Lines with Feedback
+- alternative to `clip~` could be `normalize~`, which will normalize a signal in real time, such that you specify a max amp to output and it will scale everything based on the maximum input (so far).  
+- although sometimes this makes quiet sounds way too quiet, so you send it a 'reset' message.
+- delayed signals emulate a reflection, but since acoustics are complicated, you want multiple reflection sources and a good way to approximate that is via feeback on a delay line
+
+
+## 29 - Flanging
+- When a signal with a time-varying delay (especially a very short delay) is added together with the original undelayed signal, the result is a continually varying comb filter effect known as flanging. Flanging can create both subtle and extreme effects, depending on the rate and depth of the modulation.
+    - so basically, we're just using an lfo on the delay time.  the key parameters are modulation rate and depth.
+
+
+## 30 - Chorus
+- Instead of a regular delay amout like in the flanging example, we can change the delay amount randomly and get a chorus effect.
+    - `noise~` generates white noise, but this would not be a good modulation source for the chorusing becuase it would change so quickly that it would just sound like added noise.
+    - `rand~` also chooses a random number between -1 and 1, but it does so less frequencly and linearly interpolates between all of those values.
+        - `rand~` is like a low-frequency noise bc the spectral energy will typically be concentrated most in the freqs below it's own
+    - adding feedback also adds some nice chorusy effects
+
+
+## 31 - Comb Filter
+- The MINIMUM delay time that a tapin can use is set by the signal vector size
+- Effects which rely on shorter durations need to use special msp objects, like `comb~`
+- A comb filter accentuates and attenuates the input signal at regularly spaced frequency intervals -- that is, at integer multiples of some fundamental frequency.
+    - this makes is sound like a harmonic sound
+    - best to use a comb filter on a harmonically rich sound source
+- `comb~` output is a single signal
+- `comb~` input is a combination of 4 params:
+    - base delay time
+    - gain of input signal
+    - gain of delay
+    - feedback gain
+- so the fundamental frequency of the comb filter is set by the base delay time
+- A band-limited pulse has a harmonic spectrum with equal energy at all harmonics, but has a limited number of harmonics in order to prevent aliasing. 
+- `gain~` can be really useful in scaling a linear amplitude range (eg 0-127) into an exponential one so that perceived amplitude conforms with the linearly-ranged input value.  it also takes an interpolation time so there are no sudden discontinuities.  (see mapping tutorials and the inspector for this object)
+- you can modulate the signals sent into a comb filter and do any number of wackadoodle things!
+
+## Compression Tutorial
+- There are two circuits in a compressor:
+    1. Threshold/Level Detection
+    2. Gain Adjustment
+- The level detection circuit is using `average~` in rms mode with frames of 1000 samples long.  I guess this is to smooth any spurious values exceeding the threshold, so that we know no gain adjustments will take place unless it's true- this equals about 22ms of response time.
+- The attack and release times use `rampsmooth~`: this records a rampup and rampdown time (set by messages).  then whenever the incoming message value changes, it begins to ramp up/down linearly according to the ramp up/down times set.
+- Remember, its the absolute amplitude we're interested in: we compare abs(signal_val) to the threshold
+- Typically, compressors respond to average levels whereas limiters respond to peak levels
+- `meter~` will show you some levels.  i think there are live meters out there too.
+- `omx.peaklim~` gives you a brick wall limiter
+- `omx.Comp~`
+- `omx.4band~` is a multiband compresson
+- good idea to put a noise gate in front of any compressor for raw recordings
+
+
+## Misc Useful Stuff
+- `sync~`:
+    - just like `phasor~` except that it understands speed in BPM, not Hz
+    - you can set the BPM through tapping or direct number box entry
+    - used for synchronizing events
+- `rate~`:
+    - takes a (typically raming) signal input (like from sync), and you specify a scaling factor as an argument and it will time scale it
+	    - 2: double the period
+	    - 0.25: quarter the period
+- using `line~` to simulate an envelope: you can send `line~` a message of pairs of values and it will simulate an envelope:
+    - eg "0 0 1 1 0 5" will set it to 0 immediately, ramp it to 1 in 1 ms, and then back down to 0 in 5ms
+- `listfunnel~`:
+    - parses a list and then sends out each element prepended by it's index number
+    - eg "foo bar snack time" -> 0 foo, 1 bar, 2 snack, 3 time
+- `techno~`:
+    - audio-rate step sequencer
+    - 3 outputs:
+        - midi freq of note for current step (AS A SIGNAL - so use mtof~)
+        - amplitude of each note
+        - current step
+    - inputs:
+        - ramp signal (such as provided by phasor~ or sync~)
+        - messages:
+            - "length x" : how many steps in the sequence
+            - "pitch <step_ind> <val>"
+            - "amplitude <step_ind> <val>"
+            - "attack <step_ind> <val>"
+            - "decay <step_ind> <val>"
+            - "curve <step_ind> <val>"  amount of portamento/glide
+    - you can wire it up to a multislider for steps and amps (+ listfunnel and prepend if you like)
+- `seq~` object:
+    - can record and playback sequences of numbers timestamped according to a master clock signal.
+    - typically this master clock signal would be a signal ramp, but it could be signal outside 0 to 1 or be a curve of some kind
+    - records and returns (max) numbers instead of signals, so this would typically be midi data.
+- You can have any number of delay lines associated with the same `tapout~` source.
+	- they can have different delay amounts
+	- specify a series of arguments (delay amts) for each delay line and you'll get that many outlets
+		- (this is like a multitap delay- multiple delays from the same source)
+Sending a signal input into a `tapout~`:
+	- This uses a continuous delay algorithm
+	- Useful for pitch shifting (see delicious max tutorial on youtube - #7, maybe)
+		- Why that works in general: doppler effect.  the pitch shifting is only possible while the distance is between source and observer is changing.  (see notes)

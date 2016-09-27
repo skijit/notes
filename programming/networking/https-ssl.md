@@ -5,8 +5,7 @@ Collections of notes about HTTPS, SSL, TLS, certificates, etc.
 ## Misc SSL Notes
 - NW Stack Position: SSL operates **directly** on top of TCP
     - This means all the TCP functionality remains unchanged, but the payloads will be encrypted data
-    - HTTPS protocol is the same as HTTP, but it's just built to sit on top of SSL
-        - I would assume SSL exposes a similar/same interface to HTTP as TCP.
+    - HTTPS protocol is the same as HTTP, but it's just built to use SSL     
 - **Handshake**: The protocol/exchange involved in initiating an SSL connection.
     - Configuration steps determine:
         - Version of TLS/SSL
@@ -29,7 +28,7 @@ Collections of notes about HTTPS, SSL, TLS, certificates, etc.
 - **Q:** What is the difference between SSL and HTTPS?
     - SSL: **S**ecure **S**ockets **L**ayer.  
         - The reference to sockets indicate the developers intentions that applications could use them like traditional TCP sockets
-    - TSL: **T**ransport **L**ayer **S**ecurity
+    - TLS: **T**ransport **L**ayer **S**ecurity
     - **TLS** is the new name for SSL.  The protocol got upgraded, and switched names and reset version numbers.
     - HTTPS is HTTP within an SSL/TLS Tunnel
 - **Q:** How does the SSL Certificate work?
