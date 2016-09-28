@@ -1,7 +1,8 @@
-Promises in ES7 / TypeScript 1.7+ / Etc.
+ES6 Features
 ==============
 - Easy way to test out all of this functionality is to create a js [codepen](https://codepen.io) and in the gear-icon, select the *babel* js preprocessor
     - Tip: to rerun your code use: Ctrl-Shift-5
+- Repo of ES6 examples is [here](https://github.com/DanWahlin/ES6Samples)
 
 
 ## Arrow Functions

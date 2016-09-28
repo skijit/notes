@@ -19,7 +19,7 @@ Physical Sound
 ### Pressure (_p_):
 * A force acting on a surface
 * __Unit__ = Pascals (Pa)
-	* 1 Pa = 1 N/m<sup>2</sup>
+	* 1 Pa = 1 N/`- m^2`
 * _p_ = F / A, where A is the Area
 * At sea level on earth, there is an ambient pressure of 101325 Pa
 	* Acoustic pressure is usually measured relative to this value, rather than dealing in absolutes.
@@ -28,7 +28,7 @@ Physical Sound
 * The ability to cause a change in Energy
 * __Unit__ = Joules (J)
 * Energy might conversely be thought of as the ability to do work
-* $ W = \Delta E $
+* `- W = \Delta E `
 
 ### Power: 
 * The rate at which work is done
@@ -62,11 +62,11 @@ Physical Sound
 * Velocity (v) is the rate of change of distance
 	* __Unit__ = m/s
 * Accelleration (a) is the rate of change of velocity
-	* __Unit__ = ms<sup>-2</sup>  
+	* __Unit__ = `- ms^{-2}`  
 * F = _ma_ will help:
 	* Explain how air moves to create sound
 	* Explain how simple hormonic motion occurs
-* 1 N will accelerate a 1 kg object at 1ms<sup>-2</sup>
+* 1 N will accelerate a 1 kg object at 1`- ms^{-2}`
 
 ### Sound-Related Terms 
 * We measure displacement in m, relative to an objects _rest point_ or _equilibrium position_, where it is undisturbed by any vibrations.
@@ -121,13 +121,13 @@ Physical Sound
 	* _f_ = 1 / T where T = cycle time
 	* __Units__ = Hz (cycles per second)
 * Basic Wave Math
-	* $ c = {f}{\lambda } $
-		* Where c = speed of sound and $ \lambda $ = wavelength
-		* Unit analysis: $ \frac{count}{sec} \cdot \frac{meters}{1}$ 
-	* $ \lambda = {c} / f $
-		* Unit analysis: $ \frac{meters}{sec} \cdot \frac{sec}{count} $
-	* $ f = c / \lambda $
-		* Unit analysis: $ \frac{meters}{sec} \cdot \frac{1}{meters} $
+	* `- c = {f}{\lambda } `
+		* Where c = speed of sound and `- \lambda ` = wavelength
+		* Unit analysis: `- \frac{count}{sec} \cdot \frac{meters}{1}` 
+	* `- \lambda = {c} / f `
+		* Unit analysis: `- \frac{meters}{sec} \cdot \frac{sec}{count} `
+	* `- f = c / \lambda `
+		* Unit analysis: `- \frac{meters}{sec} \cdot \frac{1}{meters} `
 	* It should make intuitive sense that the wavelength depends on frequency and speed of the wave.  
 	* 20mm for highest frequencies
 	* 17m for lowest frequencies
@@ -154,28 +154,28 @@ Physical Sound
 
 ### Standing Waves and Modes
 
-Natural Frequency
-:   The frequency that an object vibrates at when struck.  All objects have one or more natural frequencies.
-:  These frequencies are largely determined by the characteristics of the object: size and dimension may ultimately determine the wavelength(s) ($ \lambda $) and the materials may determine speed ($ c $), giving us  $ f $.
+- **Natural Frequency**
+    - The frequency that an object vibrates at when struck.  All objects have one or more natural frequencies.
+    - These frequencies are largely determined by the characteristics of the object: size and dimension may ultimately determine the wavelength(s) (`- \lambda `) and the materials may determine speed (`- c `), giving us  `- f `.
 
-Forced Vibration
-: Any time one vibrating object forces an interconnected/coupled object into vibrational motion.
-:  When the object which is forced into vibration has a larger surface area than the exciting object, this causes an increase in the amplitude of the sound.  E.G. A piano's sound board, a guitar's soundbox, etc.
+- **Forced Vibration**
+    - Any time one vibrating object forces an interconnected/coupled object into vibrational motion.
+    - When the object which is forced into vibration has a larger surface area than the exciting object, this causes an increase in the amplitude of the sound.  E.G. A piano's sound board, a guitar's soundbox, etc.
 
-Resonant Forced Vibration
-: Forced vibration can be induced on an object by another, even if their only coupling is the air (i.e. they don't touch), if their natural frequencies are similar.  In that case the first object creates a sound wave which in turn sets the second object into motion.
+- **Resonant Forced Vibration**
+    - Forced vibration can be induced on an object by another, even if their only coupling is the air (i.e. they don't touch), if their natural frequencies are similar.  In that case the first object creates a sound wave which in turn sets the second object into motion.
 
-Standing Wave
-: When a wave propagating through some medium encounters a boundary/terminus which causes reflection, two things can happen:
-1.  A regular, standing wave
-2. An irregular, non-repeating wave
+- **Standing Wave**
+    - When a wave propagating through some medium encounters a boundary/terminus which causes reflection, two things can happen:
+    1.  A regular, standing wave
+    2. An irregular, non-repeating wave
 
-*  A standing wave creates an interference pattern where certain points along the medium appear to be still, hence the term 'standing wave'.    These points are called __nodes__.
-* The set of frequencies which create standing waves are known as __harmonics__ and they are whole number multiples of some base frequency.
-* __Natural frequencies of an object = Harmonics which produce standing waves __
+- A standing wave creates an interference pattern where certain points along the medium appear to be still, hence the term 'standing wave'.    These points are called __nodes__.
+- The set of frequencies which create standing waves are known as __harmonics__ and they are whole number multiples of some base frequency.
+-  __Natural frequencies of an object = Harmonics which produce standing waves __
 
-Modes
-: This is just an alternate way of classifying the different standing wave patterns, like harmonics.  Each mode has a particular number of nodes.
+- **Modes**
+    - This is just an alternate way of classifying the different standing wave patterns, like harmonics.  Each mode has a particular number of nodes.
 
 ## Analogues 
   
