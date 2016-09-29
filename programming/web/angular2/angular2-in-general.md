@@ -203,6 +203,7 @@ export class AppComponent {
         - Create and Render Children
         - Process Changes
         - Destroy
+        - [More info](https://angular.io/docs/ts/latest/guide/lifecycle-hooks.html)
     - Hooks:
         - **OnInit**: component initialization, **retrieve data**
         - **OnChanges**: watch for changes to *input properties*
@@ -228,6 +229,13 @@ export class AppComponent {
     - When it's only managing a smaller view
     - It has it's own selector
     - It communicates with it's container (optional)
+- See **Smart Component** / **Dumb Component** 
+    - This is a design pattern from the React community
+    - Components are much easier to reason about if you divide them in two categories, smart and dumb.
+        1. A smart component does the heavy lifting (Fetching data, etc.) It contains little layout information and relies instead on dumb components.
+        2. Dumb components receives its data from the smart component and displays it with little to no added logic. It makes them reusable and easier to test.
+    - [Source](https://medium.com/front-end-developers/writing-a-basic-application-with-angular-2-5811cf6d6bb)
+    - [Source](https://www.reddit.com/r/Angular2/comments/4pnge8/refactoring_smart_and_dumb_components/)
 - Communication pattern:
     - parent -> child : Input Properties
     - child -> parent : Events
@@ -262,6 +270,22 @@ export class AppComponent {
         }   
     }```
     - Also see the `inputs` array for bulk designation of input properties
+    - **Obvious Question**: Is there a better way than calling `ngOnChanges()` for each change?
+        - YES.  
+            - See setter/getter logic below.
+            - Also be advised that `ngOnChanges()` takes a parameter `changes` which  you can use to iterate over each changed property, it's old and new value.  [Source](https://angular.io/docs/ts/latest/guide/lifecycle-hooks.html#!#onchanges).
+         - Using **get/set** with input properties [Source](https://angular.io/docs/ts/latest/cookbook/component-communication.html#!#parent-to-child-setter)
+            ```(typescript)
+            export class NameChildComponent {
+                _name: string = '<no name set>';
+                
+                @Input()
+                set name(name: string) {
+                    this._name = (name && name.trim()) || '<no name set>';
+                }
+                get name() { return this._name; }
+            }```
+            
 - **Event Example** (Child -> Parent communication)
     - Child component exposes an event with the @Output decorator which it can use to communicate data to it's container
     - Property decorated by @Output must be an event, but it's payload can be specified with the `EventEmitter<>` generic
@@ -362,6 +386,8 @@ export class AppComponent {
     - Use **absolute paths**
     - `templateUrl: 'app/products/product-list.component.html'`
     - `styleUrls: ['app/products/product-list.component.css']`
+- **Seems to be event more confusing than this with modules**
+    - See [this](http://blog.thoughtram.io/angular/2016/06/08/component-relative-paths-in-angular-2.html) blog for info
 
 
 ## Naming Conventions
@@ -672,8 +698,8 @@ export class AppComponent {
     <!-- fax refers to the input element; pass its `value` to an event handler -->
     <input ref-fax placeholder="fax number">
     <button (click)="callFax(fax.value)">Fax</button>```
-- This can be very useful with forms.  For instance, here we use the form ref variable to drive validation.
-    - note the use of `ngForm` which wraps the HTML DOM form element with extra functionality, such as tracking validity.
+- Forms Use-Cases
+    - Driving Validation    
     ```(html)
         <form (ngSubmit)="onSubmit(theForm)" #theForm="ngForm">
             <div class="form-group">
@@ -682,7 +708,25 @@ export class AppComponent {
             </div>
             <button type="submit" [disabled]="!theForm.form.valid">Submit</button>
         </form>```
-
+        - note the use of `ngForm` which wraps the HTML DOM form element with extra functionality, such as tracking validity.
+    - Alternative to DOM Event handling
+        - Harder
+            - Template
+            ```(html)
+            <input (keyup)="onKey($event)">
+            <p>{{values}}</p>```
+            - Event Handler
+            ```(typescript)
+            onKey(event: KeyboardEvent) {
+                this.values += (<HTMLInputElement>event.target).value + ' | ';
+            }```
+        - Easier
+            - Template (and now no need for event handler)
+            ```(html)
+            <input #box (keyup)="0">
+            <p>{{box.value}}</p>```
+                - keyup handler (0) does nothing, but it tells angular that if this event fires, to update bindings
+            
 ## Pipes
 - Transform bound properties before they are displayed
 - Built-in pipes include:
