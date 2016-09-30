@@ -42,37 +42,81 @@ rx.js
         - Gives directions to DumbComponent
 - Dumb Component
     ```(typescript)
-        import {Control, FORM_DIRECTIVES} from 'angular2/common';  
-        import {Component, Output, Input, EventEmitter} from 'angular2/core';  
-        import 'rxjs/Rx';
+    import {Control, FORM_DIRECTIVES} from 'angular2/common';  
+    import {Component, Output, Input, EventEmitter} from 'angular2/core';  
+    import 'rxjs/Rx';
 
-        @Component({
-        selector: 'spotify-search',
-        directives: [FORM_DIRECTIVES],
+    @Component({
+    selector: 'spotify-search',
+    directives: [FORM_DIRECTIVES],
+    template: `
+        <h1>Spotify Search</h1>
+        <input [ngFormControl]="searchBox" 
+          placeholder="Search Spotify artist" />
+
+        <div *ngFor="#artists of results | async">
+            {{ artists.name }} -- Popularity {{ artists.popularity }}
+        </div>
+    `
+    })
+    export class SpotifySearch {
+
+        @Input() results: Observable<any>;
+        @Output() searchEvent: EventEmitter = new EventEmitter();
+
+        private searchBox:Control = new Control();
+
+        constructor() {
+            this.searchBox
+                .valueChanges
+                .debounceTime(200)
+                .subscribe((event) => this.searchEvent.emit(event));
+        }
+    }```
+    - Has input property `results`, which is an observable.
+        - Its value comes from the parent (smart) component.
+        - The template subscribes to it via the `async` pipe.  Any updates will be reflected.
+    - has a private Control called `searchBox` (another observable), which emits an event for each change 
+- Smart Component
+    ```(typescript)
+    import {Http} from 'angular2/http';  
+    import {Component} from 'angular2/core';  
+    import {Input, Output, EventEmitter} from 'angular2/core';  
+    import 'rxjs/Rx';  
+    import {Observable} from 'rxjs/Observable';  
+    import {SpotifySearch} from './services/Search';
+
+    @Component({
+        selector: 'app-root',
+        directives: [SpotifySearch],
         template: `
-            <h1>Spotify Search</h1>
-            <input [ngFormControl]="searchBox" placeholder="Search Spotify artist" />
-
-            <div *ngFor="#artists of results | async">
-                {{ artists.name }} -- Popularity {{ artists.popularity }}
-            </div>
+            <spotify-search 
+            (searchEvent)="onSearch($event)" 
+            [results]="data">
+            </spotify-search>
         `
-        })
-        export class SpotifySearch {
+    })
+    export class AppComponent {  
+        private data: Observable;
+        private dataObserver: Observer;
 
-            @Input() results: Observable<any>;
-            @Output() searchEvent: EventEmitter = new EventEmitter();
+        constructor(private http: Http) {
+            this.data = new Observable(observer => this.dataObserver = observer);
+        }
 
-            private searchBox:Control = new Control();
+        onSearch(event) {
+            this.http.get(
+                'https://api.spotify.com/v1/search?q=' + event + '&type=artist'
+            ).map((response) => {
+                var artists = response.json();
+                return artists.artists.items;
+            }).subscribe(result => {
+                this.dataObserver.next(result);
+            }, error => console.log('Could not load artists'));
+        }
+    }```
+    - The dataObserver is the object responsible for generating values that will be emitted through the Observable.
+    - We need an explicit reference to push through any data to that Observer (and any subscribers)
 
-            constructor() {
-                this.searchBox
-                    .valueChanges
-                    .debounceTime(200)
-                    .subscribe((event) => this.searchEvent.emit(event));
-            }
-        }```
-    - Has input property `results`, which is an observable
-    - has a private Control called `searchBox` which is bound to the , 
 
-     
+- next: http://reactivex.io/intro.html   
