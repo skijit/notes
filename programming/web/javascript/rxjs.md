@@ -5,6 +5,7 @@ rx.js
 - **Sources**:
     - [rxjs - angular2 blog](http://blog.rangle.io/observables-and-reactive-programming-in-angular-2/)
     - [reactiveX](http://reactivex.io/)
+    - [intro to reactive programming you've been missing](https://gist.github.com/staltz/868e7e9bc2a7b8c1f754)
 
 ## Streams
 - Essential rx mantra is **'Everything is a Stream'**
@@ -117,6 +118,77 @@ rx.js
     }```
     - The dataObserver is the object responsible for generating values that will be emitted through the Observable.
     - We need an explicit reference to push through any data to that Observer (and any subscribers)
+
+## Non-Angular Examples
+- observable = stream = subject
+- observer = subscriber = listener
+- rx gives you the streams, plus the api for modifying/aggregating/etc the streams (based on a functional programming approach).
+    - each such call returns a new stream bc streams are **IMMUTABLE**
+- Creating an observable and emitting a single value
+```(javascript)
+    var requestStream = Rx.Observable.just('https://api.github.com/users');```
+- Creating an observable manually
+```(javascript)
+    var myStream = Rx.Observable.create(function (observer) {
+        var emittedValues = doSomethingToGenerateValues();
+        
+        if (thatWorked) {
+            observer.onNext(emittedValues);
+        } else if (weDone) {
+            observer.onCompleted();
+        } else {
+            observer.onError(someError);
+        }
+  });```
+  - A little surprising that we don't call something like `this.Publish(emittedValues)`
+  - But remember that `observer` is not a direct reference to a single subscriber
+    - It's injected in by the Observable
+    - `onNext` does seem like an appropriate method to be calling on the observer, since it's like an event targeting the observer.
+- Transforming a stream to become a MetaStream (ie a stream of streams)
+```(javascript)
+    var responseMetastream = requestStream
+    .map(function(requestUrl) {
+        return Rx.Observable.fromPromise(jQuery.getJSON(requestUrl));
+    });```
+    - `map()` is performing the behavior of a `subscribe()` and a typical `Array.map()`
+    - Promises (from jQuery or ES6) are Observables that emit one value, so it's easy to convert them into actual streams using `fromPromise()`.
+- If you don't want a MetaStream, you can use flatmap:
+```(javascript)
+    var responseStream = requestStream
+    .flatMap(function(requestUrl) {
+        return Rx.Observable.fromPromise(jQuery.getJSON(requestUrl));
+    });```
+    - `flatMap()` won't emit branching streams, it just flattens everything onto the input trunk
+- A simple response/request stream flow
+```(javascript)
+    var requestStream = Rx.Observable.just('https://api.github.com/users');
+
+    var responseStream = requestStream
+        .flatMap(function(requestUrl) {
+            return Rx.Observable.fromPromise(jQuery.getJSON(requestUrl));
+        });
+
+    responseStream.subscribe(function(response) {
+        // render `response` to the DOM however you wish
+    });```
+- Updating the request stream based on a JavaScript DOM click event, and defining a startup value
+```(javascript)
+    var refreshButton = document.querySelector('.refresh');
+    var refreshClickStream = Rx.Observable.fromEvent(refreshButton, 'click');
+
+    var requestStream = refreshClickStream
+        .startWith('startup click')
+        .map(function() {
+            var randomOffset = Math.floor(Math.random()*500);
+            return 'https://api.github.com/users?since=' + randomOffset;
+        });```
+    - `startWith()` emits an initial value
+    - `merge()` can also be used to merge two streams (use in fluent syntax or normal)
+
+## TODO
+- [Review the rx list of combinator functions](https://github.com/Reactive-Extensions/RxJS/tree/master/doc#getting-started-with-rxjs)
+- [Understand the hot/cold observable differences](https://github.com/Reactive-Extensions/RxJS/blob/master/doc/gettingstarted/creating.md#cold-vs-hot-observables)
+
 
 
 - next: http://reactivex.io/intro.html   
