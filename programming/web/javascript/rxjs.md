@@ -188,7 +188,6 @@ rx.js
 ## TODO
 - [Review the rx list of combinator functions](https://github.com/Reactive-Extensions/RxJS/tree/master/doc#getting-started-with-rxjs)
 - [Understand the hot/cold observable differences](https://github.com/Reactive-Extensions/RxJS/blob/master/doc/gettingstarted/creating.md#cold-vs-hot-observables)
+- [Review this article about angular and observables](http://blog.thoughtram.io/angular/2016/01/06/taking-advantage-of-observables-in-angular2.html)
 
 
-
-- next: http://reactivex.io/intro.html   
