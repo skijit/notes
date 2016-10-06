@@ -27,11 +27,11 @@ Transcription of song from 'Nightmare Before Christmas'
 ## Phrase 3
 - Length: 2, Bars 11-12
 - Start/End: III => bII
-- Function: subdominant, starts like previous phrase but ends unresolved on the #II
+- Function: subdominant, starts like previous phrase but ends unresolved on the bII
 - III - bII
 
 ## Intersection of phrase 2 & 3
-- First instance of a #II => i cadence.  Up until this point, we've just had strong V => cadences
+- First instance of a bII => i cadence.  Up until this point, we've just had strong V => cadences
 
 ## Phrase 4
 - Length: 4, bars 13-16
