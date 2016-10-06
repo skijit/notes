@@ -84,5 +84,12 @@ Max/MSP Gotchas and Misc Notes
 ## Max/MSP Prototypes
 - Saves the styling along with the particular object type.  However, you can save prototypes on a blank object (jbogus) and get the styling, then change the object type to whatever you want and keep the styling.
 
-
+## Scopes
+- In objects like `v`, `pv`, `send`, `receive`...
+    - Prefixing the name with '#0' in an abstraction will prepend a unique integer to the name (which is making it local)
+        - Doesn't work in subpatchers
+        - The '#1', '#2', etc. are used to reference arguments in the abstraction
+    - Prefixing the name with '-' (e.g. `send -foo`) will make the value local to that **instance of the patch** ([source](https://cycling74.com/forums/topic/local-sendreceive-within-the-same-patch-only/))
+        - This might only work in M4L patches (need confirmation)
+     
 
