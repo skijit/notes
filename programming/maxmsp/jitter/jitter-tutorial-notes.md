@@ -31,4 +31,6 @@ Max/MSP Jitter Tutorials
 - Other messages for a jit.matrix:
     - setall <val>
     - clear
+
+
     
