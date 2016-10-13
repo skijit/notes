@@ -1,11 +1,23 @@
+Sudden Stars
+================
+
 ## A Section
 | 1 | 2 | 3 | 4 | 5 | 6 |
 | :---: | :---: | :---: | :---: | :---: | :---: |
 | A | C | G | F#- | F | E |
+| I | bIII | bVII | vi | bVI | v |
+| alt. | - | - | - | - | - |
+| V | bVII | IV | iii | 
 
-- a simpler version might be: A, A-, G, D, F, E-
+- i think...
+    - I => i-7 - bVII - vi (sub for the IV which is expected, sounds almost IVmaj7) - bVI ( think like it's stepping down to the V or its a variant of the iv7 )- v
+    - so maybe it's really: I - i-7\* - bVII - IV\* - iv\* - v but  with some subsitutions playing up a minor 3rd at the starred chords. 
+- a I7 or i7 chord can move to the bVII like it was a suspension over the bVII
+- the G to F#- is like the bVII was going to go to a D, but F#- is a good substitution
+    - maybe those kids of subs are best: it's subbing how it resolves- resolve to a variant  
+- a simpler version might be: A, A-7, G, D, F, E-
     - or A, E-, 
-- some thoughts on this type of resolution: v => I
+- some thoughts on this type of resolution: v7 => I
     - sounds like a bVII => I (add this to my list of reasonable resolutions to I.  Seems a little weaker sounding that minor plagal)
 - g is a bVII and instead of it being a secondary IV to D, it resolve to F#- which is like the iii of D.
     - bVII => IV stronger resolution
