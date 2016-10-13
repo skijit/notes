@@ -2,7 +2,6 @@ Positive Discipline Notes
 =====================
 
 ![this is the alt title](/resources/images/misc/IMG_3081.JPG)
-/resources/docs/music/esther-sec-a.png)
 
 &nbsp;
 &nbsp;  
