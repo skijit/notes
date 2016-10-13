@@ -3,52 +3,42 @@ Musical Acoustics Class Notes
 - [Class Videos](http://msp.ucsd.edu/170-webm/)
 - [Syllabus](http://musicweb.ucsd.edu/~mpuckette/syllabi/170.13f/index.htm)
 - [course notes / textbook](http://musicweb.ucsd.edu/~mpuckette/syllabi/170.13f/course-notes/index.html)
+- Chapter 1 Notes 
 
-## Lecture 1
-- Sound represented as a signal is typically a single channel of information, whereas a sound field in air is like an infinitude of channels.
-    - The sound is different at each location in space.
-- Digital Audio Workflow:
-    - Sound -> microphone -> ADC -> computer/memory -> DAC -> Loudspeaker -> ear
-- When you make a recording, you...
-    - Take out the infinitude of channels
-    - Throw out the time domain (b/c things are arranged spatially e.g. on a wax cylinder or in memory)
-
-## Book - Chapter 1
+## Overview
 - Big stuff you need to learn in Acoustics:
     - How sounds behave in the physical world
     - How human hearing works
-    - how to manipulate sound (using computers)
-- A sound is time-varying motion of air (or some other medium) with an accompanying change in pressure. 
-    - motion and the pressure depend on physical location.
+    - How to manipulate sound (using computers)
+- Sound is a time-varying motion of air (or some other medium) with an accompanying change in pressure. 
+    - exact motion and the pressure depend on physical location of the observer / measurment
     - motion can be periodic or not 
-    - Knowing the pressure and motion at *one point* in the air does *not* inform you what the pressure and motion might be at any *other point*.
-- Sound can be mediated as signals which can be mediated as recordings
+- Sound in an air field is like an infinitude of signals
+    - Knowing the pressure and motion of a sound at *one point* in the air does *not* inform you what the pressure and motion might be at any *other point*.
+- When you make a recording, you...
+    - Take out the infinitude of channels
+    - Throw out the time domain (b/c things are arranged spatially e.g. on a wax cylinder or in memory)
 - Analog signal is a voltage or current that goes up and down in time *analog*ous to the changing pressure at a fixed location.
 - Usually the analog signal doesn't reflect absolute pressure, but its deviation from the avg atmospheric presure, and thus it can positive and negative values.
 
-&nbsp;
-&nsbp;
+## Basic Signals
 
-**Common Signal Types**
-- **Sinusoid**
-    ```+
-    x(t) = \alpha \cos(2\pi ft + \phi_0)
-    ```
-    - ```- \alpha ``` : amplitude
-    - ```- f ``` : frequency in cycles per unit time
-        - If time is measured in seconds, the frequency is measured in Hz
-    - ```- \phi_0 ``` : initial phase
-    - Relationship of Frequency (```- f ```) to Period (```- \tau ```)
-        - ```- f = 1 / \tau ```
-        - ```- \tau = 1 / f ```
-- **White Noise**
-    - Uniform White Noise: Every sample point is a random number between ```- -\alpha``` and ```- \alpha```, where ```- \alpha ``` is the amplitude.
-    - Other types of white noise exist corresponding to various probabalistic distributions (e.g. gaussian)
+### Sinusoid
+```+ x(t) = \alpha \cos(2\pi ft + \phi_0) ```
+- ```- \alpha ``` : amplitude
+- ```- f ``` : frequency in cycles per unit time
+    - If time is measured in seconds, the frequency is measured in Hz
+- ```- \phi_0 ``` : initial phase
+- Relationship of Frequency (```- f ```) to Period (```- \tau ```)
+    - ```- f = 1 / \tau ```
+    - ```- \tau = 1 / f ```
 
-&nbsp;   
-&nbsp;   
+### White Noise
+- Uniform White Noise: Every sample point is a random number between ```- -\alpha``` and ```- \alpha```, where ```- \alpha ``` is the amplitude.
+- Other types of white noise exist corresponding to various probabalistic distributions (e.g. gaussian)
 
-** Pitch Units => Octaves**
+## Pitch Units
+- **Pitch Units => Octaves**
 - Octaves are a natural unit of measurement because changing the octave has a uniform effect on the perceived pitch
 - Octaves are a logarithmic unit
     - each successive Octave's frequency is a doubling of the previous 
@@ -63,10 +53,8 @@ Musical Acoustics Class Notes
     or
     ```+ I = H / 12 ```
 
-&nbsp;   
-&nbsp;   
-
-** Amplitude 'Unit' => Decibels **
+## Amplitude Units
+- ** Amplitude 'Unit' => Decibels **
 - Decibels, also a logarithmic 'unit', are a natural unit of measurement of loudness b/c
     - **Huge Range**: The ratio of just-audible to dangerously loud amplitudes is around 100,000
     - **Convenience**: In sound engineering, most operations act multiplicatively, but with a logarithmic scale, you can treat these as additions.
@@ -82,16 +70,13 @@ Musical Acoustics Class Notes
     - no units (e.g. 1) for a digital audio recording
 - **Where does the 20 come from in the decibel equation?**
     - It's more like a ```- 2 \cdot 10``` than a 20
-    - 10: easy, that's bc the units is *deci*bels, not bels
-    - 2: bc the ratio needs to be squared to make it not subject to the positive/negative sign of the amplitudes.
-        - As a basic log property you can move the 2 out of the log term and multiply it by the final result, which is computationally more simple.
+        - 10: easy, that's bc the units is *deci*bels, not bels
+        - 2: bc the ratio needs to be squared to make it not subject to the positive/negative sign of the amplitudes.
+            - As a basic log property you can move the 2 out of the log term and multiply it by the final result, which is computationally more simple.
 
-&nbsp;   
-&nbsp;   
-
-** Word Size And Linear Quantization**
-- AKA Bit-depth or bit-resolution
-- The selection of a word size has an impact on the *fidelity* of the audio, which can be (partially?) characterized by the *SQNR*- Signal-to-quantization-noise-ratio (which is the digital counterpart to the analog-domain Signal to noise ratio (aka S/R, SNR)) 
+## Word Size And Linear Quantization
+- Word Size AKA Bit-depth or bit-resolution
+- The selection of a word size has an impact on the *SQNR*- Signal-to-quantization-noise-ratio (which is the digital counterpart to the analog-domain Signal to noise ratio (aka S/R, SNR)) 
 - Linear Quantization is the process of taking an analog, real-valued signal and mapping it to a new number that fits within the prescribed word size.
     - Works by dividing the incoming signal into uniformly sized (hence *linear*) regions
     - Given an input signal with a range of ```- \pm E``` volts and a bit-depth N:
@@ -112,25 +97,18 @@ Musical Acoustics Class Notes
 - 24 bit-depth is customary for digital audio records, yielding a SQNR of 144dB
 - Audio CD's are typically 16-bits, for a SQNR of 96dB
 
-&nbsp;   
-&nbsp;   
-
-**Sample Rate**
+## Sample Rate
 - Subject to the *Nyquist Theorem* which states that the Sample Rate has to be at least twice as fast as the highest frequency you want to record.  Otherwise, you'll get aliasing / foldover.
     - Not suprisingly, standard audio sample rates are 44.1 kHz, which is slightly more than the upper limit on human hearing, 20,000 Hz 
 
-&nbsp;   
-&nbsp;
-
-**Misc**
-- Amplification is the process of multiplying a signal ```- x(t) ```, by a constant ```- k ```, yielding ```- k \cdot x(t) ```
+## Operations
+- **Amplification** is the process of multiplying a signal ```- x(t) ```, by a constant ```- k ```, yielding ```- k \cdot x(t) ```
     - If the original signal level is ```- L ```, the new level will be given by:
     ```+ L + 20 \log ( \lvert k \rvert)```
-&nbsp;   
-&nbsp;
 
-**Summary**
-- Sample Rate is more about frequency resolution and Bit-Depth is more about SQNR (ie presence of noise)
+## Summary
+- Sample Rate => frequency resolution 
+- Bit-Depth => Signal to Noise
 
 
 
