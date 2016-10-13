@@ -1,9 +1,8 @@
-Musical Acoustics Class Notes
+Acoustics - Chapter 1
 ==================
 - [Class Videos](http://msp.ucsd.edu/170-webm/)
 - [Syllabus](http://musicweb.ucsd.edu/~mpuckette/syllabi/170.13f/index.htm)
 - [course notes / textbook](http://musicweb.ucsd.edu/~mpuckette/syllabi/170.13f/course-notes/index.html)
-- Chapter 1 Notes 
 
 ## Overview
 - Big stuff you need to learn in Acoustics:
