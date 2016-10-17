@@ -1,6 +1,5 @@
 People Do It All The Time
-
-## People Do it All The Time
+=========================
 
 **Phrase 1**
 
