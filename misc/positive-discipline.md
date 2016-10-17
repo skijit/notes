@@ -1,6 +1,33 @@
 Positive Discipline Notes
 =====================
 
+- Misc Notes from book/worksheet/class on Positive Discipline
+
+## Chapter 1
+- Children will listen to you AFTER they feel listened to
+    - Don't lecture - be brief
+    - Model respectful behavior when dealing with their feelings
+- Instead of telling, **try asking**
+    - Ask Curiosity Questions like...
+        - What were you trying to accomplish?
+        - How do you feel about what happened?
+        - What did you learn from it?
+        - What ideas do you have to help prevent this from happening again?
+- Asking Vs Telling
+
+| Telling | Asking |
+| :---: | :---: |  
+| Don't forget your coat  | What are you taking so you won't be cold outside? | 
+| Do your hw | What is your plan for doing hw tonight?  |
+| Stop whining | How can we communicate more respectfully?  |
+| Pick up your toys | What is your responsibility when you're done playing with your toys?  |
+
+- **Connection before Correction**
+    - Kids can't learn when they feal threatened
+    - Things like giving hugs when the child is misbehaving seem counter-intuitive, but it will encourage their desire to contribute and cooperate.
+    
+## Class Photos
+
 ![this is the alt title](/resources/images/misc/IMG_3081.JPG)
 
 &nbsp;
