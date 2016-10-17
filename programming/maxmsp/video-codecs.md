@@ -93,4 +93,49 @@ Misc About Video Codecs
         - Note: NTSC is 29.97 fps and PAL is 25 fps
 - Different versions of QuickTime support different audio and video codecs
 
-     
+## ffmpeg
+- Also can convert images and audio
+- `ffmpeg -i my-input.avi sample.mp4`
+    - with this extension, it knows the format to convert to (e.g. mp4)
+- `ffmpeg -i quality_tester.mp4 -q 23 quality_23.avi`
+    - *quality* (i.e. from -q) number between 23-30 is most common.  
+    - Lower numbers mean higher quantities.
+    - quality number only exists for avi, but mp4 has a similar parameter available from the -crf param.
+- `ffmpeg -i inFile.mp3 -b:a 320k outFile.mp3`
+    - bitrate applies to audio and/or video
+    - `-b` = bitrate, `a` means the audio track, but you could also use `v`
+    - common bitrates for audio:
+    
+    - common bitrates for video:
+- `ffmpeg -i inFile -filter:v "crop=w=640:h=480:x=100:y=200" outFile
+    - crops a video
+    - last two parameters specify the upper left corner
+- `ffmpeg -i inFile -filter:v "scale=w=640:h=480" outFile'
+    - you can use arithmetic in this expression
+    - you can also specify proportional scaling
+- `ffmpeg -i inFile -filter:v "rotate=45*PI/180" outFile
+    - this rotates it 45 degrees
+- use ffprobe to get statistics on a video
+
+
+Hi,
+
+I'm planning on a max/jitter project that will be my first foray into video - pretty much at all.  I'm still going through jitter tutorials, but I thought this might be a good time for a sanity check to see if what I want to do is reasonable, whether I might anticipate (even better- avoid!) some pitfalls before I get too deep.
+
+The basic idea (which I'd guess is pretty common) is:
+- patch connected to a contact mic, listening for events onsets
+- maybe doing some spectral analysis
+- have a variety of video clips, each less than 3 minutes in length
+- trigger the videos based on logic and analysis of input audio
+- run jitter or vizzie effects on them
+- output to projector
+
+Questions
+- run all this on a 2011 macbook pro with 10 GB Ram and a core I7
+- my hd is rather slow- I don't know if the bottleneck will be streaming from disc, but if so, perhaps I should upgrade to a SSD?
+- it seems like the video resolution recommendations for jitter are for pretty modest... any guidance on whether this will be an issue on a projector and how best to ameliorate the situation?
+- this is getting in the weeds a bit but: the jitter recommendations also suggest using the motion jpeg codec.  I've been having a heck of a time getting a clean, working conversion of my AVCHD MTS files to motion jpeg.  any suggestions?  
+-  
+
+
+    
