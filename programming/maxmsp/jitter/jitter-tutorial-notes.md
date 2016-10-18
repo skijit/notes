@@ -31,3 +31,15 @@ Max/MSP Jitter Tutorials
 - Other messages for a jit.matrix:
     - setall <val>
     - clear
+
+## Tutorial 2
+- `jit.matrix`
+    - first argument is an optional name
+        - then... <planes_of_data> <data_type> <dim1_len> <dim2_len> 
+    - sends out its name from the left outlet name when banged
+    - sends results of queries out its right outlet, e.g. from *getcell x y*
+- `uzi`
+    - sends a rapid fire of bangs out its left outlet
+    - sends a counter int out its right outlet
+    - only gets started when it receives a bang in it's left inlet
+    
