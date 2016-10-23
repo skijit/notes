@@ -45,6 +45,10 @@ Max/MSP Gotchas and Misc Notes
 		- you need to interject a delay or pipe or deferlow because then it creates a new event to schedule, rather than just processing depth-first until stack-overflow.
 	- you can start to overflow the scheduler if new events are added faster than they can be serviced.  e.g. a rapid metronome or a snapshot~ updating every ~1ms
 		- in this case, use the ```qlim``` or ```speedlim``` object.
+    - this gets to the difference between `qmetro` and `metro`
+        - `metro` runs in the high-priority thread and is for time-critical applications (music, triggers, etc)
+        - `qmetro` runs in the low-priority thread and its for less time-critical applications, such as driving a video, where the perception of motion can be maintained with a variable and lower frequency.
+            - note that some objects are smart enough to *dropframe* (cancel fulfillment of their request if they can't be serviced in realtime), but others (e.g. OpenGL drawing commands) and not able to do this.  Therefore, it is better to use `qmetro` to drive them
 
 
 ## M4L Folder
