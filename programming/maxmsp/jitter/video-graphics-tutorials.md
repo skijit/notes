@@ -8,6 +8,7 @@ Video and Graphics Tutorial
     - outputs video when connected to a toggle - doesn't seem to require a metro
         - there are lots of attributes, like: FPS which handles autorendering
     - can take a `playlist` or a `jit.movie` as input
+    - second outlet emits a bang whenever a frame is rendered
     - first argument is the *world* (e.g. `jit.world myworld`) or *context* which is a useful handle for later operations
         - be careful not to reuse/change names of the contexts (they have to be global and if you change it, you might have to re-opn your patch)
 - `jit.movie` available for lower level playback
@@ -23,7 +24,7 @@ Video and Graphics Tutorial
     - knowing the available attributes which can be set
     - knowing each attribute's range
 - `jit.fluoride` : adds a neon glow
-- `jit.slide` : settings for video delay / reverb
+- `jit.slide` : settings for video delay / reverb / smoothing
 - `swatch` object is good for visually picking out colors
 
 ## Tutorial 4 - Adding 3D Objects
@@ -35,6 +36,7 @@ Video and Graphics Tutorial
 - To see the specific message being sent by an `attrui`, check the corresponding object's value in the inspector and press alt (or option) while dragging it into the patching window.
 - `jit.gl.model` lets you import an 3d model into the drawing context.
     - From there, you have the same types of controls over the model as with gridshape
+    - You can view a couple built-in 3d models (extension .dae) from the FIle Browser -> Kinds -> OpenGL -> filter on DAE
 
 ## Tutorial 5 - Jitter Matrix operations
 - you can load a still image into a `jit.movie`
@@ -55,7 +57,7 @@ Video and Graphics Tutorial
         - `cell[0]` : the cell number
         - `norm[0]` : generates normalized values across the first dimension (horizontal)
     - various mathematical constants
-- you can target specific regions of a source or destination matrix for copying using these messages:
+- you can target specific regions of a source or destination matrix for copying using these messages to `jit.matrix`, while passing a reference to another (the source matrix) in the leftmost inlet:
     - usesrcdim 1 : enables copying selected region from the source matrix
     - srcdimstart <x> <y> 
     - srcdimend <x> <y>
