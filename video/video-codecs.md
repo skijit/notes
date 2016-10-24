@@ -56,12 +56,10 @@ Misc About Video Codecs
     - Has features like Menu Navigation, Slide Shows, and subtitles
 - **AVCHD MTS**
     - aka MTS or TS
-    - Originally designed for broadcast systems where signal degradation was likely.
-    -  
+    - Originally designed for broadcast systems where signal degradation was likely. 
         
-    
-
-## Quicktime
+   
+## Quicktime 
 - [source](https://docs.cycling74.com/max5/tutorials/jit-tut/jitterappendixa.html)
 - Quicktime movies are containers for tracks
     - Each track contains a particular type of media
@@ -79,7 +77,7 @@ Misc About Video Codecs
 - Frame-rate is based on a unique time system.
     - *Timescale* defines how many time values are available per second
     - *Interesting time* defines how many of these time values should elapse before emitting a new frame
-- **Optimizations for Jitter**
+- **Optimizations for Jitter  OUTDATED**
     - **loadram** message to `jit.qt.movie` will copy the compressed media to RAM
     - To load uncompressed data into RAM, use `jit.matrixset`
     - Often best to used uncompressed audio (PCM) to accompany video since the size is, by comparison, small and doesn't load down the CPU in decompression (as it will with the corresponding video)
@@ -116,26 +114,3 @@ Misc About Video Codecs
 - `ffmpeg -i inFile -filter:v "rotate=45*PI/180" outFile
     - this rotates it 45 degrees
 - use ffprobe to get statistics on a video
-
-
-Hi,
-
-I'm planning on a max/jitter project that will be my first foray into video - pretty much at all.  I'm still going through jitter tutorials, but I thought this might be a good time for a sanity check to see if what I want to do is reasonable, whether I might anticipate (even better- avoid!) some pitfalls before I get too deep.
-
-The basic idea (which I'd guess is pretty common) is:
-- patch connected to a contact mic, listening for events onsets
-- maybe doing some spectral analysis
-- have a variety of video clips, each less than 3 minutes in length
-- trigger the videos based on logic and analysis of input audio
-- run jitter or vizzie effects on them
-- output to projector
-
-Questions
-- run all this on a 2011 macbook pro with 10 GB Ram and a core I7
-- my hd is rather slow- I don't know if the bottleneck will be streaming from disc, but if so, perhaps I should upgrade to a SSD?
-- it seems like the video resolution recommendations for jitter are for pretty modest... any guidance on whether this will be an issue on a projector and how best to ameliorate the situation?
-- this is getting in the weeds a bit but: the jitter recommendations also suggest using the motion jpeg codec.  I've been having a heck of a time getting a clean, working conversion of my AVCHD MTS files to motion jpeg.  any suggestions?  
--  
-
-
-    

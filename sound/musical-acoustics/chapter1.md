@@ -93,6 +93,7 @@ Acoustics - Chapter 1
     which means that for each additional bit, we get an improvement of 6dB improvement in SQNR.
 - SQNR is a theoretical best-case scenario b/c the avg quantization noise is going to be constant, whereas the amplitudes of a signal not using the full bit-depth-imposed-range will decrease.  
     - One reason, you don't want to record at a really quiet level: it will be competing with quantization noise (among other things, presumably)
+    - Speaks to the importance of a good **preamp**
 - 24 bit-depth is customary for digital audio records, yielding a SQNR of 144dB
 - Audio CD's are typically 16-bits, for a SQNR of 96dB
 
