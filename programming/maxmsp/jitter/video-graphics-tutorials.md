@@ -109,7 +109,6 @@ Video and Graphics Tutorial
         - gen patches can be embedded or saved separately, as a .genjit file
         - to load a separately saved genjit patch, use: `jit.gl.pix @gen <nameOfPatchWithoutExtension>`
     - There are standard genjit patchers available, corresponding to many of the matrix-based jitter objects, to make use of.
-        - 
     - `attrui` works with standard genjit patchers!  
         - they're usually at the very bottom with lowercase names
     - `jit.gl.pix` processes RGBA planes instead of ARGB
@@ -136,8 +135,18 @@ Video and Graphics Tutorial
 - `jit.gl.videoplane` is how you display a video in an openGL render world
     - send it a `layer <int>` message to set it front/back.  Higher values move it to the front.
     - Attribute **blend_enable** lets you blend various layers
-    - by default, the blend is driven by the alpha channel, but there is also a jit.gl.pix patch (alphy) that will let you substitute any plane for the alpha. 
+    - by default, the blend is driven by the alpha channel, but there is also a jit.gl.pix patch (alphy) that will let you substitute any plane for the alpha.
+    - `jit.gl.videoplane` doesn't need to be connected to a `jit.world` to render.    
 - **luminance** is the avg of R, G, and B
+- `jit.gl.texture` will take generate a buffer of image data used in drawing a 3d geometry that resides on the graphics card.  It's like the `jit.matrix` of open gl data.
+    - Sometimes you'll want to create a new texture, which you'll name with *@name*, and recall later, like for putting on the surface of a `jit.gl.gridshape`
+- `jit.gl.camera` will move the position, characteristics of the camera in the virtual space.
+    - looklock attribute will keep the gaze on the same object, while just moving the position of the camera.
+- 
+
+
+## Depth Testing vs Layering
+- Link from Tutorial 10
 
 ## More information
 - [Article on building your own video system in Jitter](https://cycling74.com/2008/12/22/the-video-processing-system-part-1/)
