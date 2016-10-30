@@ -146,7 +146,22 @@ Video and Graphics Tutorial
 
 
 ## Depth Testing vs Layering
-- Link from Tutorial 10
+- There are 2 primary ways to handle how overlapping objects are rendered:
+    1. **Layering**: this is driven by the proximity of each object to the camera such that closer stuff gets drawn on top.
+    2. **Depth Testing**: this is driven by a *layer* attribute that is associated with each object.  Objects with higher layer values are drawn on top by virtue of the fact that they're drawn later.
+- Depth Testing
+    - The render context relies on a *depth buffer*, which corresponds to an attribute `depthbuffer`, used by `jit.pwindow` or `jit.window` (and maybe the `jit.world`?) which is ON by default
+    - Each jit.gl object has an attribute, `depth_enable` which needs to be on (also ON by default) 
+- Layering
+    - Make sure each jit.gl object has `depth_enable=0`
+    - Driven by the `layer` attribute
+- Blending
+    - Layering with configurable transparency, set `blend_enable=1`
+    - `blend` attribute will let you configure various transparency from a variety of sources (1 = solid, 0 = totally transparent), though by default it is set to *alphablend* which is the last value of the object's color attribute.
+- Hybrid methods are OK
+- The `depth_write` attribute lets you use a depth testing approach but not update the depth values for objects.
+
+## About GL Contexts
 
 ## More information
 - [Article on building your own video system in Jitter](https://cycling74.com/2008/12/22/the-video-processing-system-part-1/)

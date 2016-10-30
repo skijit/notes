@@ -14,6 +14,7 @@ Graphics Fundamentals
         - Make it move
 - Instead of a detailed Computer graphics pipeline, you could zoom out and think of it like this...
 - ![graphics process](/resources/images/programming/graphics-process.png)
+
 - **Modelling**
     - Possible Inputs for 3d Geometric modelling
         - 3D scanning
@@ -23,7 +24,7 @@ Graphics Fundamentals
         - Displacement Mapping
         - Material properties
     - Output goes to a rendering stage 
- - **Animation**
+- **Animation**
     - Different Methods for Animation
         - keyframe animation is where you smoothly interpolate movement
         - Physics motion computation
@@ -56,6 +57,7 @@ Graphics Fundamentals
     
 ## Graphics Hardware 
 - ![graphics process](/resources/images/programming/graphics-hardware.png)
+
 - **Frame Buffer**
     - a 2d Array
     - uses Additive colors (RGB)
@@ -146,6 +148,7 @@ Graphics Fundamentals
     - So you have to put these two factors togehter:
         - What wavelengths are coming in and what wavelengths can this thing bounce out?
     - ![graphics data structures](/resources/images/programming/why-lighting.png)
+
 - **Lighting Environment**
     - You need to know the geometery of the scene to illuminate it properly
     - Ambient: Light that's everywhere
@@ -155,12 +158,14 @@ Graphics Fundamentals
         - Like the 'shininess'
         - How close your eye is to the angle of reflection from the diffuse lighting
     - ![graphics data structures](/resources/images/programming/Lighting-types.png)
+
     - Hardware can calculate these things pretty well for us, but it gets very complicated 
 - **Light types**
     - Point : Light is just spreading out from the point
     - Parallel
     - Spot
     - ![graphics data structures](/resources/images/programming/light-sources.png)
+
 - Two Types of Rendering
     1. Start at the Object
         - On Graphics Hardware

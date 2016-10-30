@@ -1,12 +1,11 @@
 
 Misc Signal Level & Type Info
 ==============================
-
-## Signal Level
-TODO About signal levels
-
-## Signal Type
-TODO About signal types
+- TODO:
+	- Signal levels
+	- Signal types
+	- Noise / Interference
+	- Passive / Direct
 
 ## Balanced Vs Unbalanced Connections
 - **Balanced Signals**:
@@ -27,7 +26,7 @@ TODO About signal types
 - **TODO** Explain unblanaced signals
 
 
-## **DI Boxes**:
+## DI Boxes
 - "Direct Insertion" Box
 - **3 Functions**:
     - **Connector Matching**
@@ -50,10 +49,7 @@ TODO About signal types
 		 - Typically a 50-60 Hz hum in the line
 		 - Caused when the interconnected musical equipment draws power from different circuits, which have incompatible ground references.
 		 - The DI box contains an Audio Transformer which breaks the coupling of the different circuits.
-##  **Passive vs Direct**
 
-## Noise & Interference
-- TODO Explain noise and interference
 
 
 
