@@ -99,7 +99,7 @@ Electricity Fundamentals
     - **Current** (I): The flow of water
         - Amperes (A) (Coulombs / sec passing through a point in a circuit)
     - **Voltage** (V): Pressure (at the end of the hose leading out of it)
-        - Volts (V)
+        - Volts (V): (Joule/Coulomb)
     - **Resistance** (R): Hose width
         - Ohm (```- \Omega```) : 1 Ohm is the resistance between 2 points in a conductor where application of 1V will push 1 Amp .
     - More water in the tank, means more charge.  And it means there's more pressure in the hose (i.e. higher voltage)
@@ -273,6 +273,60 @@ Electricity Fundamentals
     
 ## Capacitors
 - [source](https://learn.sparkfun.com/tutorials/capacitors)
+- One of the three fundamental passive components:
+    1. Capacitors
+    2. Inductors
+    3. Resistors
+- Basic functions
+    - Local energy storage
+    - voltage spike suppression
+    - Complex signal filtering
+        - Crossover circuits for speakers
+        - Hi-pass filtering
+- Capacitor Symbols
+    ![capacitor symbols](/resources/images/electronics/capacitor-symbols.png)
+- The capacitance of a capacitor tells you how much charge it can store
+    - Unit is called the *Farad* (F)
+    - 1 Farad is actually huge
+- The capacitor is made of two metal plates connected to each terminal, with an insulator (called a *dielectric*) of some type between them.
+    - The size and materials all exert an influence on the capacitance of the capacitor
+- Behavior
+    - When current flows into a capacitor, the plate on the input side will build up a negative charge.
+    - This creates an E-Field that pushes away like charges on the other plate, making it postively charged.
+    - This creates a strong field of attraction between the two plates, which stores the charge (like a battery) bc they're unable to resolve the attraction because of the insulating dielectric in the middle. 
+    - When the charge reaches it's capacitance, it will repel any new electrons
+    - If another path in the circuit becomes available, like via a switch, that allows the charges on the plates to find each other, then the capacitor will discharge.
+    ![capacitor symbols](/resources/images/electronics/Capacitor-discharge.gif)
+    - ```- Q = CV```
+        - The charge stored in a capacitor (Q) is the product of it's capacitance (C - which is a property of it's specific physical design) and the Voltage (V) applied to it.
+        - Thus more voltage, more charge.  Less voltage, less charge.
+        - Remeber Volts is the Potential Energy difference in Joules per Coulomb.  
+    - Current (I) through a capacitor depends on it's capacitance (C) and how quickly the voltage is rising or falling.
+        - If the current is unchanging, no current can get through it.
+- Characteristics
+    - Size: physical size and capacitance are usually correlated
+    - Maximum voltage
+    - Leakage Current: all capacitors have some amount of leakage across the dielectric
+    - Tolerance : Their ratings aren't perfect
+    - Equivalent Series Resistance (ESR): resistance- since they're not perfect conductors there will be some heat/power loss.
+- Types of capacitors:
+    - Ceramic
+        - Most common
+        - Small size and capacity
+        - Close to ideal behavior (regarding resistance and leakage)
+    - Electrolytic
+        - Lot of capacitance in a small volume
+        - look like little tin cans
+        - have high maximum voltage ratings
+        - high leakage
+        - polarized: if you reverse the direction, they'll pop and short-circuit
+    - Supercapacitors:
+        - very high capacities, but low voltage ratings
+        - they're usually wired in series to achieve a higher voltage rating
+- Wiring in series / parallel
+    - You can put them in parallel and their total capacity will be the sum of all capacities
+    - If you put them in series, their sum capacity is the inverse of the sum of inverses of each capacities (```- 1 / C_{tot} = 1/C_1 + 1/C_2 + ... + 1/C_N```)
+
 
 ## Resistors
 - [source](https://learn.sparkfun.com/tutorials/resistors)
@@ -301,6 +355,9 @@ Electricity Fundamentals
 ## Accelerometers
 - [source](https://learn.sparkfun.com/tutorials/accelerometer-basics)
 
+## Integrated circuits
+- [source](https://learn.sparkfun.com/tutorials/integrated-circuits)
+
 ## Selecting the Right Motors
 - [source](https://learn.sparkfun.com/tutorials/motors-and-selecting-the-right-one)
 
@@ -308,3 +365,4 @@ Electricity Fundamentals
 - LED's are *non-ohmic*.  Current flowing through it does not follow Ohm's law because a resitance is not constant.  In a motor, as the load increases, it will pull more current, because the resistance goes down.  [see here](http://electronics.stackexchange.com/questions/95874/when-people-talk-about-a-device-drawing-current-what-do-they-mean-why-do-dev)  - How does a load only pull what it needs?  
 - Why do circuits need to be closed?
 - See note above about Kirchoff's Voltage Laws
+- Passive vs Active components, and other component types
