@@ -18,3 +18,6 @@ Misc Comparisons
             - Cats: 60Hz
             - Dogs: 80Hz
                 - this is why dogs don't care what's on the TV as much as cats 
+
+- Atoms, at a max, are 3x10-10 meters long.
+- Proton's mass: 1.6726 x 10-27 kg vs Electron's mass: 0.00091 x 10-27 kg vs Neutron's mass: 1.6749 x 10-27 kg

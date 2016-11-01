@@ -4,6 +4,79 @@ Electricity Fundamentals
 
 ## What is Electricity
 - [Source](https://learn.sparkfun.com/tutorials/what-is-electricity)
+- Electricity is the flow of electric charge
+- In the Bohr Model of the Atom, a stable atom will have the same number of electrons as it has protons.
+- Electrons in an outer orbit of the nucleus are called **valence electrons** and with sufficient outside force, they can escape their orbit and become **free electrons**.
+    - Free electrons let us move charge around, which is what electricity is all about
+- Charge is a quantifiable property of matter, just like mass, density, etc.
+    - Charge comes in two types: Positive (+) and Negative (-)
+    - Electrons -> negative, Protons -> Positive
+    - The charge type of protons and electrons is important bc this is what lets us exert a force on them
+- Electrostatic Force
+    - Also called Coulomb's law
+    - ```- F = k_e  \frac{q_1 q_2}{r^2} ```
+        - Calculates the force between two charged particles where ```- k_e``` is Coulomb's constant, ```- q_1``` and ```- q_2``` are the signed charges, and r is the distance between the charges.
+    - Opposite's attract, like's repel
+    - Inverse square law, like gravity
+    - This force helps *glue* the atom together and also to get charge flowing...
+- You can use electrostatic force to turn valence electrons into free electrons
+    - Valence electrons are most easily converted to free electrons bc their outer orbit means less attraction to the nucleus than others.
+    - You can free them by using other electrons to repel them, or attract them via external atom's protons
+- Current is able to flow in a conductor because it doesn't hold on to it's electrons very tightly
+    - Current is essentially a chain-reaction of freed electrons which bounce to another atom, in the process freeing another valence electron, and so forth.
+- Examples of insualtors include glass, rubber, plastic and air
+- **Static Electricity**
+    - In electronics, we typically focus on a different kind of electricity: **Current Electricity**
+    - Static electricity exists when there's a build up of charge on two materials separated by an insulator
+    - This electricity exists **until** the charges find a way to equalize, causing a **static discharge**
+        - Note the difference between static electricity and electrostatic discharge (ESD)!
+    - Static discharge happens when the charge differential becomes so great the attraction can overcome the insulator's tendency to keep it's electrons.
+        - When the discharge occurs across and insulator like air, the electrons in air become excited and release energy in the form of light.
+    - Static electricity can be induced by rubbing two materials together: the object that loses electrons will become positively charged and the object that gains them, negatively.
+    - When working with electronics, the main consideration about static electricity is to prevent a discharge:
+        - You can wear ESD bracelets
+        - Or add components to circuits that protect against spikes in the charge
+- **Current Electricity**
+    - As opposed to static electricity which is at rest, current electricity is dynamic.
+    - Current electricity exists when charges are able to constantly flow
+    - In order to flow, current electricity requires a circuit: a closed loop of conductive material
+- **Electric Fields**
+    - Electric fields often induce the flow of electrons
+    - **Field**
+        - A tool to model physical interaction which don't involve any observable contact
+        - Just as a gravitational field exerts a force on objects of mass, electric fields exert force on objects of charge.
+    - An electric field (E-Field) is just the realization in space of Coulomb's Law
+        - Per Wikipedia, An electric field is a vector field that associates to each point in space the Coulomb force experienced by a test charge.
+    - Any charged object will create an E-field (proton or electron)
+    - The idea of a test charge is this:
+        - To determine the direction of force in an E-Field, you imagine dropping a positively charged (but the charge has to be infinitely small) into a field and you imagine the direction the charge would move.
+- **Electric Potential Energy**
+    - stored energy of a circuit is it's electric potential energy
+    - a charge has electric potential energy as you (doing work) move it counter to the direction of the E-Field it's in:
+        - moving a proton away from a field electrons
+        - pushing a proton into a field of other protons
+        - etc.
+    - so, electric potential energy is based on the direction of the E-field and it is presumably zero'd out based on Coulomb's force being zero, which is dependent on the distance and charges of the objects.
+- **Electric Potential**
+    - Different from Electric Potential Energy
+    - Electric Potential Energy includes the charges and position in a field, HOWEVER...
+    - Electric Potential takes the charge quantity out of the equation by dividing electric potential energy by the charges
+    - It tells us how much potential energy specific areas of the electric field may provide
+    - Unit of measurement is the Volt
+    - In any electrical field, there are 2 main points of interest:
+        - point of high electric potential
+        - point of low electric potential
+    - Voltage is the difference in electric potential between two points in an electric field
+        - It tells us how much pushing force (or pressure?) an electric field has
+- **Putting it Together**
+    - Charges in a circuit are propelled by an electric field
+        - Electric field is the realization in space of electrostatic force (Coulomb's Law), aggregated across all charges 
+        - The field exists in all space surrounding the charges, regardless of material
+        - Remember that with conductors, it just takes less energy to free those electrons
+        - We need a source of electric potential (Voltage) which (does work) pushes electrons from a low potential to a high potential.
+        - A battery will create voltage because one end is highly positively charged, whereas the other is highly negatively charged.
+        - The E-Field created from this difference is sufficiently powerful to move elctrons in the circuit
+    - Typically, an electric circuit will transfer electric energy into some other form of energy: light, heat, motion, etc.
 
 ## Voltage, Current, Resistance
 
@@ -44,31 +117,171 @@ Electricity Fundamentals
         - Typically: Higher pressure means higher flow (and vice versa)
     - **Scenario 3: Resistance**
         - Restricting the width of the hose is like adding resistance to the circuit
-
+- Other Analogies
+    - The water tank analogy makes it hard to visualize the difference between current and voltage.
+    - **Highway Analogy**
+        - Conductor: Highway
+        - Resistance: width of highway (number of lanes)
+        - Current: Amount of cars passing a point in the highway per sec
+        - Voltage: Speed of the cars
+        - **Problems**:
+            - Density of electrons is always the same
+            - Speed of electrons is always the same
+    - **Improved Highway Analogy**
+        - Bumper cars (electrons) on a highway that is filled with trees
+        - Cars are pulled through the highway by a battery at the end via bungee cords (electrostatic)
+        - Voltage is the tension in the bungee cord.  Cars will always goes the same speed (speed of light in the given substrate), but the force of the collision is stronger.
+        - resistance: the width of the highway
+        - Current: amount of cars passing a point per sec
 ### Resistance
 - Ohm's Law states the relationship between Volts, Current, and Resistance
 ```+ V = I \cdot R```
--  Voltage (V) is proportional to Current (I)
+- Voltage (V) is proportional to Current (I), mediated by Resistance (R)
 - But since Current and Resistance are on the same side of the equation, all things being equal, they will be inversely proportional
 - **Common Application in Electronics**:
     - Components, such as LED's, etc., will have a currrent rating (e.g. 20 mA or 0.020 amps).  You'll need to add the proper resistor (graded in Ohms) to bring the current into the proper range.  
         - This can be calculated, of course, with Ohm's Law
         - The resistor will affect R of the whole circuit, and in many cases, where it is placed (i.e. before or after a particular component) is not so important.  BUT, in some circuits, it does matter where you place the component.  For more information, look into **[Kirchoff's Voltage Laws](http://www.facstaff.bucknell.edu/mastascu/elessonshtml/basic/basic5kv.html)**
+- Impedance vs Resistance
+    - Both Resistance and Impedance are measured in Ohms
+    - Both Resistance and Impedance measure the opposition to electrical flow
+    - In an AC circuit, there are two categories for opposition to current: Resistance and Reactance.
+    - In an AC circuit, Impedance is the combinatino of Resistance and Reactance
+    - DC, has no reactance, so they'll just measure it as Resistance
+
+    
 
 ## Electric Power
 - [source](https://learn.sparkfun.com/tutorials/electric-power)
+- Power is the energy transfer/transform over time
+- Example energy transfers in a circuit:
+    - Lighting LED's: electric -> electromagnetic energy
+    - Spinning motor: electric -> mechanical energy
+    - Soundin a buzzer: electric -> sound energy
+    - Battery power: chemical -> electric energy
+- Energy is measured in Joules (J)
+- Power is measured in Watts (W).
+    - ```- W = J / sec```
+- Unit analysis:
+![electrical power unit analysis](/resources/images/programming/electrical-power-unit-analysis.png)
+- ```- P = V \cdot I```
+- V and I both relate to Coulomb (Charge).  
+    - Power puts I and V together to abstract away from charge and to see the amount of work that can be done over time.
+- Another way to look at it is to start with I (the current flowing through the circuit), now you want to characterize that by the pressure (V) in the system.
+- Resistor transforms electric energy into heat
+    - if you know the voltage of the power source and the resistance of the resistor, you can calculate I
+    - then you can calculate power, which is the amount of electrical energy transformed as heat by the resistor every second
+- Other derivations of Power formula:
+- ```- P = V^2 / R```
+- ```- P = I^2 \cdot R```
+- **Power Ratings**
+    - the purpose of electrical components is to transfer energy from one type (electrical) to another:
+        - Resistors convert electrical energy to heat
+        - LED's convert to light
+        - etc.
+    - most electrical components have a rating for the maximum amount of power they can dissipate before failing (i.e. getting burned out).
+    - Resistors are good for dropping voltage, as per Ohm's Law
+    - Resistors are rated as per the maximum power they can handle
+    - This means you have to calculate what the power loss associated with the voltage drop will be. 
+        - You'll know the resistance (in Ohm's) of the desired resistor
+        - You can calculate the Voltage drop with Ohm's Law
+        - Power loss can be calculated from the voltage drop
+        - Then you have to make sure the resistor (of that particular resistance) is able to handle that wattage
+
+## AC vs DC
+- [source](https://learn.sparkfun.com/tutorials/alternating-current-ac-vs-direct-current-dc)
+- Direct Current (DC): current only flows in 1 direction
+- Alternating Current (AC): periodic changes in direction of current flow (and thus sign of voltage)
+- AC
+    - Generated by an **altnernator**
+        - A coil of wires spinning inside a magnet
+        - Spinning can be driven by wind turbine, steam turbine, flowing water, etc.
+        - Voltage and current alternates as it spins
+        - Continuing with the water analogy from earlier...
+            ![alternator analogy](/resources/images/programming/alternator-analogy.gif)
+            - notice that the resistor applies resistance in either direction of current
+    - AC in homes has it's voltage following a sine wave (60 Hz), with a peak to peak voltage of 170 V, whose RMS is 120V
+        - RMS is the Root of the average of squared values
+    - AC is better for power transmission because at high voltages you can reduce the current, which means less heat loss.
+        - Also AC voltages are more easily converted (by transformers)
+    - Easily converted to DC 
+        - Note that AC Adapters often step down the voltage (so the device doesn't have to do it) AND they use a rectifier which converts from AC to DC
+- DC
+    - Most digital electronics use DC
+    - Batteries provide DC
+    - Unidirectional: Voltage and current may vary, but the direction will not
+- Historically, Edison was a big proponent of DC, but he couldn't get it generated to sufficient voltages to power over long distances.  Transmission distance was approx 1 mi per power station, which was a dealbreaker for a largely rural population.  Tesla invented the AC generator, purchased by Westinghouse, and this corrected this downside.
+
 
 ## What is a circuit
 - [source](https://learn.sparkfun.com/tutorials/what-is-a-circuit)
+- Electricity needs to flow to do work
+    - ```- P = V \cdot I```
+- Electricity needs to flow from a higher voltage to a lower voltage
+    - Or moves from a charge surplus to a charge deficiency
+- Every electrical source has two sides:
+    - Wall Outlets have 2 (or more) holes
+    - Batteries have two terminals
+    - Each side is either:
+        - Positive (+) : Higher voltage
+        - Negative (-) : Lower voltage
+- Electricity flows from the postive side to the negative side
+    - THIS IS ACTUALLY WRONG, BUT... we just stuck with it for historic reasons.
+    - In his electrical experiments, Ben Franklin's assumption about the directional flow of electricity was inverted.  He assumed it was going from positive to negative, and that is why we say electrons have a negative charge: he figured they don't have a lack of charge.  
+    - Positive and Negative are purely nominal.  It could as easily be Black and White.
+    - Franklin meant Postive -> surplus of charge, Negative -> deficiency of charge
+    - He was right in that electricity moves from charge surplus to charge deficiency: he just didn't realize that the thing he called 'negative' was actually the charge surplus. 
+    - Because it doesn't really matter as long as we're consistent, we typically follow a convention of notating electrical current as flowing from positive to negative, even though we know now that at the atomic level this is wong.
+    - Non-polarized components are electrical components that work irrespective of current direction
+    - Polarized devices also exist (usually semiconductor based)
+- We typically say the negative side is 0 volts and the positive side is however many volts are available (given the source)
+- Circuit is a loop
+- 'Load' is a component in a circuit that does work (e.g. a motor)
+- Its possible to overload and underload a component
+- 2 Degenerate Circuit types
+    - Short Circuit:
+        - Connect a wire to each end of a battery (don't actually), and since there's no load or resistance to regulate flow, the power source will deliver all the current it can, which could produce some bad results like burning a wire, etc.
+    - Open Circuit:
+        - When there's a break in the circuit.  Electricity will not flow.
+
+## Batteries
+- [source](https://learn.sparkfun.com/tutorials/what-is-a-battery)
+- 3 parts
+    - Anode: the - side
+    - Cathode: the + side
+    - Electrolyte: substance (in the middle) that chemically reacts with the anode and cathode
+- Anode and cathode are both **Electrodes**: conductors that allow electricity to enter or leave in a circuit
+- Electrons flow out from the anode electrode (although in conventional notation, this means current flows into it)
+- The chemical reaction between the electrolyte and anode builds up electrons in the anode end, which want to flow to the cathode side and they're prevented from passing through the electrolyte to get to the cathode.
+- Called a 'redox' reaction because electrons are transferred between chemicals.
+- **Anode Oxidation** 
+    - Produces electrons, and possibly ions
+    - Ions may pass through the electrolyte, but electrons cannot
+- **Cathode Reduction**
+    - Ions may be produced or consumed during this reaction
+- Some of these chemical rxns occur even if the battery is not connected to a circuit- this can affect shelf life.
+    - But they only occur full force when the battery is connected to a circuit.
+- Nominal voltage:
+    - Voltage stated by manufacturer
+    - AA batteries -> 1.5V
+- Battery capacities are usually stated in miliAmp / hours
+- You can increase the voltage by putting batteries in series
+- You can increase the capacities of batteries by putting them in parallel
+- Sometimes you wire batteries in both series and parallel
+- If you're battery voltage is too high, you might need a DC/DC converter
+
+    
+## Capacitors
+- [source](https://learn.sparkfun.com/tutorials/capacitors)
+
+## Resistors
+- [source](https://learn.sparkfun.com/tutorials/resistors)
 
 ## Series vs Parallel
 - [source](https://learn.sparkfun.com/tutorials/series-and-parallel-circuits)
 
-## Batteries
-- [source](https://learn.sparkfun.com/tutorials/what-is-a-battery)
-
-## AC vs DC
-- [source](https://learn.sparkfun.com/tutorials/alternating-current-ac-vs-direct-current-dc)
+## Diodes
+- [source](https://learn.sparkfun.com/tutorials/diodes)
 
 ## Polarity
 - [source](https://learn.sparkfun.com/tutorials/polarity)
@@ -92,5 +305,6 @@ Electricity Fundamentals
 - [source](https://learn.sparkfun.com/tutorials/motors-and-selecting-the-right-one)
 
 ## TODOS - Clarify
-- LED's are *non-ohmic*.  Current flowing through it does not follow Ohm's law.  It induces a *Voltage Drop* (?) 
+- LED's are *non-ohmic*.  Current flowing through it does not follow Ohm's law because a resitance is not constant.  In a motor, as the load increases, it will pull more current, because the resistance goes down.  [see here](http://electronics.stackexchange.com/questions/95874/when-people-talk-about-a-device-drawing-current-what-do-they-mean-why-do-dev)  - How does a load only pull what it needs?  
+- Why do circuits need to be closed?
 - See note above about Kirchoff's Voltage Laws
