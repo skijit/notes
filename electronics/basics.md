@@ -330,6 +330,74 @@ Electricity Fundamentals
 
 ## Resistors
 - [source](https://learn.sparkfun.com/tutorials/resistors)
+- Passive components that have a static electrical resistance
+    - Passive components: only consume power, cannot generate it.
+- Often added to circuits where there are active components like op-amps, microcontrollers, and integrated circuits.
+- Common Uses:
+    - **Limit Current**
+        - E.G. Placed in a series with LED to prevent it from blowing up
+        - When figuring out the resistance you need, check the LED's typical forward voltage and its maximum forward current 
+    - **Voltage Dividing**
+        - Wiring up resistors in series will produce a voltage drop which can then be a suitable voltage for sensors and other components.
+        - How does this work?
+            - Adding resistors will first impact the current
+            - Remember:
+                - Voltage is based on the electrostatic force between two points
+                    - But voltage is not constant across a circuit!
+                - The load determines how many amps are pulled.
+                    - Load = components with resistance.
+                    - Components can mean resistors or motors  
+                    - The Load is the resistance.
+                    - If there was no load, then all available amps would be pushed through, perhaps creating too much heat in the wires and a short-circuit.
+            - New current will be given by: ```- I = \frac{V_{in}}{R_1 + R_2}
+            - See [here](https://learn.sparkfun.com/tutorials/voltage-dividers/extra-credit-proof) for a simple derivation of how this works.                    
+    - **Pull Up I/O Lines**
+        - Biases the input pin to a MCU (microcontroller unit) so that its always predictable - not *floating*
+        - see [here](https://learn.sparkfun.com/tutorials/pull-up-resistors)
+- Unit of resistance is the Ohm (```- \Omega```) defined as resistance between two points wher 1 Volt of applied potential energy will push 1 Amp (A) of current.
+- Symbols:
+    ![resistor symbols](/resources/images/electronics/resistor-symbols.png)
+- In schematics, resistor symbols have:
+    - Name: Letter and Number combination usually (e.g. R2)
+    - Number: Resistance value
+- Types of resistors
+    1. Through Hole (PTH - Plated through hole)
+        - Good for prototyping
+        - Can be soldered to board, PCB, or stuck to a breadboard
+        - Size is relative to it's power rating
+        ![resistor type 1](/resources/images/electronics/through-hole-resistors.png)
+    2. Surface Mount (SMD/SMT - sufface mount technology or device)
+        - Shiny black rectangles
+        - Sit on PCB's, soldered by robots
+        ![resistor type 2](/resources/images/electronics/surface-mount-resistors.jpg)
+- Resistor composition
+    - Filled with a thin, somewhat-conductive film wrapped in a helix around which is covered by an insulating material
+- Other Resistor Packages
+    - rheostats: resistors which can be adjusted internally between a range of values
+    - potentiometer: connect two resistors in series and allow you to adjust a center tap between them creating an adjustable voltage divider.  Used for knobs and stuff.
+- Reading Through Hole Resistor Color Codes
+![resistor color coding](/resources/images/electronics/resistor-color-codes.png)
+- SMD resistors have their own coding conventions (E24, E96, perhaps more)
+- Power Ratings
+    - You want to keep the input power to a resistor below it's maximum rating, otherwise heat/fire risks
+    - Typically between 0.125W and 1W
+    - Through hole resistors usually come in 1/4 W or 1/2 W ratings, consistent with their size
+    - Power resistors might list their power rating on their side
+    - SMD power ratings can usually also be judged by their size
+        - Both 0402 and 0603-size resistors are usually rated for 1/16W, and 0805’s can take 1/10W.
+- Measuring Power Across a Resistor
+    - We can combine Ohm's Law (V = IR) with our Power Formula ( P = IV) to get:
+        - ```- P = I^2 \cdot V```
+        - ```- P = V^2 / R```
+- Resistors in Series and Parallel
+    - Series: ```- R_{tot} = R_1 + R_2 + ... + R_N```
+    - Parallel: ```- 1/R_{tot} = 1/R_1 + 1/R_2 + ... + 1/R_N```
+        - Just FYI: The inverse of resistance is called *conductance*
+        - Or if there are just two: ```- R_{tot} = \frac{R_1 \cdot R_2}{R_1 + R_2}
+        - A shorthand way of saying two resistors are in parallel is by using the parallel operator: ||
+- Calculating a network of resistors in series and parallel
+    - Find all the groups of resistors in series and calc resistance
+    - Then calc the rest as parallel resistances
 
 ## Series vs Parallel
 - [source](https://learn.sparkfun.com/tutorials/series-and-parallel-circuits)
