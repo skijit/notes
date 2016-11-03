@@ -142,7 +142,6 @@ Video and Graphics Tutorial
     - Sometimes you'll want to create a new texture, which you'll name with *@name*, and recall later, like for putting on the surface of a `jit.gl.gridshape`
 - `jit.gl.camera` will move the position, characteristics of the camera in the virtual space.
     - looklock attribute will keep the gaze on the same object, while just moving the position of the camera.
-- 
 
 
 ## Depth Testing vs Layering
@@ -162,6 +161,49 @@ Video and Graphics Tutorial
 - The `depth_write` attribute lets you use a depth testing approach but not update the depth values for objects.
 
 ## About GL Contexts
+- OpenGL rendering happens in an named context.
+    - 2 approaches:
+        1. `jit.gl.render` + (`jit.window` || `jit.pwindow` || `jit.matrix`
+        2. `jit.world` which combines `jit.gl.render` with `jit.window`
+- Jitter GL objects must be associated with a named context in order to draw
+    - via context name as argument name (this is the first argument, which sets the *drawto* attribute)
+    - implicitly: if you only have one render context, then you don't have to name it, and every gl object will write automatically to it.  (including subpatches)
+- `jit.world` and `jit.gl.render` send signals to all associated gl objects to draw
+- Shared Contexts:
+    - In some situations you might want two render contexts to share the same resources (e.g. textures)
+        - Ex: writing to a `jit.window` and a `jit.pwindow`
+    - This can only happen if you mark each context with the *shared* attribute (value = 1)
+- **TODO**: Notes incomplete, resume at subcontexts
+
+## Gl Texture Output
+- Jitter video object's output may include:
+    - matrix (typical)
+    - GL Texture
+        - Supported by `jit.movie`, `jit.grab`, `jit.playlist`, and probably others
+- Textures are image or other kinds of data stored and processed on your machine's GPU
+- When @output_texture = 1, video frames are decoded and directly uploaded to an internal `jit.gl.texture` object
+- Passing textures actually just passes a message *jit_gl_texture <internal_texture_name>*
+- Texture output is faster, especially with HD content
+- Other optimizations include:
+    - if alpha channel is not needed, set color mode to *uyvy* instead of *argb* as it requires half the data with no loss in quality
+        - note this only applies to how the image is uploaded to the GPU- it doesn't affect the color mode of the internal texture.
+        - OTOH, if you use this color mode on a jitter matrix, it will literally cut the matrix size in half
+- Once you get a video texture in the GPU, you want to keep it there.  So you won't want to switch back to using jitter matrices.
+- Displaying video data in texture:
+    - Connect to a `jit.world`
+    - For more control over placement, size, and color use `jit.gl.videoplane`
+        - Image skewing, mapping, etc. can be managed with `jit.gl.conerpin`
+- Texture processing:
+    - use `jit.gl.slab` (uses shaders) or `jit.gl.pix` (uses gen patchers)
+    - Most matrix operations have a corresponding shader or genpatcher.
+    - jit.op operations have corresponding shaders, each starting with the prefix *op* (e.g. op.add.jxs, op.max.jxs)
+- Matrix Readback
+    - This is a costly operation where you read a texture back into main memory for processing on the CPU
+    - Avoid doing it!
+    - Happens anytime you connect a texture output into a `jit.matrix`
+    - There are some cases you might want to do it if you're performing color tracking or analysis (see `jit.findbounds` or `jit.3m`), but if you do, first downsample the texture with `jit.gl.texture` before sending it into a matrix
+    
+
 
 ## More information
 - [Article on building your own video system in Jitter](https://cycling74.com/2008/12/22/the-video-processing-system-part-1/)

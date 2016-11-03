@@ -95,5 +95,12 @@ Max/MSP Gotchas and Misc Notes
         - The '#1', '#2', etc. are used to reference arguments in the abstraction
     - Prefixing the name with '-' (e.g. `send -foo`) will make the value local to that **instance of the patch** ([source](https://cycling74.com/forums/topic/local-sendreceive-within-the-same-patch-only/))
         - This might only work in M4L patches (need confirmation)
-     
+
+## Patching Mechanics
+- To insert a new object between two connected objects:
+    - select the patch cord, then press 'Shift+N'
+    - You can also use this with any of the shortcuts like 'Shift+B' for a button, 'Shift+T' for a toggle, etc.
+- If you want to make a new object and have it connected to the selected object, type `Shift+N'
+- Selecting multiple patch-cords: 'Alt-Drag cursor', then you can drag them to a new input
+
 

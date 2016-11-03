@@ -77,18 +77,6 @@ Misc About Video Codecs
 - Frame-rate is based on a unique time system.
     - *Timescale* defines how many time values are available per second
     - *Interesting time* defines how many of these time values should elapse before emitting a new frame
-- **Optimizations for Jitter  OUTDATED**
-    - **loadram** message to `jit.qt.movie` will copy the compressed media to RAM
-    - To load uncompressed data into RAM, use `jit.matrixset`
-    - Often best to used uncompressed audio (PCM) to accompany video since the size is, by comparison, small and doesn't load down the CPU in decompression (as it will with the corresponding video)
-    - You might have special hardware to handle compression/decompression, but don't assume that Jitter can take advantage of that
-    - Recommended Codecs: 
-        - using a video codec without temporal compression, such a Photo-JPEG or Motion-JPEG 
-            - Photo- and Motion-JPEG compression use the same compression method, but Motion-JPEG is optimized for special hardware support (which is probably not useful on a mac)
-        - **However**: If image quality is of principle importance, the Animation codec looks better than Photo-JPEG, but creates much larger files
-    - 320 x 240 movies will generally perform fine
-    - Setting the framerate to 15-20 fps is usually good
-        - Note: NTSC is 29.97 fps and PAL is 25 fps
 - Different versions of QuickTime support different audio and video codecs
 
 ## ffmpeg
