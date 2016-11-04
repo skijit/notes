@@ -402,6 +402,30 @@ Electricity Fundamentals
 ## Series vs Parallel
 - [source](https://learn.sparkfun.com/tutorials/series-and-parallel-circuits)
 
+## Ground
+- On the power distribution grid, 'ground' is literally the earth
+- The planet is a good conductor and so it makes a handy return path for electrons
+- Because of its huge size, it is able to dissipate the excess electricity safely
+- Utility poles have a wire running down into the ground: this connects the electrical ground line to actual ground line
+- Near the power meter at your house, there is also a long copper rod running into the ground
+    - All the neutral and ground plugs eventually attach to this rod
+- The point is safely dissipate any excess voltage that is not safely contained in the loop
+- Just like humans want to be at rest / not stressed, charge seeks equilibrium
+- Having the wrong number of valence electrons will create charge
+- Charge won't move unless you give it a path to what it wants (which is ground)
+- Electrical circuits are kinda like the carrot you put on a stick attached to a rabbit
+    - The rabbit is never going to get that carrot just like charge is not going to get fully discharged (to ground), because first we want to route it and make it do things for us.
+- "Ground is a reference point"
+    - means that ground is where electricity wants to be
+    - on a multimeter, the black probe is the 'reference probe'
+- Ground on a circuit is typically a screw or screw hole
+
+## Rossman videos
+- [Playlist called 'guide to basic electronics: unprofessional edition](https://www.youtube.com/playlist?list=PLkVbIsAWN2ltOWmriIdOc5CtiZqUTH7GT)
+    - pretty entertaining descriptions of electronics concepts
+
+
+
 ## Diodes
 - [source](https://learn.sparkfun.com/tutorials/diodes)
 
