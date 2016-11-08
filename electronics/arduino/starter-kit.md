@@ -29,10 +29,112 @@ Arduino Starter Kit
     - Makes sure electricity only flows in one direction
     - Semiconductor component
     - Sometimes you'll want the flow of electricity to be unidirectional
-    - 2 sides (electrodes):
-        - Cathode
-            - marked with a band on its side
-        - Anode
+- Gels
+    - Filter out colors
+    - R, G, B gels are available
+    - When used in conjunction with phototransistors, they cause the sensor to only react to the light (amount) of that filtered color.
+- H-Bridge
+    - This could be an IC, or assembled from components
+    - Lets you control the polarity of the voltage applied to a load, usually placed in front of a motor
+- LEDs
+    - A type of diode that illuminates when electricity passes through
+- LCD
+- Male Header Pins
+    - Fit into female sockets, like those on a breadboard
+- Optocoupler
+    - Aka OptoIsolator
+    - Transfers electrical signals between 2 isolated circuits using light
+    - When voltage is applied to the +, an internal LED illuminates which causes a photoreceptor inside to close a switch.
+- Piezo
+    - Component that detects vibrations and creates noises
+- Phototransistor
+    - Component that generates a current proportional to quantity of light absorbed
+- Potentiometer
+    - knob that lets you control voltage
+- Pushbuttons
+    - momentary switches that temporarily close a circuit when pressed
+- Resistors
+    - Resist the flow of electricity
+- Servo motor
+    - Geared motor that can rotate (only) 180 degrees.  
+    - Controlled by Arduino sending pulses which tell it what position it should move to.
+- Temperature Sensor
+    - Changes tvoltage output depending on the temperature
+- Tilt Sensor
+    - switch that will open or close depending on orientation
+    - has a hollow cylinder filled with a metal ball inside
+- Transistor
+    - Electronic switch often used to control high current / high voltage components like motors
 
-## General Electrical Info
-- Discrete Components vs Integrated Circuits
+## Parts of Arduino Board
+- Reset button
+- TX and RX LEDs
+    - indicate serial communication between your board and the computer (transmit and receive)
+- Digital Pins
+    - Use digitalRead() and digitalWrite()
+    - analogWrite() works on the pins with the PWM (pulse width modulation) symbol (~)
+- Pin 13 LED
+    - Digital pin 13 has a LED connected to it in the board, which is useful for debugging
+- ATmega microcontroller
+- Analog ins
+    - Marked A0 - A5
+- Gnd & 5V pins
+    - Use these to connect power source and ground
+
+## Project 1: Get To Know Your Tools
+- Types of energy include heat, gravity, movement, light, electrical, etc.
+- Transducers: convert one type of energy into another
+    - Sensors: Transduce other energy into electrical
+    - Actuators: Transduce electrical energy into other
+- Load: something on a circuit that can do something useful with electrical energy
+- Electrical flow:
+    - From high PE (+) to low PE (- or ground)
+    - DC- unidirectional (unlike the power coming from wall sockets)
+    - If there's no path from higher PE to lower PE, the circuit will not work
+- In any circuit, all of the energy will be used up
+    - Each component contributes
+- Flow of current at some point will always be the same going in as out
+- Electricity will follow the path of least resistance to ground
+    - If you connect power to ground directly with no components, the current will follow this path
+        - The power source and wires will transduce the current into heat and light
+        - This is a short circuit
+- Breadboard
+    - Each horizontal row (short - 5 holes) is connected together with conductive metal strips
+        - called Terminal Strips
+    - The gutter in the middle of the breadboard separates the two sides electrically
+    - The vertical strips that run on the perimeter are called Power Strips
+        - Have a + and - side
+        - The whole strip is connected (usually) to provide flexibility
+- LED
+    - It is polarized, so the electricity has to flow in the proper direction
+    - Anode side (longer): Connects to power
+    - Cathode side (shorter): Connects to ground
+- switch
+    - Will break or connect the circuit
+    - 'Closed' means the circuit is connected, 'Open' means it is broken
+    - Momentary switches, like in this kit, close the circuit only when pressure is applied
+
+### Clarifications
+- Consider:
+    - Series circuit: 
+        - Voltage will drop as you add more resistors
+        - Current will be the same.
+    - Parallel circuit:
+        - Voltage will be the same as you add more resistors
+- Why?
+    - Separate the idea of the electrons (i.e. the 'charge' or current) from the energy (or force or voltage) they carry.
+    - The electrons are not destroyed or transduced, but their energy is
+    - Ex: Rocks tumbling down a hill
+        - The rocks don't vanish / get transduced
+        - They just lose their PE
+        - Thus current is constant, voltage is not
+        - Resistance will impede current, voltage will drop (in series)... so, just as V = IR, voltage and current will be proportional.
+- Explaining why in parallel adding more resistors does not contribute to total resistance, whereas in series it does:
+    - [src](http://physics.stackexchange.com/questions/190194/why-does-voltage-change-in-series-circuit-but-not-in-parallel-circuit) 
+    - Assume you have four waterfalls, and they connect one river to another. The waterfalls drop by five feet. If you put the waterfalls end to end, then the second river must be 20 feet below the first river. If, however, the waterfalls get put side by side, and still connect the two rivers, the second river is just five feet below the first river.
+    - Now, this is exactly the same arrangement using gravitational potential that you get with resistors. The first arrangement is series, and the second one is parallel.
+ - [Why Voltage is the dependent variable, not Current](http://www.evilmadscientist.com/2012/resistors-for-leds/)
+    - LED's have a characteristic called a "forward voltage" (Vf) which is the amount of voltage lost/transduced when operated at a reference current (typically 0.020 mA).
+    - You can calculate the amount of voltage lost
+    - You have a target amount of current to drive the LED
+    - Thus you just plug these into Ohm's law to figure out the ideal amount resistance you need.
