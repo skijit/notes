@@ -323,3 +323,38 @@ void colorcube()
     - Basically, you just paint over the polygons of your model with a brush
     - The colors are applied directly to the texture map
     - Resolution of the texture is dependent on the resolution of the model
+
+## General 3d Terminology
+- To create an animated sequence, assets must move through a pipeline
+- Simple Pipeline Example
+    - PreProduction: artwork to illustrate the artistic concept, and story boards
+    - Modelling and Textures
+    - Rigging: Allows for the control of the models
+    - Animation
+    - Layout
+    - Compositing
+    - Lighting and Rendering
+- Virtual Sets: Digital sets for chromakeying scenarios
+- Set Dressing: Adding props to a modelled (virutal) set.
+    - Like furniture, etc.
+- Thumbnail sketching: sketches of ideas (digital or analog)
+- Storyboards: sequence of sketches that shows how things develop
+- Animatics: Movie showing storyboards
+- Modelling: Creating 3D assets.  
+    - 3 different geometeries when creating a model
+        1. Nurbs: good for smooth surfaces, but hard to use
+        2. Polygon: most common, easy to use, can take a lot of work, can lead to a high polygon count
+        3. Sub-Division surfaces: combines features of nurbs and polygon models- you create a polygon cage and then calculate a smooth surface on top of it
+    - Will eventually recieve coloring, texturing, and possibly being rigged
+- Channel Box: gives you the quickest to use menu changing important menu features (e.g. rotate X, translate y, etc.)
+    - you get access to keyable attributes
+- Dynamics: When you want to animate things to make interactions seem realistic.  Think physics engines.
+    - ex: particle simulations, rigid/soft body simulations, cloth simulations
+    - these will save you a lot of time
+- Display Layers: common in 2D image application software, but you can also use it in developing 3D models too
+    - In 3D context, the stacking order is not so important, it's benefit is more for grouping / organization of scenes/models
+- Rendering: convert 3d scenes into 2d images.  Involves first applying lighting and shading first.
+    
+
+    
+
