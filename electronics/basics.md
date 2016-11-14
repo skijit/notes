@@ -244,6 +244,19 @@ Electricity Fundamentals
     - Open Circuit:
         - When there's a break in the circuit.  Electricity will not flow.
 
+## Analog vs Digital Circuits
+- [Source](https://learn.sparkfun.com/tutorials/analog-vs-digital/all)
+- Analog Circuits
+    - Basic components like resistors, capacitors, inductors, diodes, transistors, and op amps require analog circuitry
+    - They're harder to design
+    - More susceptible to noise 
+- Digital Circuits
+    - Use discrete, digital signals rather than analog, continuous voltages
+    - Involve combinations of transistors, logic gates, microcontrollers
+- Combinations of both are not uncommon
+    - DAC and ADC
+    - Pulse Width Modulation
+
 ## Batteries
 - [source](https://learn.sparkfun.com/tutorials/what-is-a-battery)
 - 3 parts
@@ -293,9 +306,10 @@ Electricity Fundamentals
 - Behavior
     - When current flows into a capacitor, the plate on the input side will build up a negative charge.
     - This creates an E-Field that pushes away like charges on the other plate, making it postively charged.
+    - Electric field (E-Field) or static electric field is different from an electromagnetic field!
     - This creates a strong field of attraction between the two plates, which stores the charge (like a battery) bc they're unable to resolve the attraction because of the insulating dielectric in the middle. 
     - When the charge reaches it's capacitance, it will repel any new electrons
-    - If another path in the circuit becomes available, like via a switch, that allows the charges on the plates to find each other, then the capacitor will discharge.
+    - If another path in the circuit becomes available, like via a switch, that allows the charges on the plates to find each other (via the alternate path), and the capacitor will discharge.
     ![capacitor symbols](/resources/images/electronics/Capacitor-discharge.gif)
     - ```- Q = CV```
         - The charge stored in a capacitor (Q) is the product of it's capacitance (C - which is a property of it's specific physical design) and the Voltage (V) applied to it.
@@ -403,6 +417,7 @@ Electricity Fundamentals
 - [source](https://learn.sparkfun.com/tutorials/series-and-parallel-circuits)
 
 ## Ground
+- [src](http://www.learningaboutelectronics.com/Articles/Why-does-a-circuit-always-have-to-have-ground)
 - On the power distribution grid, 'ground' is literally the earth
 - The planet is a good conductor and so it makes a handy return path for electrons
 - Because of its huge size, it is able to dissipate the excess electricity safely
@@ -419,10 +434,60 @@ Electricity Fundamentals
     - means that ground is where electricity wants to be
     - on a multimeter, the black probe is the 'reference probe'
 - Ground on a circuit is typically a screw or screw hole
+- Circuit needs an earth ground or a floating ground to work
+    - Earth Ground
+        - for AC circuits (like in the home)
+        - uses the 3rd prong / wire
+    - Floating Ground
+        - Used in battery and low voltage applications where there is no risk of serious shock
+        - Serves as the 0V reference point
+        - Serves as the return path to the negative side of the power supply
+- Voltage is always measured with respect to the ground (0V)
+    - This is what is meant as the 'reference point'
+
 
 ## Rossman videos
 - [Playlist called 'guide to basic electronics: unprofessional edition](https://www.youtube.com/playlist?list=PLkVbIsAWN2ltOWmriIdOc5CtiZqUTH7GT)
     - pretty entertaining descriptions of electronics concepts
+- capacitors are typically connected to ground on one side, so that they can attract charge
+- AC is able to pass through capacitors, DC not
+    - The behavior is clearly complicated as capacitors also have leakiness and other characteristics
+- When looking at Ohm's Law scenarios, remember that Current is really just a function of the circuits resistance
+- Impedance (in addition to applying to AC) is often applied to the circuit as a whole, not individual components
+- speakers need AC.  DC will fix them at one position and eventually blow the coil.
+- short to ground in motherboard repair often happens when one component goes bad, and becomes a 0 ohm load (essentially like a wire), and goes to ground (prematurely)
+- QUESTION: I wonder why if electricity seeks the path of least resistance as indicated by the circuit pathways or the E-field.  If the E-Field is an inverse square law, maybe you could have a least resistance path that is just physically more distant than another path, and so the attraction was less.
+- inductor is like the opposite of a capacitor: 
+    - good at passing DC but not AC
+    - resists quick changes in **current**
+- Compare:
+    - capacitors 
+        - resist sudden changes in voltage 
+        - store energy in the form of a static charge
+    - inductors
+        - resist sudden changes in current
+        - store energy in the form of a magnetic 
+- inductor is a coil of wire, such that when current flows through it, it builds up a magnetic field which store the energy.
+    - when current stops flowing into an inductor, the magnetic field breaks down anad it will release the current
+    - it takes a certain amount of time to release all the current in an inductor
+- inductors have lots of applications including:
+    - Voltage boosting
+    - Lowpass filtering
+- transistors
+    - is a resistor insofar as it keeps voltage the same, but passes less current
+    - allow a small electrical current to control a much larger one
+    - there are high-power and low-power types depending on the application / input signals
+    - vacuum tubes used to be used for similar situations (but they were expensive, needed to be replaced, and very hot)
+    - FET Field effect transistor
+        - controlled by voltage, use almost no input current
+        - JFET, MosFET are types of FETs
+- pull up resistor
+    - data line is a communication line between two different circuits/component
+    - data line work by sending a current which is then interrupted (short to ground) at times (like morse code)
+        - maybe it's PWM?
+    - 
+
+
 
 
 
@@ -437,18 +502,105 @@ Electricity Fundamentals
 
 ## Voltage Dividers
 - [source](https://learn.sparkfun.com/tutorials/voltage-dividers)
+- [short video](https://www.youtube.com/watch?v=EQtwsWJuUPs&t=15s)
+- Voltage drop is just the Voltage between two points which are typically not the start/endpoints.  
+    - But you could say the voltage drop of the whole circuit is the same as the battery
+- Problem: You want to plug a 9V battery into the input pins in an Arduino.  But the max voltage for these pins (not the power supply) is 6V. 
+- Solution: you can first run it through 2 resistors (in series) on a breadboard, creating a voltage divider.
+- Calculating Voltage Drops:
+    - Scenario 1: 
+        - 10V battery with two resistors in series, R1 and R2 (both 10 Ohms)
+        - Calculate Current: I = V / R = 10V / 20 ```- \Omega ``` = 500mA
+        - Calculate Voltage drop of each resistor (using Ohm's law):
+            - ```- V_{R1} = R1 * I_{Total} = 10\Omega * 500mA = 5V ```
+            - ```- V_{R2} = R2 * I_{Total} = 10\Omega * 500mA = 5V ```
+        - **So:**: 
+            - In a series circuit the Voltage drops add up to the original voltage
+            - The current is always the same
+    - Scenario 2:
+        - 10V battery with two resistors in series, R1 (10 Ohms) and R2 (100 Ohms)
+        - Calculate current: I = V / R = 10V / 110 ```- \Omega``` = 91mA
+        - Voltage drops:
+            - ```- V_{R1} = R1 * I_{Total} = 10\Omega * 0.091A = 0.91V ```
+            - ```- V_{R2} = R2 * I_{Total} = 100\Omega * 0.091A = 9.1V ```
+            - Voltage drop is 10X bigger for R2 b/c the resistance of R2 is 10X bigger than R1.
+- Quick formula for voltage out:
+    - ```- V_{out} = \frac{R_2}{R_1 + R_2} \cdot V_{in} ```
+
 
 ## PCB Basics
 - [source](https://learn.sparkfun.com/tutorials/pcb-basics)
 
 ## Pulse Width Modulation
 - [source](https://learn.sparkfun.com/tutorials/pulse-width-modulation)
+- Its a digital signal that has a variety of applications
+- Though digital, it has analog qualities: but the continuous parameter is the width of the pulse (aka duty cycle) rather than the voltage level (i.e. in analog signals)
+- You set a fixed period and then you vary the length of time the signal is full-on or full-off
+![duty cycles](/resources/images/programming/duty_cycle.jpg
+- Applications:
+    - By changing the pulse width, you can give the impression of dimming LED's
+        - But the period of the signal has to be sufficiently high, or you'll just give the impression of flickering
+    - Each position in a servo corresponds to a particular pulse width.  So if you want it to move, you just change the pulse width.
+
+## Pull-Up Resistors
+- [source](https://www.youtube.com/watch?v=wxjerCHCEMg)
+- [see also](https://www.arduino.cc/en/Tutorial/DigitalPins)
+- [this too](https://learn.sparkfun.com/tutorials/pull-up-resistors)
+- [lastly, this one](http://www.resistorguide.com/pull-up-resistor_pull-down-resistor/)
+
+
 
 ## Accelerometers
 - [source](https://learn.sparkfun.com/tutorials/accelerometer-basics)
 
 ## Integrated circuits
 - [source](https://learn.sparkfun.com/tutorials/integrated-circuits)
+
+## Transistors
+- [source](https://learn.sparkfun.com/tutorials/transistors)
+
+## Using a multimeter
+- [src](https://learn.sparkfun.com/tutorials/how-to-use-a-multimeter)
+- Measures:
+    - voltage
+    - resistance
+    - current
+    - continuity
+- They all have:
+    - display
+    - dial
+    - ports
+- Black probe touches the neutral wire, and it always plugged in on the COM (for common) port
+- Red probe can switch depending on whether you're testing:
+    - Ohms/Voltage
+    - Current 
+        - There's often a separate port for large currents
+- Different dial depending on whether you're measuring DC or AC (AC is the wave, DC is the straight/dotted line)
+- If you hook up your test leads the wrong way, the voltage displayed will be negative- which makes sense
+- Hold: means keep the reading value displayed
+- Non-contact voltage: detects electric fields, so you dont actually have to touch the lead to, say, an outlet
+- For non-auto-ranging multimeters, you need to set the dial to the ceiling voltage you expect to measure.  
+    - If the measured voltage exceeds that, the multimeter will say something like '1'
+- Measuring current is different from measuring voltage:
+    - Voltage- you can just probe the different spots, creating a parallel circuit
+    - Current- You have to do this in series, physically interrupting the lines
+        - Good to do this with alligator clips
+- Continuity is the checking the resistance between two points in a circuit.  
+    - Essentially, this makes sure they're connected
+    - If they are connected, the reading should be less than a few Ohms
+    - Meter will sound a tone when they ARE connected.  if the circuit is open, there is no tone.
+    - Continuity symbol is usualy a diode with propagation waves around it
+    - You can touch the probes together to verify that a small amount of current is allowed to pass between them
+    - Turn OFF the system before checking continuity
+- Typical circuit troubleshooting workflow:
+    - With system on, check voltage between VCC and Ground
+    - Power down and check continuity between VCC and Ground
+        - If you hear a beep that means you have a short somewhere (bc there should be more significant resistance between VCC and Ground)
+- When checking continuity between VCC and Ground, you might hear a beep (incidcating a short) if there's a large cap on the circuit.
+    - That's just the extra capacitance (from the cap) in the circuit.
+    
+
+
 
 ## Selecting the Right Motors
 - [source](https://learn.sparkfun.com/tutorials/motors-and-selecting-the-right-one)
@@ -458,3 +610,18 @@ Electricity Fundamentals
 - Why do circuits need to be closed?
 - See note above about Kirchoff's Voltage Laws
 - Passive vs Active components, and other component types
+
+- When the switch is open:
+    - Why is the pin's input value floating?
+    - I would guess that the input has a high-impedance and therefore pulls very little amps
+    - Since the amps have gone down, the voltage 
+    - But wouldn't the voltage still be 5V?  
+-the point with the pull-up resistor is that the pin wasn't getting any voltage when the switch was closed, and so now it will get ever so little, but what it does get will be high.
+- the mcu does indeed have a high impedance, so it doesn't drain the current
+- microcontroller (input) pin has a high impedance
+    - when switch is open, very little current will go there
+    - the value it reads in is floating because  
+V = I * R
+5V = I * 10E3, I = 5 / 10E3 = 0.5mA
+input to the pin: High Impedance!
+so it doesn't draw much current, and it will send 
