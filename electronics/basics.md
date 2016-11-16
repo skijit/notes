@@ -415,7 +415,49 @@ Electricity Fundamentals
 
 ## Series vs Parallel
 - [source](https://learn.sparkfun.com/tutorials/series-and-parallel-circuits)
+- The idea that current takes the path of least resistance is **NOT TRUE**
+    - Current will flow from a high voltage to a low voltage
+    - Some amount of current will flow through every path it can take to get to an area of lesser voltage
+- Nodes:
+    - Any circuit can be deconstructed into one or more nodes
+    - A node is a stretch of any wire between some components
+    - If you imagine the wire as a path, it's anywhere you can walk without bumping into a component
+    - Below there are 4 nodes (colored different)
+    - You can name a node by the component endpoints (e.g. VS-R1, R2-R3-R4, etc.)
+    ![nodes in a circuit](/resources/images/electronics/circuit_nodes.png)
 
+- **Series Circuit**
+    - Def: Two nodes are in series if they share a common node and if the same current flows through them
+    - Have the same current running through them
+    - To calculate total resistance, just sum each individual resistor together: ```- R_{tot} = R_{1} + R_{2} + ... + R_{n} ```
+
+- **Parallel Circuit**
+    - Def: If components have 2 common nodes and there are multiple distinct paths the current can take to get from high to voltage
+    - Have the same voltage drop
+    - Example:
+    ![parallel resistance example](/resources/images/electronics/parallel_resistance.png)
+        - With a 10 k```- \Omega``` resistor and a 10V power supply we can calculate the current will be 1mA.
+        - Since there are 2 resistors, we know they'll pull cumulatively 2mA
+        - But if you plug in a 2mA current with a 10V power supply, we see that these 2 10 k```- \Omega``` resistors in parallel create a circuit with overall 5 k```- \Omega``` resistance.
+    - Total resistance for a parallel circuit:
+    ```+ \frac{1}{R_{total}} = \frac{1}{R_1} + \frac{1}{R_2} + ... + \frac{1}{R_{n}} ``` 
+- Tips
+    - To get a very specific resistance: ```- R_{total} = R / N ``` where R = resistance of each component (must be the same), N = number of components in parallel
+    - If you're combining resistors, be sure to factor in their individual tolerances
+    - The combined resistance of two resistors (in parallel) of different values is always less than the smallest value resistor. 
+- Series and Parallel Capacitors
+    - in many ways, just opposite of resistance in series and parallel
+    - recall capacitor design has two plates separated by an insulator.
+        - if you increase the size of the plates, you increase capacitance b/c there's more room to hold a bunch of electrons
+        - if you increase the distance between the plates, you decrease capacitace b/c there's less force to attract
+    - capacitors in series:
+        - capacitance goes down: it's like spacing the plates further apart
+            - ```- \frac{1}{C_{total}} = \frac{1}{C_1} + \frac{1}{C_2} + ... + \frac{1}{C_N} ```
+            - same a calculating resistance in parallel circuit
+        - voltages add up - like with batteries
+    - capacitance in parallel:
+        - capacitances add up
+    
 ## Ground
 - [src](http://www.learningaboutelectronics.com/Articles/Why-does-a-circuit-always-have-to-have-ground)
 - On the power distribution grid, 'ground' is literally the earth
@@ -456,7 +498,6 @@ Electricity Fundamentals
 - Impedance (in addition to applying to AC) is often applied to the circuit as a whole, not individual components
 - speakers need AC.  DC will fix them at one position and eventually blow the coil.
 - short to ground in motherboard repair often happens when one component goes bad, and becomes a 0 ohm load (essentially like a wire), and goes to ground (prematurely)
-- QUESTION: I wonder why if electricity seeks the path of least resistance as indicated by the circuit pathways or the E-field.  If the E-Field is an inverse square law, maybe you could have a least resistance path that is just physically more distant than another path, and so the attraction was less.
 - inductor is like the opposite of a capacitor: 
     - good at passing DC but not AC
     - resists quick changes in **current**
@@ -526,6 +567,19 @@ Electricity Fundamentals
             - Voltage drop is 10X bigger for R2 b/c the resistance of R2 is 10X bigger than R1.
 - Quick formula for voltage out:
     - ```- V_{out} = \frac{R_2}{R_1 + R_2} \cdot V_{in} ```
+- I think we like to say voltage dividers because:
+    - 1 resistor in series: gotta have it (to prevent a short)
+    - 2 resistors in series: produce a drop in current and ultimately in voltage (in fact it's like its being divided)
+
+## Voltage Drops
+- Not the same thing as voltage
+- Voltage Drop: The energy (volts) a component uses when current flows
+- There is only a voltage drop when current is flowing
+- Calculate the current in the circuit from the Voltage Source and the cumulative resistance.
+    - Then you calculate the individual voltage drop for each component using Ohm's law, the known current (as this doesn't change), and the component's individual resistance.
+- All the voltages have to add up to the total voltage : ie all voltage has to go away
+- Only components that have a load (resistance) ) (the stuff that does work) have a voltage drop
+
 
 
 ## PCB Basics
@@ -547,8 +601,56 @@ Electricity Fundamentals
 - [see also](https://www.arduino.cc/en/Tutorial/DigitalPins)
 - [this too](https://learn.sparkfun.com/tutorials/pull-up-resistors)
 - [lastly, this one](http://www.resistorguide.com/pull-up-resistor_pull-down-resistor/)
-
-
+- [and this post](https://forum.arduino.cc/index.php?topic=435495.0)
+- [youtube](https://www.youtube.com/watch?v=BxA7qwmY9mg)
+- [this](http://www.learningaboutelectronics.com/Articles/Why-does-a-circuit-always-have-to-have-ground)
+- Scenario: you have a microcontroller (MCU) with an input PIN that reads voltage (perhaps connected ultimately to some sensor value).
+- There are 3 potential voltages which can be read:
+    - High  (actionable!)
+    - Low (actionable!)
+    - Floating (indeterminate!)
+        - aka a 'High-Impedance' state or 'Disconnected' 
+- This floating state results from any number of things: stray current, leftover capacitance in the wire, current induced by magnetic fields, etc.
+- The problem with floating is it will read high and low, switching randomly.  You need to connect that input to a known voltage state.
+- You can solve this problem with a pull up resistor (R1 in diagram below)
+![pull-up resistor](/resources/images/electronics/pull-up-resistor.jpg)
+- When switch is open, voltage will be pulled up to Vcc.  When switch is closed, voltage will be pulled to 0.
+- **Details**
+    - First, the MCU input is known as high-impedance.  It has very high resistance - perhaps around 1M```- \Omega``` .
+        - That means when the switch is open, the only path to ground will be through the MCU and due to the high-impedance, will only draw a very small amount of current.
+    - When the switch is closed, then all that current will prefer to flow to ground directly.
+    - Besides pulling the voltages to a known level, the pull-up resistor will avoid a short when the switch is closed.
+    - The input pin senses voltage, but more specifically, **it is sensing the voltage drop across R1.** 
+    - **Example**
+        - R1 is 10K```- \Omega ```
+        - Input is 10M```- \Omega ```
+        - Vcc is 5V
+        - When switch is open:
+            - Only path to ground is through MCU, so we need to factor Input impedance into the circuit's total resistance:
+            - ```- R_{total} = ``` 1,000,000 + 10,000 = 1,010,000
+            - I = V / R = 5 / 1,010,000 = 0.00495 mA  (that's a very small amount of current!)
+            - Voltage Drop Across R1 (i.e. what the input reads):
+                - V = I x R = 0.00000495 * 10,000 = 9.9 mV
+                - So the input pin will read 5V - 0.0099V = 4.99V
+                - So it is pulled high to a known voltage
+        - When switch is closed:
+            - Path to ground is doesn't go through input pin.
+            - Only resistance in the circuit is from R1, which means the voltage drop across R1 will be to 0V
+- **Pull Down Resistor**
+![pull down resistor](/resources/images/electronics/220px-Pulldown_Resistor.png)
+- Without the resistor, the circuit is floating- any stray current is able to freely move around because there is no resistance to impede the current.
+- When the switch is open:
+    - The circuit's current is now more restricted (thanks to R1), and since there is no voltage drop across a component when there is no current, and thus the input reads 0. 
+- When the switch is closed:
+    - The current will primarily run through the resistor to ground, rather than through the high-impedance input.
+    - So the voltage drop across the resistor will be based on current pulled primarily by the resistor, and this will be Vcc.
+- **Choosing these resistor values**
+    - Sometimes you want more or less of a pull-up or down.  
+    - Generally, you want the resistor to be an order of magnitude smaller than the high impedance input's resistance, so that the voltage drop when the switch closes is not so dramatic.
+        - A lot depends on the variation of Vcc (since that's coming from a sensor with whatever sensitivities / characteristics) and how far you're willing to pull it up or down
+            - When there's high variation in Vcc, you probably want a lower-resistance R1 so you don't pull it too far
+    - You also want it to be high enough so that it doesn't just waste current when the switch is open.
+    
 
 ## Accelerometers
 - [source](https://learn.sparkfun.com/tutorials/accelerometer-basics)
@@ -598,7 +700,7 @@ Electricity Fundamentals
         - If you hear a beep that means you have a short somewhere (bc there should be more significant resistance between VCC and Ground)
 - When checking continuity between VCC and Ground, you might hear a beep (incidcating a short) if there's a large cap on the circuit.
     - That's just the extra capacitance (from the cap) in the circuit.
-    
+
 
 
 
@@ -606,22 +708,5 @@ Electricity Fundamentals
 - [source](https://learn.sparkfun.com/tutorials/motors-and-selecting-the-right-one)
 
 ## TODOS - Clarify
-- LED's are *non-ohmic*.  Current flowing through it does not follow Ohm's law because a resitance is not constant.  In a motor, as the load increases, it will pull more current, because the resistance goes down.  [see here](http://electronics.stackexchange.com/questions/95874/when-people-talk-about-a-device-drawing-current-what-do-they-mean-why-do-dev)  - How does a load only pull what it needs?  
-- Why do circuits need to be closed?
-- See note above about Kirchoff's Voltage Laws
+- LED's are *non-ohmic*.  Current flowing through it does not follow Ohm's law because a resitance is not constant.  In a motor, as the load increases, it will pull more current, because the resistance goes down.  [see here](http://electronics.stackexchange.com/questions/95874/when-people-talk-about-a-device-drawing-current-what-do-they-mean-why-do-dev)  - See note above about Kirchoff's Voltage Laws
 - Passive vs Active components, and other component types
-
-- When the switch is open:
-    - Why is the pin's input value floating?
-    - I would guess that the input has a high-impedance and therefore pulls very little amps
-    - Since the amps have gone down, the voltage 
-    - But wouldn't the voltage still be 5V?  
--the point with the pull-up resistor is that the pin wasn't getting any voltage when the switch was closed, and so now it will get ever so little, but what it does get will be high.
-- the mcu does indeed have a high impedance, so it doesn't drain the current
-- microcontroller (input) pin has a high impedance
-    - when switch is open, very little current will go there
-    - the value it reads in is floating because  
-V = I * R
-5V = I * 10E3, I = 5 / 10E3 = 0.5mA
-input to the pin: High Impedance!
-so it doesn't draw much current, and it will send 

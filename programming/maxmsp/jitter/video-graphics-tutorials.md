@@ -100,7 +100,6 @@ Video and Graphics Tutorial
 ## Tutorial 9 - Building Live Video effects
 - the standard matrix effect objects aren't super high-performance, so using the gl objects (particularly `jit.gl.pix` and `jit.gl.slab`) is often better.
 - instead of working on matrix data, most gl objects work on a different data structure called a **texture**, which is handled by the GPU.
-    - 'shaders' and 'textures' are basically the same thing
 - to get jitter objects like `jit.movie` and `jit.grab` to output a texture instead of a matrix, you need to set the attribute **@output_texture 1**.
 - `jit.gl.pix` is a based on `gen`, and it allows you to process textures using the performant, low level gen-patching contructs.
     - Reminders about `gen`:
@@ -146,8 +145,8 @@ Video and Graphics Tutorial
 
 ## Depth Testing vs Layering
 - There are 2 primary ways to handle how overlapping objects are rendered:
-    1. **Layering**: this is driven by the proximity of each object to the camera such that closer stuff gets drawn on top.
-    2. **Depth Testing**: this is driven by a *layer* attribute that is associated with each object.  Objects with higher layer values are drawn on top by virtue of the fact that they're drawn later.
+    1. **Depth Testing**: this is driven by the proximity of each object to the camera such that closer stuff gets drawn on top.
+    2. **Layering**: this is driven by a *layer* attribute that is associated with each object.  Objects with higher layer values are drawn on top by virtue of the fact that they're drawn later.
 - Depth Testing
     - The render context relies on a *depth buffer*, which corresponds to an attribute `depthbuffer`, used by `jit.pwindow` or `jit.window` (and maybe the `jit.world`?) which is ON by default
     - Each jit.gl object has an attribute, `depth_enable` which needs to be on (also ON by default) 
@@ -173,7 +172,15 @@ Video and Graphics Tutorial
     - In some situations you might want two render contexts to share the same resources (e.g. textures)
         - Ex: writing to a `jit.window` and a `jit.pwindow`
     - This can only happen if you mark each context with the *shared* attribute (value = 1)
-- **TODO**: Notes incomplete, resume at subcontexts
+- SubContexts:
+    - you can use `jit.gl.node` to create subcontexts
+    - subcontexts are good because:
+        - You can manipulate their common attributes by sending the changes directly to `jit.gl.node`
+        - You can output the entire context as a texture
+    - to make a jit.gl object write to a subcontext, make sure to set the **@drawto** attribute.
+    - A common idiom is to put a jit.gl.node object in a subpatch with other jit.gl objects, forcing them to implicitly attach to the node
+- `jit.world` outputs:
+    - 
 
 ## Gl Texture Output
 - Jitter video object's output may include:
