@@ -141,8 +141,16 @@ Video and Graphics Tutorial
     - Sometimes you'll want to create a new texture, which you'll name with *@name*, and recall later, like for putting on the surface of a `jit.gl.gridshape`
 - `jit.gl.camera` will move the position, characteristics of the camera in the virtual space.
     - looklock attribute will keep the gaze on the same object, while just moving the position of the camera.
-
-
+- `jit.gl.node` 
+    - lets us render an entire scene as a texture, which can be processed or reused in a number of ways.
+    - it's like a child context.
+    - *@capture 1* renders the output as a texture
+    - gl objects (videoplane, gridshape, etc.) connected to the middle outlet of `jit.gl.node` are associated with that node's <context></context>
+- `jit.gl.cornerpin` lets you map textures in a window.  
+    - you can arrange their position with 4 corner pins that get drawn to the screen.
+    - in many ways it like taking a whole gl context and flattening it into a plane and then manipulating it in another context.
+    - not sure if you can make it a 3d context.
+    
 ## Depth Testing vs Layering
 - There are 2 primary ways to handle how overlapping objects are rendered:
     1. **Depth Testing**: this is driven by the proximity of each object to the camera such that closer stuff gets drawn on top.
@@ -180,7 +188,9 @@ Video and Graphics Tutorial
     - to make a jit.gl object write to a subcontext, make sure to set the **@drawto** attribute.
     - A common idiom is to put a jit.gl.node object in a subpatch with other jit.gl objects, forcing them to implicitly attach to the node
 - `jit.world` outputs:
-    - 
+    - Captured scene out the left outlet  (OR)
+    - Matrix output OR
+    - Texture output
 
 ## Gl Texture Output
 - Jitter video object's output may include:
