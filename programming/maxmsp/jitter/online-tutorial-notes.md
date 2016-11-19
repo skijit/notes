@@ -3,6 +3,6 @@
         - A 1 plane matrix is basically just a grayscale value
     - the interval you specify in a `metro` is a number of milliseconds (or a notevalue)
     - message to matrix to set a value: `setcell <x> <y> val <val>`
-    s 
+   
     
     

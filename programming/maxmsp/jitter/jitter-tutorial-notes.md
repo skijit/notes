@@ -153,7 +153,7 @@ Max/MSP Jitter Tutorials
 ## Tutorial 7
 - `jit.brcosa`
     - Changing brightness is equivalent to scaling (ie multiplying) all the values by a number
-    
+    - 
 
 
 
