@@ -244,6 +244,19 @@ Electricity Fundamentals
     - Open Circuit:
         - When there's a break in the circuit.  Electricity will not flow.
 
+## Analog vs Digital Circuits
+- [Source](https://learn.sparkfun.com/tutorials/analog-vs-digital/all)
+- Analog Circuits
+    - Basic components like resistors, capacitors, inductors, diodes, transistors, and op amps require analog circuitry
+    - They're harder to design
+    - More susceptible to noise 
+- Digital Circuits
+    - Use discrete, digital signals rather than analog, continuous voltages
+    - Involve combinations of transistors, logic gates, microcontrollers
+- Combinations of both are not uncommon
+    - DAC and ADC
+    - Pulse Width Modulation
+
 ## Batteries
 - [source](https://learn.sparkfun.com/tutorials/what-is-a-battery)
 - 3 parts
@@ -293,9 +306,10 @@ Electricity Fundamentals
 - Behavior
     - When current flows into a capacitor, the plate on the input side will build up a negative charge.
     - This creates an E-Field that pushes away like charges on the other plate, making it postively charged.
+    - Electric field (E-Field) or static electric field is different from an electromagnetic field!
     - This creates a strong field of attraction between the two plates, which stores the charge (like a battery) bc they're unable to resolve the attraction because of the insulating dielectric in the middle. 
     - When the charge reaches it's capacitance, it will repel any new electrons
-    - If another path in the circuit becomes available, like via a switch, that allows the charges on the plates to find each other, then the capacitor will discharge.
+    - If another path in the circuit becomes available, like via a switch, that allows the charges on the plates to find each other (via the alternate path), and the capacitor will discharge.
     ![capacitor symbols](/resources/images/electronics/Capacitor-discharge.gif)
     - ```- Q = CV```
         - The charge stored in a capacitor (Q) is the product of it's capacitance (C - which is a property of it's specific physical design) and the Voltage (V) applied to it.
@@ -401,8 +415,51 @@ Electricity Fundamentals
 
 ## Series vs Parallel
 - [source](https://learn.sparkfun.com/tutorials/series-and-parallel-circuits)
+- The idea that current takes the path of least resistance is **NOT TRUE**
+    - Current will flow from a high voltage to a low voltage
+    - Some amount of current will flow through every path it can take to get to an area of lesser voltage
+- Nodes:
+    - Any circuit can be deconstructed into one or more nodes
+    - A node is a stretch of any wire between some components
+    - If you imagine the wire as a path, it's anywhere you can walk without bumping into a component
+    - Below there are 4 nodes (colored different)
+    - You can name a node by the component endpoints (e.g. VS-R1, R2-R3-R4, etc.)
+    ![nodes in a circuit](/resources/images/electronics/circuit_nodes.png)
 
+- **Series Circuit**
+    - Def: Two nodes are in series if they share a common node and if the same current flows through them
+    - Have the same current running through them
+    - To calculate total resistance, just sum each individual resistor together: ```- R_{tot} = R_{1} + R_{2} + ... + R_{n} ```
+
+- **Parallel Circuit**
+    - Def: If components have 2 common nodes and there are multiple distinct paths the current can take to get from high to voltage
+    - Have the same voltage drop
+    - Example:
+    ![parallel resistance example](/resources/images/electronics/parallel_resistance.png)
+        - With a 10 k```- \Omega``` resistor and a 10V power supply we can calculate the current will be 1mA.
+        - Since there are 2 resistors, we know they'll pull cumulatively 2mA
+        - But if you plug in a 2mA current with a 10V power supply, we see that these 2 10 k```- \Omega``` resistors in parallel create a circuit with overall 5 k```- \Omega``` resistance.
+    - Total resistance for a parallel circuit:
+    ```+ \frac{1}{R_{total}} = \frac{1}{R_1} + \frac{1}{R_2} + ... + \frac{1}{R_{n}} ``` 
+- Tips
+    - To get a very specific resistance: ```- R_{total} = R / N ``` where R = resistance of each component (must be the same), N = number of components in parallel
+    - If you're combining resistors, be sure to factor in their individual tolerances
+    - The combined resistance of two resistors (in parallel) of different values is always less than the smallest value resistor. 
+- Series and Parallel Capacitors
+    - in many ways, just opposite of resistance in series and parallel
+    - recall capacitor design has two plates separated by an insulator.
+        - if you increase the size of the plates, you increase capacitance b/c there's more room to hold a bunch of electrons
+        - if you increase the distance between the plates, you decrease capacitace b/c there's less force to attract
+    - capacitors in series:
+        - capacitance goes down: it's like spacing the plates further apart
+            - ```- \frac{1}{C_{total}} = \frac{1}{C_1} + \frac{1}{C_2} + ... + \frac{1}{C_N} ```
+            - same a calculating resistance in parallel circuit
+        - voltages add up - like with batteries
+    - capacitance in parallel:
+        - capacitances add up
+    
 ## Ground
+- [src](http://www.learningaboutelectronics.com/Articles/Why-does-a-circuit-always-have-to-have-ground)
 - On the power distribution grid, 'ground' is literally the earth
 - The planet is a good conductor and so it makes a handy return path for electrons
 - Because of its huge size, it is able to dissipate the excess electricity safely
@@ -419,10 +476,59 @@ Electricity Fundamentals
     - means that ground is where electricity wants to be
     - on a multimeter, the black probe is the 'reference probe'
 - Ground on a circuit is typically a screw or screw hole
+- Circuit needs an earth ground or a floating ground to work
+    - Earth Ground
+        - for AC circuits (like in the home)
+        - uses the 3rd prong / wire
+    - Floating Ground
+        - Used in battery and low voltage applications where there is no risk of serious shock
+        - Serves as the 0V reference point
+        - Serves as the return path to the negative side of the power supply
+- Voltage is always measured with respect to the ground (0V)
+    - This is what is meant as the 'reference point'
+
 
 ## Rossman videos
 - [Playlist called 'guide to basic electronics: unprofessional edition](https://www.youtube.com/playlist?list=PLkVbIsAWN2ltOWmriIdOc5CtiZqUTH7GT)
     - pretty entertaining descriptions of electronics concepts
+- capacitors are typically connected to ground on one side, so that they can attract charge
+- AC is able to pass through capacitors, DC not
+    - The behavior is clearly complicated as capacitors also have leakiness and other characteristics
+- When looking at Ohm's Law scenarios, remember that Current is really just a function of the circuits resistance
+- Impedance (in addition to applying to AC) is often applied to the circuit as a whole, not individual components
+- speakers need AC.  DC will fix them at one position and eventually blow the coil.
+- short to ground in motherboard repair often happens when one component goes bad, and becomes a 0 ohm load (essentially like a wire), and goes to ground (prematurely)
+- inductor is like the opposite of a capacitor: 
+    - good at passing DC but not AC
+    - resists quick changes in **current**
+- Compare:
+    - capacitors 
+        - resist sudden changes in voltage 
+        - store energy in the form of a static charge
+    - inductors
+        - resist sudden changes in current
+        - store energy in the form of a magnetic 
+- inductor is a coil of wire, such that when current flows through it, it builds up a magnetic field which store the energy.
+    - when current stops flowing into an inductor, the magnetic field breaks down anad it will release the current
+    - it takes a certain amount of time to release all the current in an inductor
+- inductors have lots of applications including:
+    - Voltage boosting
+    - Lowpass filtering
+- transistors
+    - is a resistor insofar as it keeps voltage the same, but passes less current
+    - allow a small electrical current to control a much larger one
+    - there are high-power and low-power types depending on the application / input signals
+    - vacuum tubes used to be used for similar situations (but they were expensive, needed to be replaced, and very hot)
+    - FET Field effect transistor
+        - controlled by voltage, use almost no input current
+        - JFET, MosFET are types of FETs
+- pull up resistor
+    - data line is a communication line between two different circuits/component
+    - data line work by sending a current which is then interrupted (short to ground) at times (like morse code)
+        - maybe it's PWM?
+    - 
+
+
 
 
 
@@ -437,12 +543,114 @@ Electricity Fundamentals
 
 ## Voltage Dividers
 - [source](https://learn.sparkfun.com/tutorials/voltage-dividers)
+- [short video](https://www.youtube.com/watch?v=EQtwsWJuUPs&t=15s)
+- Voltage drop is just the Voltage between two points which are typically not the start/endpoints.  
+    - But you could say the voltage drop of the whole circuit is the same as the battery
+- Problem: You want to plug a 9V battery into the input pins in an Arduino.  But the max voltage for these pins (not the power supply) is 6V. 
+- Solution: you can first run it through 2 resistors (in series) on a breadboard, creating a voltage divider.
+- Calculating Voltage Drops:
+    - Scenario 1: 
+        - 10V battery with two resistors in series, R1 and R2 (both 10 Ohms)
+        - Calculate Current: I = V / R = 10V / 20 ```- \Omega ``` = 500mA
+        - Calculate Voltage drop of each resistor (using Ohm's law):
+            - ```- V_{R1} = R1 * I_{Total} = 10\Omega * 500mA = 5V ```
+            - ```- V_{R2} = R2 * I_{Total} = 10\Omega * 500mA = 5V ```
+        - **So:**: 
+            - In a series circuit the Voltage drops add up to the original voltage
+            - The current is always the same
+    - Scenario 2:
+        - 10V battery with two resistors in series, R1 (10 Ohms) and R2 (100 Ohms)
+        - Calculate current: I = V / R = 10V / 110 ```- \Omega``` = 91mA
+        - Voltage drops:
+            - ```- V_{R1} = R1 * I_{Total} = 10\Omega * 0.091A = 0.91V ```
+            - ```- V_{R2} = R2 * I_{Total} = 100\Omega * 0.091A = 9.1V ```
+            - Voltage drop is 10X bigger for R2 b/c the resistance of R2 is 10X bigger than R1.
+- Quick formula for voltage out:
+    - ```- V_{out} = \frac{R_2}{R_1 + R_2} \cdot V_{in} ```
+- I think we like to say voltage dividers because:
+    - 1 resistor in series: gotta have it (to prevent a short)
+    - 2 resistors in series: produce a drop in current and ultimately in voltage (in fact it's like its being divided)
+
+## Voltage Drops
+- Not the same thing as voltage
+- Voltage Drop: The energy (volts) a component uses when current flows
+- There is only a voltage drop when current is flowing
+- Calculate the current in the circuit from the Voltage Source and the cumulative resistance.
+    - Then you calculate the individual voltage drop for each component using Ohm's law, the known current (as this doesn't change), and the component's individual resistance.
+- All the voltages have to add up to the total voltage : ie all voltage has to go away
+- Only components that have a load (resistance) ) (the stuff that does work) have a voltage drop
+
+
 
 ## PCB Basics
 - [source](https://learn.sparkfun.com/tutorials/pcb-basics)
 
 ## Pulse Width Modulation
 - [source](https://learn.sparkfun.com/tutorials/pulse-width-modulation)
+- Its a digital signal that has a variety of applications
+- Though digital, it has analog qualities: but the continuous parameter is the width of the pulse (aka duty cycle) rather than the voltage level (i.e. in analog signals)
+- You set a fixed period and then you vary the length of time the signal is full-on or full-off
+![duty cycles](/resources/images/programming/duty_cycle.jpg
+- Applications:
+    - By changing the pulse width, you can give the impression of dimming LED's
+        - But the period of the signal has to be sufficiently high, or you'll just give the impression of flickering
+    - Each position in a servo corresponds to a particular pulse width.  So if you want it to move, you just change the pulse width.
+
+## Pull-Up Resistors
+- [source](https://www.youtube.com/watch?v=wxjerCHCEMg)
+- [see also](https://www.arduino.cc/en/Tutorial/DigitalPins)
+- [this too](https://learn.sparkfun.com/tutorials/pull-up-resistors)
+- [lastly, this one](http://www.resistorguide.com/pull-up-resistor_pull-down-resistor/)
+- [and this post](https://forum.arduino.cc/index.php?topic=435495.0)
+- [youtube](https://www.youtube.com/watch?v=BxA7qwmY9mg)
+- [this](http://www.learningaboutelectronics.com/Articles/Why-does-a-circuit-always-have-to-have-ground)
+- Scenario: you have a microcontroller (MCU) with an input PIN that reads voltage (perhaps connected ultimately to some sensor value).
+- There are 3 potential voltages which can be read:
+    - High  (actionable!)
+    - Low (actionable!)
+    - Floating (indeterminate!)
+        - aka a 'High-Impedance' state or 'Disconnected' 
+- This floating state results from any number of things: stray current, leftover capacitance in the wire, current induced by magnetic fields, etc.
+- The problem with floating is it will read high and low, switching randomly.  You need to connect that input to a known voltage state.
+- You can solve this problem with a pull up resistor (R1 in diagram below)
+![pull-up resistor](/resources/images/electronics/pull-up-resistor.jpg)
+- When switch is open, voltage will be pulled up to Vcc.  When switch is closed, voltage will be pulled to 0.
+- **Details**
+    - First, the MCU input is known as high-impedance.  It has very high resistance - perhaps around 1M```- \Omega``` .
+        - That means when the switch is open, the only path to ground will be through the MCU and due to the high-impedance, will only draw a very small amount of current.
+    - When the switch is closed, then all that current will prefer to flow to ground directly.
+    - Besides pulling the voltages to a known level, the pull-up resistor will avoid a short when the switch is closed.
+    - The input pin senses voltage, but more specifically, **it is sensing the voltage drop across R1.** 
+    - **Example**
+        - R1 is 10K```- \Omega ```
+        - Input is 10M```- \Omega ```
+        - Vcc is 5V
+        - When switch is open:
+            - Only path to ground is through MCU, so we need to factor Input impedance into the circuit's total resistance:
+            - ```- R_{total} = ``` 1,000,000 + 10,000 = 1,010,000
+            - I = V / R = 5 / 1,010,000 = 0.00495 mA  (that's a very small amount of current!)
+            - Voltage Drop Across R1 (i.e. what the input reads):
+                - V = I x R = 0.00000495 * 10,000 = 9.9 mV
+                - So the input pin will read 5V - 0.0099V = 4.99V
+                - So it is pulled high to a known voltage
+        - When switch is closed:
+            - Path to ground is doesn't go through input pin.
+            - Only resistance in the circuit is from R1, which means the voltage drop across R1 will be to 0V
+- **Pull Down Resistor**
+![pull down resistor](/resources/images/electronics/220px-Pulldown_Resistor.png)
+- Without the resistor, the circuit is floating- any stray current is able to freely move around because there is no resistance to impede the current.
+- When the switch is open:
+    - The circuit's current is now more restricted (thanks to R1), and since there is no voltage drop across a component when there is no current, and thus the input reads 0. 
+- When the switch is closed:
+    - The current will primarily run through the resistor to ground, rather than through the high-impedance input.
+    - So the voltage drop across the resistor will be based on current pulled primarily by the resistor, and this will be Vcc.
+- **Choosing these resistor values**
+    - Sometimes you want more or less of a pull-up or down.  
+    - Generally, you want the resistor to be an order of magnitude smaller than the high impedance input's resistance, so that the voltage drop when the switch closes is not so dramatic.
+        - A lot depends on the variation of Vcc (since that's coming from a sensor with whatever sensitivities / characteristics) and how far you're willing to pull it up or down
+            - When there's high variation in Vcc, you probably want a lower-resistance R1 so you don't pull it too far
+    - You also want it to be high enough so that it doesn't just waste current when the switch is open.
+    
 
 ## Accelerometers
 - [source](https://learn.sparkfun.com/tutorials/accelerometer-basics)
@@ -450,11 +658,55 @@ Electricity Fundamentals
 ## Integrated circuits
 - [source](https://learn.sparkfun.com/tutorials/integrated-circuits)
 
+## Transistors
+- [source](https://learn.sparkfun.com/tutorials/transistors)
+
+## Using a multimeter
+- [src](https://learn.sparkfun.com/tutorials/how-to-use-a-multimeter)
+- Measures:
+    - voltage
+    - resistance
+    - current
+    - continuity
+- They all have:
+    - display
+    - dial
+    - ports
+- Black probe touches the neutral wire, and it always plugged in on the COM (for common) port
+- Red probe can switch depending on whether you're testing:
+    - Ohms/Voltage
+    - Current 
+        - There's often a separate port for large currents
+- Different dial depending on whether you're measuring DC or AC (AC is the wave, DC is the straight/dotted line)
+- If you hook up your test leads the wrong way, the voltage displayed will be negative- which makes sense
+- Hold: means keep the reading value displayed
+- Non-contact voltage: detects electric fields, so you dont actually have to touch the lead to, say, an outlet
+- For non-auto-ranging multimeters, you need to set the dial to the ceiling voltage you expect to measure.  
+    - If the measured voltage exceeds that, the multimeter will say something like '1'
+- Measuring current is different from measuring voltage:
+    - Voltage- you can just probe the different spots, creating a parallel circuit
+    - Current- You have to do this in series, physically interrupting the lines
+        - Good to do this with alligator clips
+- Continuity is the checking the resistance between two points in a circuit.  
+    - Essentially, this makes sure they're connected
+    - If they are connected, the reading should be less than a few Ohms
+    - Meter will sound a tone when they ARE connected.  if the circuit is open, there is no tone.
+    - Continuity symbol is usualy a diode with propagation waves around it
+    - You can touch the probes together to verify that a small amount of current is allowed to pass between them
+    - Turn OFF the system before checking continuity
+- Typical circuit troubleshooting workflow:
+    - With system on, check voltage between VCC and Ground
+    - Power down and check continuity between VCC and Ground
+        - If you hear a beep that means you have a short somewhere (bc there should be more significant resistance between VCC and Ground)
+- When checking continuity between VCC and Ground, you might hear a beep (incidcating a short) if there's a large cap on the circuit.
+    - That's just the extra capacitance (from the cap) in the circuit.
+
+
+
+
 ## Selecting the Right Motors
 - [source](https://learn.sparkfun.com/tutorials/motors-and-selecting-the-right-one)
 
 ## TODOS - Clarify
-- LED's are *non-ohmic*.  Current flowing through it does not follow Ohm's law because a resitance is not constant.  In a motor, as the load increases, it will pull more current, because the resistance goes down.  [see here](http://electronics.stackexchange.com/questions/95874/when-people-talk-about-a-device-drawing-current-what-do-they-mean-why-do-dev)  - How does a load only pull what it needs?  
-- Why do circuits need to be closed?
-- See note above about Kirchoff's Voltage Laws
+- LED's are *non-ohmic*.  Current flowing through it does not follow Ohm's law because a resitance is not constant.  In a motor, as the load increases, it will pull more current, because the resistance goes down.  [see here](http://electronics.stackexchange.com/questions/95874/when-people-talk-about-a-device-drawing-current-what-do-they-mean-why-do-dev)  - See note above about Kirchoff's Voltage Laws
 - Passive vs Active components, and other component types

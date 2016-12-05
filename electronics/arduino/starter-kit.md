@@ -133,8 +133,84 @@ Arduino Starter Kit
     - [src](http://physics.stackexchange.com/questions/190194/why-does-voltage-change-in-series-circuit-but-not-in-parallel-circuit) 
     - Assume you have four waterfalls, and they connect one river to another. The waterfalls drop by five feet. If you put the waterfalls end to end, then the second river must be 20 feet below the first river. If, however, the waterfalls get put side by side, and still connect the two rivers, the second river is just five feet below the first river.
     - Now, this is exactly the same arrangement using gravitational potential that you get with resistors. The first arrangement is series, and the second one is parallel.
- - [Why Voltage is the dependent variable, not Current](http://www.evilmadscientist.com/2012/resistors-for-leds/)
+- [Why Voltage is the dependent variable, not Current](http://www.evilmadscientist.com/2012/resistors-for-leds/)
     - LED's have a characteristic called a "forward voltage" (Vf) which is the amount of voltage lost/transduced when operated at a reference current (typically 0.020 mA).
     - You can calculate the amount of voltage lost
     - You have a target amount of current to drive the LED
     - Thus you just plug these into Ohm's law to figure out the ideal amount resistance you need.
+
+## Project 2: Spaceship Interface
+- Digital PINs on Arduino:
+    - Can be input OR output
+    - 2 state:
+        - HIGH: 5V
+        - LOW: 0V
+    - pins 0 and 1 are used for communicating with the computer
+    - the pins can be a voltage source if you configure them as output with a digitalWrite()
+    
+- Placement of the resistor (i.e. whether it is before or after a component) is not important: it usually affects the whole circuit.
+    - There are some exceptions though: for more info, see [Kirchoff's Voltage Laws](http://www.facstaff.bucknell.edu/mastascu/elessonshtml/basic/basic5kv.html)
+- **Recall**:
+    - Electric Potential Energy vs Electric Potential
+        - Electric Potential Energy is the energy of a charged particle(s) in an E-Field (subjected to Couloumb's law) (unit: *Joules*)
+        - You increase the Electric Potential Energy as you move the charge contrary to the direction of Electrostatic forces exerted in the E-Field.
+        - If you have a bigger rock you roll up a hill, you'll have more PE.  If you have a bunch of charge you move contrary to an E-Field, you have more Electric Potential Energy.
+        - Electric Potential is the Electric Potential Energy divided by the charge.  
+        - it divides by force (Joules) by the charge amount (Coulomb) (i.e. size of the rock) to assess the strength of the E-field independent of the charge amount.
+    - Voltage is the difference in Electrical Potential between 2 points in a circuit
+        - Each point is subject to different E-Fields
+    - Electrons want to move from an area of high electric potential to low electric potential
+        - By definition, bc low electric potential means they're not counter to the electrostatic force
+    - Ground has the lowest electric potential, so that's where electricity wants to flow
+        - its full of conductors, not insulators
+        - it's not really charged (i.e. electrons are not super packed together)
+            - if they get to close, they can move / make space for each other.
+            - and there's plenty of space to move any excess charge around.
+    - If you don't have any resistance, and you connect a voltage source to ground, you'll get a short circuit
+        - Bc there's nothing to impede the flow of current, so it's all going to go (and possibly overwhelm the wire/conductor you're using)
+        - If the wire had truly 0 Ohm resistance, then by V = I * R, voltage would be 0
+        - But, there is a little resistance on the wire so voltage is actually just very low
+            - Everything has a certain resistance (to electrical current)- Even conductors
+            - Bc V = I * R, any time you have a resistance, you will have a voltage too
+        - If there's so little voltage, why does the wire heat up?  Is that coming from Amps?
+            - Power is the rate at which electrical energy is transferred: 
+            - P = V * I
+            - watts = joules/couloumb * couloumb/sec = joules/sec
+            - tells you the amount of work that can be done over time
+            - transforming current to heat is work
+            - even though voltage might be low, current will be very high
+            - resistors electric energy into heat (some better than others)
+            - the wire gets super hot because it still has some resistance 
+            - [joule heating](https://en.wikipedia.org/wiki/Joule_heating) states that the power of heating is proportional to the product of it's resistance and the square of it's current.
+    - Short to ground:
+        - Just means to have a direct connection to ground.
+    - Ground loop means there are multiple paths to ground, and some of the electricity will form a loop.
+    - Open circuit is like the opposite of a short circuit:
+        - short circuit = no voltage / no resistance / full current
+        - open circuit = there is a voltage, but degenerate since there's active current / infinite resistence / no current         
+    - Are amps really being drawn by components:
+        - I don't think so... I think they each have their resistances which limit the flow of current in the circuit
+        - The current always wants to go to the area of least electric potential 
+    - **Floating**
+        - Floating ground: when a circuit does not have a connection to ground
+        - Floating voltage: conductors have a floating voltage if they're not connected to another grounded conductor
+            - In this case you have arbitrary voltage and flows being induced by electric-fields or induction instead of having it driven by the usual power source with a prescribed electric potential.
+    - What happens if you have a battery connected to ground, but without a closed loop connecting back to the other battery terminal.  [answer](http://electronics.stackexchange.com/questions/268531/why-electricity-requires-a-closed-loop-to-flow)
+        - Short Version: 
+            - There are two bursts of current between the + term and earth: 
+                1. zeros out the + term's voltage (rel to earth), and 
+                2. happens as the battery works to maintain a 9V differential between + and -, resulting in the - term being -9V (rel to earth) and the + term being 0V (rel to earth). 
+            - It happens very quickly, so it's more of a discharge / burst than sustained current. 
+            - To get a sustained current implies creating a charge on the wire (i.e. it loses electrons) which requires a huge amount of (increasing) voltage delivered- so basically, it isn't practical.
+    - Open circuit is really just a closed circuit with an extremely HIGH resistor (such as air)
+    - To "pull current" is just a statement about the resistance (in an AC circuit, the impedance) of the circuit and the voltage of the power source.  Under a mechanical load, certain component's resistances might decrease, causing them pull more current.  [src] (http://electronics.stackexchange.com/questions/95874/when-people-talk-about-a-device-drawing-current-what-do-they-mean-why-do-dev)
+    - The role of voltage and current in a circuit:
+        - The voltage is what converts into energy
+            - It has the charge which is being acted on by the E-Field
+        - Current
+            - The amps are a function of the internal resistance / design of the motors
+            - The amps are like the volt delivery system.  It shows how much charge (with some voltage) can be delivered.
+            - This is borne out by P = V x I
+    
+  
+

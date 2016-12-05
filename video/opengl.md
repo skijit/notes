@@ -257,8 +257,3 @@ void colorcube()
             - ```glLinkProgram```
             - ```glDeleteShader```
             - ```glDeleteProgram```
-
-
-
-    
-

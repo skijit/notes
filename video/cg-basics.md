@@ -28,7 +28,7 @@ CG Basics
 2. Normals: 
     - Normal is an invisible vector line which points out perpandicularly from the polygon face
     - A point of these surface normals is so that the 3D program knows which is the front of your image (because it won't need to render the interior!)
-    - Normals also give important lighting, camera-realted cues
+    - Normals also give important lighting, camera-related cues
 3. Specularity:
     - Defines how a surface reflects light that is cast on it
     - High specularity will reflect the light - a gloss
