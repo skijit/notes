@@ -130,3 +130,8 @@ Picking a Projector
 )
 - [this discussion](https://cycling74.com/forums/topic/how-to-create-audio-visual-performance-using-jitter/#.WAgjp5MrLMU)
 - [terms](http://www.projectorcentral.com/glossary.cfm)
+
+## My requirements
+- Home screen size:
+    - Max width: 6'
+    - Max height: 4'
