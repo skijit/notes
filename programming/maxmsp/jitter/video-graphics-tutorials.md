@@ -2,7 +2,7 @@ Video and Graphics Tutorial
 ===================
 - note that playback/functionality is buggy on a windows surface
 
-## Tutorial 1 - Displaying a Video
+## Displaying a Video (1)
 - `jit.world` 
     - will create a separate display window
     - outputs video when connected to a toggle - doesn't seem to require a metro
@@ -14,12 +14,12 @@ Video and Graphics Tutorial
 - `jit.movie` available for lower level playback
     - it can be attached to a `jit.pwindow` or a `jit.world`
 
-## Tutorial 2 - Live Capture
+## Live Capture (2)
 - `jit.fpsgui` displays the current fps coming out of a `jit.pwindow`
 - `jit.grab` lets you specify an input device (video camera or web cam?)
     - it will return a jitter matrix, which you can pass into jitter effects or `jit.world`
 
-## Tutorial 3 - Controlling Jitter With Messages
+## Controlling Jitter With Messages (3)
 - `attrui` objects are useful for:
     - knowing the available attributes which can be set
     - knowing each attribute's range
@@ -27,7 +27,7 @@ Video and Graphics Tutorial
 - `jit.slide` : settings for video delay / reverb / smoothing
 - `swatch` object is good for visually picking out colors
 
-## Tutorial 4 - Adding 3D Objects
+## Adding 3D Objects (4)
 - `jit.gl.gridshape` lets you draw a 2d or 3d shape into a context
     - *lighting_enable* adds shading which makes it look less flat
     - *smooth_shading* interpolates values to smooth
@@ -38,14 +38,14 @@ Video and Graphics Tutorial
     - From there, you have the same types of controls over the model as with gridshape
     - You can view a couple built-in 3d models (extension .dae) from the FIle Browser -> Kinds -> OpenGL -> filter on DAE
 
-## Tutorial 5 - Jitter Matrix operations
+## Jitter Matrix operations (5)
 - you can load a still image into a `jit.movie`
 - sending a *planemap* message into a `jit.matrix` allows you to reorder the planes in a matrix
 - `jit.cellblock` lets you view the contents (and filter by plane and perhaps more) of the `jit.matrix`
 - `jit.unpack` lets you create a new jitter matrix from the plane of an existing matrix
 - `jit.pack` lets you pack up multiple matrices by plane. 
 
-## Tutorial 6 - More Jitter Matrix operations
+## More Jitter Matrix operations (6)
 - `jit.noise` generates a matrix of any number of planes and any size
 - `jit.expr` lets you build an expression targeting matrices. You can use:
     - operators from `jit.op`
@@ -66,7 +66,7 @@ Video and Graphics Tutorial
     - dstdimend <x> <y>
     - interp 1 : will interpolate, which smooths things out when you have scaling/distortion
 
-## Tutorial 7 - Generating Geometry
+## Generating Geometry (7)
 - Typically, jit.gl.* objects will simply render their outputs.  
 - But you can also reconfigure them (@matrixoutput 1) to output a jitter matrix
     - Instead of a 3 or 4 plane (A)RGB matrix of char data, they'll contain 12 plane floating point geometric data
@@ -80,7 +80,7 @@ Video and Graphics Tutorial
     - `jit.gen` is another populate option for generating geometry data.
 - `jit.map` is like the `scale` object, but for jitter matrices
 
-## Tutorial 8 - Audio into a matrix
+## Audio into a matrix (8)
 - `jit.transpose` is pretty simple: it just transposes rows and columns.
 - `jit.*` is just a shorthand for `jit.op` where the operation is multiplication.
     - the *val* attribute can be used to specify a scalar value as the multiplier (rather than another matrix)
@@ -97,7 +97,7 @@ Video and Graphics Tutorial
         - Convert the matrix into a graph and visualize that
         - Use that matrix as a modifier of a geometry via various ops
 
-## Tutorial 9 - Building Live Video effects
+## Building Live Video effects (9)
 - the standard matrix effect objects aren't super high-performance, so using the gl objects (particularly `jit.gl.pix` and `jit.gl.slab`) is often better.
 - instead of working on matrix data, most gl objects work on a different data structure called a **texture**, which is handled by the GPU.
 - to get jitter objects like `jit.movie` and `jit.grab` to output a texture instead of a matrix, you need to set the attribute **@output_texture 1**.
@@ -129,7 +129,7 @@ Video and Graphics Tutorial
         - Or you can send it a `getparamlist` message and print out the result from its right outlet
         - To set an attribute, use the following message syntax: `param <attribute name> <value(s)>`
 
-## Tutorial 10 - Composing the Screen
+## Composing the Screen (10)
 - An OpenGL scene can have any number of video and geometry elements together in a scene
 - `jit.gl.videoplane` is how you display a video in an openGL render world
     - send it a `layer <int>` message to set it front/back.  Higher values move it to the front.
@@ -150,7 +150,7 @@ Video and Graphics Tutorial
     - you can arrange their position with 4 corner pins that get drawn to the screen.
     - in many ways it like taking a whole gl context and flattening it into a plane and then manipulating it in another context.
     - not sure if you can make it a 3d context.
-    
+
 ## Depth Testing vs Layering
 - There are 2 primary ways to handle how overlapping objects are rendered:
     1. **Depth Testing**: this is driven by the proximity of each object to the camera such that closer stuff gets drawn on top.

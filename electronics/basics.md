@@ -206,6 +206,7 @@ Electricity Fundamentals
         - Also AC voltages are more easily converted (by transformers)
     - Easily converted to DC 
         - Note that AC Adapters often step down the voltage (so the device doesn't have to do it) AND they use a rectifier which converts from AC to DC
+    - Analog signals (e.g. audio) are typically AC.  They need to be, what could be oscillating in Direct Current?  If the voltage is oscillating (i.e. changing sign, not merely fluctuating), it has to be AC.
 - DC
     - Most digital electronics use DC
     - Batteries provide DC
@@ -363,7 +364,7 @@ Electricity Fundamentals
                     - Components can mean resistors or motors  
                     - The Load is the resistance.
                     - If there was no load, then all available amps would be pushed through, perhaps creating too much heat in the wires and a short-circuit.
-            - New current will be given by: ```- I = \frac{V_{in}}{R_1 + R_2}
+            - New current will be given by: ```- I = \frac{V_{in}}{R_1 + R_2} ```
             - See [here](https://learn.sparkfun.com/tutorials/voltage-dividers/extra-credit-proof) for a simple derivation of how this works.                    
     - **Pull Up I/O Lines**
         - Biases the input pin to a MCU (microcontroller unit) so that its always predictable - not *floating*
@@ -581,7 +582,6 @@ Electricity Fundamentals
 - Only components that have a load (resistance) ) (the stuff that does work) have a voltage drop
 
 
-
 ## PCB Basics
 - [source](https://learn.sparkfun.com/tutorials/pcb-basics)
 
@@ -590,7 +590,7 @@ Electricity Fundamentals
 - Its a digital signal that has a variety of applications
 - Though digital, it has analog qualities: but the continuous parameter is the width of the pulse (aka duty cycle) rather than the voltage level (i.e. in analog signals)
 - You set a fixed period and then you vary the length of time the signal is full-on or full-off
-![duty cycles](/resources/images/programming/duty_cycle.jpg
+![duty cycles](/resources/images/programming/duty_cycle.jpg)
 - Applications:
     - By changing the pulse width, you can give the impression of dimming LED's
         - But the period of the signal has to be sufficiently high, or you'll just give the impression of flickering

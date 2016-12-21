@@ -26,7 +26,12 @@ Future Note Sources
         - [Primary Course Link](http://music.columbia.edu/cmc/courses/g6610/fall2011/)
         - [Course Materials](http://music.columbia.edu/cmc/courses/g6610/fall2011/syl.html)
     - Spatialization techniques
-
+    - Filter Videos / Tutorials for Max/msp
+        - [first](https://cycling74.com/2016/03/08/a-tour-of-filtering-tools-in-max/#.WFfylaIrJ24)
+        - [then](https://cycling74.com/2016/09/13/crossover-filter-design-video-tutorial/#.WFfyqqIrJ24)
+        - [then...](https://cycling74.com/2016/08/16/demystifying-filters-video-tutorial/#.WFfyfaIrJ24)
+        - [finally](https://cycling74.com/2016/12/06/advanced-max-an-inquiry-into-maxs-slide-objects/#.WEsHrqIrIW1)
+        
 TODO
 - **Music**
     - Ableton

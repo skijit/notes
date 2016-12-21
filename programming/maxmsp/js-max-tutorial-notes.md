@@ -45,7 +45,7 @@ outlet(outlet_index, val)  //outlet index starts with 0```
 	- You can define a js task which will repeated at a specified interval, started and cancelled on commands, etc.
 	- Define the task:
 	```(javascript)
-	var tsk = new Task(mytask, this);  //mytask is a function that will be repeated'''
+	var tsk = new Task(mytask, this);  //mytask is a function that will be repeated```
 	- Set interval, if desired
 	```(javascript)
 		tsk.interval = 200;  //in ms```

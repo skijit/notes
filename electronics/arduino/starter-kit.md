@@ -2,6 +2,8 @@ Arduino Starter Kit
 ==============
 - Notes collected from the starter kit materials
 - For more info, go to the [starterkit link](http://arduino.cc/starterkit)
+- Datasheets for all components are linked from page above
+- [Language Reference](https://www.arduino.cc/en/Reference/HomePage)
 
 ## Intro
 - Simple way to think of arduino:
@@ -105,6 +107,12 @@ Arduino Starter Kit
     - The vertical strips that run on the perimeter are called Power Strips
         - Have a + and - side
         - The whole strip is connected (usually) to provide flexibility
+    - Breadboard Series Circuit
+    ![series-breadboard](/resources/images/electronics/series-breadboard.png)
+    - Breadboard Parallel Circuit
+    ![parllel-breadboard](/resources/images/electronics/parallel-breadboard.png)
+    - So, when you have connections on the same row, they are essentially parallel bc there are multiple paths for the currentto flow
+
 - LED
     - It is polarized, so the electricity has to flow in the proper direction
     - Anode side (longer): Connects to power
@@ -203,7 +211,7 @@ Arduino Starter Kit
             - It happens very quickly, so it's more of a discharge / burst than sustained current. 
             - To get a sustained current implies creating a charge on the wire (i.e. it loses electrons) which requires a huge amount of (increasing) voltage delivered- so basically, it isn't practical.
     - Open circuit is really just a closed circuit with an extremely HIGH resistor (such as air)
-    - To "pull current" is just a statement about the resistance (in an AC circuit, the impedance) of the circuit and the voltage of the power source.  Under a mechanical load, certain component's resistances might decrease, causing them pull more current.  [src] (http://electronics.stackexchange.com/questions/95874/when-people-talk-about-a-device-drawing-current-what-do-they-mean-why-do-dev)
+    - To "pull current" is just a statement about the resistance (in an AC circuit, the impedance) of the circuit and the voltage of the power source.  Under a mechanical load, certain component's resistances might decrease, causing them pull more current.  [src](http://electronics.stackexchange.com/questions/95874/when-people-talk-about-a-device-drawing-current-what-do-they-mean-why-do-dev)
     - The role of voltage and current in a circuit:
         - The voltage is what converts into energy
             - It has the charge which is being acted on by the E-Field
@@ -212,5 +220,69 @@ Arduino Starter Kit
             - The amps are like the volt delivery system.  It shows how much charge (with some voltage) can be delivered.
             - This is borne out by P = V x I
     
-  
+## Project 3
+- done: notes are in the code
+
+## Project 4
+- The digital pins can only output a high (5V) or low (0V) value
+- The analog ins are good for detecting variable voltage drops
+- Since the digital pins can only output high or low, it can instead use Pulse Width Modulation (PWM) to output a variable signal.
+- PWM modulates from HIGH to LOW at a variable rate.  When the HIGH is equal the length of LOW, the **duty cycle** is said to be 50%.
+    - The percentage of time the value stays on HIGH is the duty cycle
+- Phototransistors output a current proportional to the light output.
+
+### PhotoTransistor Resistor selection Notes
+- Each phototransistor is wired up with a 10K```- \Omega ``` resistor.  Why?
+- [Relevant Arduino Forum Post](http://forum.arduino.cc/index.php?topic=442070.0)
+- [This also explains it very well]
+(http://learn.parallax.com/tutorials/robot/shield-bot/robotics-board-education-shield-arduino/chapter-6-light-sensitive-11)
+![phototransistor](/resources/images/electronics/phototransistor-resistor.jpg)
+- [This is good too](http://learn.parallax.com/tutorials/robot/shield-bot/robotics-board-education-shield-arduino/chapter-6-light-sensitive-15)
+- [PhotoTransistor Datasheet](https://www.arduino.cc/documents/datasheets/HW5P-1.pdf)        
+    - Supply voltage = 3-15 V
+    - The longer leg is called the **collector**- this attaches to the positive side
+    - The shorter leg is called the **emitter** - this is where the current change occurs
+    - Datasheet shows the configuration the component was tested in, with a 1 K resistor- but notice the Vout (presumably where they measure) is before the resistor. 
+        - It says the collector photo current at 10 LUX produces a current of 60uA.
+        - Why does it say that about the collector and not the emitter?  Basically bc the amount of light that it detects makes it change its resistance, so it essentially lets in less current into the collector.  Rather than restricting it's output (emitter), it restricts its input (collector).
+- Using Ohm's Law, we can make some observations about resistor selection.
+    - Assume a constant 60uA 
+    - ```- V_{out} = I \cdot R ```
+    - **1 K resistor**: 1 K * 60 uA = 0.06V
+    - **10K resistor**: 10 K * 60 uA = 0.6V
+        - **Trend**: Increased resistance at a constant current means more voltage (bc you need more pressure to push the same current through more resistance.)
+        - Comparing these first two scenarios, how can we get a 1K resistor to result in a 0.6 V across it (same as the 10 K resistor), as this might be a preferable range?  
+            - We'd have to increase the current to 6 uA, which means an increase in light.
+            - This means the resistor we choose makes the phototransistor more or less sensitive to light:  
+            - **More resistance = More photosensitivity**
+    - **100K resistor**: 100 K * 60 uA = 6V
+        -  **BUT THAT WOULDN'T MAKE SENSE AS THE INPUT VOLTAGE IS ONLY 5V**                
+- So there seem to be two factors:
+    - With a standard resistor, figure out the voltage range for the light levels you want to be sensitive to.
+    - Then you can add or remove resitance (using Ohm's law, as above) to bring that into the ideal range given your analog in and supply voltage.     
+- How does detection of a voltage drop work:
+    - The phototransistor and resistor are in series.  
+    - That means the current coming out of the phototransistor will be impeded immediately.
+    - So you would measure before the resistor.  
+    - Also, remember that voltage is a difference, and you want it to be compare the voltage to ground - but if you measured after the resistor, it would be the same as ground.    
+
+### RGB LED Resistor selection
+- [Datasheet](https://www.arduino.cc/documents/datasheets/LED(RGB).pdf)
+- Remember, we're going to use PWM (between 0-5V) to adjust the intensity of each color component
+- Datasheet says Forward Voltage is:
+    - R: 1.8 - 2.2
+    - G: 3 - 3.5
+    - B: 3 - 3.5
+- Forward voltage is essentially the voltage drop
+- Forward current is listed as 20mA
+- So we need to find a resistor to accompany:
+    - V (for G, B) = 5V - 3V = 2V 
+    - V (for R) = 5V - 2V = 3V 
+    - I = 0.020 A
+- For G, B: V = I x R; R = V / I = 2 / 0.020 = 100 Ohm
+- For R: V = I x R; R = V/I - 3 / 0.020 = 150 Ohm
+- resistor for each is a 220 Ohm, so it's fairly close.
+- We're going to be putting in less than the 20mA- might be worth seeing how they work with 100Ohm resistors too.
+    - The hard part is I've only got 220 Ohm resistors.
+    - I think I might have to put a couple together in parallel to test this... (TODO)
 

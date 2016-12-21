@@ -17,5 +17,7 @@ Misc Concepts in Video
         - 'Image artifacts'- a discontinuity / jump in a fast-moving object between successive frames
         - More blurring
         - Moire patterns
+
+
     
         
