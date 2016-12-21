@@ -1,6 +1,39 @@
 A Collection Of CSS Notes
 ==============
 
+- Pseudo-Elements vs Pseudo-Classes
+    - Pseudo-classes help selecting an existing element whereas pseudo-elements allow you to use CSS(3) to insert elements into the document
+        - Pseudo-elements typically have the a `content` property, as that tells them what to insert
+    - Common Pseudoclasses
+        - :link
+        - :visited
+        - :hover
+        - :active
+        - :focus
+        - :enabled
+        - :disabled
+        - :checked
+        - :first-child
+        - :nth-child(n)
+        - :nth-last-child(n)
+        - :nth-of-type(n)
+        - :nth-last-of-type(n)
+        - :last-child
+        - :first-of-type
+        - :last-of-type
+        - :only-child
+        - :only-of-type
+        - :root
+        - :empty
+        - :not(x)
+        - :target
+        - :lang(language)
+    - Common Pseudoelements
+        - ::before
+        - ::after
+        - ::first-letter
+        - ::first-line
+        - **Note**: the second colon was introduced in CSS3 so that you can easily distinguish between pseudoclasses (:) and pseudo-elements (::)
 - Difference between psuedo-class ```:first-of-type``` vs ```:first-child```
     - ```:first-of-type``` is more specific
     - You've also got the ```:nth-child(1)``` pseudo-class which can be used

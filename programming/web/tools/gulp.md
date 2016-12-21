@@ -46,3 +46,21 @@ Gulp
         - watch()
         - dest()
         - task()
+- [Another src](https://www.youtube.com/watch?v=dwSLFai8ovQ)
+- To get one task to run prior to another task use the following syntax to declare it as a dependency.
+    - Multiple dependencies might not have ordering guarantees.
+```(javascript)
+gulp.task('coffee', function() {
+    //...
+});
+
+gulp.task('scripts', ['coffee'], function() {
+    //...   
+});```
+- On every task, be sure you're returning the stream.
+    ```(javascript)
+    gulp.task('coffee', function() {
+        return ...;
+    });```
+- `gulp.dest()` is when it takes the contents out of the memory and writes to disk
+- [list of other good articles](https://github.com/gulpjs/gulp/blob/master/docs/README.md#articles)
