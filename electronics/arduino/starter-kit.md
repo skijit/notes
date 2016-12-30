@@ -234,8 +234,7 @@ Arduino Starter Kit
 ### PhotoTransistor Resistor selection Notes
 - Each phototransistor is wired up with a 10K```- \Omega ``` resistor.  Why?
 - [Relevant Arduino Forum Post](http://forum.arduino.cc/index.php?topic=442070.0)
-- [This also explains it very well]
-(http://learn.parallax.com/tutorials/robot/shield-bot/robotics-board-education-shield-arduino/chapter-6-light-sensitive-11)
+- [This also explains it very well](http://learn.parallax.com/tutorials/robot/shield-bot/robotics-board-education-shield-arduino/chapter-6-light-sensitive-11)
 ![phototransistor](/resources/images/electronics/phototransistor-resistor.jpg)
 - [This is good too](http://learn.parallax.com/tutorials/robot/shield-bot/robotics-board-education-shield-arduino/chapter-6-light-sensitive-15)
 - [PhotoTransistor Datasheet](https://www.arduino.cc/documents/datasheets/HW5P-1.pdf)        
@@ -285,4 +284,14 @@ Arduino Starter Kit
 - We're going to be putting in less than the 20mA- might be worth seeing how they work with 100Ohm resistors too.
     - The hard part is I've only got 220 Ohm resistors.
     - I think I might have to put a couple together in parallel to test this... (TODO)
+        - Remember Total resistance for a parallel circuit:
+            - ```+ \frac{1}{R_{total}} = \frac{1}{R_1} + \frac{1}{R_2} + ... + \frac{1}{R_{n}} ```
+        - And if you have resistors of all the same resistance in parallel, you can use:
+            - ```- R_{total} = R / N ```
+
+## Project 5
+- Uses servo and capacitors
+- I have some [questions](http://electronics.stackexchange.com/questions/276242/basic-capacitor-discharge) about capacitors I'm still trying to understand.
+- These kinds of capacitors are called *decoupling capacitors* bc they reduce changes caused by the components from the rest of the circuit.
+
 

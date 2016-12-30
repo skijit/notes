@@ -170,6 +170,11 @@ Max/MSP Jitter Tutorials
         - Decreasing will lead to a grayscale
         - Increasing will lead to a polarization to 0, 255
 - `jit.hue` lets you change hue for each pixel by specifying an angle with which to shift the input pixels hue on the color wheel
+- For an interesting graphical representation of brightness and contrast transfer functions, check the help file on the `jit.charmap'
+    - transfer function is represented by a graph (on a `multislider`)
+    - brightness raises/lowers the line
+    - contrast changes the slope
+
 
 ## Simple Mixing (8)
 - You can mix two photos/movies together by adding them
@@ -215,7 +220,12 @@ Max/MSP Jitter Tutorials
 - `jit.charmap` builds its output matrix by using the values in the input (left) matrix to point to positions in the (right) matrix and copying the value found there
     - given a cell in the left matrix of (70, 100, 23, 45), `jit.charmap` will check  the cells of the lookup (right) matrix in cells 70, 100, 23, and 45.  Then it will use these values.  
 - Lookup tables for `jit.charmap` should be one-dimensional matrices of 256
-    - Sine there are only 256 different char values.
+    - Since there are only 256 different char values.
+    - They can however, have 4 planes corresponding to *argb*
+- Look at the help file for `jit.charmap` and you'll see examples of a different `multislider` for each color channel.
+    - The brco suppatcher calculates new transfer values based on brightness and contrast parameters.
+        - Brightness raises the entire value
+        - Contrast changes the slope
 - `jit.gradient` also lets you create lookup tables
     - `jit.gradient` generates single dimension char matrices that transition smoothly between two specified cell values
     - you send it start and end messages to define the gradient.  
@@ -383,6 +393,10 @@ Max/MSP Jitter Tutorials
     - the type of projection
         - default projection type is called 'perspective projection'
         - you can change to orthographic (e.g. Qbert) by sending the message *ortho 1*
+            - perspective projection is the distortion that is used to imply depth.  it produces a more *realistic* view.
+            - orthographic projection doesn't apply any distortion based on depth.  it can be useful for modelling. 
+            - [discussion here](http://blender.stackexchange.com/questions/648/what-are-the-differences-between-orthographic-and-perspective-views)
+            - **ALSO:** a lot of times you'll use orthographic projection when using a `jit.gl.videoplane` that you don't need depth information on (i.e. you just want to display the video, not the video in some 3d space)
     - the lens angle
         - objects will be smaller as the lens angle increases to accommodate a larger field of view. 
         - Similarly, we can change the lens angle of our perspective transformation to increase the field of view
@@ -795,7 +809,7 @@ function bang()
 ## Frames of MSP Signals (48)
 - Tutorial 27 covered `jit.poke~`, which copies an MSP signal sample-by-sample, into a jit.matrix
     - also saw `jit.graph` which is useful for visualizing audio and other one-dimensional data
-- `jit.catch~` also moves data from signal to domain
+- `jit.catch~` also moves data from signal to matrix domain
     - Can take multiple audio signals and assign each to a matrix frame
     - mode attribute:
         - 0 : matrix size is dependent on time of last bang, output is a single dimesional matrix
@@ -812,7 +826,21 @@ function bang()
         - 0 : Expects a 1:1 mapping of matrix cell to output sample (make sure you're buffering enough)
         - 1 : the playback position is smoothly adjusted (i.e. the values are interpolated) based on how much data is given. 
             - put differently: If the playback time of samples stored is less than the length of the latency attribute, jit.release~ will play through the samples more slowly.
-    - for more examples of using `jit.release~`, check out jit.forbidden-planet patch    
+    - for more examples of using `jit.release~`, check out jit.forbidden-planet patch
+    - Consider the following `jit.release` scenario, using mode=0
+        - You have a `qmetro` banging every 2ms.
+            - That means it's a period of 500 Hz
+        - With each bang, it creates a 1-plane matrix size of 1024
+        - Thus we're producing 500 Hz * 1024 samples = 512,000 samples per second
+            - This is enough for a SR of 44.1 kHz
+        - So you need to figure out, in advance, how much pre-buffering (*@latency*) is necessary            
+            - Figure out the rate (per second) at which you're producing samples and compare this to the sample rate.
+            - Control Rate: consider that the process feeding the `jit.release~` is not at audio-rate.  
+                - **Enable Overdrive**: When Overdrive is enabled, the Max event scheduler runs at interrupt level.
+                - **Enable Scheduler in Audio Interrupt**: This runs the Max event scheduler immediately before processing a signal vector's worth of audio.
+                - **Experiment with your Signal Vector size**: 
+                    - When the Signal Vector Size is 512, the scheduler will run every 512 samples. At 44.1 kHz, this is every 11.61 milliseconds, which is just at the limit of noticeable latency.
+                    - You can reduce the signal vector size, but you may run into buffer under-run situations. 
 - `jit.graph`
     - takes single dimensional matrix data and rewrites it to be output to a pwindow
     - lets you specify the name of the matrix you want to output to with *@out_name*
@@ -821,8 +849,152 @@ function bang()
     - *@clear_it* lets you specify when you clear the output matrix: useful when you want to overlay audio data
 - `jit.3m` gives you min, max, & mean based on each plane of a matrix
 - `bondo` synchronizes a group of messages
-    - todo: compare with `pak` and `buddy`
-    
+    - it is like pak except that instead of outputting a list, it has an inlet/outlet 1:1 correspondence
+    - it like `buddy` except that with `buddy`, output only occurs once all inlets have recieved input.
+- `jit.buffer~` is just a wrapper around `buffer~` that also accepts messages which can be useful for later visualizing the matrix data in 2 dimensions.
+
+## Color Spaces (49)
+- setting *colormode uyvy*, such as in a `jit.movie` changes the encoding of the matrix:    
+    - if you think about it, ARGB, particularly the RGB part reflects the way we perceive color (we have color receptors for each type of light), but that doesn't mean it's the optimal storage mechanism of this data.
+- luminance vs chrominance
+    - luminance: the intensity information of a given color
+    - chrominance: the color information which is used to determine hue
+- YUV color space separates luminance from chrominance as such:
+    - **Y**: Luminance of a pixel
+    - **U**: Y - blue
+    - **V**: Y - red
+    - To convert from RBG values to YUV:
+        - Y = 0.299R + 0.587G + 0.114B
+        - U = 0.492(B - Y)
+        - V = 0.877(R - Y)
+    - note that U and V are signed but we are using char8 (0-255), so we center at 128
+- YUV compression
+    - called **chroma subsampling**
+    - combines the chrominance of two horizontally adjacent pixels into a 4 plane matrix:
+        - **0**: U value for both pixels
+        - **1**: Y value for pixel 1
+        - **2**: V value for both pixels
+        - **3**: Y value for the second pixel
+        - this is why even though the colorspace is *YUV*, we call the encoding *uyvy*
+    - **Warning**: although this compression reduces the size by 2, if you have other transformations to make (rotation, etc.), you should probably convert/use the full argb color space.
+    - A lot of video codecs use native YUV compression, so decompressing this with a `jit.movie` set to *colormode uyvy* can be extra fast.
+- **Historical note**: the first luminance/chrominance color systems developed in the 50s while rolling out color TV's but keeping backwards compatibility with B/W sets.
+    - Luminance was all that was needed for B/W
+    - Chrominance was there on a separate channel for color tv sets
+- converting between argb and uyvy:
+    - `jit.argb2uyvy` and `jit.uyvy2argb`
+- there are lots of other colorspaces available in jitter, along with corresponding conversion objects:
+    - **luma**: 1-plane char grayscale
+    - **ahsl**
+- Note that many of the transformations you use typically, are also availabe directly on the hardware-accellerated `jit.gl.videoplane`.  This includes:
+    - color
+    - rotate
+    - scale
+    - blend_enable
+
+## Procedural & Textural Modelling (50)
+- Analogies to audio:
+    - procedural : synthesis
+    - images, movies, 3d-models : sampling
+- `jit.bfg`
+    - Each function performs a point-wise operation in n-dimensional space whose evaluation is independent of neighboring results
+    - Classes of functions include:
+        - Fractal
+        - Noise
+        - Filter
+        - Transfer
+        - Distance
+- Inner process:
+    - You specify the size matrix you want and `jit.bfg` allocates it
+    - Based on the value of `scale` attribute, `jit.bfg` creates a set of cartesian coordinates on top of that
+        - For example, if you allocate a matrix of 256x256:
+            - set scale=0 -> you get about 4 coordinates
+            - set scale= 255 -> you get about 65636 coordinates (ie 1 per matrix cell) 
+    - Then passes the coordinates to the specified basis function, which fills the values which are then mapped to the individual matrix cells.
+- `jit.bfg` is often connected to `jit.normalize`: Since the output range of `jit.bfg` may yield extremely large results, especially when evaluating unbounded functions such as fractals, we need to normalize our output in order to map the results for display.
+    - that may explain why scaling certain functions has no effect on them
+- Other standard attributes which influence the appearance
+    - Global origin
+        - set by attribute *origin*
+        - is a function of the coordinates created internally by `jit.bfg` (i.e. the *scale* attribute), not the matrix dimensions
+        - Default origin is the upper left corner.  
+            - Moving to the right is means moving x in the negative direction
+            - Moving down is moving y in the negative direction
+    - Similarly, you can modify the *offset* (translation) and the *rotation* attributes
+    - You can override the plane count of the output by sending the message *planecount x*
+- It appears that you can combine different basis functions (not sure how yet)
+    - Basis functions that do not combine are called 'generators' (in the docs)
+- The *align* attribute seems to let you translate diagonally (x and y direction, towards the origin)
+- **Distance Functions**
+    - Define a unique metric for determining the positional difference from a given point to the global origin
+    - note that in all of these images, the global origin has been shifted to center
+    - **chebyshev**: Absolute maximum difference between two points.
+    ![bfg function](/resources/images/programming/bfg-chebyshev.png)
+    - **euclidean**: True straight line distance in Euclidean space.
+    ![bfg function](/resources/images/programming/bfg-euclidean.png)
+    - **manhattan:** Rectilinear distance measured along axes at right angles.
+    ![bfg function](/resources/images/programming/bfg-manhattan.png)
+    - **minkovsky**: Exponentially controlled distance.
+    ![bfg function](/resources/images/programming/bfg-minkovsky.png)    
+- **Filter Functions**
+    - **box**: Sums all samples in the filter area with equal weight.
+    ![bfg function](/resources/images/programming/bfg-box.png)	
+    - **gaussian**: Weights samples in the filter area using a bell curve.
+    ![bfg function](/resources/images/programming/bfg-gaussian.png)	
+    - **mitchell**: Weights samples using a controllable cubic polynomial
+    ![bfg function](/resources/images/programming/bfg-mitchell.png)	
+    - **disk**: Sums all samples inside the filter's radius with equal weight.
+    ![bfg function](/resources/images/programming/bfg-disk.png)
+    - **sinc**: Weights samples using an un-windowed sinc curve.
+    ![bfg function](/resources/images/programming/bfg-sinc.png)
+    - **catmullrom**: Weights samples using a Catmull-Rom cubic polynomial.
+    ![bfg function](/resources/images/programming/bfg-catmullrom.png)
+    - **bessel**: Weights samples with a linear phase response.
+    ![bfg function](/resources/images/programming/bfg-bessel.png)	
+    - **triangle**: Weights samples in the filter area using a pyramid.
+    ![bfg function](/resources/images/programming/bfg-triangle.png)
+- **Transfer Functions**
+    - **step**: Always 1 if given value is less than threshold.
+    ![bfg function](/resources/images/programming/bfg-step.png)
+    - **smoothstep**: Step function with cubic smoothing at boundaries.
+    ![bfg function](/resources/images/programming/bfg-smoothstep.png)
+    - **bias**: Polynomial similar to gamma but remapped to unit interval.
+    ![bfg function](/resources/images/programming/bfg-bias.png)	
+    - **saw**: Periodic triangle pulse train.
+    ![bfg function](/resources/images/programming/bfg-saw.png)
+    - **quintic**: Generic 5th order polynomial with controllable coefficients.
+    ![bfg function](/resources/images/programming/bfg-quintic.gif)
+    -  **gain: S-Shaped polynomial evaluated inside unit interval. Note: the default settings will result in a linear curve instead of the descriptive S-curve shape.**
+    ![bfg function](/resources/images/programming/bfg-gain.gif)	
+    - **pulse**: Periodic step function.
+    ![bfg function](/resources/images/programming/bfg-pulse.gif)
+    - **smoothpulse**: Periodic step function with cubic smoothing at boundaries.
+    ![bfg function](/resources/images/programming/bfg-smoothpulse.gif)
+    - **sine**: Periodic sinusoidal curve. 
+    ![bfg function](/resources/images/programming/bfg-sine.gif)
+- **Noise Functions**
+    - **cellnoise**: Coherent blocky noise.
+    ![bfg function](/resources/images/programming/bfg-cellnoise.gif)
+    - **checker**: Periodic checker squares.
+    ![bfg function](/resources/images/programming/bfg-checker.gif)
+    - **cubicspline**: Polynomial smoothed pseudo-random values.
+    ![bfg function](/resources/images/programming/bfg-cubicspline.gif)
+    - **convolution**: Convolution filtered pseudo-random values.
+    ![bfg function](/resources/images/programming/bfg-convolution.gif)	
+    - **gradient**: Directionally weighted polynomially interpolated values.
+    ![bfg function](/resources/images/programming/bfg-gradient.gif)	
+    - **voronoi**: Distance weighted pseudo-random feature points.
+    ![bfg function](/resources/images/programming/bfg-voronoi.gif)
+    - **distorted**: Domain distorted combinational noise.
+    ![bfg function](/resources/images/programming/bfg-distorted.gif)
+- **Fractal Functions**
+    - Works by combining multiple scales of another basis function, giving self similarity
+    - **mono**: Additive fractal with global simularity across scales.
+    ![bfg function](/resources/images/programming/bfg-mono.gif)	
+    - **multi**: Multiplicative fractal with varying simularity across scales.
+    ![bfg function](/resources/images/programming/bfg-multi.gif)
+    - **turbulence**: Additive mono-fractal with sharp ridges.
+	![bfg function](/resources/images/programming/bfg-turbulence.gif)
 
 
 
