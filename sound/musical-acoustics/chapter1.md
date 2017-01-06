@@ -72,6 +72,10 @@ Acoustics - Chapter 1
         - 10: easy, that's bc the units is *deci*bels, not bels
         - 2: bc the ratio needs to be squared to make it not subject to the positive/negative sign of the amplitudes.
             - As a basic log property you can move the 2 out of the log term and multiply it by the final result, which is computationally more simple.
+- **The significance of 0 dB**
+    - Many digital (and perhaps analog?) systems treat 0 dB as a clipping point
+    - That makes sense insofar as they define ```- a_{ref}``` as the maximum volume that can be handled.
+        - That would make ```- \frac{a}{a_ref} = 1``` and we all know log 1 = 0.
 
 ## Word Size And Linear Quantization
 - Word Size AKA Bit-depth or bit-resolution

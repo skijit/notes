@@ -53,3 +53,13 @@ A Collection Of CSS Notes
     - px (1px = 1/96th of 1 in)
     - pt: points (1pt = 1/72 of 1in)
     - pc: picas (1pc = 12 pt)
+- Box Shadows
+```(css)
+div {
+    box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
+    //horizontal shadow: 1px
+    //vertical shadow: 2px
+    //blur amt: 4px
+    //color of shadow: rgba(0, 0, 0, .5)
+}```
+    - [this(http://www.w3schools.com/css/css3_shadows.asp)] has some decent examples to get started
