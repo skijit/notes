@@ -32,6 +32,13 @@ Color Spaces in Computer Graphics
 - note that many color wheels depict 'painter's colors'- colors which lead to a different set of hues than additive
 - primary colors R, G, B at 0, 120, and 240 degrees
 - secondary colors (e.g. C, Y, M) result from combining two primary colors in their full intensities
+- the circumference of the color wheel shows the hues: any combination of two primary colors.
+    - remember the color wheel is a cycle, so the hues just show the evolving influence of each primary color on each other.
+    - secondary colors are like special cases of hues (and happen at the intersection of each of two primary colors)
+- **Hue**
+    - A color not modified by tinting or shading
+    - Formed by combining 2 primary colors
+    - In other words, the kind of color you find on a color wheel, since that is just the blending of two different adjacent color components      
 - **Shade**
     - Painters refer to as 'adding black'
     - Decreasing the intensity of the color
@@ -40,10 +47,6 @@ Color Spaces in Computer Graphics
     - Painters refer to as 'adding white'
     - Increasing the intensity of the color
     - Fully tinted = White
-- **Hue**
-    - A color not modified by tinting or shading
-    - Formed by combining 2 primary colors
-    - In other words, the kind of color you find on a color wheel, since that is just the blending of two different adjacent color components      
 - **Tone**
     - Painters refer to as 'Adding gray'
     - Can reduce the 'colorfulness' of a hue
@@ -73,6 +76,7 @@ Color Spaces in Computer Graphics
 - Hue, Saturation, and Lightness (aka Luminance)
 - Used by CSS3
 - Popular because it gives you a more common-sense way to tweaking colors than with RGB
+- But consider that with RGB, you are mixing 3 color components, whereas with HSL, you are start with a mixture of 2 (i.e. a hue)
 - Hue
     - Corresponds with presentation in color wheel
     - Angular relationship between tones in the color wheel is easily determined
@@ -86,9 +90,33 @@ Color Spaces in Computer Graphics
 - Lightness:
     - 0% - 100% in CSS3
     - typical value is 50%
+    - < 50% = you are shading
+    - > 50% = you are tinting
     - at 0% you have black
     - at 100% you have white
+- So with HSL:
+    - You start with Hue as a base
+    - You apply shades / tints / tones independently
+- **Shading**
+    - Lightness < 50% 
+- **Tinting**
+    - Lightness > 50%
+- **Toning**
+    - Set the grey: Shade of gray that you add is determined by lightness
+    - Apply the grey: Incrementally apply the grey by decreasing saturation amount
 - Microsoft Paint will show you both RGB and HSL values side by side, so it's a good way to get a feel for the mappings
+
+## HSL Visualizations
+- There are three values, so you might imagine it to map to a cube or a sphere BUT...
+    - Usually you would use a cylinder
+    - Hue / Saturation (aka chroma) needs 2-dimensions and is a cycle, so it's a circle
+    - Lightness is not a cycle, it's a range, so it like stacking (above and below) a hue circle such that
+        - the top is white 
+        - the bottom is black
+![hsl-cylinder-1](/resources/images/programming/hsl-cylinder-1.jpg)
+![hsl-cylinder-2](/resources/images/programming/hsl-cylinder-2.jpg)
+- But you could also see it as a cone, b/c as you proceed along the lightness range, you narrow your saturation range, until at the lightness min/max, you only have black or white.
+![hsl-cylinder-3](/resources/images/programming/hsl-cylinder-3.jpg)
 
 
 
