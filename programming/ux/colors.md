@@ -85,6 +85,7 @@ Color Spaces in Computer Graphics
 - Saturation: 
     - 0% - 100% in CSS3
     - controls purity of color
+    - Saturation = colorfulness or chroma
     - at 0% you have a level of grey that is dependent on the Lightness level
     - at 100% you have the hue at it's full intensity
 - Lightness:
@@ -102,8 +103,9 @@ Color Spaces in Computer Graphics
 - **Tinting**
     - Lightness > 50%
 - **Toning**
-    - Set the grey: Shade of gray that you add is determined by lightness
-    - Apply the grey: Incrementally apply the grey by decreasing saturation amount
+    - 2-step process:
+        1. Set the grey: Shade of gray that you add is determined by lightness
+        2. Apply the grey: Incrementally apply the grey by decreasing saturation amount
 - Microsoft Paint will show you both RGB and HSL values side by side, so it's a good way to get a feel for the mappings
 
 ## HSL Visualizations
@@ -117,6 +119,19 @@ Color Spaces in Computer Graphics
 ![hsl-cylinder-2](/resources/images/programming/hsl-cylinder-2.jpg)
 - But you could also see it as a cone, b/c as you proceed along the lightness range, you narrow your saturation range, until at the lightness min/max, you only have black or white.
 ![hsl-cylinder-3](/resources/images/programming/hsl-cylinder-3.jpg)
+- Some observations about the HSL Cone
+    - This seems the most accurate representation
+    - Each HS circle (cross-section) should have in it's center point a grey-scale value
+        - Because that's the only point in which the Chroma of each color component is balanced
+        - That particular grey-scale value is set by the Luminosity (highest = white, lowest = black)
+    - Saturation:
+        - If you keep Lightness and Hue constant, as you move inward in the HS circle (cross-section), you decrease saturation.
+        - The colorfulness or volume or intensity of that hue just scales downwards, ultimately landing on a pure grey-scale value
+        - It seems a little odd that it would begin to become grey when dealing with a hue because this is the combination of 2-colors, and a pure grey-scale value involves equal parts of 3 color components.
+            - **But** remember that it's just approaching the grey-scale value.  The only pure grey-scale value is the middle point.  The other points are going to be somewhat grey, somewhat that hue.  
+            - And this makes sense because their individual color values are getting so close to 0, that it's like a combination of balanced colors.
+    
+   
 
 
 

@@ -501,8 +501,8 @@ from [this](http://www.developerhandbook.com/git/git-for-net-developers/) blog p
 	- Remote Repo First  (i.e. Clone an empty repo from remote, fill, then push back up)
 		- This is the *preferred* option bc it will take care of some of the initial remote/local (origin) plumbing for you.  This is the method I'll describe below.
 		- On the other hand, if you want to got with Local Repo first, the command-line instructions to push to the remote is presented in the TFS Web interface.  It looks something like this:
-	> git remote add origin http://ricnmittfs01prd:8080/tfs/DefaultCollection/NewMarket/_git/VendorAssessment 
-git push -u origin --all
+	> git remote add origin http://ricnmittfs01prd:8080/tfs/DefaultCollection/NewMarket/_git/VendorAssessment
+	> git push -u origin --all
 - **Clone To Local**: 
 	- Once you've created your Git repo (either in a new Team Project or not), on the server (instructions above), you'll want to Clone it to your local machine.
 		- In your GIT shell, change your directory to your TFS git root (see above- recall the command: *tfs_repos* which should take you there.) .
