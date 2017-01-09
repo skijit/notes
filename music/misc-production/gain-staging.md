@@ -1,0 +1,62 @@
+- [source](http://www.soundonsound.com/techniques/gain-staging-your-daw-software)
+- [source](http://therecordingrevolution.com/are-you-recording-too-hot/)
+- [source](http://www.soundonsound.com/sound-advice/q-how-much-headroom-should-i-leave-24-bit-recording)
+- [source](http://www.massivemastering.com/blog/index_files/Proper_Audio_Recording_Levels.php)
+- [source](http://www.soundonsound.com/sound-advice/q-whats-dynamic-range-channels-my-daw)
+- [TODO source](http://www.soundonsound.com/techniques/mix-mistakes)
+
+- Gain Staging: ensuring the *appropriate* input-level at each stage of your signal path
+    - Applies all the way from instruments, mics, preamps, to final stereo mix bus.
+    - Appropriate input-level comprises 2 factors:
+        1. Healthy SNR
+        2. Leaving enough room to prevent signal clipping
+- In the old analog recording days, you would typically record 'hot' to maximize your SNR
+    - 'Hot': get your recording levels as high as possible without clipping
+    - A slight amount of clipping via tape saturation was acceptable bc it sounds nice
+    - Since each analog component in your signal chain contributes a certain (fixed) amount of noise, the louder the input you feed it, the better your SNR will be.
+- Digital gear isn't as noisy as analog gear, so the noise floor (the constant amount of noise contributed at each stage of signl processing, or the quietest sound you can record(?)) is quite small by comparison.   
+    - Typically, the analog electronics noise floor and the acoustic ambience will dominate over the DAW's noise floor.
+- Line-level for final stereo mixes is 0VU
+    - 0 VU = volume units .  These are the units displayed on Volume Meter.
+        - VU meters are averaging- they don't show transient peaks
+        - 0VU signal level basically equals +4dBu
+- Analog equipment clips at +24 dBu, but the VU meter typically only displays up to 0 VU
+    - So you had a hidden +24dB of headroom for mixing
+- In a DAW, you want to keep signal level around -18 or -20 dbFS b/c this approximates the extra 20dB headroom present in analog systems
+- Noise floor of analog console is around -90dBU.  So the total dynamic range is about 90 + 24 = 114dBu.
+    - 24 bit recording provide dynamic ranges of about 124dB!
+- You also want to have decent headroom to make it easier to mix.
+- Headroom goes away when you get to mastering phase... it's no longer needed!
+- 0 dbFS is the maximum level we can deal with
+- Digital Dynamic Range:
+    - Difference between digital noise floor and the loudest possible sound before clipping
+- Noise floor:
+    - Noise is across the spectrum
+    - Acoustics: it is the SPL volume of the room when everything is off and quiet
+    - Digital Electronics:
+        - its the same as the quantization noise 
+        - noise introduced by rounding off analog values to the value which can be represented by the given bit-depth
+        - There are reallty two digital noise floors to consider:
+            - Noise floor from the ADC process  (SQNR for 24 bits)
+            - Noise floor from the internal computations:
+                - Your daw will use 32bit or 64bit floating point numbers which give it additional headroom
+                - Noise floor when bit-reducing to a mastering format (like 16bit CD audio)
+    - Analog to Digital mediation:
+        - 
+
+- Reasons you don't want to record with settings too low:
+    - You will not pick up the quieter sounds
+    - Worse SNR as your signal will be closer to the quantization noise  (but remember, this is because you're dealing with an analog interface: the ADC.  You don't have this problem in the purely digial world)
+- What is the dynamic range on your DAW?
+    - Although you might record your audio at 24bits, all processing on it is at 32bits (or perhaps 64?), which gives you a huge amount of dynamic range, and essentially no noise floor.
+        - 
+
+
+- Question:
+    - Explain more line level, dbFS, etc.
+    - What gain values matter in a daw and which don't?
+        - Is this only important at the intersection of digital to analog gear?
+    - Mathematics
+    - Add Line-level comparison
+- Recording at 24bit gives you 144dB of Dynamic Range
+    - 
