@@ -10,6 +10,7 @@ Leve and Gain Staging Notes
 
 ## Intro
 - The big question is how much do you want to increase the gain at each stage of your signal path.
+     - Applies all the way from instruments, mics, preamps, to final stereo mix bus.
 - This matters because:
     - Lets you get the Best SNR
     - Leave enough headroom to prevent clipping
@@ -21,35 +22,13 @@ Leve and Gain Staging Notes
     - Digital Electronic (post ADC)
 
 ## Misc    
-- Gain Staging: ensuring the *appropriate* input-level at each stage of your signal path
-    - Applies all the way from instruments, mics, preamps, to final stereo mix bus.
-    - Appropriate input-level comprises 2 factors:
-        1. Healthy SNR
-        2. Leaving enough room to prevent signal clipping
-- In the old analog recording days, you would typically record 'hot' to maximize your SNR
-    - 'Hot': get your recording levels as high as possible without clipping
-    - A slight amount of clipping via tape saturation was acceptable bc it sounds nice
-    - Since each analog component in your signal chain contributes a certain (fixed) amount of noise, the louder the input you feed it, the better your SNR will be.
-- Digital gear isn't as noisy as analog gear, so the noise floor (the constant amount of noise contributed at each stage of signl processing, or the quietest sound you can record(?)) is quite small by comparison.   
-    - Typically, the analog electronics noise floor and the acoustic ambience will dominate over the DAW's noise floor.
-- Line-level for final stereo mixes is 0VU
-    - 0 VU = volume units .  These are the units displayed on Volume Meter.
-        - VU meters are averaging- they don't show transient peaks
-        - 0VU signal level basically equals +4dBu
 
-- You also want to have decent headroom to make it easier to mix.
-- Headroom goes away when you get to mastering phase... it's no longer needed!
-- 0 dbFS is the maximum level we can deal with
-- Digital Dynamic Range:
+
+
     
 
 
-- Reasons you don't want to record with settings too low:
-    - You will not pick up the quieter sounds
-    - Worse SNR as your signal will be closer to the quantization noise  (but remember, this is because you're dealing with an analog interface: the ADC.  You don't have this problem in the purely digial world)
-- What is the dynamic range on your DAW?
-    - Although you might record your audio at 24bits, all processing on it is at 32bits (or perhaps 64?), which gives you a huge amount of dynamic range, and essentially no noise floor.
-        - 
+
 
 ## Decibel Formats
 - [src](http://www.audiorecording.me/what-is-the-difference-between-dbfs-vu-and-dbu-in-audio-recordings.html)
@@ -106,7 +85,7 @@ Leve and Gain Staging Notes
     - Typically 0 dBFS is clipping.
     - **Best Practice**: You want to keep signal level around -18 or -20 dbFS b/c this approximates the extra 20dB headroom present in analog systems
 
-## Noise floor
+## Noise Floor
 - Noise floor is a measure of the summation of all the noise sources and unwanted signals generated within the entire data acquisition and signal processing system
     - Typically appears as a constant hum
     - Could be introduced by any 3 signal media:
@@ -164,31 +143,134 @@ Leve and Gain Staging Notes
     - So the total dynamic range in the best analog system is 90 + 24 = 114dBu.
     - 24 bit recording provide dynamic ranges of about 144dB!
 
-### Actual Dynamic Range
-- On a master track, your clipping point is indeed 0dB, however within an individual track (or processing chain) - before its audio is passed the master buss - you have more headroom because you're using 32bit floating point calculations instead of the 24bit audio buffers you pass to the sound card.
-- **Fixed vs Floating Point**
-    - [src](http://www.analog.com/en/education/education-library/articles/fixed-point-vs-floating-point-dsp.html)
-    - Fixed Point
-        - Integers
-        - A 16-bit integer will hold ```- 2^{16}``` (65536) values ranging from ``- -2^{16}``` to ``- 2^{16} - 1```
-        - Always use a min of 16-bits
-        - Typically have a reserved (fixed) number of bits for each side of the decimal
-    - Floating Point
-        - Always use a min of 32-bits
-        - Like scientific notation
-        - Each number has a number (aka mantissa) and an exponent
-            - ```- A x 2^B```
-            - A = mantissa
-            - B = exponent
-        - ```- 2^{32}``` distinct values
-        - Can represent a much wider range of values because the placement of the decimal varies.
-        
+## Fixed vs Floating Point and Dynamic Range
+- [src](http://www.analog.com/en/education/education-library/articles/fixed-point-vs-floating-point-dsp.html)
+- [src](http://www.dspguide.com/ch28/4.htm)
+- [src](http://www.exploringbinary.com/the-spacing-of-binary-floating-point-numbers/)
+- Fixed Point
+    - Integers
+    - A 16-bit integer will hold ```- 2^{16}``` (65536) values ranging from ``- -2^{16}``` to ``- 2^{16} - 1```
+    - Always use a min of 16-bits
+    - Typically have a reserved (fixed) number of bits for each side of the decimal
+- Floating Point
+    - Always use a min of 32-bits
+    - Like scientific notation
+    - Each number has a number (aka mantissa) and an exponent
+        - ```- A x 2^B```
+        - A = mantissa
+        - B = exponent
+    - ```- 2^{32}``` distinct values
+    - Can represent a much wider range of values because the placement of the decimal varies.
+- Precision vs Accuracy:
+- In scientific contexts:
+    - Precision: consistency of results
+    - Accuracy: whether the result represents truth.
+- [In computing (floating point) contexts](http://ask.metafilter.com/204661/What-is-the-difference-between-floating-point-accuracy-and-precision):
+    - Accuracy: how close the result is to the truth.
+        - "How good it is"
+    - Precision: the resolution, amount of detail, or just plain number of bits used to represent a number
+        - The amount of storage space you have.
+        - The number of bits allocated to the significand or mantissa. (they're the same thing)
+- Floating points will trade off a certain amount of precision to have a larger range (giving them a possibility for more accuracy) given a constant amount of storage space.
+    - Integers have a very high degree of accuracy, but their range is limited. 
+    - More precision typically means more accuracy.
+    - Example of how a lack of precision can make you lose some accuracy:
+        - (1.0 / 3.0) * 3.0 = 0.99999
+        - In reality, the compiler would probably optimize this out.
+        - You can often get better accuracy by performing operations that reduce accuracy at the end of the calculation. 
 
+- Fixed point is typically 16bit, but some are higher
+- Floating point is minimum of 32 bits
+- Floating point typical largest is +/-3.4E+38 and smallest is +/-1.2E-38
+    - The represented values are spaced unequally (logarithmically) between these extremes
+    - the gap between any two numbers is about ten-million times smaller than the value of the numbers
+- Limited precision makes binary floating-point numbers discontinuous; there are gaps between them.
+    - If you think of Xeno's paradox, then you'll see why there have to be gaps between the different real numbers that are represented by a floating point scheme.
+    - Precision determines the **number of gaps**:
+        - or worded differently, the placement along a number line of each real number represented by the float, is determined by the number of bits in the mantissa
+    - **Gap size** is the same between in each consecutive power of two.
+        - Gap size increases up the number line only as you reach the next power of 2
+    ![floating-point](/resources/images/programming/floating-point-system-1.png)
+    ![floating-point](/resources/images/programming/floating-point-system-2.png)
+    
+| Scientific Notation | Binary | Decimal | 
+| :---: | :---: | :---: | 
+| 1.000 x 2E-1	| 0.1 |0.5 |
+| 1.001 x 2E-1	| 0.1001 | 0.5625 |
+| 1.010 x 2E-1	|	0.101|0.625 |
+| 1.011 x 2E-1	|	0.1011|0.6875 |
+| 1.100 x 2E-1	|	0.11 | 0.75 |
+| 1.101 x 2E-1	|	0.1101 | 0.8125 |
+| 1.110 x 2E-1	|	0.111 | 0.875 |
+| 1.111 x 2E-1	|	0.1111 | 0.9375 |
+| 1.000 x 2E0	|	1 | 1 |
+| 1.001 x 2E0	|	1.001 | 1.125 |
+| 1.010 x 2E0	|	1.01 | 1.25 |
+| 1.011 x 2E0	|	1.011 | 1.375 |
+| 1.100 x 2E0	|	1.1 | 1.5 |
+| 1.101 x 2E0	|	1.101 | 1.625 |
+| 1.110 x 2E0	|	1.11 | 1.75 |
+| 1.111 x 2E0	|	1.111 | 1.875 |
+| 1.000 x 2E1	|	10 | 2 |
+| 1.001 x 2E1	|	10.01 | 2.25 |
+| 1.010 x 2E1	|	10.1 | 2.5 |
+| 1.011 x 2E1	|	10.11 | 2.75 |
+| 1.100 x 2E1	|	11 | 3 |
+| 1.101 x 2E1	|	11.01 | 3.25 |
+| 1.110 x 2E1	|	11.1 | 3.5 |
+| 1.111 x 2E1	|	11.11 | 3.75 |
+
+    - The takeaway here is that the gaps get much bigger as you progress along the number line.
+        - They have to since you have a consistent number of gaps between each power of 2.
+        - This means we're 'compressing' the values to cover a larger range.
+        - Often said that the gap between any two numbers is about 10 million times smaller than the value of the numbers.
+- DSP and Floating vs Fixed Point
+    - Speed:
+        - In general purpose processors fixed point arithmetic is faster
+        - In DSP's the speed is about the same
+    - Precision:
+        - Based on number of bits, so in a default comparison, the 32-bit float is better than the 16-bit int
+    - Dynamic Range
+        - Floating point is going to be better here
+
+- Each time we stor a number in floating point, we're adding noise to the signal since there has to be a certain amount of rounding
+    - Rounding error is a max of 1/2 the gap size
+    
+Now let's turn our attention to performance; what can a 32-bit floating point system do that a 16-bit fixed point can't? The answer to this question is signal-to-noise ratio. Suppose we store a number in a 32 bit floating point format. As previously mentioned, the gap between this number and its adjacent neighbor is about one ten-millionth of the value of the number. To store the number, it must be round up or down by a maximum of one-half the gap size. In other words, each time we store a number in floating point notation, we add noise to the signal.
+
+The same thing happens when a number is stored as a 16-bit fixed point value, except that the added noise is much worse. This is because the gaps between adjacent numbers are much larger. For instance, suppose we store the number 10,000 as a signed integer (running from -32,768 to 32,767). The gap between numbers is one ten-thousandth of the value of the number we are storing. If we want to store the number 1000, the gap between numbers is only one one-thousandth of the value.
+
+Noise in signals is usually represented by its standard deviation. This was discussed in detail in Chapter 2. For here, the important fact is that the standard deviation of this quantization noise is about one-third of the gap size. This means that the signal-to-noise ratio for storing a floating point number is about 30 million to one, while for a fixed point number it is only about ten-thousand to one. In other words, floating point has roughly 30,000 times less quantization noise than fixed point.
+
+
+
+
+## Actual Dynamic Range
+- On a master track, your clipping point is indeed 0dB
+- Within an individual track (or processing chain) before its audio is passed the master bus - you have more headroom because you're using 32bit floating point calculations instead of the 24bit audio buffers you pass to the sound card.
+- 32-bit
+
+-
+-
 
 ## Gain Staging
 
+## Recording Levels
+- In the old analog recording days, you would typically record 'hot' to maximize your SNR
+    - 'Hot': get your recording levels as high as possible without clipping
+    - A slight amount of clipping via tape saturation was acceptable bc it sounds nice
+    - Since each analog component in your signal chain contributes a certain (fixed) amount of noise, the louder the input you feed it, the better your SNR will be.
+- Digital gear isn't as noisy as analog gear, so the noise floor (the constant amount of noise contributed at each stage of signl processing, or the quietest sound you can record(?)) is quite small by comparison.   
+    - Typically, the analog electronics noise floor and the acoustic ambience will dominate over the DAW's noise floor.
+- Reasons you don't want to record with settings too low:
+    - You will not pick up the quieter sounds
+    - Worse SNR as your signal will be closer to the quantization noise  (but remember, this is because you're dealing with an analog interface: the ADC.  You don't have this problem in the purely digital world)
+- For practical purposes
+    - you don't want recording levels too high or too low.
+    - There's no single formula, because your preamp, ADC will sound different at different levels with different content.
+    - You just have to experiment and see what works. 
 
-- Questions:
+## Questions:
 - Add Line-level comparison
 - Add Recording Level Tradeoffs  (in gain staging section)
 - Recording at 24bit gives you 144dB of Dynamic Range
