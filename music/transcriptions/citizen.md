@@ -1,0 +1,5 @@
+- C / G
+- Ab / G/ F
+- Ab / Bb / C
+- C / G / C / G/ F / A- G
+- Eb / F- / G- / F- / Eb F- / Db / Ab
