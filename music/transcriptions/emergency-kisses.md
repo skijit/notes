@@ -40,3 +40,6 @@ Emergency Kisses
 - The V could be thought of 2 ways:
     - A V of the I (Eb maj), suggesting resolution to I (probably less accurate)
     - A bVII of the vi (C-), making it a bVII -> VI resolution (not the picardy third) (probably more accurate)
+- Another way of seeing this: 
+    - We start off in the key of C-.  
+    - We get to the v, but anytime you have a v7 (which is what the bVII implies), you can step up a 4th (G- -> C)

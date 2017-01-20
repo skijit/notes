@@ -1,75 +1,86 @@
-Leve and Gain Staging Notes
+Level and Gain Staging Notes
 ===================
-- [source](http://www.soundonsound.com/techniques/gain-staging-your-daw-software)
-- [source](http://therecordingrevolution.com/are-you-recording-too-hot/)
-- [source](http://www.soundonsound.com/sound-advice/q-how-much-headroom-should-i-leave-24-bit-recording)
-- [source](http://www.massivemastering.com/blog/index_files/Proper_Audio_Recording_Levels.php)
-- [source](http://www.soundonsound.com/sound-advice/q-whats-dynamic-range-channels-my-daw)
-- [source](http://blog.prosig.com/2008/04/14/what-is-db-noise-floor-dynamic-range/)
-- [TODO source](http://www.soundonsound.com/techniques/mix-mistakes)
+- Sources
+    - [SoS Article about gain staging](http://www.soundonsound.com/techniques/gain-staging-your-daw-software)
+    - [Are you recording too hot?](http://therecordingrevolution.com/are-you-recording-too-hot/)
+    - [SoS Article about Headroom](http://www.soundonsound.com/sound-advice/q-how-much-headroom-should-i-leave-24-bit-recording)
+    - [Blog about Proper Recording Levels](http://www.massivemastering.com/blog/index_files/Proper_Audio_Recording_Levels.php)
+    - [SoS article about dynamic range](http://www.soundonsound.com/sound-advice/q-whats-dynamic-range-channels-my-daw)
+    - [Good blog about noise floor](http://blog.prosig.com/2008/04/14/what-is-db-noise-floor-dynamic-range/)
+    - [TODO source: SoS article about mix mistakes](http://www.soundonsound.com/techniques/mix-mistakes)
 
 ## Intro
 - The big question is how much do you want to increase the gain at each stage of your signal path.
-     - Applies all the way from instruments, mics, preamps, to final stereo mix bus.
+     - Applies all the way from instruments, mics, preamps, to final stereo mix.
 - This matters because:
     - Lets you get the Best SNR
     - Leave enough headroom to prevent clipping
-    - Leave enough headroom to allow mixing / mastering, if appropriate
+    - Leave enough headroom to allow mixing / mastering
     - Set input levels to non-linear components (pre-amps, compressors, distortion, etc.) at the proper level
-- Depending on the media in each signal processing stage, you might have a different strategy:
+- Depending on the media (types below) in each signal processing stage, you might have a different gain staging strategy.    
     - Acoustic
     - Analog Electronic (on a wire)
-    - Digital Electronic (post ADC)
-
-## Misc    
-
-
-
-    
-
-
+    - Digital Electronic / Computer (post ADC)
 
 
 ## Decibel Formats
-- [src](http://www.audiorecording.me/what-is-the-difference-between-dbfs-vu-and-dbu-in-audio-recordings.html)
-- [another src](http://duc.avid.com/archive/index.php/t-206620.html)
-- We only care about dB in 3 different forms
-    1. **Air** = measure sound pressure, which is *analog*
-        - **dB SPL** = ```- 20 \log{\frac{P}{P_{ref}}  ```
+- Sources
+    - [blog on various db formats](http://www.audiorecording.me/what-is-the-difference-between-dbfs-vu-and-dbu-in-audio-recordings.html)
+    - [avid forum post](http://duc.avid.com/archive/index.php/t-206620.html)
+- We only care about dB in 3 different media
+    1. **Air** = measure sound pressure (**analog**)
+        - **dB SPL** = ```- 20 \log{\frac{P}{P_{ref}}}  ```
         - P = sound pressure in dynes/cm2
         - ```- P_{ref} ``` = 0.0002 dyne/cm2 = **the (lower) threshold of hearing**
         - Note also that there are different weights (e.g. A, B, C) to adjust for the fact that our ears perceive level differently according to different frequencies.
-    2. **Wire** = measure electrical power which is *analog*
+    2. **Wire** = measure electrical power (**analog**)
         - There are a couple different formats here:
         - **dBm** = ```- 10 \log{\frac{p}{0.001}} ``` because ```- P_{ref}``` =1 milliwatt
-            - Since we're already dealing with Power units, they've been squared.  Hence the factor of 10 instead of 20.
-        - **dBu** (aka **dBv**)         
+            - Since we're already dealing with Power units, they've been squared.  Hence the factor of 10 instead of 20.        
         - **dBu** = ```- 20 \log{\frac{V}{V_{ref}}} ``` where ```- V_{ref} = 0.775V ```
             - Usually used to measure max amplitude
             - Particularly useful for ADC
             - Each ADC has a different conversion rate:
-                - US: +24 dBU = 0 dbFS
-                - Europe: +18 dBU = 0 FS
+                - US: +24 dBu = 0 dbFS
+                - Europe: +18 dBu = 0 FS
                 - etc.
+        - **dBv** is same as **dBu**
         - **dBV** = ```- 20 \log{\frac{V}{V_{ref}}} ``` where ```- V_{ref} = 1V ```
         - **dBVU**
-            - 0 VU = volume units .  These are the units displayed on Volume Meter.
-                - VU meters are averaging- they don't show transient peaks
-            - dBVU = dBVU + 4 dBu
-            - also just abbreviated dbVU = +4 dBu
+            - VU = volume units .  
+            - These are the units displayed on Volume Meter.
+            - VU meters are averaging- they don't show transient peaks            
+            - dbVU = +4 dBu
+                - The volume meter is actually 4 dB's louder than dBu
             - The reason for this is because in the old tape days, you could record louder (getting a better SNR) but they wanted to keep the Volume meter at the same level.
             - This is what you would use to monitor amplitude in a purely analog setup
-    3. **Digital** = measure bit values, which is *digital*
-        - **dbFS** = ```-20 \log{\frac{SL}{FS}} ```
+    3. **Digital Electronic Device** = measure bit values (**digital**)
+        - **dbFS** = ```- 20 \log{\frac{SL}{FS}} ```
             - *SL* = the current sample level
             - *FS* = the maximum value you can record.  (Full-Scale)
             - 0 dBFS is as loud as you can go without clipping
             - This is what you'd use to monitor if you've got a DAW involved, since that's the headroom you'll need to monitor
+- **Example: Adding Decibels**
+    - Say we have 2 signals of the same magnitude (-20 dBFS) that are getting added together, such as in a mixer.
+    - What will the new dBFS level be?
+    - Remember ```- dbFS = -20 \log{\frac{SL}{FS}} ```
+        - Where **FS = 1**, and (**this part is new**) **SL = SL_1 + SL_2 + ... SL_N**
+    - **First let's get signal level from dBFS:**
+        - ```- -20 dBFS = 20 \log{\frac{x}{1}} ```
+        - ```- -1 = \log{\frac{x}{1}} ```
+        - ```- 10^{-1} = x ```
+        - ```- x = \frac{1}{10} = 0.10 ``` 
+        - **Signal level = 0.10**
+    - **Now let's add the signals together:**
+        - ```- 20 \log{\frac{0.1 + 0.1}{1}} = 20 \log 0.2 = -13 ```
+        - **New dBFS is -13 dBFS**
+    - **So**: we doubled a signal at -20 dB and it only became -13 dB.
 
 
 ## Headroom
-- [src](http://www.soundonsound.com/sound-advice/q-what-exactly-headroom-and-why-it-important)
-- When do we need headroom:
+- Sources
+    - [SoS Article About Headroom](http://www.soundonsound.com/sound-advice/q-what-exactly-headroom-and-why-it-important)
+- When do we need headroom?
     - To fully represent transient peaks
     - Mastering involves playing with dynamics and they'll need extra dynamic range to find the ideal settings
         - Most mastering engineers want at least -6dB of headroom to start
@@ -85,22 +96,25 @@ Leve and Gain Staging Notes
     - Typically 0 dBFS is clipping.
     - **Best Practice**: You want to keep signal level around -18 or -20 dbFS b/c this approximates the extra 20dB headroom present in analog systems
 
+
 ## Noise Floor
 - Noise floor is a measure of the summation of all the noise sources and unwanted signals generated within the entire data acquisition and signal processing system
     - Typically appears as a constant hum
     - Could be introduced by any 3 signal media:
         1. Acoustic
-        2. Electronic
-        3. Digial
+        2. Analog Electronic
+        3. Digital
     - **Important because...** Noise floor imposes a lower limit of signals that can be recorded due to noise
-        - At that level, the signal cannot be extracted from the noise
-- Do we care about the noise level bc:
-    - gets commit to tape?
+        - At this level, the signal cannot be extracted from the noise
+- We care about the noise level bc:
+    - gets included in the recording, downgrading the fidelity
     - limits the range of stuff we can record
     - contributes to the overall SNR
 - Noise can be introduced in two processes:
     1. Input / Data Capture / Recording        
+        - this is the kind we care about
     2. Output / Playback
+        - Not much we can do about this... (buy a nicer stereo?)
 - Noise introduced by signal media:
     - **Acoustic**
         - it is the SPL volume of the room when everything is off and quiet
@@ -114,11 +128,7 @@ Leve and Gain Staging Notes
             - Noise floor from the internal computations:
                 - Your daw will use 32bit or 64bit floating point numbers which give it additional headroom
                 - Noise floor when bit-reducing to a mastering format (like 16bit CD audio)
-- Differentiate between noise floor 
-    - input chain: noise which is committed to media at record time
-        - this is the kind we care about
-    - output chain: noise inherent in the output systems
-        - Not much you can do about that
+
 
 ## Dynamic Range
 - This is a ratio (expressed in dB) of the minimum (= noise floor) and maximum signals that can be represented.
@@ -128,9 +138,13 @@ Leve and Gain Staging Notes
     - Resolution (i.e. bit depth)
 - The Dynamic Range for a 16-bit system is calculated by...
     - Number of distinct amplitude values that can be represented is ```- 2^{16} = 65536```
-    - If the voltage range of the ADC is +/- 10V, then it has a dynamic range of 20V
-    - The smallest voltage that the system can distinguish is therefore: 20 / 65536 = 0.3 mV
-    - Converting that to dB: ```- 20 \log{65536} = -96dB```    
+    - Converting that to dB: ```- 20 \log{65536} = -96dB``` (this is the dynamic range of the system) 
+    - Taking it a step further:
+        - If the voltage range of the ADC is +/- 10V, then it has a dynamic range of 20V    
+        - The smallest voltage that the system can distinguish is therefore: 20 / 65536 = 0.3 mV 
+        - We can calculate the minimum theoretical noise floor from this number:
+            - **dBu** = ```- 20 \log{\frac{V}{V_{ref}}} ``` where ```- V_{ref} = 0.775V ```
+            - ```- 20 log{\frac{0.003}{0.775}} = -48.24 dBu```
 - Following same procedure as above:
     - Dynamic range for a 24bit system is -144 dB
 - **Affect on Noise Floor**
@@ -138,24 +152,26 @@ Leve and Gain Staging Notes
         - Since the reference value in dB's calculation is the largest value that can be represented.
     - In reality though, the noise floor will always be higher due to misc electronic noise.
 - **Comparing Analog to Digital**
-    - Noise floor of analog console is around -90dBU.  
+    - Noise floor of analog console is around -90dBu.  
     - Recall that analog electronics have a hidden headroom of about 24 dBu.
     - So the total dynamic range in the best analog system is 90 + 24 = 114dBu.
     - 24 bit recording provide dynamic ranges of about 144dB!
 
+
 ## Fixed vs Floating Point and Dynamic Range
-- [src](http://www.analog.com/en/education/education-library/articles/fixed-point-vs-floating-point-dsp.html)
-- [src](http://www.dspguide.com/ch28/4.htm)
-- [src](http://www.exploringbinary.com/the-spacing-of-binary-floating-point-numbers/)
+- Sources
+    - [analog.com article](http://www.analog.com/en/education/education-library/articles/fixed-point-vs-floating-point-dsp.html)
+    - [dspguide.com](http://www.dspguide.com/ch28/4.htm)
+    - [exploringbinary.com](http://www.exploringbinary.com/the-spacing-of-binary-floating-point-numbers/)
 - Fixed Point
     - Integers
-    - A 16-bit integer will hold ```- 2^{16}``` (65536) values ranging from ``- -2^{16}``` to ``- 2^{16} - 1```
+    - A 16-bit integer will hold ```- 2^{16}``` (65536) values ranging from ```- -2^{16}``` to ```- 2^{16} - 1```
     - Always use a min of 16-bits
     - Typically have a reserved (fixed) number of bits for each side of the decimal
 - Floating Point
     - Always use a min of 32-bits
     - Like scientific notation
-    - Each number has a number (aka mantissa) and an exponent
+    - Each number has a number part (aka mantissa) and an exponent part
         - ```- A x 2^B```
         - A = mantissa
         - B = exponent
@@ -168,6 +184,8 @@ Leve and Gain Staging Notes
 - [In computing (floating point) contexts](http://ask.metafilter.com/204661/What-is-the-difference-between-floating-point-accuracy-and-precision):
     - Accuracy: how close the result is to the truth.
         - "How good it is"
+        - The accuracy may change due to different types of mathematical operations having differing levels of rounding in the results.
+        - TODO: I think dividing a big float vs a little float can be a problem... review this
     - Precision: the resolution, amount of detail, or just plain number of bits used to represent a number
         - The amount of storage space you have.
         - The number of bits allocated to the significand or mantissa. (they're the same thing)
@@ -220,10 +238,22 @@ Leve and Gain Staging Notes
 | 1.110 x 2E1	|	11.1 | 3.5 |
 | 1.111 x 2E1	|	11.11 | 3.75 |
 
-    - The takeaway here is that the gaps get much bigger as you progress along the number line.
-        - They have to since you have a consistent number of gaps between each power of 2.
-        - This means we're 'compressing' the values to cover a larger range.
-        - Often said that the gap between any two numbers is about 10 million times smaller than the value of the numbers.
+- The takeaway here is that the gaps get much bigger as you progress along the number line.
+    - They have to since you have a consistent number of gaps between each power of 2.
+    - This means we're 'compressing' the values to cover a larger range.
+    - Often said that the gap between any two numbers is about 10 million times smaller than the value of the numbers.
+        - **Given** 32-bit float, 24b mantissa, 8b exponent
+        - Number of gaps per order of magnitude: ```- 2^{numBits(mantissa)-1} = 2^{23} ``` 
+        - Take the interval over ``` 2^{9} ``` to ```- 2^{10} ``` (512 to 1024)
+        - There are 512 integers in this interval but ```- 2^23 ``` values available
+        - ```- 2^23 ``` = 8,388,608 = (approx) 10,000,000
+- Each time we store a number in floating point, we're adding noise to the signal since there has to be a certain amount of rounding
+    - Rounding error is a max of 1/2 the gap size, which varies along the range
+- **Why does this matter?**
+    - We have a superior dynamic range
+    - We have superior precision
+    - This means that the quantization noise imposed from rounding will be worse in a fixed point system because the gap sizes are bigger.
+
 - DSP and Floating vs Fixed Point
     - Speed:
         - In general purpose processors fixed point arithmetic is faster
@@ -233,8 +263,6 @@ Leve and Gain Staging Notes
     - Dynamic Range
         - Floating point is going to be better here
 
-- Each time we stor a number in floating point, we're adding noise to the signal since there has to be a certain amount of rounding
-    - Rounding error is a max of 1/2 the gap size
     
 Now let's turn our attention to performance; what can a 32-bit floating point system do that a 16-bit fixed point can't? The answer to this question is signal-to-noise ratio. Suppose we store a number in a 32 bit floating point format. As previously mentioned, the gap between this number and its adjacent neighbor is about one ten-millionth of the value of the number. To store the number, it must be round up or down by a maximum of one-half the gap size. In other words, each time we store a number in floating point notation, we add noise to the signal.
 

@@ -4,7 +4,7 @@ Sudden Stars
 ## A Section
 | 1 | 2 | 3 | 4 | 5 | 6 |
 | :---: | :---: | :---: | :---: | :---: | :---: |
-| A | C | G | F#- | F | E |
+| A | C | G | F#- | F | E- |
 | I | bIII | bVII | vi | bVI | v |
 | alt. | - | - | - | - | - |
 | I | i-7 | bVII | IV | iv | v | 
