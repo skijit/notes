@@ -294,4 +294,7 @@ Arduino Starter Kit
 - I have some [questions](http://electronics.stackexchange.com/questions/276242/basic-capacitor-discharge) about capacitors I'm still trying to understand.
 - These kinds of capacitors are called *decoupling capacitors* bc they reduce changes caused by the components from the rest of the circuit.
 
+## Project 6
+
+
 

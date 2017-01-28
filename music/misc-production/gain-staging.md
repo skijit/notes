@@ -17,23 +17,37 @@ Level and Gain Staging Notes
     - Leave enough headroom to prevent clipping
     - Leave enough headroom to allow mixing / mastering
     - Set input levels to non-linear components (pre-amps, compressors, distortion, etc.) at the proper level
-- Depending on the media (types below) in each signal processing stage, you might have a different gain staging strategy.    
-    - Acoustic
-    - Analog Electronic (on a wire)
-    - Digital Electronic / Computer (post ADC)
+- Depending on the domains (see below) in each signal processing stage, you might have a different gain staging strategy.    
+    - **Acoustic**
+        - In the air
+        - Analog
+    - **Analog Electronic**
+        - on a Wire
+        - Analog
+    - **Digital Electronic**
+        - In a Digital Eletronic device (incl. Computer)
+        - Digial
+        - Typically anything in your signal chain which is post ADC
 
 
 ## Decibel Formats
 - Sources
     - [blog on various db formats](http://www.audiorecording.me/what-is-the-difference-between-dbfs-vu-and-dbu-in-audio-recordings.html)
     - [avid forum post](http://duc.avid.com/archive/index.php/t-206620.html)
-- We only care about dB in 3 different media
-    1. **Air** = measure sound pressure (**analog**)
+- Gain is about increasing amplitude
+- We typically measure amplitude in decibels (dB) because like our perception of sound, it is logarithmic.
+    - Also makes calculations easier: whereas in some cases you would want to multiply amplitudes, it's quite easy to add decibels.
+- We only care about dB in 3 different domains
+    1. **Acoustic** 
+        - measure sound pressure
         - **dB SPL** = ```- 20 \log{\frac{P}{P_{ref}}}  ```
         - P = sound pressure in dynes/cm2
         - ```- P_{ref} ``` = 0.0002 dyne/cm2 = **the (lower) threshold of hearing**
-        - Note also that there are different weights (e.g. A, B, C) to adjust for the fact that our ears perceive level differently according to different frequencies.
-    2. **Wire** = measure electrical power (**analog**)
+            - A lot of times the reference amplitude will be a higher threshold (making our decibels negative).
+            - **In this case**, it's a lower threshold, the dB is a positive value.
+        - Note also that there are different weights (e.g. A, B, C) to adjust for the fact that our ears perceive level differently across frequency bands.
+    2. **Analog Electronic** 
+        - measure electrical power
         - There are a couple different formats here:
         - **dBm** = ```- 10 \log{\frac{p}{0.001}} ``` because ```- P_{ref}``` =1 milliwatt
             - Since we're already dealing with Power units, they've been squared.  Hence the factor of 10 instead of 20.        
@@ -52,12 +66,15 @@ Level and Gain Staging Notes
             - VU meters are averaging- they don't show transient peaks            
             - dbVU = +4 dBu
                 - The volume meter is actually 4 dB's louder than dBu
-            - The reason for this is because in the old tape days, you could record louder (getting a better SNR) but they wanted to keep the Volume meter at the same level.
+                - The reason for this is because in the old days when tape came out, you could record louder (getting a better SNR) but they wanted to keep the Volume meter at the same level.
+                - So it uses the same ```- P_{ref} ``` as dBu.
             - This is what you would use to monitor amplitude in a purely analog setup
-    3. **Digital Electronic Device** = measure bit values (**digital**)
+    3. **Digital Electronic** 
+        - measure bit values 
         - **dbFS** = ```- 20 \log{\frac{SL}{FS}} ```
             - *SL* = the current sample level
             - *FS* = the maximum value you can record.  (Full-Scale)
+                - This value is often 1.
             - 0 dBFS is as loud as you can go without clipping
             - This is what you'd use to monitor if you've got a DAW involved, since that's the headroom you'll need to monitor
 - **Example: Adding Decibels**
@@ -95,15 +112,19 @@ Level and Gain Staging Notes
 - Digital systems => **No hidden Headroom Margin**
     - Typically 0 dBFS is clipping.
     - **Best Practice**: You want to keep signal level around -18 or -20 dbFS b/c this approximates the extra 20dB headroom present in analog systems
+- There is one case when you have hidden headroom in a digital system:
+    - When your DAW is treating your audio as 32bit float (see floating point section)
+    - **Fine Print**: that headroom is fleeting.  If you send the audio signal out to the DAC or export to a common audio format (mp3, wav, etc.) then you'll be working on a smaller word size (e.g. 24bit), and so you might actually end up clipping.
+        
 
 
 ## Noise Floor
 - Noise floor is a measure of the summation of all the noise sources and unwanted signals generated within the entire data acquisition and signal processing system
     - Typically appears as a constant hum
-    - Could be introduced by any 3 signal media:
+    - Could be introduced by any 3 signal domains:
         1. Acoustic
         2. Analog Electronic
-        3. Digital
+        3. Digital Electronic
     - **Important because...** Noise floor imposes a lower limit of signals that can be recorded due to noise
         - At this level, the signal cannot be extracted from the noise
 - We care about the noise level bc:
@@ -115,7 +136,7 @@ Level and Gain Staging Notes
         - this is the kind we care about
     2. Output / Playback
         - Not much we can do about this... (buy a nicer stereo?)
-- Noise introduced by signal media:
+- Noise introduced by signal domains:
     - **Acoustic**
         - it is the SPL volume of the room when everything is off and quiet
     - **Analog Electronics**
@@ -123,7 +144,7 @@ Level and Gain Staging Notes
     - **Digital Electronics**
         - its the same as the quantization noise 
         - noise introduced by rounding off analog values to the value which can be represented by the given bit-depth
-        - There are reallty two digital noise floors to consider:
+        - There are really two digital noise floors to consider:
             - Noise floor from the ADC process  (SQNR for 24 bits)
             - Noise floor from the internal computations:
                 - Your daw will use 32bit or 64bit floating point numbers which give it additional headroom
@@ -163,54 +184,92 @@ Level and Gain Staging Notes
     - [analog.com article](http://www.analog.com/en/education/education-library/articles/fixed-point-vs-floating-point-dsp.html)
     - [dspguide.com](http://www.dspguide.com/ch28/4.htm)
     - [exploringbinary.com](http://www.exploringbinary.com/the-spacing-of-binary-floating-point-numbers/)
-- Fixed Point
-    - Integers
-    - A 16-bit integer will hold ```- 2^{16}``` (65536) values ranging from ```- -2^{16}``` to ```- 2^{16} - 1```
-    - Always use a min of 16-bits
-    - Typically have a reserved (fixed) number of bits for each side of the decimal
-- Floating Point
-    - Always use a min of 32-bits
-    - Like scientific notation
-    - Each number has a number part (aka mantissa) and an exponent part
-        - ```- A x 2^B```
-        - A = mantissa
-        - B = exponent
-    - ```- 2^{32}``` distinct values
-    - Can represent a much wider range of values because the placement of the decimal varies.
-- Precision vs Accuracy:
-- In scientific contexts:
-    - Precision: consistency of results
-    - Accuracy: whether the result represents truth.
-- [In computing (floating point) contexts](http://ask.metafilter.com/204661/What-is-the-difference-between-floating-point-accuracy-and-precision):
-    - Accuracy: how close the result is to the truth.
-        - "How good it is"
-        - The accuracy may change due to different types of mathematical operations having differing levels of rounding in the results.
-        - TODO: I think dividing a big float vs a little float can be a problem... review this
-    - Precision: the resolution, amount of detail, or just plain number of bits used to represent a number
-        - The amount of storage space you have.
-        - The number of bits allocated to the significand or mantissa. (they're the same thing)
-- Floating points will trade off a certain amount of precision to have a larger range (giving them a possibility for more accuracy) given a constant amount of storage space.
-    - Integers have a very high degree of accuracy, but their range is limited. 
-    - More precision typically means more accuracy.
-    - Example of how a lack of precision can make you lose some accuracy:
-        - (1.0 / 3.0) * 3.0 = 0.99999
-        - In reality, the compiler would probably optimize this out.
-        - You can often get better accuracy by performing operations that reduce accuracy at the end of the calculation. 
-
-- Fixed point is typically 16bit, but some are higher
-- Floating point is minimum of 32 bits
-- Floating point typical largest is +/-3.4E+38 and smallest is +/-1.2E-38
-    - The represented values are spaced unequally (logarithmically) between these extremes
-    - the gap between any two numbers is about ten-million times smaller than the value of the numbers
-- Limited precision makes binary floating-point numbers discontinuous; there are gaps between them.
-    - If you think of Xeno's paradox, then you'll see why there have to be gaps between the different real numbers that are represented by a floating point scheme.
-    - Precision determines the **number of gaps**:
-        - or worded differently, the placement along a number line of each real number represented by the float, is determined by the number of bits in the mantissa
-    - **Gap size** is the same between in each consecutive power of two.
-        - Gap size increases up the number line only as you reach the next power of 2
-    ![floating-point](/resources/images/programming/floating-point-system-1.png)
-    ![floating-point](/resources/images/programming/floating-point-system-2.png)
-    
+    - [useful blog here](http://steve.hollasch.net/cgindex/coding/ieeefloat.html)
+    - [explanation of subnormal](http://stackoverflow.com/questions/8341395/what-is-a-subnormal-floating-point-number)
+    - [representation basics](http://www.geeksforgeeks.org/floating-point-representation-basics/)
+- Floating point representation is defined by standard IEEE 754
+- Floating Point representation has 2 essential properties:
+    - Binary
+    - Scientific Notation
+- Significant Digits and Scientific Notation
+    - Significant Digits
+        - In calculations, the point is that the output should never have more precision (see below) than your inputs
+        - Which digits are giving information regarding the actual precision of the calculation
+        - Consider numbers as having both scale and precision.
+            - Scale: You can represent different ways
+                - 502, 5.02E3, 0.00502E6
+            - Precision:
+                - After the first non-zero digit in an amount, the additional, meaningful information which refines the quantity.
+                    - 502 has a precision of 3 
+            - **Precision = significant digits** 
+        - Rules:
+            - Non-zero digits and 0's in between => Significant
+            - Leading zeros: not significant
+            - Trailing Zeros:
+                - If the decimal is included => Significant
+                - If no decimal => Not significant
+        - Why are leading 0's which are **after** the decimal place insignificant?
+            - Ex.  42 g has 2 significant digits
+            - 0.042 kg is the same number and it clearly it cannot have increased the number of significant digits
+            - **So**: significant digits are **different** from the digits that imply scale.  
+            - Significant digits are those that contribute to the precision!
+    - Scientific Notation
+        - Separates the Scale (=exponent) from the Precision (=significand)
+        - Ex: 5.02E3
+            - Significant = 5.02
+            - Exponent (base 10) = 3
+        - The point is...
+            - shorthand for a wide range of quantities
+            - you use only the significant figures in your amount
+            - simplifies calculation
+        - Formatting note: The part to the left of the decimal should always be <= 1 and > 10
+- Precision vs Accuracy in Scientific contexts    
+    - `Accuracy`: whether the result represents truth
+    - `Precision`: consistency of results        
+- Precision vs Accuracy in Computing (floating point) contexts
+    - [Decent discussion here](http://ask.metafilter.com/204661/What-is-the-difference-between-floating-point-accuracy-and-precision):
+    - `Accuracy`
+        - How close the result is to the truth.
+        - The reason we might have an imperfect value is not because of some methodological issue (e.g. bad data, measurement, etc.) as with a purely scientific context (above), but rather we might need to represent a number imperfectly (i.e. we might need to round it).
+        - Any digital format has space limitations, and so not every real number (since the number of reals is infinite) can be represented. Some rounding may be necessary.        
+        - Accuracy may change due to different types of mathematical operations having differing levels of rounding in the results.
+            - [Some reasons we have to round](http://floating-point-gui.de/errors/rounding/)
+            - [Some descriptions of safe and unsafe operations](http://floating-point-gui.de/errors/propagation/)
+                - Safe: Multiplication & Division
+                - Not Safe: Addition & Subtraction when one number is really big and another is really small
+    - `Precision`
+        - The number of bits you allocate to storing the significand   
+- Floating Point Format
+    - Bits are divided in 3 sections:
+        - Mantissa (significand)
+        - Expoonent
+        - Sign
+    - bit allocation:
+    |  | Sign | Mantissa| Exponent | 
+    | :---: | :---: | :---: |  :---: | 
+    | Single Precision	| 1 | 23 | 8 |
+    | Double Precision	| 1 | 52 | 11 |
+    - Layout:
+        - **Single**: SEEEEEEE EMMMMMMM MMMMMMMM MMMMMMMM
+        - **Double**: SEEEEEEE EEEEMMMM MMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM
+    - Sign Bit: 1 = negative, 0 = positive
+    - Exponent:
+        - Needs to represent positive and negative values
+        - Uses a bias (single=127, double=1023) such that:
+            - Actual\_Exponent\_value = Bias - Stored\_Exponent\_Value
+        - Bias makes sense since, a single has 8 bits in it's exponent, ```- 2^8 = 256 ``` which is (basically) half
+    - Mantissa:
+        - Note that in scientific notation you can represent the same number in various ways:
+            - 0.5E2
+            - 5000E-2 
+            - etc.
+        - To prevent this, floating point uses Normalized form:
+            - Strips off all the leading insignificant digits
+            - Puts the decimal place after the first significant digit
+            - But, since the bit has to be a 0 or 1, and 0 is insignificant, you can actually assume a leading one and use the entire mantissa for the parts after the decimal point.
+                - This implied bit gives us an extra bit of precision!
+                - Only exception to this rule is for denormalized numbers
+- Example toy floating point system
 | Scientific Notation | Binary | Decimal | 
 | :---: | :---: | :---: | 
 | 1.000 x 2E-1	| 0.1 |0.5 |
@@ -238,48 +297,84 @@ Level and Gain Staging Notes
 | 1.110 x 2E1	|	11.1 | 3.5 |
 | 1.111 x 2E1	|	11.11 | 3.75 |
 
-- The takeaway here is that the gaps get much bigger as you progress along the number line.
-    - They have to since you have a consistent number of gaps between each power of 2.
-    - This means we're 'compressing' the values to cover a larger range.
-    - Often said that the gap between any two numbers is about 10 million times smaller than the value of the numbers.
+- Floating point Special Cases
+    - Overflow: when a result is out of range
+    - Underflow: when a result is too small to be represented
+    - There are also special bit patterns for 0, +inf, -inf, and NaN (not-a-number)
+    - Denormalized numbers:
+        - They're bigger than 0 but smaller than ```- 1 x 2^{e_{min} ```
+        - The purpose of having subnormal numbers is to smooth the gap between the smallest normal number and zero.
+        - Format: 
+            - Exponent is all 0's 
+            - Mantissa is non-zero
+            - The implied bit is assumed to be a zero
+        - Representation is ```- (−1)^s × 0.f × 2^{−126} ``` where s = sign bit and f = fraction
+        - As denormalized numbers get smaller, they gradually lose precision as the left bits of the fraction become zeros.
+            - That's the precision is linked to the size of the mantissa which is typically all significant bits.
+            - However, now the mantissa is being used to scale down the number having exhausted the range available to the exponent.
+        - In practice, when you encounter denormalized numbers, you should consider scaling the number set.
+
+- Floating Point Arrangement on the Number Line
+    - Floating point typical largest is +/-3.4E+38 and smallest is +/-1.2E-38
+    - Values which don't have to be rounded at all are spaced unequally (logarithmically) between these extremes
+    - The distance between each of these values are called **gaps**
+    - For each set of consecutive power of 2, the number of gaps is constant
+    - Within each set of consecutive powers of 2, the size of the gaps is constant
+    - However for each set of consecutive powers of the 2, the size of the gaps increases
+    ![floating-point](/resources/images/programming/floating-point-system-1.png)
+    ![floating-point](/resources/images/programming/floating-point-system-2.png)
+- Gaps and Precision
+    - Precision determines the number of gaps
+    - Often said that the number of gaps between any two numbers powers of 2 10 million times smaller than the value of the numbers.
         - **Given** 32-bit float, 24b mantissa, 8b exponent
         - Number of gaps per order of magnitude: ```- 2^{numBits(mantissa)-1} = 2^{23} ``` 
         - Take the interval over ``` 2^{9} ``` to ```- 2^{10} ``` (512 to 1024)
         - There are 512 integers in this interval but ```- 2^23 ``` values available
         - ```- 2^23 ``` = 8,388,608 = (approx) 10,000,000
-- Each time we store a number in floating point, we're adding noise to the signal since there has to be a certain amount of rounding
-    - Rounding error is a max of 1/2 the gap size, which varies along the range
-- **Why does this matter?**
-    - We have a superior dynamic range
-    - We have superior precision
-    - This means that the quantization noise imposed from rounding will be worse in a fixed point system because the gap sizes are bigger.
-
-- DSP and Floating vs Fixed Point
-    - Speed:
-        - In general purpose processors fixed point arithmetic is faster
-        - In DSP's the speed is about the same
-    - Precision:
-        - Based on number of bits, so in a default comparison, the 32-bit float is better than the 16-bit int
-    - Dynamic Range
-        - Floating point is going to be better here
-
+    - You can calculate a float's precision in number of decimal places 
+        - mantissa = 23 bits
+        - ```- \log_{10}2^{23} ``` = 6.924 = 7 decimal places
+- Fixed Point
+    - Typically 16-bits or higher
+    - Have a reserved (fixed) number of bits for each side of the decimal
+    - Gap size is constant
+    - No difference between representing integers or reals with a fixed number of decimal places: multiply it by a constant to get the value you want.
+- Floating Point vs Fixed Point
+    - Precision and Accuracy
+        - Accuracy is primarily driven by the number of bits available.
+            - 16 bit fixed point vs 32 bit floating point is not a totally fair comparison
+        - You get arbitrary precision in a fixed point scheme because you have no control over how many bits will be allocated to insignificant digits (e.g. leading or trailing zeros)
+        - For floating point, you have a constant precision (except in cases of denormals)   
+    - The big difference: Dynamic Range
+        - Floating points trade off a certain amount of precision (via mantissa) to have a larger range (via exponent)
+        - Fixed point schemes are accurate enough, but their range is limited. 
+    - **Summary**
+        - Floating point wins on dynamic range and precision
+        - Fairly even on accuracy
+- Floating vs Fixed Point Performance   
+    - In general purpose processors fixed point arithmetic is faster
+    - In DSP's the speed is about the same
+- **Application to Audio**
+    - Dynamic Range (the bigger deal)
+        - Floating point numbers have much greater dynamic range than fixed point systems, which means less clipping
+        - Although we can't send a 32-bit audio frame to a sound card (yet?), this does give the inner signal processing chains much more useful headroom. 
+            - This is the "hidden" dynamic range.
+    - Quantization Noise (the lesser big deal)
+        - Primary source of noise in digital electronics is SQNR (quantization noise- noise from rounding)
+        - Each time we store a number, we're adding noise to the signal if there has to be a certain amount of rounding
+        - Rounding error is a max of 1/2 the gap size, which varies along the range
+        - Std Deviation of rounding error (=signal to noise ratio) is about 1/3 of the gap size.  
+        - Quantization noise imposed from rounding will be worse in a fixed point system as the gap sizes are bigger.
+            - **Confirm** Although, as you get into the higher range of a floating point number, the gap size gets pretty big.  Maybe bigger than a fixed point numbers...
+            - HOWEVER, you probably wouldn't be able to represent that number in a fixed point system due to the smaller dynamic range.
     
-Now let's turn our attention to performance; what can a 32-bit floating point system do that a 16-bit fixed point can't? The answer to this question is signal-to-noise ratio. Suppose we store a number in a 32 bit floating point format. As previously mentioned, the gap between this number and its adjacent neighbor is about one ten-millionth of the value of the number. To store the number, it must be round up or down by a maximum of one-half the gap size. In other words, each time we store a number in floating point notation, we add noise to the signal.
-
-The same thing happens when a number is stored as a 16-bit fixed point value, except that the added noise is much worse. This is because the gaps between adjacent numbers are much larger. For instance, suppose we store the number 10,000 as a signed integer (running from -32,768 to 32,767). The gap between numbers is one ten-thousandth of the value of the number we are storing. If we want to store the number 1000, the gap between numbers is only one one-thousandth of the value.
-
-Noise in signals is usually represented by its standard deviation. This was discussed in detail in Chapter 2. For here, the important fact is that the standard deviation of this quantization noise is about one-third of the gap size. This means that the signal-to-noise ratio for storing a floating point number is about 30 million to one, while for a fixed point number it is only about ten-thousand to one. In other words, floating point has roughly 30,000 times less quantization noise than fixed point.
-
-
-
 
 ## Actual Dynamic Range
 - On a master track, your clipping point is indeed 0dB
 - Within an individual track (or processing chain) before its audio is passed the master bus - you have more headroom because you're using 32bit floating point calculations instead of the 24bit audio buffers you pass to the sound card.
 - 32-bit
 
--
--
+
 
 ## Gain Staging
 
@@ -304,3 +399,11 @@ Noise in signals is usually represented by its standard deviation. This was disc
 - Recording at 24bit gives you 144dB of Dynamic Range
 - Do we really clip at 0 dBFS?  What's the real digital headroom?
 - Once in a digital domain, what are the non-linear devices that are sensitive to input gain and how do you optimize this?
+- One simple approach:
+    - You're not getting noise from digital components: floating point to the rescue!  But you need to leave enough headroom.
+    - There's not much you can do about ambient noise.
+    - The main source of noise is in your analog electronics- preamps, ADC, etc.
+        - The noise level is typically constant (or independent of signal level)
+        - So you make signal level high enough to make the noise comparatively small.
+        - Just leave enough room so you don't clip/distort.
+        
