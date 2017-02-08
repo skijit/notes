@@ -287,22 +287,42 @@ MSP Tutorial Notes
     - two issues though:
         1. 64 is supposed to be centered, but since midi range is 0-127, 64 would actually be center of 0-128 range. so we divide the cc value by 128 if between 0 - 64, and 127 if greater.
             - i guess there are a couple ways we could handle this, but for sheer usability, we need to maintain 64 as the center point
-        2. the intensity of the overall sound is proportional to the sum of the amplitudes, not the sum of the amplitudes.  therefore, you perceive greater intensity when it's NOT panned center.
+        2. the intensity of the overall sound is proportional to the sum of the **square** of the amplitudes, not the sum of the amplitudes.  therefore, you perceive greater intensity when it's NOT panned center.
             - example:
                 - (0.75 \* 0.75) + (0.25 \* 0.25) = 0.625
                 - (0.5 \* 0.5) + (0.5 \* 0.5) = 0.5
-            - this is especially crappy because this means we won't maintain the impression of the same distance from the speaker as we pan
-                      
+            - this is crappy because this means we won't maintain the impression of the same distance from the speaker as we pan.
+                - this is especially crappy bc it should be loudest at the center, bc that's where it's actually closest to your head.  this totally flips that logic.
 2. Equal Distance Crossfade
     - the best way to maintain a constant distance is to move the values along an arc
-    - we'll just map the midi cc values (including the mapping/midpoint trickery mentioned above) to a 0-0.25 range and then feed that into a sine and cosine values for r / l channels, respectively
-    at any point from 0 - 0.25, the sum of the squares of the sin/cos are equal to 1.
+    - map the midi cc values (including the mapping/midpoint trickery mentioned above) to a 0-0.25 range and then feed that into a sine (corresponding to R channel) and cosine (corresponding to L channel) values.
+        - at any point from 0 - 0.25, the sum of the squares of the sin/cos are equal to 1.
+        - ![this is the alt title](/resources/images/programming/equal-distance-xfade.png)
+            - Green dotted line: y = sin x
+            - Green solid line: y = (sin x)^2
+            - Orange dotted line: y = cos x
+            - Orange solid line: y = (cos x)^2 
     - note the values returned by `cycle~` are stationary as long as the cc doesn't change bc the input is going to the phase inlet
     
 3. Speaker-to-Speaker Crossfade
     - In the equal distance crossfade, this simulates the movement of the sound along an arc with the listener at the center, but if you wanted the effect of a pan moving in a straight line from one speaker to the next, that means the sound will be closer, and thus louder, to the listener when panned center.  so the gain needs to be proportional to the distance of the source to the sound the the listener, which is partially a function of the width/narrowness of speaker placement.  plus there's some extra trig work here.
     - generally, it's not worth doing it this way b/c for narrow speaker placements, it's not noticeable and for wide speaker placements, its too extreme.
 
+4. Another Crossfade Method
+    - This one is described in 'Electronic Music and Sound Design', but was originally proposed by Dodge/Jerse (1997)
+    - For any given Amplitude, A, the left and right channels should be multiplied by the square root of the pan amount, X:
+        - ```- A_{left} = A_{global} \cdot \sqrt{x} ```
+        - ```- A_{right} = A_{global} \cdot \sqrt{1 - x} ```
+    - ![this is the alt title](/resources/images/programming/another-xfade-method.png)
+        - Red line: ```- A_{left} ```
+        - Blue line: ```- A_{right} ```
+        - Green line: ```- A_{left} ``` + ```- A_{right} ```
+        - **Note**: this is not an equal power crossfade!  The Center point has the highest power, but this is appealing because it will also be closest!
+            - **In fact**, it's basically the inverse of the original naieve (non-equal power) crossfade, such that instead of favoring the center, we favor the sides.
+            ![this is the alt title](/resources/images/programming/naieve-xfade.png)
+                - Red line: ```- A_{left} ```
+                - Blue line: ```- A_{right} ```
+                - Green line: ```- A_{left} ``` + ```- A_{right} ```
 
 ## 23 - Viewing Signal Data
 - `number~` and `meter~` are updating every 250 ms by default, but you can change this with it's 'interval' attribute
