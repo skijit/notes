@@ -1,0 +1,183 @@
+Norway Wkshp Notes
+============
+- [info](https://www.derivative.ca/Events/2016/NorwayWorkshop/)
+
+## User Interface Basics
+- In the Top menu bar, some options of interest:
+    - \[WIKI\] - the online help files, documentation, etc.
+    - \[FORUM\]
+    - \[TUTORIALS\]
+    - **Help**
+        - **Operator Snippets**
+            - Opens in a separate session and has examples of how each operator works
+        - **Python Help**
+        - **Download Offline Help**  (could be useful)
+- There's a green flag in the upper-right corner which lets you update your build (when one is available)
+- Spacebar pauses the playbar/transport
+- Also a power bar in the upper tool menu, which can pause things.  
+    This should usually be on.
+- Palette Browser
+    - Left side
+    - Examples of prebuilt modules
+    - Use as a learning aid or integrate into your project
+    - You can rename operators (just type into the bottom line) and then drag them into 'My Components' in the upper half of the Palette Browswer to save them for later reuse.
+    - You can easily toggle it open/close
+- Network Editor
+    - Left button lets you drag/pan around
+    - `h`: centers everything.  this is useful in a big network.
+    - zooming: middle mouse button.  on a trackpad, just move two fingers up and down.
+        - keep your operators the normal size, and then zoom if you want to understand it better.
+    - you can select a single operator then press `shift-h` and it will 'home' just on to that operator
+        - to 'home' on multiple nodes, use shift-click to select multiple, then `shift-h` 
+    - box selection of multiple:
+        - right-click and drag
+        - **TODO** This is really useful, but it doesn't seem to work on the trackpad.  NEED TO FIGURE OUT HOW TO WORK THIS!
+    - Right-click -> Reset node size: resizes everything back to normal
+    - `p` toggles the parameter window, which shows data for the currently selected operator
+        - parameters sometimes have multiple pages
+        - bullseye will show you only the parameters that have changed from their default.
+            - Useful when you're first going through somebody's network
+            - All of these parameters are animatable, can be expression driven, etc.            
+- Operators
+    - Different families have different colors
+    - Double-click to see menu of Operators
+        - In upper right corner, you can select 'Basic' or 'All' depending on how much you want to see
+    - Operator menu has a little search box / filter at the top
+- Patching mechanics
+    - To delete a cord, create a new cord from the output and let it go nowhere
+    - Right-click on a patch cord and you can:
+        - disconnect
+        - insert operator (in the middle)
+        - etc.
+    - Only lets you connect to appropriate family-types of operators
+        - Although there are converters available...
+    - You can right-click on an outlet and you'll get the operator menu.  When you select an operator, it will be connected to that outlet.
+    - If you drag one cord onto another, it will replace it
+    - **Dotted line**
+        - not a patch cord, but lets one operator send some type of data to another
+            - e.g. for purposes of animation, etc.
+- Operator families:
+    - **SOP**: Surface Operator for 3D Graphics
+    - **CHOP**: Channel operators: motion, audio, animation, and control signals
+    - **TOP**: Texture operators - All 2D image operations
+    - **DAT**: Capture and representation of data as tables, objects, etc.
+    - **MAT**: Material operators: materials and shaders.
+    - **COMP**: Components - Typically a subnetwork / module.  Components contain other operators.
+        - Object components (3D objects)
+        - Panel components (2D UI gadgets)
+        - Each component has a path
+    - Each family has "generator" operators which take no input and "filter" operators which take 1 or more input.
+    - Many operators have parameters that are references to operators in other families
+        - Links: dashed line between nodes that represents other data flow between nodes.
+            - [Examples](https://www.derivative.ca/wiki088/index.php?title=Link)
+        - Exporting: Flows numeric data from a CHOP to other operators.
+- Comparing TD against other graphics packages:
+    - Has to run in real-time.  
+    - This introduces interesting design constraints
+
+## Common TOPS : Movie File In
+- When you save, it automatically appends a version number
+- `tab` gets you to operator menu
+- movies and still images both use `Movie File In` from the TOP menu
+- for simpler pathing (ie using relative paths), you should put media assets underneath the project folder
+- `Movie File In`
+    - Speed attribute lets you vary playback.
+        - 1 = normal playback, 2 = double speed, -1 = playback in reverse
+        - Not all codecs will support playing back in reverse.
+            - H264 is no good.
+            - Animation codecs, Photo JPEG are all good at playing backwards.
+            - Half Q, Half Q with alpha: good for 4K stuff
+            - Always consider what you're trying to accomplish and then select the appropriate codec.
+            - If you click the `?` button in the upper left of the parameter window, it takes you to the wiki for that operator.  
+                - You can see the file types that are supported.
+                - Remember the difference between file type (container) and codec, though
+                - In general, any codec supported by VLC should be supported by TD
+    - You can set a start point with the cue point parameter.  
+        - Then clicking the pulse button will jump that that cue point.
+        - You can change the units from percentage, to seconds, to frames, to index
+    - To get diagnostic info:
+        - Add the `info` CHOP, then in its parameter window, drop the `Movie File In` onto the Operator parameter.
+        - Then you'll get a running diagnostic output of all the values, which you can filter.
+    - If you notice the frame is a fraction, that is bc TD is running at 60Hz, whereas the movie probably has a framerate less than 30.
+    - parameter interpolate frames does an automatic blend, if you want to slow down, but without the steppy motion
+    - trim parameters lets you specify sections (start/end) of a movie to play
+    - If you point it to a folder of photos, it will do a slideshow at whatever sample rate you specify
+    - Individual parms can take a value, an expression, or a reference to another parameter
+        - To reference another parameter, right-click on the source parameter and select 'copy parameter' then in the destination parameter, right-click and select 'paste parameter reference'.  The value in there will be python code.
+        - you can toggle between expressions and constant values
+        - you can reference these parameters across chops and that's when you get the dotted line on the design surface.
+    - The Tune page gives you all sorts of low-level optimizations for playback.
+- There's a global preference where you can change the resolution multiplier on each TOP
+- You can right-click on top of all the operators and choose 'select default' and it will undo all your changes.
+- Middle mouse click on any operator and you'll get some other diagnostic info
+    - **TODO** figure out how to do this with the touchpad
+    - it will show you how much GPU memory you have available and how much the current is showing
+
+## Other Common TOPS
+- `Constant` TOP just makes a texture that is a single color
+    - default size is 256x256
+- `over` TOP lets you overlay two images
+    - For compositing, be sure t set the PreFit Overlay to 'Native Resolution'
+    - You can translate, scale, rotate one image over the other 
+- `text` TOP creates a texture with some kind of text in it
+    - You can select the fonts or bundle your own with it
+    - Has support for unicode, but requires a python patch
+- If you right-click on the operator and select 'View', you can view it in native resolution
+- if you click on the bottom right corner for any tops, it will place that output into the background of the design surface
+    - you can do this for multiple operators at the same time and its a good way to A/B test things
+- Operator color coding
+    - dark operators: generators
+    - lighter operators: filters
+- `ramp` top
+    - specify any kind and with any colors
+    - lets you choose any number of colors: you have to select each one on the top swatch
+- the `constant` CHOP (not the TOP) lets you create a channel of a value
+    - you can input a `constant` CHOP into a `speed` chop.  
+    - the `speed` is like a counter, whose speed is dependent on it's input
+    - the `null` CHOP is for creating a copy of a value- you put it at the end of your chain- and then you can export it.
+        - select view on the `null` CHOP and then you can drag it onto the value of a parameter you want to animate.
+- the `composite` type has any number of combine operators (like `jit.op`)
+- 1280 x 720 is the max non-commercial license resolution
+- in the operators that have multi-inputs, you can change the order of the inputs in the parameter window
+- `select` TOP: 
+    - this is a no-cost operation where you refer to another TOP.
+    - this is useful so that your network doesn't get too congested.
+    - just drag the TOP you want to select into the select's TOP parameter in the parameter window
+    - will produce a dotted line between source and target
+        - you can remove the dotted lines by clicking 'x'
+- `cross` TOP:
+    - cross fade between two different video sources
+    - cross parameter determines fade level (value should be between 0 and 1)
+- You can switch inputs (e.g. if an operator has 2 inputs) when you click one and drag it to the Other
+- You can turn off individual operators visuals, there's a button in the upper-left corner
+- Bottom right corner of an operator can set it as 'Active' at which point you can interact with it:
+    - drag, zoom, home it, right-click for options, etc.
+    - it will keep the operator in place though while active
+    - keyboard shortcut (after selecting) is 'A'
+- `Blur` TOP
+- `Luma Blur`
+    - Takes a ramp TOP as input, as well as a movie.
+    - The ramp should be black/white gradient
+    - In the ramp regions where it is black, you set a blur value for 1 and in the ramp regions where it is white, you set another blur value
+- For situations where the middle mouse button is not working, you can get the operator diagnostic info by clicking on the 'i' button in the parameter window, in the upper left
+- `Switch` TOP
+    - Takes any number of inputs
+    - Index parameter lets you switch between those inputs
+    - You can also blend between indexes (like a multi-crossfade)
+- `Mouse In` CHOP - captures mouse movements
+- `Math` CHOP - can scale/map from one range to another
+    - When you use it like this, you will often connect that to a `Limit` CHOP to put a hard limit on the TO range's upper scale
+- `Noise` TOP
+    - set types
+    - animate
+- `Video Device In` TOP
+    - Any webcam or capture card video input
+- `Photoshop In` TOP
+    - They get the active document from Photoshop
+- `Kinect sensor` TOP
+    - Brings in all the kinect sensor data
+    - You need to install the SDK
+    - Works for version 1 and 2
+- `Circle` TOP
+- `Rectangle` TOP
+

@@ -100,6 +100,17 @@ Electricity Fundamentals
         - Amperes (A) (Coulombs / sec passing through a point in a circuit)
     - **Voltage** (V): Pressure (at the end of the hose leading out of it)
         - Volts (V): (Joule/Coulomb)
+            - Joules measures Energy, which is the property that must be transferred to do work on, or heat, an object
+            - Common types of energy, and they each have a different formula definining 1 Joule
+                - kinetic energy: energy of a moving object
+                - potential energy: energy stored by virtue of an object's position in a field
+                    - For an electrostatic field, 1 Joule = the work required to move an electric charge of one coulomb through an electrical potential difference of one volt.
+                    - Alternately, a joule is the work required to produce one watt of power for one second
+                - elastic energy: energy stored by stretching objects
+                - chemical energy: released when a fuel burns
+                - radiant energy: carried by light
+                - thermal energy: due to an object's temperature
+            - 
     - **Resistance** (R): Hose width
         - Ohm (```- \Omega```) : 1 Ohm is the resistance between 2 points in a conductor where application of 1V will push 1 Amp .
     - More water in the tank, means more charge.  And it means there's more pressure in the hose (i.e. higher voltage)
@@ -185,6 +196,9 @@ Electricity Fundamentals
     - This means you have to calculate what the power loss associated with the voltage drop will be. 
         - You'll know the resistance (in Ohm's) of the desired resistor
         - You can calculate the Voltage drop with Ohm's Law
+            - Basic method is different for parallel components but for series...
+            - Calculate the total current (amps) flowing through the circuit (which is constant) based on the input voltage and total resistance (sum of all resistance)
+            - Then calculate the new voltage based on each individual resistor in the circuit: this is the voltage drop for that resistor 
         - Power loss can be calculated from the voltage drop
         - Then you have to make sure the resistor (of that particular resistance) is able to handle that wattage
 
