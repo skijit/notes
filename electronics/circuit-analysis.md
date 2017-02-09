@@ -1,0 +1,181 @@
+Circuit Analysis
+===============
+- [Kahn Academy Course](https://www.khanacademy.org/science/electrical-engineering/ee-circuit-analysis-topic) on analyzing and understanding circuits.
+
+## General Approach
+- We want to relate the 3 basic types of components (Resistors (R), Capacitors (C), Inductors (L)) to Voltage (V) and Current (I).
+![this is the alt title](/resources/images/electronics/Components.png)
+- Voltage and Current then help us relate to Energy (U) (joules) and Power (P) (watts)
+    - P = IV
+    - P = ```- \frac{dU}{dt} ```
+    - ```- U = \int_{t_0}^{t_x} I V dt ```
+
+## Circuit Elements
+- 3 passive circuit elements and their mathematical relationship to current (I)
+1. Resistor (R = Resistance)
+    - ```- V = IR ``` (Ohm's Law)
+2. Capacitor (C = capacitance)
+    - ```- I = C \frac{dv}{dt} ```
+    - Current is proportional to the rate of change of the voltage
+3. Inductor (L = inductance)
+    - ```- V = L \frac{di}{dt} ```
+    - Voltage is proportional to the time rate of change of the current
+        - Note the similarity to the capacitance equation
+- We draw these all such that current flows into the positive terminal
+- These are **ideal components**.  Real world will have some variance.
+- **Ideal Sources**
+    - Ideal Voltage Source:
+        - symbol is a circle
+        - is a constant voltage
+        - battery is a special case, with a special symbol
+            - with a battery symbol, the long line = cathode, short line = anode 
+        - example of a non-battery voltage source is a power supply (use a circle to diagram this)
+    - Ideal Current Source:
+        - Symbol is a circle with an arrow, pointing in direction of current flow
+    - IV Plot is 2d graph with V as horizontal, I as vertical axes
+        - Ideal Voltage is a constant, vertical line on the IV plot (since V doesn't change)
+        - Ideal current is a constant horizontal line on the IV plot
+- 2 types of Circuit elements
+    - Sources
+        - Provide energy to a circuit.
+        - 2 types:
+            - Voltage source
+            - Current source
+    - Components
+        - Resistors
+        - Capacitors
+        - Inductors
+- Sources and components all have 2 terminals
+- *emf* (electromotive force), sometimes denoted *e*, also refers to a voltage source such as a battery or generator
+- Variable voltage source
+    - The voltage changes over time
+    - Symbol is a circle with a squiggly, sinusoid inside it
+- Constant Voltage Source
+    - Has a fixed voltage, regardless of current which is drawn the connected components
+        - This is an idealized assumption, but ok for now. 
+- Constant Current Source
+    - symbol is a circle with an arrow in direction of current flow
+    - the voltage becomes whatever is required to push out that constant current
+        - in reality, we have restrictions here, but in an idealized scenario this is no problem
+- IV graph for Ohm's Law
+    - Think of R as constant
+    - The relationship between I and V is linear
+    - When R is big: I is small, V is big
+    - When R is small: V is small, I is big
+- symbol for a resistor in the US and Japan is a zigzag, but a rectangle for UK, Europe, and elsewhere
+- **Proof By Unit Analysis**: P = V I
+    - Power (P) is the rate at which energy (U), measured in joules/sec or watts, is transferred
+    - ```- P = \frac{dU}{dt} ```
+    - Voltage is the energy transfer per unit of charge: ```- V = \frac{dU}{dq} ``` where q is the total charge
+    - Current is the rate of flow of charge: ```- I = \frac{dq}{dt} ```
+    - ```- P = \frac{dU}{dt} =   \frac{dU}{dq} \cdot \frac{dq}{dt} = V \cdot I ```
+- Power is dissipated by a resistor when current flows through it.
+    - In other words, some energy is converted to heat as the electrons collide with atoms in the resistor
+- The charge on a capacitor relates to the voltage across the capacitor
+    - ```- Q = CV ```
+    - Q is the charge (in coulombs)
+    - C is a constant, the capacitance property of the capacitor measured in Farads (coulomb/volts)
+    - V is voltage
+- We already know that ```- I = \frac{dq}{dt} ``` (i.e. the flow of charge over time)
+    - taking the derivative on both sides of ```- Q = CV ```:
+        - ```- \frac{dq}{dt} = C \frac{dv}{dt} = I = C\frac{dv}{dt} ```
+        - ```- I = C\frac{dv}{dt} ```
+    - So the current in a capacitor is proportional to the change in voltage across a capacitor
+- Capacitors are a little more tricky:
+    - Compared to the resistors dependence on I and V (via Ohm's law), the capacitor cares about the rate of change!
+    - Rather than relating capacitance to I, we could relate it to V:
+    - ```- I = C\frac{dv}{dt} ``` so ```- \frac{dv}{dt} = \frac{1}{C} I ``` and ```- dv = \frac{1}{C} I dt ``` so...
+    - ```- V = \frac{1}{C} \int_{-\infty}^{T} I dt ```
+        - This means that the voltage across the capacitor depends on all the charge that has **ever** flowed across it, but practically we relate that to some known time (```- t_0 ```):
+        - ```- V = \frac{1}{C} \int_{t_0}^{T} I dt + v_0 ```
+- Voltage across an inductor is proportional to the rate of change of current across it:
+    - ```- V = L \frac{di}{dt} ```
+- The inductor stores energy in a magnetic field.  This energy can returns to the circuit by generating a current.
+- L is the inductance, and the unit of inductance is called the Henry (H)
+- **Parasitic Effects**
+    - This is when an inductor, resistor, or capacitor displays properties of another component type- typically this a minute effect
+        - Ex: A resistor showing some inductance
+    - Happens bc it is impossible to construct an absolute, ideal component
+    - Usually, but not always, these effects are negligible
+- Inductors:
+    - Electrical current running in a wire creates a magnetic field surrounding the wire.
+    - If the wire is coiled up, then the field is concentrated in the interior of the coil.
+    - A changing magnetic field creates an electric field, which induces current
+    - So you have energy stored in a magnetic field, with current inducing a magnetic field, and vice versa.
+    - ```- V = L \frac{di}{dt} ```
+    - Inductors usually have to be pretty big
+        - This is why you rarely see an inductor in an integrated circuit
+- Circuit Terminology
+    - Element includes
+        - Components
+        - Sources
+    - Node 
+        - is a junction between two (or more) components
+        - Identify them by starting at the output of an element, and anywhere you can trace to without going through another element, is one node.
+        - Node can involve more than 1 wire
+        - You need to have the same current everywhere on the node
+        - You can have a 'distributed node' which is spread out over a wide area
+    - Branch connects different nodes together
+        - Branch = element
+    - Mesh
+        - A mesh is a loop that has no other loops inside it.
+            - Basically the simplest, atomic, loops in the circuit
+        - Relating to a window screen, a mesh is like individual hole in the screen
+            - Its like the windows of open space in our circuit
+    - Loop:
+        - intuitive notion is basically correct however...
+        - a loop can visit (pass through) a node once.
+        - typically refers to the loops which are not meshes
+    - Reference node:
+        - To measure any voltage, we pick one standard 'reference node' to measure against.
+        - Typical choices for reference node are:
+            - negative terminal of the voltage source
+            - the node connected to the greatest number of branches
+        - Reference node is generally the same as 'ground'
+    - Schematic Equivalence
+        - A real circuit and a schematic (or multiple schematics) are equivalent IFF:
+            - Represent the same elements
+            - Same number of nodes
+            - Each node must be connected to the same branches
+        - **HUGE GOTCHA**
+            - The lines in a schematic diagram do not necessarily represent the specific point-to-point order of the connections the corresponding real circuit might have. 
+            - The schematics capture the nodes and elements interconnections, but NOT the specific sequence.
+- Schematic Best Practices
+    - Inputs on left, outputs on right
+    - Info should flow from left to right
+    - Higher voltage nodes should be up top, lower towards the bottom
+- Sign Convention For Passive Components
+    - Passive components
+        - do not create power
+        - do not amplify a signal
+        - Batteries are generally creating power, but they cannot amplify a signal, so we often refer to them as passive.
+            - They cannot raise the voltage beyond where it is
+    - There's a convention for how you apply/label the sign (positive/negative) for current and voltages values in a schematic.
+        - The sign matters because it indicates the direction current is flowing or whether voltage has increased or decreased.
+        - It's useful to talk about positive and negative currents and voltages
+        - Ohm's law defines the relationship between current, voltage, and resistance for passive components.  But it would be a lot less useful if we could not factor the polarity of these values as well.
+    - Current (i)
+        - The direction of current flow is a straight arrow pointing from the positive end to the negative end
+        - When you have a positive i, that means current is flowing in the direction of the arrow.
+        - Converserly, negative means current is flowing in the opposite direction of the arrow.
+    - Voltage (v)
+        - The direction of voltage is a curved arrow from negative to positive, indicating that the positive side has a higher voltage.
+        - A positive voltage amount means that the voltage at the + side is greater than the negative amount.
+        - A negative voltage amount means that the voltage at the + side is less than the negative amount.
+    - If you don't want to draw the arrows, you can just label each side of a component with a '+' and a '-' and that will all make sense.
+    - There are different ways for labelling the current direction coming from a voltage source.
+        - Probably the best is to leave that part out.
+        - But if you follow the Sign Convention, don't worry if you have a negative current:
+            - In a voltage source, you want current to flow OUT of the positive, which is the opposite of how other passive components are handled. 
+    - Sometimes you'll analyze a circuit without knowing how to label the signs
+        - That's ok!  It's only a convention.
+        - *As long as you are consistent* between the schematic and how you represent it in the formulas (e.g. using Kirchoff's Voltage Laws), it will all work out.
+    - **THIS MIGHT ALL MAKE MORE SENSE ONCE I START ANALYZING CIRCUITS**
+    
+## Resistor circuits
+- continue [here](https://www.khanacademy.org/science/electrical-engineering/ee-circuit-analysis-topic/ee-resistor-circuits/v/ee-series-resistors)
+
+## DC Circuit Analysis
+
+
+
