@@ -110,6 +110,7 @@ Norway Wkshp Notes
 - There's a global preference where you can change the resolution multiplier on each TOP
 - You can right-click on top of all the operators and choose 'select default' and it will undo all your changes.
 - Middle mouse click on any operator and you'll get some other diagnostic info
+    - If the middle mouse button is not working, you can get the operator diagnostic info by clicking on the 'i' button in the parameter window, in the upper left
     - **TODO** figure out how to do this with the touchpad
     - it will show you how much GPU memory you have available and how much the current is showing
 
@@ -137,7 +138,7 @@ Norway Wkshp Notes
     - the `null` CHOP is for creating a copy of a value- you put it at the end of your chain- and then you can export it.
         - select view on the `null` CHOP and then you can drag it onto the value of a parameter you want to animate.
 - the `composite` type has any number of combine operators (like `jit.op`)
-- 1280 x 720 is the max non-commercial license resolution
+- 1280 x 720 (aka 720p) is the max non-commercial license resolution
 - in the operators that have multi-inputs, you can change the order of the inputs in the parameter window
 - `select` TOP: 
     - this is a no-cost operation where you refer to another TOP.
@@ -159,7 +160,6 @@ Norway Wkshp Notes
     - Takes a ramp TOP as input, as well as a movie.
     - The ramp should be black/white gradient
     - In the ramp regions where it is black, you set a blur value for 1 and in the ramp regions where it is white, you set another blur value
-- For situations where the middle mouse button is not working, you can get the operator diagnostic info by clicking on the 'i' button in the parameter window, in the upper left
 - `Switch` TOP
     - Takes any number of inputs
     - Index parameter lets you switch between those inputs
@@ -180,4 +180,37 @@ Norway Wkshp Notes
     - Works for version 1 and 2
 - `Circle` TOP
 - `Rectangle` TOP
+
+## SOPS
+- If you create a `TORUS` SOP, then you might want to click the 'Activate' button (or 'a') to interact with it, such as to Tumble the geometry around.
+- You have a bunch of different menu options when you right-click on it.  
+    - Toggle Wireframe mode 'w'
+    - Display Options ('p'): gives you a custom menu for interacting with the model.
+        - You can view points, normals, coordinates, etc
+- SOP parameters
+    - To clearly see the different types of primitives and rows/columns, set the model to wireframe and then experiment
+    - Mesh and Polygons Primitive types are fast for realtime
+    - Other options include Nurbs and Bezier... but these can be much heavier on the CPU, especially if you animate.
+- `Merge` SOP lets you put two models in a group, and then act on them together
+- `Transform` SOP lets you manipulate the model's scale, positioning, orientation.
+    - This can apply to the individual model or the merged group depending on who it is connected to.
+- 2 Paths to 3d Geometries:
+    - Import: Common file format to import a model into TD: FBX
+    - Generate Procedurally (via SOP Generator): For simpler particle emitters or masks, you might as well just create them procedurally
+- SOP geometries (whether procedural or imported models) are calculated on the CPU
+    - Exacerbated when you animate things
+    - In the info pop up, you should check the CPU cook time in ms
+    - 60Hz means you only have 16ms
+    - Consider this for when you try to realtime animate a 3d model with tons of geometry
+- `Grid` SOP is what you might use to texture with a movie and move around in 3D space
+- `Noise` SOP: You can input a 3d geometry and it will apply noise to each point, deforming it
+    - You can also apply noise the colors, point normals, and other properties
+- Normals is the angle the given vertex is facing, so this is a key input to the lighting engine
+    - `Noise` doesn't change the normals.
+    - If you want to re-compute the normals, use the `Attribute Create` SOP
+        - this also will recreate tangents... if you know what those are... 
+- `Group` SOP is a filter that will let you define a subgroup of points in a geometry.
+    - Once you given a group a name, you can take other filter SOP's to target just that group.  EG the `Transform` SOP.
+--Continue at 12:30
+
 
