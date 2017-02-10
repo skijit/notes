@@ -211,6 +211,43 @@ Norway Wkshp Notes
         - this also will recreate tangents... if you know what those are... 
 - `Group` SOP is a filter that will let you define a subgroup of points in a geometry.
     - Once you given a group a name, you can take other filter SOP's to target just that group.  EG the `Transform` SOP.
---Continue at 12:30
+- `Particle` SOP will animate over a 3d object's points.
+    - You control how quickly it walks across them, how long the particles live, and other parameters, like where they go
+
+## COMPS
+- `Base` Comp
+    - Creates a subnetwork
+    - You give it a name (bottom of the node) and this name will be displayed in the browser bar
+    - You can use the browser bar to navigate
+    - shortcuts (while the comp is selected): 
+        - 'i' takes you into the comp ( you can also double click or press 'enter')
+        - 'u' takes you up out of the comp
+        - zoomable ui: If you select it, you can zoom into/out of it, and it will eventually snap you in or out
+    - there's also a 'root' button next to the browser bar.
+        - this will show you the project setup with other stuff
+- Use the `In` and `Out` TOP/CHOP/etc for inlets and outlets
+- in the Pane controls, you can create multiple workspaces and then work at different levels
+- You can retroactively create a comp by multiselecting and context-clicking on 'collapse'
+- You can save a component as a separate .tox file
+    - Typically this is how you send examples for the forums, etc.
+    - You can also drag/drop a tox file into the network editor
+    - You can specify that a component always loads from a separate tox file (like if you get it from github)
+        - It will only reload if you re-init the network
+- `Panel` COMP helps you create user interface controls
+    - Button, Slider, etc.
+- Components have inputs on top and bottom: this is for parenting/hierarchy
+- `Container` COMP 
+    - connect it's bottom to the tops of some UI COMP's (button, slider, etc.)
+    - You might need to change the individual control elements Layout properties in it's parameter window
+    - You will right click onthe Container and press view.  Then it will open it up in a floating window which you can interact with.
+- Another way to do a hierarchy
+    - You can put all your components inside a container
+    - You might want to `merge` the values and the send them to the `out` of the COMP
+- There are some other 3d components which are needed to render a scene:
+    - `geometry`, `light`, `camera`, etc.
+    - these would automatically connect to a `render` TOP
+
+
+
 
 
