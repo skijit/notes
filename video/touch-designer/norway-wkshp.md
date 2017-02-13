@@ -233,19 +233,67 @@ Norway Wkshp Notes
     - You can also drag/drop a tox file into the network editor
     - You can specify that a component always loads from a separate tox file (like if you get it from github)
         - It will only reload if you re-init the network
-- `Panel` COMP helps you create user interface controls
+- There are bunch of different types of Comps:
+    - 3d objects
+    - Panels
+    - Other
+- Panel COMP types helps you create user interface controls
     - Button, Slider, etc.
 - Components have inputs on top and bottom: this is for parenting/hierarchy
 - `Container` COMP 
-    - connect it's bottom to the tops of some UI COMP's (button, slider, etc.)
-    - You might need to change the individual control elements Layout properties in it's parameter window
-    - You will right click onthe Container and press view.  Then it will open it up in a floating window which you can interact with.
-- Another way to do a hierarchy
-    - You can put all your components inside a container
-    - You might want to `merge` the values and the send them to the `out` of the COMP
+    - good for creating a UI panel which aggregates controls
+    - There are 2 ways to connect individual CHOP controls to a `container` CHOP:
+    - Using the hiearchy (top/bottom outlets):
+        - connect it's bottom to the tops of some UI COMP's (button, slider, etc.)
+        - You might need to change the individual control elements Layout properties in it's parameter window
+        - You will right click onthe Container and press view.  Then it will open it up in a floating window which you can interact with.
+    - Embed controls inside the container
+        - You can put all your components inside a container
+        - You might want to `merge` the values and the send them to the `out` of the COMP
 - There are some other 3d components which are needed to render a scene:
     - `geometry`, `light`, `camera`, etc.
     - these would automatically connect to a `render` TOP
+
+## CHOPS
+- Uses of CHOPS
+    - Getting Data from Devices
+        - MIDI
+        - keyboard
+        - kinect
+        - Leap
+        - DMX
+        - serial
+        - etc.
+    - Controlling Devices
+        - serial
+        - OSC
+        - MIDI
+        - DMX
+        - Laser
+        - etc.
+    - Time based Animation of Geometries
+        - Smoothing noisy signals
+        - normalizing data
+        - processing motion
+        - controlling movie-playback
+        - control image effects and 3d shapes
+        - Timing events, state machines, counting
+        - procedural animation of geometric shapes
+            - lfo
+            - loops
+            - beats
+    - audio
+        - mixing and effects
+        - files and live audio streams
+    - avoiding doing things with python or C++
+- Example 1:
+    - (notes are based on file: CHOPsDATS.15.toe)
+    - `Mouse In` CHOP -> `Math` CHOP with *Combine Channels* set to *Length* -> `Filter` CHOP to smooth data -> `Slope` CHOP to only record directional changes -> `Logic` CHOP to translate into 0 or 1 *(and possibly only react on larger changes?)* -> `Trigger` CHOP to create an envelope -> `Null` CHOP to export data to two `Cross` TOPs -> `CHOPTo` *(not sure what this is for)*
+    - `Math` CHOP: [link](http://www.derivative.ca/wiki088/index.php?title=Math_CHOP)
+    - `Filter` CHOP: [link](http://www.derivative.ca/wiki088/index.php?title=Filter_CHOP)
+    - `Slope` CHOP: [link](http://www.derivative.ca/wiki088/index.php?title=Slope_CHOP)
+    - `Logic` CHOP: [link](http://www.derivative.ca/wiki088/index.php?title=Logic_CHOP)
+
 
 
 
