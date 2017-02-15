@@ -239,6 +239,7 @@ Norway Wkshp Notes
     - Other
 - Panel COMP types helps you create user interface controls
     - Button, Slider, etc.
+- Buttons have different modes including *momentary* and *toggle*
 - Components have inputs on top and bottom: this is for parenting/hierarchy
 - `Container` COMP 
     - good for creating a UI panel which aggregates controls
@@ -286,16 +287,170 @@ Norway Wkshp Notes
         - mixing and effects
         - files and live audio streams
     - avoiding doing things with python or C++
-- Example 1:
+- [Channel](https://www.derivative.ca/wiki088/index.php?title=Channel): aka samples.  Like a signal, it's a sequence of numbers that can represent motion, control signals, MIDI, audio, color maps, rolloff curves or lookup tables.
+        - A CHOP outputs one or more channels
+        - The group of one or more channels created by a CHOP is called a Clip. 
+        - A clip is what a CHOP outputs.
+- Each channel is one array of raw samples, which is simply a list of numbers.
+- Each channel of a CHOP has a channel name that can be set by the user.
+- Channels can also be exported to a parameter of any operator, overriding that parameter's value.
+- CHOP data flows at the frame rate
+- A CHOP contains:
+    - Set of channels
+        - The various sequences of data (aka samples)
+    - Control Parameters
+        - Defines the data and data channels
+        - Usually constants, but they can be time-dependent expressions
+        - 3 parameter units:
+            1. Samples (indexes)
+            2. Frames
+            3. Seconds
+        - Each sample number (0 indexed) corresponds to a frame number (based on fps setting) and a moment in time
+        - You select the units in the parameter menu to the right of the parameter value
+    - Sample Rate
+        - This is used if the CHOP contains time-dependent motion or audio data
+    - Various on/off flags (displayed in the upper-left corner of the object)
+        - Display flag: marks the CHOP to be displayed in the CHOP viewer
+        - Export flag: toggles channel exports on / off
+        - Lock flag
+        - ByPass flag
+    - Start/End Interval
+        - Offset indices for start and end- shared by all channels in a CHOP
+- [Sample vs Frames](https://www.derivative.ca/wiki088/index.php?title=CHOP)
+    - Frame refers to the timeline, which is expressed in time (sec) and/or frames
+    - Time_Sec = (Frame-1)/FPS
+    - Sample index may have no relation to time or frame
+        - E.G. when a CHOP is used as a lookup table
+    - When the samples are time oriented, the start/end interval is determined by sample rate
+        - Sample Rate (samples/sec) can be related to FPS as Samples per Frame
+- Channel Data
+![channel info](/resources/images/programming/ChannelsInfo2.gif)
+    - The horizontal axis is called the i-axis or the sample index-axis.
+    - The vertical axis is called the v-axis or the value-axis.
+    - A sample index is a point along the i-axis,denoted by i.
+    - A value is a point along the v-axis, denoted by v.
+    - A sample is an index-value pair (i,v). i.e. the value of a channel at a certain sample index.
+    - A sample is made of a sample index and a sample value.
+    - An interval is an index range, which goes from a start index to an end index.
+    - A value range goes from a start value to an end value.
+    - The index duration is the end index minus the start index + 1.
+    - CHOP data channels are arrays of raw samples, in 32-bit floating point format, all computations are done at 64 bits, and parameters are stored as 64 bits.
+    - CHOPs can be evaluated at integer and non-integer indexes.
+    - Frame is used when the index corresponds to time.
+    - When speaking of animation frames, you can refer to start frame, end frame and frame range.
+    - a "Channel Index" is the channel number of a CHOP, 0 being the first channel.
+
+- **Example 1**:
     - (notes are based on file: CHOPsDATS.15.toe)
     - `Mouse In` CHOP -> `Math` CHOP with *Combine Channels* set to *Length* -> `Filter` CHOP to smooth data -> `Slope` CHOP to only record directional changes -> `Logic` CHOP to translate into 0 or 1 *(and possibly only react on larger changes?)* -> `Trigger` CHOP to create an envelope -> `Null` CHOP to export data to two `Cross` TOPs -> `CHOPTo` *(not sure what this is for)*
-    - `Math` CHOP: [link](http://www.derivative.ca/wiki088/index.php?title=Math_CHOP)
-    - `Filter` CHOP: [link](http://www.derivative.ca/wiki088/index.php?title=Filter_CHOP)
-    - `Slope` CHOP: [link](http://www.derivative.ca/wiki088/index.php?title=Slope_CHOP)
-    - `Logic` CHOP: [link](http://www.derivative.ca/wiki088/index.php?title=Logic_CHOP)
+    - In making sense of these operators, don't hesitate to find their corresponding operator snippet from **Help->Operator Snippets**
+    - `Math` [CHOP](http://www.derivative.ca/wiki088/index.php?title=Math_CHOP):
+        - Lets you operate on multiple channels from a CHOP (combining them in some fashion), or multiple channels from multiple CHOPS
+        - You have slots pre and post channel/CHOP combining to let you manipulate the data
+        - You can also do range scaling very easily (has a dedicated page)
+        - This example combines the channels using the *Length* method, which treats each channel combination as a vector, which it then uses to calculate the distance. 
+    - `Filter` [CHOP](http://www.derivative.ca/wiki088/index.php?title=Filter_CHOP):
+        - The Filter CHOP smooths or sharpens the input channels. 
+        - It filters by combining each sample and a range of its neighbor samples (determined by Filter Width parameter) to set the new value of that sample.
+        - There are a bunch of filter types, and each one prescribes a weighting factors for the various neighbors.
+        - It can operate on motion and, theoretically, sound but there are other CHOP's that are better for sound (e.g. bandpass, parameteric filter, etc.)  
+    - `Slope` [CHOP](http://www.derivative.ca/wiki088/index.php?title=Slope_CHOP):
+        - The slope is the first derivative of the channel curve. 
+        - The second and third derivatives can also be calculated
+        - Often used in combination with a `Speed` CHOP such that you calculate the slope of some object's motion, do some addtional processing on it, then use the `Speed` CHOP to calculate the new position.  
+            - When you do this, you probably need to capture the original position in a `Constant` CHOP and then feed this into your calculation, as an offset.
+    - `Speed` [CHOP](http://www.derivative.ca/wiki088/index.php?title=Speed_CHOP): 
+        - You feed it a value to increment by, which it interprets as a distance per second.  Then it updates current value by that amount / FPS.
+    - `Logic` [CHOP](http://www.derivative.ca/wiki088/index.php?title=Logic_CHOP):
+        - The Logic CHOP first converts channels of all its input CHOPs into binary (0 = off, 1 = on) channels and then combines the channels using a variety of logic operations.
+        - *Convert Input* parameter determines the method of converting input to binary.   
+            - *Off When Zero*: Returns a logical 0 when channel value is zero;  Non zero values return 1.
+            - *Off When Zero or Less*: Returns a logical 0 when a channel value is zero or less; and 1 when values are positive.
+            - *Off When Outside Bounds*: Returns 0 when channel value is outside the bounds set by the Bounds parameter.
+            - *On When Value Changed*: Returns 1 when the channel value changes.
+            - *On When Channel Name Changed*: Returns 1 when the channel name changes.
+        - *Bounds* Parameter: sets upper and lower bounds when *Convert Input* setting is *Off When Outside Bounds*
+    - `Trigger` [CHOP](http://www.derivative.ca/wiki088/index.php?title=Trigger_CHOP)
+        - The Trigger CHOP starts an audio-style attack/decay/sustain/release (ADSR) envelope to all trigger pulses in the input channels.
+        - A trigger point occurs whenever the first input's channel increases across the trigger threshold value.
+            - In this case, we were saying the threshold is 0
+        - Outputs a value between 0 and 1
+        - The envelope consists of six major sections: delay, attack, peak, decay, sustain and release.
+    - `Cross` [CHOP](http://www.derivative.ca/wiki088/index.php?title=Cross_CHOP)
+        - The Cross CHOP is a multi input OP that blends between 2 inputs at a time
+            - A value of 0 will select the first input, 1 will select the second input, 2 will select the third and so on
+            - Using in between values will blend the 2 closest inputs
+        - This is similar to a `Switch` CHOP however the Cross CHOP allows for interpolation between the inputs.
+    - `CHOP to TOP` [link](http://www.derivative.ca/wiki088/index.php?title=CHOP_to_TOP):
+        - Converts CHOP channel data into an image.
+        - The dimensions of the image are dependent on the specified parameter values.  In this case, the size if 1x1, but it only looks like this if you set it to *Native Resolution*
+        - Refers to the correspondin CHOP by reference, not by a typical network connection.
+    - `Composite` [TOP](http://www.derivative.ca/wiki088/index.php?title=Composite_TOP)
+        - This is like `jit.op`: you specify the operation on how to combine the images.
+        - The parameter *Fixed Layer* defines which of the (possibly multiple) inputs is fixed.
+            - There can be only one fixed layer.
+            - All the other inputs are overlays.
+            - You can define how you want to fit your overlay over the fixed layer with the parameter *Pre-fit Overlay*
+    - `Trail` CHOP: lets you graph channels over time
+- When you center-click on a CHOP, it will show you the start/end range in frames, samples, and seconds
+    - Typically the length is a fraction of a second, but in the case of `Trail` it defaults to around 4sec
+    - It will also tell you the sample rate (default = global FPS)
+- The frame number is relative to the timeline at the bottom, which will loop/reset after the specified number of frames
+- `Noise` CHOP
+    - This can be used as an audio CHOP- and it begins to demonstrate how the FPS and audio rate differ
+    - Sample range defaults to 10sec or 600 frames
+    - You can change the start/end range from the *Channel* parameter page:
+        - Sample rate parameter defaults to an expression pointing to the FPS
+    - When you *activate* the CHOP, you can right-click and view it differently:
+        - You can view each sample (Dots per Sample)
+        - You can use your middle mouse button to zoom around it and change the scaling.
+    - Noise pattern is deterministic, based on the seed.  
+        - So, you can recreate the same noise if you give it the same noise.
+        - Alternately, you could set it via some expression, and it will be more random.
+- `Audio File In` CHOP
+    - Setting the *Lock* flag will freeze your data so you don't see it constantly scrolling around.
+    - The start/end range will be relative to the timeline, as always.
+    - Even though the SR will be 44.1kHz, your audio range may span multiple Frames (whose rate is of course, much slower)
+    - You can downsample the audio, depending on what you want to do with it, with the `Resample` CHOP
+        - Seems to have a lowpass filtering effect
+- `Lookup` CHOP seems good for wavetable stuff
+- CHOPS and Container Components
+    - Even though you might not have any controls, you can have a bunch of generators, and then merge them together as a single output
+- `Keyboard In` CHOP lets you capture triggers from different keyboard buttons (ie QWERTY)
+- `Fan` CHOP lets you combine multiple logical channels into a single integer.
+    - You can *Fan In* which will combine multiple channels to one, or *Fan Out* which will expand the single to multichannel
+    - Non-destructive:  I guess that's the difference between it and `Math` 
 
+## Intro to DATs
+- DAT's are Good For: 
+    - Text
+    - tables
+    - GLSL
+    - JSON
+    - XML
+    - Python Scripts
+    - You can send this to a `Text` TOP to generate an image of the text
+    - Getting / Sending messages to Devices
+        - They come in as text strings
+        - MIDI, OSC, serial, etc.
+    - Protocols from other software
+        - TCP/IP, OSC, WebSockets, http
+    - Defines and runs the TD interface!
+        - To see how each piece works, hover over it and press F10
+    - Give you information about your machine
+        - `Monitors` DAT lets you see what monitors are currently connected
+- `Text` Dat: where you can just add some text.  
+- Certain nodes, like a `Ramp` TOP will have a little button in the bottom right corner which indicates its hiding an associated DAT
+    - Click to see/edit the underlying data
+    - This is called 'Docking to...' and you can do this for any DAT.
+        - Just right-click on the DAT 'Dock To...' and drag it to the associated node
+- `Web` DAT will let you capture the response to an HTTP call
+- MAT shaders often have associated DAT's driving them.
+- `Select` DAT will let us parse and chop up `Table` DATs
+- `Evaluate` DAT lets you run small chunks of python expressions
+- `Merge` DAT will let you overlay/concat/interleave 2 different DATs together
+- `Sort` DAT will let you sort the data in a `Table` DAT
+- You can convert the data in SOPs into a DAT and manipulate it
 
-
-
-
-
+    
+        
