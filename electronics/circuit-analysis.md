@@ -116,7 +116,7 @@ Circuit Analysis
         - You need to have the same current everywhere on the node
         - You can have a 'distributed node' which is spread out over a wide area
     - Branch connects different nodes together
-        - Branch = element
+        - Branch
     - Mesh
         - A mesh is a loop that has no other loops inside it.
             - Basically the simplest, atomic, loops in the circuit
@@ -173,7 +173,77 @@ Circuit Analysis
     - **THIS MIGHT ALL MAKE MORE SENSE ONCE I START ANALYZING CIRCUITS**
     
 ## Resistor circuits
-- continue [here](https://www.khanacademy.org/science/electrical-engineering/ee-circuit-analysis-topic/ee-resistor-circuits/v/ee-series-resistors)
+- [Link](https://www.khanacademy.org/science/electrical-engineering/ee-circuit-analysis-topic/ee-resistor-circuits/v/ee-series-resistors)
+- **Resistors in a series** 
+    - example: 3 resistors stacked head to tail
+    - they share the **SAME CURRENT**
+    - We don't know the individual voltage drops at each resistor
+    - Can we replace the 3 resistors with a single resistor?
+        - yes: we know the individual voltage drops and they add up to the voltage source:
+            - ```- V_{source} = v_1 + v_2 + v_3 ```
+        - each individual voltage drop is given by Ohm's law:
+            - ```- v_1 = I \cdot R_1 ```
+        - put these 2 facts together by applying Ohm's law to the circuit as a whole:
+            - ```- V_{source} = I \cdot (R_1 + R_2 + R_3)```
+        - So you can replace the series of resistors with a single resistor, given by:
+            - ```- R_{S} = R_1 + R_2 + R_3 ```
+    - **GOTCHA**: Consider the following-
+    ![this is the alt title](/resources/images/electronics/SeriesResistorGotcha.png)
+    - When you have some resistors which are in series, but there's a branch off... you don't necessarily have the same current running through each node.
+        - If the same current isn't running through, then they're not in series.
+    - The current is only the same if the current on each of those branches is 0 amps
+        - If the impedance/resistance of that component is super-dooper high (as is often the case with sensor ports) then it's basically a zero current and so you can consider the resistors in series.
+
+- **Resistors in parallel**
+    - Two components which share two (or more) nodes are in parallel with each other
+    - Regardlesss of series/parallel: voltage is uniform in a node.
+    ![parallel-resistors-1](/resources/images/electronics/parallel-resistors-1.svg)
+    - Based on this parallel resistor circuit, we know:
+        - The same voltage, ```- v ``` appears across each resistor
+            - Applying Ohm's law to the individual voltages: 
+            - ```- v = i_{R1} \cdot R1 ``` and therefore  ```- i_{R1} =  v / R1 ```
+            - ```- v = i_{R2} \cdot R2 ``` and therefore  ```- i_{R2} =  v / R2 ```
+            - ```- v = i_{R3} \cdot R3 ``` and therefore  ```- i_{R3} =  v / R3 ```
+        - There's a different current running through each resistor
+            - but because a circuit is a closed system, we know the individual currents will add up to the source's current 
+            - ```- i = i_{R1} + i_{R2} + i_{R3} ```
+        - Substituting a bit:
+            - ```- i = v / R1 + v / R2 + v / R3 = v (1/R1 + 1/R2 + 1/R3) ```
+            - We already know ```- i ``` as it is given by the current source.  So we solve for ```- v ```
+            - ```- v = i \left( \frac{1}{1/R1 + 1/R2 + 1/R3}\right) ```
+        - **Interesting Takeaway**
+            - This last result looks like Ohm's law where ```- R_{total} = \frac{1}{1/R1 + 1/R2 + 1/R3} ```
+            - For resistors in parallel, the overall resistance is the reciprocal of the sum of reciprocals of the individual resistors.
+            - **Another surprise**: In general, the total resistance, ```- R_{total} ``` will be less than the smallest of the individual resistors! 
+    - Special case: 2 resistors in parallel:
+        - ```- R_{total} = \frac{R_1 \cdot R_2}{R_1+R_2} ```
+    - Another special case: 2 of the **same** resistors in parallel:
+        - ```- R_{total} = 1/2 \cdot R ```
+    
+- **Summary of resistor circuits**
+    - series or parallel are just two special types of configurations that two (or more) connected components may have.
+        - **It's not a dichotomy**: You can have connected components that are **neither serial nor parallel**
+        - The significance of series and parallel is that they give us tools to decompose circuits into simpler representations (e.g. replacing multiple resistors with a single equivalent resistor.)
+    - resistors in series: Same current 
+    - resistors in parallel: Same voltage
+    - Current is conserved due to a circuit being a closed system.
+        - Current distributes among parallel resistors with the largest current flowing through the smallest resistor.  
+
+- **Parallel Conductance**
+    - We know ```- R_{parallel} = \frac{1}{1/R1 + 1/R2 + 1/R3} ```, but this is double reciprocal thing is a pain.
+        - Conductance can help...
+    - Ohm's Law states ```- R = \frac{v}{i} ```
+    - Conductance (G) is the inverse of R: ```- G = \frac{i}{v} ```
+    - Ohm's law restated with conductance: ```- i = v \cdot G ```
+    - Unit of conductance is the siemens (S)
+    - While resistance impedes current flow, conductance allows current to flow.
+    - A 1 ```- \Omega ``` resistor has a conductance of 0.01 S
+    - **Cutting to the chase**: Conductances in parallel are just like Resistances in series.  They add.
+        - ```- G_{parallel} = G_1 + G_2 + G_3 ```
+
+
+- **Simplifying Resistor Networks**
+- [continue here](https://www.khanacademy.org/science/electrical-engineering/ee-circuit-analysis-topic/ee-resistor-circuits/v/ee-simplifying-resistor-networks)
 
 ## DC Circuit Analysis
 
