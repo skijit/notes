@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 19.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="294px" height="270px" viewBox="0 0 294 270" style="enable-background:new 0 0 294 270;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:none;stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st1{fill:none;stroke:#BABEC2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st2{fill:none;stroke:#BABEC2;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st3{fill:none;}
+	.st4{fill:none;stroke:#000000;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st5{fill:none;stroke:#000000;stroke-linecap:round;stroke-miterlimit:10;}
+	.st6{fill:none;stroke:#000000;stroke-width:1.5;stroke-linecap:round;stroke-miterlimit:10;}
+	.st7{fill:none;stroke:#000000;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st8{fill:none;stroke:#000000;stroke-width:1.5;stroke-miterlimit:10;}
+	.st9{fill:none;stroke:#000000;stroke-miterlimit:10;}
+	.st10{fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:10;}
+	.st11{fill:none;stroke:#000000;stroke-width:2;stroke-linecap:round;stroke-miterlimit:10;}
+	.st12{fill:none;stroke:#000000;stroke-linecap:round;stroke-linejoin:round;}
+	.st13{stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st14{fill:none;stroke:#000000;stroke-width:1.5;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st15{fill:none;stroke:#000000;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st16{clip-path:url(#SVGID_2_);fill:none;stroke:#000000;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st17{clip-path:url(#SVGID_2_);fill:none;stroke:#ADADEB;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st18{clip-path:url(#SVGID_2_);}
+	.st19{stroke:#000000;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st20{stroke:#000000;stroke-width:3;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st21{fill:none;stroke:#000000;stroke-linejoin:round;}
+	.st22{opacity:0.5;fill:#CCFAFF;}
+	.st23{fill:none;stroke:#0C7F99;stroke-miterlimit:10;}
+	.st24{fill:#0C7F99;}
+	.st25{fill:none;stroke:#11ACCD;stroke-width:3;stroke-linecap:round;stroke-miterlimit:10;}
+	.st26{fill:#11ACCD;}
+	.st27{fill:none;stroke:#01D1C1;stroke-width:2;stroke-miterlimit:10;}
+	.st28{fill:none;stroke:#01D1C1;stroke-linecap:round;stroke-miterlimit:10;}
+	.st29{fill:none;stroke:#01D1C1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st30{fill:none;stroke:#01D1C1;stroke-width:1.5;stroke-miterlimit:10;}
+	.st31{fill:none;stroke:#01D1C1;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st32{fill:#01D1C1;stroke:#01D1C1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st33{fill:none;stroke:#01D1C1;stroke-miterlimit:10;}
+	.st34{fill:#01D1C1;}
+	.st35{fill:none;stroke:#FCA9A9;stroke-width:3;stroke-linecap:round;stroke-miterlimit:10;}
+	.st36{fill:#FCA9A9;}
+	.st37{fill:#FFFFFF;stroke:#000000;stroke-miterlimit:10;}
+	.st38{font-family:'KaTeX_Main-Italic';}
+	.st39{font-size:18px;}
+	.st40{fill:#11ACCD;stroke:#000000;stroke-miterlimit:10;}
+	.st41{font-family:'KaTeX_Main-Regular';}
+	.st42{font-size:21px;}
+	.st43{letter-spacing:2;}
+	.st44{fill:#BABEC2;stroke:#BABEC2;stroke-miterlimit:10;}
+	.st45{stroke:#000000;stroke-miterlimit:10;}
+</style>
+<text transform="matrix(1 0 0 1 216.8403 192)" class="st26 st38 st39">Ra</text>
+<text transform="matrix(1 0 0 1 145.2993 156)" class="st26 st38 st39">Rc</text>
+<text transform="matrix(1 0 0 1 73.2993 192)" class="st26 st38 st39">Rb</text>
+<text transform="matrix(1 0 0 1 67.8242 132)" class="st26 st38 st39">x</text>
+<text transform="matrix(1 0 0 1 235.626 132)" class="st26 st38 st39">y</text>
+<text transform="matrix(1 0 0 1 164.3188 264)" class="st26 st38 st39">z</text>
+<g>
+	<circle cx="228" cy="132" r="3"/>
+	<rect x="222" y="126" class="st3" width="12" height="12"/>
+</g>
+<g>
+	<circle cx="84" cy="132" r="3"/>
+	<rect x="78" y="126" class="st3" width="12" height="12"/>
+</g>
+<g>
+	<line class="st0" x1="105.8" y1="168.8" x2="84" y2="132"/>
+	<polyline class="st7" points="130.6,208.5 120.9,210 132,193.8 112.6,196.8 123.7,180.6 104.3,183.5 115.5,167.4 105.8,168.8 	"/>
+	<line class="st0" x1="156" y1="252" x2="130.6" y2="208.5"/>
+</g>
+<g>
+	<line class="st0" x1="206.2" y1="168.8" x2="228" y2="132"/>
+	<polyline class="st7" points="181.4,208.5 191.1,210 180,193.8 199.4,196.8 188.3,180.6 207.7,183.5 196.5,167.4 206.2,168.8 	"/>
+	<line class="st0" x1="156" y1="252" x2="181.4" y2="208.5"/>
+</g>
+<g>
+	<rect x="150" y="246" class="st3" width="12" height="12"/>
+	<circle class="st37" cx="156" cy="252" r="3"/>
+</g>
+<text transform="matrix(1 0 0 1 203.9999 216)"><tspan x="0" y="0" class="st41 st42 st43">4</tspan><tspan x="12.6" y="0" class="st41 st42">Ω</tspan></text>
+<text transform="matrix(1 0 0 1 78 216)"><tspan x="0" y="0" class="st41 st42 st43">5</tspan><tspan x="12.6" y="0" class="st41 st42">Ω</tspan></text>
+<text transform="matrix(1 0 0 1 144 120)"><tspan x="0" y="0" class="st41 st42 st43">3</tspan><tspan x="12.6" y="0" class="st41 st42">Ω</tspan></text>
+<text transform="matrix(1 0 0 1 204 66)"><tspan x="0" y="0" class="st41 st42 st43">4</tspan><tspan x="12.6" y="0" class="st41 st42">Ω</tspan></text>
+<text transform="matrix(1 0 0 1 42 66)"><tspan x="0" y="0" class="st41 st42">3.12</tspan><tspan x="37.3" y="0" class="st41 st42 st43">5</tspan><tspan x="49.9" y="0" class="st41 st42">Ω</tspan></text>
+<g>
+	<line class="st0" x1="132.6" y1="132" x2="84" y2="132"/>
+	<polyline class="st7" points="179.4,132 175.5,141 167.7,123 159.9,141 152.1,123 144.3,141 136.5,123 132.6,132 	"/>
+	<line class="st0" x1="198" y1="132" x2="179.4" y2="132"/>
+	<line class="st9" x1="198" y1="132" x2="228" y2="132"/>
+</g>
+<g>
+	<line class="st0" x1="206.2" y1="95.2" x2="228" y2="132"/>
+	<polyline class="st7" points="181.4,55.5 191.1,54 180,70.2 199.4,67.2 188.3,83.4 207.7,80.5 196.5,96.6 206.2,95.2 	"/>
+	<line class="st0" x1="156" y1="12" x2="181.4" y2="55.5"/>
+</g>
+<g>
+	<line class="st0" x1="105.8" y1="95.2" x2="84" y2="132"/>
+	<polyline class="st7" points="130.6,55.5 120.9,54 132,70.2 112.6,67.2 123.7,83.4 104.3,80.5 115.5,96.6 105.8,95.2 	"/>
+	<line class="st0" x1="156" y1="12" x2="130.6" y2="55.5"/>
+</g>
+<g>
+	<rect x="150" y="6" class="st3" width="12" height="12"/>
+	<circle class="st37" cx="156" cy="12" r="3"/>
+</g>
+</svg>
