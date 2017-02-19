@@ -310,7 +310,46 @@ Circuit Analysis
 - ```- \left( \frac{4.375 \cdot 5}{4.375 + 5} \right) + 1.66 = 4 \Omega ```
 
 ### Voltage Divider
-- [here](https://www.khanacademy.org/science/electrical-engineering/ee-circuit-analysis-topic/ee-resistor-circuits/v/ee-voltage-divider)
+![voltage-divider-1](/resources/images/electronics/voltage-divider-1.svg)
+- A voltage divider takes an input voltage and runs it through *series* (almost- read on for more) resistors to step down the voltage
+    - This can then be used to bring an input voltage into better range for subsequent components
+- Assume that zero current is exiting the node between the two resistors
+    - Voltage divider needs to be connected to something to be useful, so it doesn't make sense to assume no current exits the node between the resistors.  **BUT** for now, we'll accept this contradiction.
+![voltage-divider-1](/resources/images/electronics/voltage-divider-2.svg)
+- This effectively places R1 and R2 in series, as they have the same current
+- With Ohm's Law and R1&R2 in series, we can express the current as:
+    - ```- i = v_{in} \frac{1}{R1 + R2} ```
+- ```- v_{out} ``` is the voltage from the divider.  It can be expressed as:
+    - ```- v_{out} = i R2 ```
+    - We can express this in purely voltage terms:
+    - ```- v_{out} = v_{in} \left( \frac{R2}{R1 + R2} \right)  ```
+- So the voltage is the input voltage scaled by a ratio of the two resistors
+    - The ratio is always less than once, so ```- v_{out} ``` is always less than ```- v_{in} ```
+    - Hence the term *voltage divider*
+- With matched resistors, the ```- v_{out} ``` will be equal to ```- 0.5v_{in} ```.
+    - **Why?**
+    - Remember that ```- v_{out} ``` is the voltage measured between the two nodes exiting on the right of the circuit.
+    - In series, the resistances are summed, and if you measure the voltage between the the node between the resistors (which has only been through 1 resistor) against the voltage on the node which has been through 2 resistors, you'd expect there to be a 1/2 differential.
+- **Back to Reality**
+    - Assuming we do have a load running off the voltage divider, does the voltage divider formula (```- v_{out} = v_{in} \left( \frac{R2}{R1 + R2} \right)  ```) break down?  And if so, by how much?
+![voltage-divider-1](/resources/images/electronics/voltage-divider-3.svg)
+- **Case 1**: 
+    - Assume: 
+        - ```- R1 = R2 ```
+        - ```- R_L = 10 R1 ``` 
+    - ```- R_L ``` and ```- R2 ``` are in parallel with each other.  Thus...
+        - ```- R_L \parallel R2 = \frac{R_L \cdot R2}{R_L + R2} = \frac{10R2 \cdot R2}{10R2 + R2} = 0.91 R2 ```
+![voltage-divider-1](/resources/images/electronics/voltage-divider-4.svg)
+- The 10x load has the effect of reducing R2's resistance by 91%.
+- What effect does this have on the voltage divider formula?  Is it still valid?
+    - ```- v_{out} = v_{in} \left( \frac{R2}{R1 + R2} \right) = v_{in} \left( \frac{0.91R2}{R1 + 0.91R2} \right) ```
+    - Since ```- R1 = R2 ```, they cancel out: ```- v_{out} = v_{in} \frac{0.91}{1 + 0.91} = 0.48v_{in} ```
+    - The output voltage drops from ```- 0.5v_{in} ``` to ```- 0.48v_{in} ```.  
+    - 0.48/0.5 = 0.96 = 96% 
+    - **THUS** the voltage divider output is 4% less with a resistance 10x the individual resistors (with matched resistors).  
+    - The original voltage divider function is **Wrong** by 4%.
+    
+
 
 ## DC Circuit Analysis
 
