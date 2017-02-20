@@ -287,10 +287,11 @@ Norway Wkshp Notes
         - mixing and effects
         - files and live audio streams
     - avoiding doing things with python or C++
-- [Channel](https://www.derivative.ca/wiki088/index.php?title=Channel): aka samples.  Like a signal, it's a sequence of numbers that can represent motion, control signals, MIDI, audio, color maps, rolloff curves or lookup tables.
-        - A CHOP outputs one or more channels
-        - The group of one or more channels created by a CHOP is called a Clip. 
-        - A clip is what a CHOP outputs.
+- [Channel](https://www.derivative.ca/wiki088/index.php?title=Channel): aka samples.  
+    - Like a signal, it's a sequence of numbers that can represent motion, control signals, MIDI, audio, color maps, rolloff curves or lookup tables.
+    - A CHOP outputs one or more channels
+    - The group of one or more channels created by a CHOP is called a Clip. 
+    - A clip is what a CHOP outputs.
 - Each channel is one array of raw samples, which is simply a list of numbers.
 - Each channel of a CHOP has a channel name that can be set by the user.
 - Channels can also be exported to a parameter of any operator, overriding that parameter's value.
@@ -452,5 +453,69 @@ Norway Wkshp Notes
 - `Sort` DAT will let you sort the data in a `Table` DAT
 - You can convert the data in SOPs into a DAT and manipulate it
 
-    
-        
+## Example Audio Visualization
+- Starts with a `Particle` SOP, but it needs an input Geometry in its first inlet, so a `Circle` SOP is connected to it.
+    - You can choose to render as lines or points
+- The point system's direction and force is based on the input geometry's normals.
+- In this case the normals move perpandicular along the z-axis (towards the camera), but the dev wants the points to go outwards.
+    - so the first question is how to manipulate the normals
+- He uses a `SOPTo` CHOP to import the geometry into a CHOP.
+    - There are 3 channels, *tx*, *ty*, and *tz*
+- Then he uses a `NULL` CHOP to export these channels into back into a `CHOPTo` SOP
+    - The paramters for this object have the important manipulation.
+    - He specifies the channels he wants to import with the *Channel Scope* parameter, whose default is rightly set to *tx ty tz*.
+    - The *Attribute Scope* parameter lets you specify what you want to bind these channels to.
+        - The default value is *P(0) P(1) P(2)* implying that Point Position 0 => tx, Point Position 1 => ty, etc.
+        - We could probably have replaced the *P(0) P(1) P(2)* with just a *P* (based on the drop down menu)
+        - He then adds the *N* value to the end, which specifies *Point Normal X, Y, Z*
+        - The menu is additive, so the final value is *P(0) P(1) P(2) N*
+- You can apply other forces (e.g. wind, turbulence) to the particle system, but the initial force is based on the normals
+- When you're done, you need 4 different render objects:
+    - `Geometry` COMP 
+        - Sets the render flag for the associated SOP, so that it knows it should be rendered by `Render` TOP
+        - It does more, but a little confusing
+    - `Camera` COMP
+    - `Light` COMP
+    - `Render` TOP
+        - Rendering down the 3D into 2D
+        - Will have an automatic association with `Geometry`, `Camera`, and `Light`
+        - Click the *Display* Flag and you can see it in the background
+        - If you connect your `Render` to a `Transform` TOP, you can set the background to a particular color
+- You might want to add a MAT to make the particles interact with the light better
+    - He uses the `Constant` MAT which gives a flat shaded view to each particle
+        - For that reason, he figures he can remove the `Light` component
+    - The `Constant` MAT is connected by reference to the `Geometry` COMP's *Material* parameter
+- Right clicking on the `Particle` SOP, you can see the various point attributes that are used.
+    - You'll see there is an array named *life[2]*
+    - With a little inspecting, you can find two different life-related parameters in the SOP, Life Variance and Age
+    - Now you import the `Particle` SOP into a CHOP with a `ToCHOP` SOP
+        - *Attribute Scope* (i.e. the name of the attribute) should be set to *life*
+        - then you want to change the *Rename Scope* parameter to *age* and *lifetime*, this unpacks the two attributes from the array and gives them useful channel names
+- `Pattern` CHOP makes it easy to create waveforms, curves, etc.
+    - you can specify cycles, phase, range, etc.
+    - for animation, it's nice to use curves rather than linear changes
+    - use the parameters, Channel, tab to change the name of the channel that is output
+    - You can use a `Lookup` CHOP to map the input value to a value in the `Pattern`
+        - 1st inlet: the input value
+        - 2nd inlet: the `Pattern`
+- Optimization Tip:
+    - A lot of objects don't need to cook more than once.
+        - You can tell if an object is cooking because it's outlet wires will be animated
+    - But if they have an object feeding them that is cooking all the time, then they will be forced to recook as well.
+    - So it's best to place the static, unchanging things, early in your network so they don't need to recook unnecessarily.
+- `Audio Device Out` CHOP is how you can output audio data
+- `Resample` chop can let you get audio data into a rate that is usable by the frame rate
+    - Turn off TimeSlicing when you use it.  (you almost always do that)
+    - This is fairly complicated... need to read the wiki on this one.
+- He matched each sample in an audio frame matching each point in the circle
+- `Shuffle` CHOP lets you rearrange your samples in a buffer
+- `Cache` TOP lets you add in a delay
+- `Cache Select` TOP lets you assign a `Cache` as a parameter, and then you can can select (so it uses no GPU)
+    - You can create multiple instances of it
+- `Reorder` TOP 
+    - Usually connected from a `Cache Select`
+    - Lets you assign different inputs / Channels to an RGB 
+- Set display flag for last part of your node
+
+
+

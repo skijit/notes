@@ -346,12 +346,42 @@ Circuit Analysis
     - Since ```- R1 = R2 ```, they cancel out: ```- v_{out} = v_{in} \frac{0.91}{1 + 0.91} = 0.48v_{in} ```
     - The output voltage drops from ```- 0.5v_{in} ``` to ```- 0.48v_{in} ```.  
     - 0.48/0.5 = 0.96 = 96% 
-    - **THUS** the voltage divider output is 4% less with a resistance 10x the individual resistors (with matched resistors).  
-    - The original voltage divider function is **Wrong** by 4%.
-    
+    - **THUS** 
+        - The voltage divider output is 4% less with a resistance 10x the individual resistors (with matched resistors).  
+        - The original voltage divider function is **Wrong** by 4%.
+        - This is the behavior we expect when operating the voltage divider near it's midpoint (as ```- v_{out} / v_{in} ``` is ```- \approx ``` 0.5  )
+- What about operating the voltage divider at it extremes (say, ```- v_{out} / v_{in} \approx 0.1 ``` and  ```- v_{out} / v_{in} \approx 0.9 ```  )
+- **Case 2**:
+    - Assume:
+        - ```- R_L = 10 R1 ```
+        - ```- R2 ``` does not have to be the same as ```- R1 ```
+        - ```- v_{out} / v_{in} = 0.9 ```
+    - ```- v_{out} = v_{in} \left( \frac{R2}{R1 + R2} \right) ```
+    - ```- v_{out} / v_{in} = \frac{R2}{R1 + R2} = 0.9 ```
+    - ```- 0.9R1 = R2  - 0.9R2 = 0.1R2 ```
+    - ```- R2 = 9R1 ``` **So** R2 is 9x larger than R1!
+    - From **case 1** which assumed ```- R_L ``` to be 10x R1, we derived that: ```- v_{out} / v_{in} = \frac{0.91R2}{R1 + 0.91R2} ```
+    - Now we can sub in ```- R2 = 9R1 ```, so ```- v_{out} / v_{in} = \frac{0.91(9R1)}{R1 + 0.91(9R1)} = 0.89 ```
+    - So the ideal ```- v_{out}/v_{in} = 0.9 ```, the actual ```- v_{out}/v_{in} = 0.89 ```.  0.89 / 0.9 = 1% error!
+- **Case 3**
+    -  Assume:
+        - ```- R_L = 10 R1 ```
+        - ```- R2 ``` does not have to be the same as ```- R1 ```
+        - ```- v_{out} / v_{in} = 0.1 ```
+    - Following the same procedure, we get a percent error of **9% **
+- **Summary**
+    - With a ```- R_L = 10R1 ```:
+        - At midrange (```- v_{out}/v_{in} = 0.5 ``` output), error percent approx 5%
+        - At upper-range (```- v_{out}/v_{in} = 0.9 ``` output), error percent approx 1%
+        - At bottom-range (```- v_{out}/v_{in} = 0.1 ``` output), error percent approx 9%
+    - If you need smaller errors:
+        - Increase the resistance of ```- R_L ``` relative to ```- R1 ``` and ```- R2 ```
+            - Increase resistance of ```- R_L ```
+            - Or decrease resistances of ```- R1 ``` and ```- R2 ```, although this will increase the power dissipation of the circuit as more amps will be flowing through it.
 
 
 ## DC Circuit Analysis
+- [Continue here](https://www.khanacademy.org/science/electrical-engineering/ee-circuit-analysis-topic/ee-dc-circuit-analysis/a/ee-circuit-analysis-overview)
 
 
 
