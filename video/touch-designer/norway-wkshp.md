@@ -517,5 +517,70 @@ Norway Wkshp Notes
     - Lets you assign different inputs / Channels to an RGB 
 - Set display flag for last part of your node
 
+## Example 2 - Building a Movie Player App
+- Its an app with a UI that has clickable thumbnail buttons for each movie.  When you click the button, it shows the movie.  It pulls the movies out of a movie folder on the file system.
+    - Good for a kiosk or installation
+- Creates a container component, called 'movielib', because it's going to have a UI
+    - sets the *height* and *width* parameters to the appropriate pixel size
+- Uses the `Folder` DAT to point at a folder in the filesystem and with the parameters, you can filter what you want to see (e.g. by filetype, properties, etc.)
+- There will be a master button, stored in a second `Container` comp that he wants to clone for each instance of a movie in the `Folder`
+    - sets the width on the `Container` to the resolution of the movies (they should all be the same)
+    - clones with the `Replicator` COMP
+        - an associated DAT opens with it- just ignore that
+        - Parameter *Template DAT from Table* should refer to the `Folder` DAT
+        - Parameter *Master Operator* should refer to the new `Container` COMP
+    - Then go into the `Container` COMP which we want to use as a template, and set *Clone Master* parameter to the name of itself (e.g. Container1)
+- Then inside the second `Container` (the template): he wants each Container to be able to select out a single row from the `Folder` DAT
+    - He uses a `Select` COMP which refers to the movielist `Folder` DAT.
+    - For the *start index* and *end index* parameters, he uses some Python to get the number appended to the end of the container (which is one): 
+    ```(python) parent().digits ```
+- To connect a `Movie File In` TOP to the `Select` Comp, change the `Movie File In` *file* parameter to ```(python) op("movie")[1,1]```.
+    - Or you could (even better) reference it by the column name with : ```(python) op("movie")[1,"path"]```
+- Next step is to display the movie in the background of each button
+    - Connect the `Movie File In` to a new `Container` COMP and rename it to 'Thumbnail'
+    - set the `Container` comp to the same size as the others
+    - The reason we keep setting every `Container` to the same size is just to get the aspect ratio the same (and this is an easy way).  Later on we can scale everything down appropriately.
+    - In the `Container`, set the *TOP background* parameter to *.out1*.  This will refer to the autocreated outlet node in the container called 'out1'.
+        - There are a couple other ways to do this too...
+- If you start to run out of resources, due to big movies or too many of them, you can change the *Play* parameters on the various `Movie File In` TOPS
+- If you zoom out to the outermost `Container`, you'll see only one movie.  Go to the Layout section of parameters and set *Align* to 'Layout Grid Rows'.
+- To hide the Template `Container` from the     being displayed in the parent `Container`, go to its Panel -> *Display* parameter and set it to 'Off'
+    - Only problem is that the cloned `Containers` will also be hidden.
+    - So go to the `Replicator`'s associated DAT and change the Python script so that all the clones will be displayed.
+    - This is such a regular occurence, that the code is already there, just commented out.  Uncomment and you're in business.
+- Also a good idea to trigger the Pulse button pressed on each `Movie File In` node to load up the next frame in the each movie.
+    - Put this in the `Replicator` callback: ```(python) c.op("./moviefilein1").par.cuepulse.pulse();```
+    - Or you could set the *Cue Point* parameter to something like frame 100 (since most movies fade in from black)
+- How do you get the thumbnails to play when you hover over them?
+    - Remember that the `Container` (called *thumbnail*) is connected into from `Movie File In`
+    - *thumbnail* has a *rollover* property
+    - Each `MovieFileIn` has a *play* parameter
+    - Set *play* to ```(python) op("thumbnail").panel.rollover ```
+    - *Panel* is a type of COMP- if you check the COMP menu, you'll see a variety of them (including `Container`)
+        - All Panels have a Panel member, where you can access fields like *rollover*
+    - Don't forget to click the Python help button in the parameter window
+- Now for a bigger viewer, which displays what is selected 
+    - Create a new `Movie File In` called *movieselected* at the level of the template (not in one of the cloned `Container`'s)
+    - There are a bunch of DAT's which respond to events or when something gets executed
+    - in a cloned `Container`, select `Panel Execute`
+        - In the *Panel* property, set it to the *thumbnail* `Container`
+        - For the *Panel Value*, choose 'select'
+        - Select 'Off To On' and customize the corresponding callbacks
+            - ```(python) 
+            op("../movieselected").par.file = op("movie")[1, "path"]  
+            # we used this path snippet before in the cloned container.
+            op("../movieselected").par.cuepulse.pulse()
+            return
+            ```
+    - Connect the *movieselected* `Movie File In` to an `Out` TOP (at 18:41)
+    - Then go to the project level (up one level) and connect the *movielib* container to a new `Container` CHOP, and rename it to *viewer*
+        - set the dimensions to 1280x720
+        - set the parameter *Background TOP* to "./out1" 
+    - 
+- **Remember to use tabs with your python!**            
+
+
+
+
 
 
