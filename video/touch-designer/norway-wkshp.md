@@ -566,17 +566,16 @@ Norway Wkshp Notes
         - In the *Panel* property, set it to the *thumbnail* `Container`
         - For the *Panel Value*, choose 'select'
         - Select 'Off To On' and customize the corresponding callbacks
-            - ```(python) 
-            op("../movieselected").par.file = op("movie")[1, "path"]  
-            # we used this path snippet before in the cloned container.
-            op("../movieselected").par.cuepulse.pulse()
-            return
-            ```
+        ```(python) 
+        op("../movieselected").par.file = op("movie")[1, "path"]  
+        # we used this path snippet before in the cloned container.
+        op("../movieselected").par.cuepulse.pulse()
+        return
+        ```
     - Connect the *movieselected* `Movie File In` to an `Out` TOP (at 18:41)
     - Then go to the project level (up one level) and connect the *movielib* container to a new `Container` CHOP, and rename it to *viewer*
         - set the dimensions to 1280x720
         - set the parameter *Background TOP* to "./out1" 
-    - 
 - **Remember to use tabs with your python!**            
 
 
