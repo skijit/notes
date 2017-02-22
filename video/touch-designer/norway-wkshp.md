@@ -533,9 +533,16 @@ Norway Wkshp Notes
 - Then inside the second `Container` (the template): he wants each Container to be able to select out a single row from the `Folder` DAT
     - He uses a `Select` COMP which refers to the movielist `Folder` DAT.
     - For the *start index* and *end index* parameters, he uses some Python to get the number appended to the end of the container (which is one): 
-    ```(python) parent().digits ```
-- To connect a `Movie File In` TOP to the `Select` Comp, change the `Movie File In` *file* parameter to ```(python) op("movie")[1,1]```.
-    - Or you could (even better) reference it by the column name with : ```(python) op("movie")[1,"path"]```
+    ```(python) 
+    parent().digits ```
+- To connect a `Movie File In` TOP to the `Select` Comp, change the `Movie File In` *file* parameter to 
+```(python) 
+op("movie")[1,1]
+```.
+    - Or you could (even better) reference it by the column name with : 
+    ```(python) 
+    op("movie")[1,"path"]
+    ```
 - Next step is to display the movie in the background of each button
     - Connect the `Movie File In` to a new `Container` COMP and rename it to 'Thumbnail'
     - set the `Container` comp to the same size as the others
@@ -549,13 +556,18 @@ Norway Wkshp Notes
     - So go to the `Replicator`'s associated DAT and change the Python script so that all the clones will be displayed.
     - This is such a regular occurence, that the code is already there, just commented out.  Uncomment and you're in business.
 - Also a good idea to trigger the Pulse button pressed on each `Movie File In` node to load up the next frame in the each movie.
-    - Put this in the `Replicator` callback: ```(python) c.op("./moviefilein1").par.cuepulse.pulse();```
+    - Put this in the `Replicator` callback: 
+    ```(python) 
+    c.op("./moviefilein1").par.cuepulse.pulse();
+    ```
     - Or you could set the *Cue Point* parameter to something like frame 100 (since most movies fade in from black)
 - How do you get the thumbnails to play when you hover over them?
     - Remember that the `Container` (called *thumbnail*) is connected into from `Movie File In`
     - *thumbnail* has a *rollover* property
     - Each `MovieFileIn` has a *play* parameter
-    - Set *play* to ```(python) op("thumbnail").panel.rollover ```
+    - Set *play* to 
+    ```(python) 
+    op("thumbnail").panel.rollover ```
     - *Panel* is a type of COMP- if you check the COMP menu, you'll see a variety of them (including `Container`)
         - All Panels have a Panel member, where you can access fields like *rollover*
     - Don't forget to click the Python help button in the parameter window
