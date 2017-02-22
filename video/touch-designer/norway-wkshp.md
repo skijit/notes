@@ -517,7 +517,7 @@ Norway Wkshp Notes
     - Lets you assign different inputs / Channels to an RGB 
 - Set display flag for last part of your node
 
-## Example 2 - Building a Movie Player App
+## Example Movie Player App
 - Its an app with a UI that has clickable thumbnail buttons for each movie.  When you click the button, it shows the movie.  It pulls the movies out of a movie folder on the file system.
     - Good for a kiosk or installation
 - Creates a container component, called 'movielib', because it's going to have a UI
@@ -537,12 +537,10 @@ Norway Wkshp Notes
     parent().digits ```
 - To connect a `Movie File In` TOP to the `Select` Comp, change the `Movie File In` *file* parameter to 
 ```(python) 
-op("movie")[1,1]
-```.
-    - Or you could (even better) reference it by the column name with : 
-    ```(python) 
-    op("movie")[1,"path"]
-    ```
+op("movie")[1,1]```
+- Or you could (even better) reference it by the column name with : 
+```(python) 
+op("movie")[1,"path"]```
 - Next step is to display the movie in the background of each button
     - Connect the `Movie File In` to a new `Container` COMP and rename it to 'Thumbnail'
     - set the `Container` comp to the same size as the others
@@ -579,8 +577,7 @@ op("movie")[1,1]
         - For the *Panel Value*, choose 'select'
         - Select 'Off To On' and customize the corresponding callbacks
         ```(python) 
-        op("../movieselected").par.file = op("movie")[1, "path"]  
-        # we used this path snippet before in the cloned container.
+        op("../movieselected").par.file = op("movie")[1, "path"]  # we used this path snippet before in the cloned container.
         op("../movieselected").par.cuepulse.pulse()
         return
         ```
@@ -589,7 +586,7 @@ op("movie")[1,1]
         - set the dimensions to 1280x720
         - set the parameter *Background TOP* to "./out1" 
 - **Remember to use tabs with your python!**            
-    
+
 
 
 
