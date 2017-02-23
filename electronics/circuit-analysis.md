@@ -367,7 +367,7 @@ Circuit Analysis
     -  Assume:
         - ```- R_L = 10 R1 ```
         - ```- R2 ``` does not have to be the same as ```- R1 ```
-        - ```- v_{out} / v_{in} = 0.1 ```
+        - ```- v_{out} / v_{in} = 0.1 ```   
     - Following the same procedure, we get a percent error of **9% **
 - **Summary**
     - With a ```- R_L = 10R1 ```:
@@ -381,6 +381,78 @@ Circuit Analysis
 
 
 ## DC Circuit Analysis
+- Circuit analysis means determining current and voltages in circuit elements.
+- Tools include:
+    - Element equations (Ohms Law, etc)
+        - Recall that elements = { Components, Sources }
+        - Sources = { Voltage Source,  Current sources }
+        - Components = { Resistors, Inductors, Capacitors }
+    - Schematics (wires, nodes, branches, loops, and meshes)
+    - Simplifying series and parallel resistors
+    - Kirchoff's Laws for Current and Voltage
+- Basic Strategy:
+    - Create a set of independent equations based on elements and circuit connections
+    - Solve the systems of equations (i.e. via linear algegra)
+    - Solve the remaining individual element voltages and currents
+- 3 separate methodologies:
+    1. Direct application of Ohm's and Kirchoff's laws
+        - good for simple circuits
+    2. Node Voltage Method
+        - less simultaneous equations than method 1
+    3. Mesh Current Method 
+        - Also it's cousin: Loop Current method
+        - less simultaneous equations than method 1
+
+### Kirchoff's Laws
+- Kirchoff's Laws for Current (KCL) and Voltage (KVL) deal with the net input/output of current and voltage drops in a circuit's nodes or loops.
+    - more specifically:
+        - KCL is about nodes
+        - KVL is about loops
+- Kirchoff's Current Law: The sum of all currents flowing into a node is zero   
+    - ```- \sum_{n} i_n = 0```
+    - or you could redefine it as the sum of all currents flowing into a node equal the sum of all currents flowing out of a node.
+        - ```- \Sigma i_{in} = \Sigma i_{out} ```
+![kirchoff-current](/resources/images/electronics/kirchoff-current-1.svg)
+- In this image, ```- i_5 ``` is going to be -6 mA.
+    - Note how the current arrow directions and KCL determine whether the amp is labelled positive or negative.
+    - In this example, ```- i_3 ``` must be 0 mA
+![kirchoff-current](/resources/images/electronics/kirchoff-current-2.svg)
+- **One way to analyze a circuit**
+![kirchoff-current](/resources/images/electronics/dc-1.svg)
+- In this series circuit, we can determine the current by adding the total resistance and applying Ohm's Law
+- This gives us a current of 20mA
+- From this we can calculate the individual voltage drops
+![kirchoff-current](/resources/images/electronics/dc-2.svg)
+- ```- v = i \cdot R ```
+    - ```- v_{R1} = 20 \cdot 100 = +2 V ```
+    - ```- v_{R2} = 20 \cdot 200 = +4 V ```
+    - ```- v_{R3} = 20 \cdot 300 = +6 V ```
+    - ```- v_{R4} = 20 \cdot 400 = +8 V ```
+- This gives us the following, completed circuit diagram:
+![kirchoff-current](/resources/images/electronics/dc-3.svg)
+- **Another way to solve the circuit**
+    - this leads to Kirchoff's Voltage Law (KVL)
+    1. Pick a starting node
+    2. Pick a direction to travel
+    3. Walk around the loop:
+        - Accumulate voltages
+        - If you encounter a voltage rise, add it.
+        - If you encounter a voltage drop, subtract it.
+        - Alternately worded, you can add all the voltage changes, but just make the drops as a negative voltage rise.
+    4. The sum of voltages should be zero.
+![kirchoff-current](/resources/images/electronics/dc-3.svg)
+- ```- V_{loop} = +20V - 2V - 4V - 6V - 8V ```
+- Sometimes the voltage polarity arrows on resistors might be a little strange, but as long as you're consistent, it all works out.
+- Kirchoff's Voltage Law is:
+    -  ```- \sum_{n} v_n = 0```
+    - The sum of voltages around a **loop** is 0
+        - Of course, a circuit is a loop too.
+    - Phrased differently...
+        - ```- \sum v_{rise} = \sum v_{drop}```
+
+
+    
+
 - [Continue here](https://www.khanacademy.org/science/electrical-engineering/ee-circuit-analysis-topic/ee-dc-circuit-analysis/a/ee-circuit-analysis-overview)
 
 
