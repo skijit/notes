@@ -45,9 +45,10 @@ Acoustics - Chapter 1
     - Or rather, related to a base frequency, ```- f_{ref}``` (e.g. 440 Hz), the new frequency is:
     ```+ f = f_{ref} \cdot 2^I```
         - Where ```- I ``` is the interval in octaves
+        - If we're taking octave (```- I ```) as a unit of interval, then octave will only rarely be an integer.
     - Solving for ```- I ```, you get:
-    ```+ I = \log_2 \left( \frac{f_{ref}}{440} \right) ```
-- In western music, the octave is divided into 12 half steps, so you can relate ```- H ```, the number of half steps, to an interval ```- I ``` (in units of octaves) by:
+    ```+ I = \log_2 \left( \frac{f}{f_{ref}} \right) ```
+- In western music, the octave is divided into 12 half steps (i.e. there are 12 half steps in a single octave), so you can relate ```- H ```, the number of half steps, to an interval ```- I ``` (in units of octaves) by.
     ```+ H = 12 \cdot I```
     or
     ```+ I = H / 12 ```

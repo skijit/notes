@@ -450,10 +450,66 @@ Circuit Analysis
     - Phrased differently...
         - ```- \sum v_{rise} = \sum v_{drop}```
 
+### Basic Application  
+- Analyze the following circuit using:
+    - Ohm's Law
+    - Formulas for Series and Parallel Resistors
+    - Kirchoff's Laws
+![circuit analysis](/resources/images/electronics/dc-app-1.svg)
+- We want to find the unknown currents and voltages
+- **Step 1: Label the Schematic**
+![circuit analysis](/resources/images/electronics/dc-app-2.svg)
+- Identify and (if appropriate, label) the following:
+    - Elements (5)
+    - Nodes (3: a,b,c)
+    - Meshes (aka "inner loop") (3)
+    - Voltage Sources (1: ```- V_S ```)
+    - Current Sources (1: ```- I_S ```)
+    - Currents/Directions (3: ```- i_1 i_2 i_3```)
+    - Voltages/Directions (aka Voltage Rise/Drops) (3: ```- v_1 v_2 ```)
+- **Notice**: There's no voltage drop specifically for the ```- 5 \Omega ``` resistor.  Why?
+    - Because the voltages are not element specific, but node specific.
+    - The ```- 6 \Omega ``` resistor shares the same input and output node, meaning the same voltage drop (since voltage is uniform on a node, whereas current is not)
+- Normally, we would also collapse the two parallel resistors into a single resistor, but for pedagogy, we won't here
+- **Step 2: Select the Independent Variable**
+    - We have to choose whether to solve for *i* or *v*
+    - Since we have 2 unknown voltages, and 3 unknown currents which means our equations will have only 2 voltage terms instead of 3 current terms, and thus be simpler.
+        - So we choose *v*
+- **Step 3: Write Independent Equations**
+- We have two unknown voltages to solve for, so we need two independent equations.
+- We choose the following 2 equations:
+    1. KCL at node b
+        - we chose this bc its interesting and has lots of connections
+    2. KVL around the left-most mesh
+        - we chose this bc it involves all the other elements not involved in node b
+    - Another consideration:
+        - We need to make sure, also, that each element has participated in this equation.  
+![circuit analysis](/resources/images/electronics/dc-app-3.svg)
+- **KVL in Leftmost Mesh**
+    - We start in the leftmost corner and go around clockwise adding up voltages (which we know must = 0)
+    - ```- + v_s - v_1 - v_2 = 0 ```
+    - We know ```- v_s = 140 V``` 
+    - So ```- + 140 - v_1 - v_2 = 0 ```
+- **KCL at Node b**
+    - KCL says the current flowing into the node must be the same as the current flowing out of the node
+    - ```- i_s + i_1 = i_2 + i_3 ```
+- Now we make a substitution using Ohm's Law:
+    - ```- i_s + i_1 = i_2 + i_3 ``` goes to:
+    - ```- 18 + \frac{v_1}{20} = \frac{v_2}{6} + \frac{v_2}{5} ```
+    - And this can be simplified to:
+        - **Equation 1**: ```- \frac{1}{20} v_1 - \left(1/6+1/5\right) v_2 = -18 ```
+    - And we already had this from KVL:
+        - **Equation 2**: ```- v_1 + v_2 = 140 ```
+- **Step 4**: Solve the System of Equations
+    - It's pretty simple
+    - in this case, we get the voltages, ```- v_1 ``` and ```- v_2 ```    
+- **Step 5**: Solve for the other unknowns
+    - We solve for the i's by plugging in Ohm's Law
 
-    
+### Node Voltage Method
+- [Continue here](https://www.khanacademy.org/science/electrical-engineering/ee-circuit-analysis-topic/ee-dc-circuit-analysis/v/ee-node-voltage-method-steps-1-to-4)
 
-- [Continue here](https://www.khanacademy.org/science/electrical-engineering/ee-circuit-analysis-topic/ee-dc-circuit-analysis/a/ee-circuit-analysis-overview)
+
 
 
 
