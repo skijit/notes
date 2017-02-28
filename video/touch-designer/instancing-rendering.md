@@ -3,7 +3,7 @@ Instancing and Rendering
 - [source](https://www.derivative.ca/Events/2015/WorkshopsWestVideos/)
 - Video Workshop with Matthem Ragan
 
-## Instancing
+## Session 1
 - **Instancing** is a technique for duplicating geometries that uses the GPU instead of the CPU.
 - start with `Container` the project level and 'i' into it.
 - We want to begin rending stuff
@@ -79,6 +79,19 @@ Instancing and Rendering
     - drag the `Composite` back onto `Feedback`
     - this makes everything white, but then you can turn down the *Opacity* value in the `Level` TOP
 
+## Session 2
+- When you have make a viewer active, you can *home* (h) on the shape to set the camera to the default position
+    - good when you change the size or if you don't have a mouse
+- You can right-click on the `Render` TOP to get the *View* option.
+    - You can also select (from the upper-right corner) a *Geometry Viewer* instead of the Network Viewer.
+    - The Geometry Viewer is going to show you whatever geometries exist, but the Network Viewer will be limited to whatever geometries have a *Render* flag set on them.
+- `Camera` COMP has a *Path SOP* parameter that lets you plot its position
+    - In this case we use a `Circle` SOP, and so we'll get the smoothest motion when we use the *Primitive Type* of *primitive* rather than *polygon*
+- The Geometry Viewer lets you view both the Geometry and Camera position
+- Add a `Null` COMP and then in the `Camera` COMP, set the *Look At* parameter to this new Null
+    - This will give it a constant gaze as you translate the position of the camera
+    - So that's an interesting use for the `Null` COMP
+    
 
 
     
