@@ -91,8 +91,30 @@ Instancing and Rendering
 - Add a `Null` COMP and then in the `Camera` COMP, set the *Look At* parameter to this new Null
     - This will give it a constant gaze as you translate the position of the camera
     - So that's an interesting use for the `Null` COMP
+    - The `Null` COMP also has positional parameters like *Translate*, *Rotate*, and *Scale*, and that's one of the ways you can modify the gaze
+- A good way to animate camera position:
+    - Add a `Constant` CHOP -> `Speed` CHOP -> `NULL` CHOP, then export that to the `Camera` COMP's *position* parameter
+    - Even though the camera is following the *Path SOP*, you can adjust it's positional parameters to provide any number of offsets
+- Changing the color of each of the `Box`'s
+    - `Noise` TOP with a resolution of y=1 and x=python expression for each point
+        - len(op('null1').points)
+    - The `Geometry` COMP has an *instance2* parameter page with *r*, *g*, *b*, *a* parameters
+    - In the *Noise* page for the `Noise` TOP turn off *monochrome*
+    - `Noise` TOP -> `NULL` TOP -> `TOP To` CHOP -> `Merge` CHOP which also connects to the Instance related points
+    - Now you map the `Geometry` COMP's *r*, *g*, *b*, *a* parameters ( *instance2* page) with the corresponding r,g,b, and a channels
+    - You can animate the color changes by going to the `Noise` TOP and then change the Translate *ty* expression `absTime.frame *`
+- To get a more flat feeling, add a `Constant` Mat to the Geometry's material property
+    - Then you can take out the `Light` COMP since `Constants` emit
+- You can create a new `Geometry` COMP (geometry2) and then export the `Null` from the first `Geometry` COMP (geometry1)
+    - It works by creating a `Select SOP` in geometry2 and referencing (by relative path) the null in geometry1
+    - Add the Display & Render flags on the `Select`
+    - take the same Instance values as geometry1
+    - on geometry2, you'll assign a new `Wireframe` material
+- *Render* parameter on `Render` TOP will let you choose which geometries (and other?) you want to render
+- `Camera Blend` COMP is really good for switching (or blending) between cameras in a scene.
+    - The two camera COMP's it relates to are via hierarchy (top inlet)
+    - Be sure to change the render to look at `Camera Blend`
     
-
 
     
 
