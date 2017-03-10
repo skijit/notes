@@ -15,6 +15,12 @@ Latency
         - USB clock speed is 1ms: it will generate an audio interrupt at this rate
 ![latency-1](/resources/images/programming/LatencyChain.jpg)
 The time it takes for the sound of a snare drum to reach a drummer's ears, is about 2.1 milliseconds.*
+]
+Delay vs Playthrough Optimization:
+	-When playing back tracks, Ableton will slow down all tracks to the latency corresponding to the slowest plugin
+		-this is good but this might create problems for when you're playing keyboard on an armed track and you want small latency
+		-just go to options: Reduced Latency while monitoring
+
 
 If two people stand at the opposite ends of a double decker bus (assuming its maximum length of 15 metres), there is a 43 millisecond delay when they speak (or shout) to each other.*
 
