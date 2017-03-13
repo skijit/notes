@@ -1,14 +1,18 @@
 Angular2 Confoo  Workshop
 ==============
 
-- Now refer to ng1 as ng.js
+## Misc
+- Now refer to ng1 as ng.js and ng2+ as (just) 'angular'
+- Questions:
+    - Module loader responsibilities vs execution engine
+    - Relationship between angular and webcomponents
 
 ## ES2015
-- ES6 === ES2015, ES5 === 2009
 - Now they're developing the language spec on a yearly cadence!
-- Useful features...
+- ES6 => ES2015, ES5 => 2009
+- Useful features in ES2016...
     - Template strings
-        - requires backtick ``` \`${thi.someName} is a person\` ```
+        - requires backtick ``` `${this.someName} is a person` ```
     - Block scopings (let)
         - Rather than function level
         - You can safely replace `var` with `let`
@@ -22,12 +26,7 @@ Angular2 Confoo  Workshop
         - relies on `import` and `export` keywords
     - Arrow Functions
 
-- Questions:
-    - Module loader responsibilities vs execution engine
-    - Typescript data structures in debugging
-    - Relationship between angular and webComponents
-    - In the CLI DemoApp, how did the js script tags get entered into the index.html?  Was it WebPack?
-
+    
 ## TypeScript
 - Ember, React, Aurelia are all using TypeScript
 - Union type:
@@ -36,7 +35,7 @@ let cpt: number|string;
 ```
 - You can still use `typeof()` from js
 - ```any``` is good for receiving Json-based types
-- getters and setters are from typescript
+- ES class getters and setters are from typescript
 ```(typescript)
 class Car {
     constructor(private _engine:string);  //auto-named property
@@ -70,7 +69,7 @@ function receivePerson(myPerson:IPerson) {
 ```
 
 ## Angular Basics 
-- VS Code Extensions
+- Super Useful VSCode Extensions
     - Angular v2 TypeScript Snippets
     - AngularDoc for VS Code
     - AutoImport
@@ -98,7 +97,7 @@ function receivePerson(myPerson:IPerson) {
     - syntax that generates you an html template
 - `ng g component <feature-name> --flat`
     - `flat`: do it in the current folder
-    - don't forget you can use the integrated terminal
+    - don't forget you can use the integrated terminal (`ctrl-~`)
     - creates *.spec.ts for tests
     - updates your app.module.ts
 - using @Input and @Output
@@ -120,7 +119,7 @@ function receivePerson(myPerson:IPerson) {
     - One benefit of using RxJs (over promises) is that you can have multiple subscribers
     - rxmarbles.com
         - nice graphical representation of debounce and similar aggregations/operators
-- Http has stdget, put, post, delete
+- Http module has std get, put, post, delete
 - When you import and inject a Module, like the HttpModule, you don't need to register a Provider.  
     - That is handled internally by the module.     
     - Basically, it is only custom services which need to be registered as Providers
@@ -140,17 +139,17 @@ function receivePerson(myPerson:IPerson) {
             - It's a runtime dependency.
             - Everything is self-contained
     - code will go to the dist folder  
-- webpack bunder analyzer is an interesting way to see how space is allocated in your webpack bundles
+- `webpack bunder analyzer` is an interesting way to see how space is allocated in your webpack bundles
 - each module has its own routes
-- define routesing in app.routing.ts
+- define routes in app.routing.ts
     - you create an array that maps paths to components
     - you export it
     - you can have child routes with different segments
     - order is sensitive
     - you can make routes less greedy with pathMatch: 'full'
-- app.module.ts will iport your routing and decalre them as an import
+- app.module.ts will import your routing and decalre them as an import
 - <router-outlet> </router-outlet> is the container for router views
-- you can use the [routerLink] directive OR use helpers
+- you can use the [routerLink] directive OR use helpers to build references to the appropriate view/route
 - you can retrieve captured routing parameters in the corresponding component's ngOnInit() using `this._route.snapshot.params['id']`
 - `a-`routerLink
 - 2 things need to happen with routing
