@@ -116,7 +116,7 @@ Circuit Analysis
         - You need to have the same current everywhere on the node
         - You can have a 'distributed node' which is spread out over a wide area
     - Branch connects different nodes together
-        - Branch = element
+        - Branch
     - Mesh
         - A mesh is a loop that has no other loops inside it.
             - Basically the simplest, atomic, loops in the circuit
@@ -173,9 +173,343 @@ Circuit Analysis
     - **THIS MIGHT ALL MAKE MORE SENSE ONCE I START ANALYZING CIRCUITS**
     
 ## Resistor circuits
-- continue [here](https://www.khanacademy.org/science/electrical-engineering/ee-circuit-analysis-topic/ee-resistor-circuits/v/ee-series-resistors)
+- [Link](https://www.khanacademy.org/science/electrical-engineering/ee-circuit-analysis-topic/ee-resistor-circuits/v/ee-series-resistors)
+- **Resistors in a series** 
+    - example: 3 resistors stacked head to tail
+    - they share the **SAME CURRENT**
+    - We don't know the individual voltage drops at each resistor
+    - Can we replace the 3 resistors with a single resistor?
+        - yes: we know the individual voltage drops and they add up to the voltage source:
+            - ```- V_{source} = v_1 + v_2 + v_3 ```
+        - each individual voltage drop is given by Ohm's law:
+            - ```- v_1 = I \cdot R_1 ```
+        - put these 2 facts together by applying Ohm's law to the circuit as a whole:
+            - ```- V_{source} = I \cdot (R_1 + R_2 + R_3)```
+        - So you can replace the series of resistors with a single resistor, given by:
+            - ```- R_{S} = R_1 + R_2 + R_3 ```
+    - **GOTCHA**: Consider the following-
+    ![this is the alt title](/resources/images/electronics/SeriesResistorGotcha.png)
+    - When you have some resistors which are in series, but there's a branch off... you don't necessarily have the same current running through each node.
+        - If the same current isn't running through, then they're not in series.
+    - The current is only the same if the current on each of those branches is 0 amps
+        - If the impedance/resistance of that component is super-dooper high (as is often the case with sensor ports) then it's basically a zero current and so you can consider the resistors in series.
+
+### Resistors in parallel
+- Two components which share two (or more) nodes are in parallel with each other
+- Regardlesss of series/parallel: voltage is uniform in a node.
+![parallel-resistors-1](/resources/images/electronics/parallel-resistors-1.svg)
+- Based on this parallel resistor circuit, we know:
+    - The same voltage, ```- v ``` appears across each resistor
+        - Applying Ohm's law to the individual voltages: 
+        - ```- v = i_{R1} \cdot R1 ``` and therefore  ```- i_{R1} =  v / R1 ```
+        - ```- v = i_{R2} \cdot R2 ``` and therefore  ```- i_{R2} =  v / R2 ```
+        - ```- v = i_{R3} \cdot R3 ``` and therefore  ```- i_{R3} =  v / R3 ```
+    - There's a different current running through each resistor
+        - but because a circuit is a closed system, we know the individual currents will add up to the source's current 
+        - ```- i = i_{R1} + i_{R2} + i_{R3} ```
+    - Substituting a bit:
+        - ```- i = v / R1 + v / R2 + v / R3 = v (1/R1 + 1/R2 + 1/R3) ```
+        - We already know ```- i ``` as it is given by the current source.  So we solve for ```- v ```
+        - ```- v = i \left( \frac{1}{1/R1 + 1/R2 + 1/R3}\right) ```
+    - **Interesting Takeaway**
+        - This last result looks like Ohm's law where ```- R_{total} = \frac{1}{1/R1 + 1/R2 + 1/R3} ```
+        - For resistors in parallel, the overall resistance is the reciprocal of the sum of reciprocals of the individual resistors.
+        - **Another surprise**: In general, the total resistance, ```- R_{total} ``` will be less than the smallest of the individual resistors! 
+- Special case: 2 resistors in parallel:
+    - ```- R_{total} = \frac{R_1 \cdot R_2}{R_1+R_2} ```
+- Another special case: 2 of the **same** resistors in parallel:
+    - ```- R_{total} = 1/2 \cdot R ```
+
+- **Summary of resistor circuits**
+    - series or parallel are just two special types of configurations that two (or more) connected components may have.
+        - **It's not a dichotomy**: You can have connected components that are **neither serial nor parallel**
+        - The significance of series and parallel is that they give us tools to decompose circuits into simpler representations (e.g. replacing multiple resistors with a single equivalent resistor.)
+    - resistors in series: Same current 
+    - resistors in parallel: Same voltage
+    - Current is conserved due to a circuit being a closed system.
+        - Current distributes among parallel resistors with the largest current flowing through the smallest resistor.  
+
+### Parallel Conductance
+- We know ```- R_{parallel} = \frac{1}{1/R1 + 1/R2 + 1/R3} ```, but this is double reciprocal thing is a pain.
+    - Conductance can help...
+- Ohm's Law states ```- R = \frac{v}{i} ```
+- Conductance (G) is the inverse of R: ```- G = \frac{i}{v} ```
+- Ohm's law restated with conductance: ```- i = v \cdot G ```
+- Unit of conductance is the siemens (S)
+- While resistance impedes current flow, conductance allows current to flow.
+- A 1 ```- \Omega ``` resistor has a conductance of 0.01 S
+- **Cutting to the chase**: Conductances in parallel are just like Resistances in series.  They add.
+    - ```- G_{parallel} = G_1 + G_2 + G_3 ```
+
+
+### Simplifying Resistor Networks
+- Method:
+    - Begin as far away from the circuit location of interest (in this case, the voltage source).
+    - Moving left, replace series or parallel resistors with equivalent resistance.
+
+![resistor-network simplification](/resources/images/electronics/resistor-network-1.svg)
+- These resistors can be combined serially. Like so..
+![resistor-network simplification](/resources/images/electronics/resistor-network-2.svg)
+![resistor-network simplification](/resources/images/electronics/resistor-network-3.svg)
+- These are two parallel, and the same values, so we can use ```- R_{total} = 1/2 \cdot R ```.
+![resistor-network simplification](/resources/images/electronics/resistor-network-4.svg)
+![resistor-network simplification](/resources/images/electronics/resistor-network-5.svg)
+- Now another serial combination...
+![resistor-network simplification](/resources/images/electronics/resistor-network-6.svg)
+![resistor-network simplification](/resources/images/electronics/resistor-network-7.svg)
+- Now a big parallel combination.
+- ```- R_{total} = \frac{1}{1/R1 + 1/R2 + 1/R3} = \frac{1}{1/6 + 1/4 + 1/12} = \frac{1}{6/12} = 2 \Omega ``` 
+![resistor-network simplification](/resources/images/electronics/resistor-network-8.svg)
+![resistor-network simplification](/resources/images/electronics/resistor-network-9.svg)
+- Finally, one last serial combination.
+![resistor-network simplification](/resources/images/electronics/resistor-network-10.svg)
+![resistor-network simplification](/resources/images/electronics/resistor-network-11.svg)
+- Not all simplifications get down to a single resistor at the end.
+    - Sometimes a different strategy, such as the Delta Wye Transformation, is required.
+
+### Delta-Wye Resistor Networks
+![delta-wye simplification](/resources/images/electronics/delta-wye.svg)
+- The 'Delta' and 'Wye' are references to how the schematics resemble the shape of the letters ```- \Delta ``` and ```- Y ```.
+- The transformation lets you replace 3 resistors in the ```- \Delta ``` formation with the ```- Y ``` shape and vice versa.
+- Typically, you don't see schematics drawn this way, so an equivalent formation is the ```- \pi ``` - ```- T ``` configuration.
+![pi-t simplification](/resources/images/electronics/pi-t.svg)
+![delta-wye simplification](/resources/images/electronics/delta-wye-1.svg)
+- The derivation for these transformation rules is based on putting 3 sets equations together, the first of which is shown here.
+    - Assume no current is flowing through terminal z (on the ```- \Delta ``` and ```- Y ``` sides )
+    - ```- \Delta ``` side: resistance from *x* to *y* is ```- R_c ``` in parallel with ```- R_a + R_b ```
+    - ```- Y ``` side: resistance from *x* to *y* is ```- R1 + R2 ```
+    - Therefore ```- R1 + R2 = \frac{R_c \left(R_a + R_b \right)}{R_c + \left(R_a + R_b \right)} ```
+- ```- \Delta - Y ``` Transformation
+    - Transforming from ```- \Delta ``` to  ```- Y ``` introduces one additional node.
+    - ```- R1 = \frac{R_b R_c}{R_a + R_b + R_c }```
+    - ```- R2 = \frac{R_a R_c}{R_a + R_b + R_c }```
+    - ```- R3 = \frac{R_a R_b}{R_a + R_b + R_c }```
+- ```- Y - \Delta ``` Transformation
+    - Transforming from ```- \Delta ``` to  ```- Y ``` removes one additional node.
+    - ```- R_a = \frac{R1 R2 + R2 R3 + R3 R1}{R1}```
+    - ```- R_b = \frac{R1 R2 + R2 R3 + R3 R1}{R2}```
+    - ```- R_c = \frac{R1 R2 + R2 R3 + R3 R1}{R3}```
+- **Example**
+![delta-wye simplification](/resources/images/electronics/delta-wye-2.svg)
+- **YIKES!** There are no resistors in series OR parallel
+- But we can redraw the circuit to show there are two ```- \Delta ``` formations, either of which can be converted to a ```- Y ```
+![delta-wye simplification](/resources/images/electronics/delta-wye-3svg.svg)
+- Now we relabel the resistors and nodes, but be careful to keep them straight
+![delta-wye simplification](/resources/images/electronics/delta-wye-4.svg)
+- The new node structures looks like this...
+![delta-wye simplification](/resources/images/electronics/delta-wye-5.svg)
+- The calculations are as follows:
+    - ```- R1 = \frac{R_b R_c}{R_a + R_b + R_c } = \frac{5 \cdot 3}{4 + 5 + 3} = 1.25 \Omega ```
+    - ```- R2 = \frac{R_a R_c}{R_a + R_b + R_c } = \frac{4 \cdot 3}{4 + 5 + 3} = 1 \Omega```
+    - ```- R3 = \frac{R_a R_b}{R_a + R_b + R_c } = \frac{4 \cdot 5}{4 + 5 + 3} = 1.66 \Omega```
+![delta-wye simplification](/resources/images/electronics/delta-wye-6.svg)
+- This can be redrawn as such...
+![delta-wye simplification](/resources/images/electronics/delta-wye-7.svg)
+- And now it's obvious how we reduce this...
+![delta-wye simplification](/resources/images/electronics/delta-wye-8.svg)
+- ```- \left( \frac{4.375 \cdot 5}{4.375 + 5} \right) + 1.66 = 4 \Omega ```
+
+### Voltage Divider
+![voltage-divider-1](/resources/images/electronics/voltage-divider-1.svg)
+- A voltage divider takes an input voltage and runs it through *series* (almost- read on for more) resistors to step down the voltage
+    - This can then be used to bring an input voltage into better range for subsequent components
+- Assume that zero current is exiting the node between the two resistors
+    - Voltage divider needs to be connected to something to be useful, so it doesn't make sense to assume no current exits the node between the resistors.  **BUT** for now, we'll accept this contradiction.
+![voltage-divider-1](/resources/images/electronics/voltage-divider-2.svg)
+- This effectively places R1 and R2 in series, as they have the same current
+- With Ohm's Law and R1&R2 in series, we can express the current as:
+    - ```- i = v_{in} \frac{1}{R1 + R2} ```
+- ```- v_{out} ``` is the voltage from the divider.  It can be expressed as:
+    - ```- v_{out} = i R2 ```
+    - We can express this in purely voltage terms:
+    - ```- v_{out} = v_{in} \left( \frac{R2}{R1 + R2} \right)  ```
+- So the voltage is the input voltage scaled by a ratio of the two resistors
+    - The ratio is always less than once, so ```- v_{out} ``` is always less than ```- v_{in} ```
+    - Hence the term *voltage divider*
+- With matched resistors, the ```- v_{out} ``` will be equal to ```- 0.5v_{in} ```.
+    - **Why?**
+    - Remember that ```- v_{out} ``` is the voltage measured between the two nodes exiting on the right of the circuit.
+    - In series, the resistances are summed, and if you measure the voltage between the the node between the resistors (which has only been through 1 resistor) against the voltage on the node which has been through 2 resistors, you'd expect there to be a 1/2 differential.
+- **Back to Reality**
+    - Assuming we do have a load running off the voltage divider, does the voltage divider formula (```- v_{out} = v_{in} \left( \frac{R2}{R1 + R2} \right)  ```) break down?  And if so, by how much?
+![voltage-divider-1](/resources/images/electronics/voltage-divider-3.svg)
+- **Case 1**: 
+    - Assume: 
+        - ```- R1 = R2 ```
+        - ```- R_L = 10 R1 ``` 
+    - ```- R_L ``` and ```- R2 ``` are in parallel with each other.  Thus...
+        - ```- R_L \parallel R2 = \frac{R_L \cdot R2}{R_L + R2} = \frac{10R2 \cdot R2}{10R2 + R2} = 0.91 R2 ```
+![voltage-divider-1](/resources/images/electronics/voltage-divider-4.svg)
+- The 10x load has the effect of reducing R2's resistance by 91%.
+- What effect does this have on the voltage divider formula?  Is it still valid?
+    - ```- v_{out} = v_{in} \left( \frac{R2}{R1 + R2} \right) = v_{in} \left( \frac{0.91R2}{R1 + 0.91R2} \right) ```
+    - Since ```- R1 = R2 ```, they cancel out: ```- v_{out} = v_{in} \frac{0.91}{1 + 0.91} = 0.48v_{in} ```
+    - The output voltage drops from ```- 0.5v_{in} ``` to ```- 0.48v_{in} ```.  
+    - 0.48/0.5 = 0.96 = 96% 
+    - **THUS** 
+        - The voltage divider output is 4% less with a resistance 10x the individual resistors (with matched resistors).  
+        - The original voltage divider function is **Wrong** by 4%.
+        - This is the behavior we expect when operating the voltage divider near it's midpoint (as ```- v_{out} / v_{in} ``` is ```- \approx ``` 0.5  )
+- What about operating the voltage divider at it extremes (say, ```- v_{out} / v_{in} \approx 0.1 ``` and  ```- v_{out} / v_{in} \approx 0.9 ```  )
+- **Case 2**:
+    - Assume:
+        - ```- R_L = 10 R1 ```
+        - ```- R2 ``` does not have to be the same as ```- R1 ```
+        - ```- v_{out} / v_{in} = 0.9 ```
+    - ```- v_{out} = v_{in} \left( \frac{R2}{R1 + R2} \right) ```
+    - ```- v_{out} / v_{in} = \frac{R2}{R1 + R2} = 0.9 ```
+    - ```- 0.9R1 = R2  - 0.9R2 = 0.1R2 ```
+    - ```- R2 = 9R1 ``` **So** R2 is 9x larger than R1!
+    - From **case 1** which assumed ```- R_L ``` to be 10x R1, we derived that: ```- v_{out} / v_{in} = \frac{0.91R2}{R1 + 0.91R2} ```
+    - Now we can sub in ```- R2 = 9R1 ```, so ```- v_{out} / v_{in} = \frac{0.91(9R1)}{R1 + 0.91(9R1)} = 0.89 ```
+    - So the ideal ```- v_{out}/v_{in} = 0.9 ```, the actual ```- v_{out}/v_{in} = 0.89 ```.  0.89 / 0.9 = 1% error!
+- **Case 3**
+    -  Assume:
+        - ```- R_L = 10 R1 ```
+        - ```- R2 ``` does not have to be the same as ```- R1 ```
+        - ```- v_{out} / v_{in} = 0.1 ```   
+    - Following the same procedure, we get a percent error of **9% **
+- **Summary**
+    - With a ```- R_L = 10R1 ```:
+        - At midrange (```- v_{out}/v_{in} = 0.5 ``` output), error percent approx 5%
+        - At upper-range (```- v_{out}/v_{in} = 0.9 ``` output), error percent approx 1%
+        - At bottom-range (```- v_{out}/v_{in} = 0.1 ``` output), error percent approx 9%
+    - If you need smaller errors:
+        - Increase the resistance of ```- R_L ``` relative to ```- R1 ``` and ```- R2 ```
+            - Increase resistance of ```- R_L ```
+            - Or decrease resistances of ```- R1 ``` and ```- R2 ```, although this will increase the power dissipation of the circuit as more amps will be flowing through it.
+
 
 ## DC Circuit Analysis
+- Circuit analysis means determining current and voltages in circuit elements.
+- Tools include:
+    - Element equations (Ohms Law, etc)
+        - Recall that elements = { Components, Sources }
+        - Sources = { Voltage Source,  Current sources }
+        - Components = { Resistors, Inductors, Capacitors }
+    - Schematics (wires, nodes, branches, loops, and meshes)
+    - Simplifying series and parallel resistors
+    - Kirchoff's Laws for Current and Voltage
+- Basic Strategy:
+    - Create a set of independent equations based on elements and circuit connections
+    - Solve the systems of equations (i.e. via linear algegra)
+    - Solve the remaining individual element voltages and currents
+- 3 separate methodologies:
+    1. Direct application of Ohm's and Kirchoff's laws
+        - good for simple circuits
+    2. Node Voltage Method
+        - less simultaneous equations than method 1
+    3. Mesh Current Method 
+        - Also it's cousin: Loop Current method
+        - less simultaneous equations than method 1
+
+### Kirchoff's Laws
+- Kirchoff's Laws for Current (KCL) and Voltage (KVL) deal with the net input/output of current and voltage drops in a circuit's nodes or loops.
+    - more specifically:
+        - KCL is about nodes
+        - KVL is about loops
+- Kirchoff's Current Law: The sum of all currents flowing into a node is zero   
+    - ```- \sum_{n} i_n = 0```
+    - or you could redefine it as the sum of all currents flowing into a node equal the sum of all currents flowing out of a node.
+        - ```- \Sigma i_{in} = \Sigma i_{out} ```
+![kirchoff-current](/resources/images/electronics/kirchoff-current-1.svg)
+- In this image, ```- i_5 ``` is going to be -6 mA.
+    - Note how the current arrow directions and KCL determine whether the amp is labelled positive or negative.
+    - In this example, ```- i_3 ``` must be 0 mA
+![kirchoff-current](/resources/images/electronics/kirchoff-current-2.svg)
+- **One way to analyze a circuit**
+![kirchoff-current](/resources/images/electronics/dc-1.svg)
+- In this series circuit, we can determine the current by adding the total resistance and applying Ohm's Law
+- This gives us a current of 20mA
+- From this we can calculate the individual voltage drops
+![kirchoff-current](/resources/images/electronics/dc-2.svg)
+- ```- v = i \cdot R ```
+    - ```- v_{R1} = 20 \cdot 100 = +2 V ```
+    - ```- v_{R2} = 20 \cdot 200 = +4 V ```
+    - ```- v_{R3} = 20 \cdot 300 = +6 V ```
+    - ```- v_{R4} = 20 \cdot 400 = +8 V ```
+- This gives us the following, completed circuit diagram:
+![kirchoff-current](/resources/images/electronics/dc-3.svg)
+- **Another way to solve the circuit**
+    - this leads to Kirchoff's Voltage Law (KVL)
+    1. Pick a starting node
+    2. Pick a direction to travel
+    3. Walk around the loop:
+        - Accumulate voltages
+        - If you encounter a voltage rise, add it.
+        - If you encounter a voltage drop, subtract it.
+        - Alternately worded, you can add all the voltage changes, but just make the drops as a negative voltage rise.
+    4. The sum of voltages should be zero.
+![kirchoff-current](/resources/images/electronics/dc-3.svg)
+- ```- V_{loop} = +20V - 2V - 4V - 6V - 8V ```
+- Sometimes the voltage polarity arrows on resistors might be a little strange, but as long as you're consistent, it all works out.
+- Kirchoff's Voltage Law is:
+    -  ```- \sum_{n} v_n = 0```
+    - The sum of voltages around a **loop** is 0
+        - Of course, a circuit is a loop too.
+    - Phrased differently...
+        - ```- \sum v_{rise} = \sum v_{drop}```
+
+### Basic Application  
+- Analyze the following circuit using:
+    - Ohm's Law
+    - Formulas for Series and Parallel Resistors
+    - Kirchoff's Laws
+![circuit analysis](/resources/images/electronics/dc-app-1.svg)
+- We want to find the unknown currents and voltages
+- **Step 1: Label the Schematic**
+![circuit analysis](/resources/images/electronics/dc-app-2.svg)
+- Identify and (if appropriate, label) the following:
+    - Elements (5)
+    - Nodes (3: a,b,c)
+    - Meshes (aka "inner loop") (3)
+    - Voltage Sources (1: ```- V_S ```)
+    - Current Sources (1: ```- I_S ```)
+    - Currents/Directions (3: ```- i_1 i_2 i_3```)
+    - Voltages/Directions (aka Voltage Rise/Drops) (3: ```- v_1 v_2 ```)
+- **Notice**: There's no voltage drop specifically for the ```- 5 \Omega ``` resistor.  Why?
+    - Because the voltages are not element specific, but node specific.
+    - The ```- 6 \Omega ``` resistor shares the same input and output node, meaning the same voltage drop (since voltage is uniform on a node, whereas current is not)
+- Normally, we would also collapse the two parallel resistors into a single resistor, but for pedagogy, we won't here
+- **Step 2: Select the Independent Variable**
+    - We have to choose whether to solve for *i* or *v*
+    - Since we have 2 unknown voltages, and 3 unknown currents which means our equations will have only 2 voltage terms instead of 3 current terms, and thus be simpler.
+        - So we choose *v*
+- **Step 3: Write Independent Equations**
+- We have two unknown voltages to solve for, so we need two independent equations.
+- We choose the following 2 equations:
+    1. KCL at node b
+        - we chose this bc its interesting and has lots of connections
+    2. KVL around the left-most mesh
+        - we chose this bc it involves all the other elements not involved in node b
+    - Another consideration:
+        - We need to make sure, also, that each element has participated in this equation.  
+![circuit analysis](/resources/images/electronics/dc-app-3.svg)
+- **KVL in Leftmost Mesh**
+    - We start in the leftmost corner and go around clockwise adding up voltages (which we know must = 0)
+    - ```- + v_s - v_1 - v_2 = 0 ```
+    - We know ```- v_s = 140 V``` 
+    - So ```- + 140 - v_1 - v_2 = 0 ```
+- **KCL at Node b**
+    - KCL says the current flowing into the node must be the same as the current flowing out of the node
+    - ```- i_s + i_1 = i_2 + i_3 ```
+- Now we make a substitution using Ohm's Law:
+    - ```- i_s + i_1 = i_2 + i_3 ``` goes to:
+    - ```- 18 + \frac{v_1}{20} = \frac{v_2}{6} + \frac{v_2}{5} ```
+    - And this can be simplified to:
+        - **Equation 1**: ```- \frac{1}{20} v_1 - \left(1/6+1/5\right) v_2 = -18 ```
+    - And we already had this from KVL:
+        - **Equation 2**: ```- v_1 + v_2 = 140 ```
+- **Step 4**: Solve the System of Equations
+    - It's pretty simple
+    - in this case, we get the voltages, ```- v_1 ``` and ```- v_2 ```    
+- **Step 5**: Solve for the other unknowns
+    - We solve for the i's by plugging in Ohm's Law
+
+### Node Voltage Method
+- [Continue here](https://www.khanacademy.org/science/electrical-engineering/ee-circuit-analysis-topic/ee-dc-circuit-analysis/v/ee-node-voltage-method-steps-1-to-4)
+
+
 
 
 

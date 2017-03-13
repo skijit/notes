@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 19.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="252px" height="216px" viewBox="0 0 252 216" style="enable-background:new 0 0 252 216;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:none;stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st1{fill:none;stroke:#000000;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st2{fill:none;stroke:#000000;stroke-linecap:round;stroke-miterlimit:10;}
+	.st3{fill:none;stroke:#000000;stroke-width:1.5;stroke-linecap:round;stroke-miterlimit:10;}
+	.st4{fill:none;stroke:#000000;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st5{fill:none;stroke:#000000;stroke-width:1.5;stroke-miterlimit:10;}
+	.st6{fill:none;stroke:#000000;stroke-miterlimit:10;}
+	.st7{fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:10;}
+	.st8{fill:none;stroke:#000000;stroke-width:2;stroke-linecap:round;stroke-miterlimit:10;}
+	.st9{fill:none;stroke:#000000;stroke-linecap:round;stroke-linejoin:round;}
+	.st10{fill:none;}
+	.st11{stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st12{fill:none;stroke:#000000;stroke-width:1.5;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st13{fill:none;stroke:#000000;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st14{clip-path:url(#SVGID_2_);fill:none;stroke:#000000;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st15{clip-path:url(#SVGID_2_);fill:none;stroke:#ADADEB;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st16{clip-path:url(#SVGID_2_);}
+	.st17{stroke:#000000;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st18{stroke:#000000;stroke-width:3;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st19{fill:none;stroke:#000000;stroke-linejoin:round;}
+	.st20{fill:none;stroke:#E07D10;stroke-width:2;stroke-linecap:round;stroke-miterlimit:10;}
+	.st21{fill:#E07D10;}
+	.st22{fill:#11ACCD;}
+	.st23{fill:none;stroke:#11ACCD;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+	.st24{font-family:'KaTeX_Main-Italic';}
+	.st25{font-size:18px;}
+	.st26{letter-spacing:1;}
+	.st27{font-family:'KaTeX_Main-Regular';}
+	.st28{font-size:21px;}
+	.st29{fill:#66AFE9;}
+	.st30{fill:none;stroke:#66AFE9;stroke-miterlimit:10;}
+</style>
+<text transform="matrix(1 0 0 1 131.75 60.0002)" class="st22 st24 st25 st26">i</text>
+<text transform="matrix(0.583 0 0 0.583 138.626 65.9944)" class="st22 st27 st25">1</text>
+<text transform="matrix(1 0 0 1 132 156.0002)" class="st22 st24 st25 st26">i</text>
+<text transform="matrix(0.583 0 0 0.583 138.876 161.9943)" class="st22 st27 st25">2</text>
+<g>
+	<g>
+		<line class="st23" x1="125.8" y1="42" x2="125.8" y2="64.8"/>
+		<g>
+			<path class="st22" d="M125.8,72c-1.3-3.4-3.4-7.6-5.7-10.3l5.7,2.1l5.7-2.1C129.2,64.4,127,68.6,125.8,72z"/>
+		</g>
+	</g>
+</g>
+<g>
+	<g>
+		<line class="st23" x1="125.8" y1="144" x2="125.8" y2="166.8"/>
+		<g>
+			<path class="st22" d="M125.8,174c-1.3-3.4-3.4-7.6-5.7-10.3l5.7,2.1l5.7-2.1C129.2,166.4,127,170.6,125.8,174z"/>
+		</g>
+	</g>
+</g>
+<text transform="matrix(1 0 0 1 132 95.9999)" class="st22 st24 st25 st26">i</text>
+<text transform="matrix(0.583 0 0 0.583 138.876 101.994)" class="st22 st27 st25">L</text>
+<g>
+	<circle class="st11" cx="108" cy="204" r="1.5"/>
+	<rect x="102" y="198" class="st10" width="12" height="12"/>
+</g>
+<g>
+	<circle class="st11" cx="108" cy="108" r="1.5"/>
+	<rect x="102" y="102" class="st10" width="12" height="12"/>
+</g>
+<g>
+	<line class="st0" x1="108" y1="132.6" x2="108" y2="114"/>
+	<polyline class="st4" points="108,179.4 99,175.5 117,167.7 99,159.9 117,152.1 99,144.3 117,136.5 108,132.6 	"/>
+	<line class="st0" x1="108" y1="198" x2="108" y2="179.4"/>
+	<rect x="96" y="114" class="st10" width="24" height="84"/>
+</g>
+<g>
+	<line class="st0" x1="210" y1="132.6" x2="210" y2="114"/>
+	<polyline class="st4" points="210,179.4 201,175.5 219,167.7 201,159.9 219,152.1 201,144.3 219,136.5 210,132.6 	"/>
+	<line class="st0" x1="210" y1="198" x2="210" y2="179.4"/>
+	<polygon class="st10" points="222,114 210,114 198,114 198,198 222,198 	"/>
+</g>
+<g>
+	<line class="st0" x1="108" y1="36.6" x2="108" y2="18"/>
+	<polyline class="st4" points="108,83.4 99,79.5 117,71.7 99,63.9 117,56.1 99,48.3 117,40.5 108,36.6 	"/>
+	<line class="st0" x1="108" y1="102" x2="108" y2="83.4"/>
+	<rect x="96" y="18" class="st10" width="24" height="84"/>
+</g>
+<g>
+	<g>
+		<path class="st20" d="M48.2,174c-3.7-12.9-6.2-37.6-6.2-66c0-23.9,1.8-45.1,4.5-59"/>
+		<g>
+			<path class="st21" d="M48.2,42c0.5,3.6,1.6,8.2,3.3,11.3L46.4,50l-6,0.7C43.1,48.7,46.2,45,48.2,42z"/>
+		</g>
+	</g>
+</g>
+<text transform="matrix(1 0 0 1 33.8313 30.0001)" class="st21 st27 st28">+</text>
+<text transform="matrix(0.583 0 0 0.583 42.0002 180.9932)" class="st21 st27 st28">  </text>
+<text transform="matrix(1 0 0 1 33.8313 198.0001)" class="st21 st27 st28">−</text>
+<text transform="matrix(1 0 0 1 9.3003 108.0001)" class="st21 st24 st25">v</text>
+<text transform="matrix(0.583 0 0 0.583 17.5801 113.9942)" class="st21 st24 st25">in</text>
+<text transform="matrix(1.0107 0 0 1 159.7438 122.4)" class="st21 st27 st28">+</text>
+<text transform="matrix(0.5892 0 0 0.583 168.0001 179.7931)" class="st21 st27 st28">   </text>
+<text transform="matrix(1.0107 0 0 1 159.7438 198.0001)" class="st21 st27 st28">−</text>
+<g>
+	<g>
+		<path class="st20" d="M150,186c3.7-6.4,6.2-18.8,6.2-33c0-10.2-1.3-19.5-3.4-26.3"/>
+		<g>
+			<path class="st21" d="M150,120c2.4,2.7,6,5.8,9.1,7.4l-6.1,0.2l-4.5,4C149.7,128.4,150.1,123.6,150,120z"/>
+		</g>
+	</g>
+</g>
+<text transform="matrix(1 0 0 1 162.6196 156.0002)" class="st21 st24 st25">v</text>
+<text transform="matrix(0.583 0 0 0.583 170.8994 161.9943)" class="st21 st24 st25">out</text>
+<text transform="matrix(1 0 0 1 72.0005 66)" class="st27 st25">R1</text>
+<text transform="matrix(1 0 0 1 72.0005 156)" class="st27 st25">R2</text>
+<text transform="matrix(1 0 0 1 222 156)" class="st27 st25">RL</text>
+<line class="st6" x1="108" y1="108" x2="144" y2="108"/>
+<polyline class="st6" points="60,12 108,12 108,18 "/>
+<line class="st6" x1="60" y1="204" x2="144" y2="204"/>
+<line class="st6" x1="108" y1="102" x2="108" y2="114"/>
+<g>
+	<circle class="st6" cx="147" cy="108" r="3"/>
+	<rect x="144" y="102" class="st10" width="6" height="12"/>
+</g>
+<g>
+	<circle class="st6" cx="147" cy="204" r="3"/>
+	<rect x="144" y="198" class="st10" width="6" height="12"/>
+</g>
+<g>
+	<circle class="st6" cx="57" cy="204" r="3"/>
+	<rect x="54" y="198" class="st10" width="6" height="12"/>
+</g>
+<g>
+	<circle class="st6" cx="57" cy="12" r="3"/>
+	<rect x="54" y="6" class="st10" width="6" height="12"/>
+</g>
+<line class="st6" x1="108" y1="198" x2="108" y2="204"/>
+<g>
+	<g>
+		<line class="st23" x1="120" y1="108" x2="130.8" y2="108"/>
+		<g>
+			<path class="st22" d="M138,108c-3.4,1.3-7.6,3.4-10.3,5.7l2.1-5.7l-2.1-5.7C130.4,104.6,134.6,106.7,138,108z"/>
+		</g>
+	</g>
+</g>
+<polyline class="st6" points="210,114 210,108 150,108 "/>
+<polyline class="st6" points="150,204 210,204 210,198 "/>
+</svg>

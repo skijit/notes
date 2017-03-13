@@ -306,3 +306,11 @@ Misc (Old) Live Notes
 	- some people advise putting these into the master track or individual tracks	
 
 
+## operator 
+- you can use fixed oscillator setting to set the multi to 0.01 and get an extra lfo effectively
+- ocarina preset is interesting for physical modelling
+- tone setting really can add a lot of content depending on the patch
+- having a random waveform also good for adding some character to phsical modelling
+- the filter is important for getting out of pure FM-land.  the waveshaper tool on the filter is interesting.
+- another good physical modelling idea is to add a very slight pitch envelope
+- to get an autofilter-like effect, you can set any of the envelopes (like filter) to repeat on beat

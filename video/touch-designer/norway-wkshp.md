@@ -211,6 +211,384 @@ Norway Wkshp Notes
         - this also will recreate tangents... if you know what those are... 
 - `Group` SOP is a filter that will let you define a subgroup of points in a geometry.
     - Once you given a group a name, you can take other filter SOP's to target just that group.  EG the `Transform` SOP.
---Continue at 12:30
+- `Particle` SOP will animate over a 3d object's points.
+    - You control how quickly it walks across them, how long the particles live, and other parameters, like where they go
+
+## COMPS
+- `Base` Comp
+    - Creates a subnetwork
+    - You give it a name (bottom of the node) and this name will be displayed in the browser bar
+    - You can use the browser bar to navigate
+    - shortcuts (while the comp is selected): 
+        - 'i' takes you into the comp ( you can also double click or press 'enter')
+        - 'u' takes you up out of the comp
+        - zoomable ui: If you select it, you can zoom into/out of it, and it will eventually snap you in or out
+    - there's also a 'root' button next to the browser bar.
+        - this will show you the project setup with other stuff
+- Use the `In` and `Out` TOP/CHOP/etc for inlets and outlets
+- in the Pane controls, you can create multiple workspaces and then work at different levels
+- You can retroactively create a comp by multiselecting and context-clicking on 'collapse'
+- You can save a component as a separate .tox file
+    - Typically this is how you send examples for the forums, etc.
+    - You can also drag/drop a tox file into the network editor
+    - You can specify that a component always loads from a separate tox file (like if you get it from github)
+        - It will only reload if you re-init the network
+- There are bunch of different types of Comps:
+    - 3d objects
+    - Panels
+    - Other
+- Panel COMP types helps you create user interface controls
+    - Button, Slider, etc.
+- Buttons have different modes including *momentary* and *toggle*
+- Components have inputs on top and bottom: this is for parenting/hierarchy
+- `Container` COMP 
+    - good for creating a UI panel which aggregates controls
+    - There are 2 ways to connect individual CHOP controls to a `container` CHOP:
+    - Using the hiearchy (top/bottom outlets):
+        - connect it's bottom to the tops of some UI COMP's (button, slider, etc.)
+        - You might need to change the individual control elements Layout properties in it's parameter window
+        - You will right click onthe Container and press view.  Then it will open it up in a floating window which you can interact with.
+    - Embed controls inside the container
+        - You can put all your components inside a container
+        - You might want to `merge` the values and the send them to the `out` of the COMP
+- There are some other 3d components which are needed to render a scene:
+    - `geometry`, `light`, `camera`, etc.
+    - these would automatically connect to a `render` TOP
+
+## CHOPS
+- Uses of CHOPS
+    - Getting Data from Devices
+        - MIDI
+        - keyboard
+        - kinect
+        - Leap
+        - DMX
+        - serial
+        - etc.
+    - Controlling Devices
+        - serial
+        - OSC
+        - MIDI
+        - DMX
+        - Laser
+        - etc.
+    - Time based Animation of Geometries
+        - Smoothing noisy signals
+        - normalizing data
+        - processing motion
+        - controlling movie-playback
+        - control image effects and 3d shapes
+        - Timing events, state machines, counting
+        - procedural animation of geometric shapes
+            - lfo
+            - loops
+            - beats
+    - audio
+        - mixing and effects
+        - files and live audio streams
+    - avoiding doing things with python or C++
+- [Channel](https://www.derivative.ca/wiki088/index.php?title=Channel): aka samples.  
+    - Like a signal, it's a sequence of numbers that can represent motion, control signals, MIDI, audio, color maps, rolloff curves or lookup tables.
+    - A CHOP outputs one or more channels
+    - The group of one or more channels created by a CHOP is called a Clip. 
+    - A clip is what a CHOP outputs.
+- Each channel is one array of raw samples, which is simply a list of numbers.
+- Each channel of a CHOP has a channel name that can be set by the user.
+- Channels can also be exported to a parameter of any operator, overriding that parameter's value.
+- CHOP data flows at the frame rate
+- A CHOP contains:
+    - Set of channels
+        - The various sequences of data (aka samples)
+    - Control Parameters
+        - Defines the data and data channels
+        - Usually constants, but they can be time-dependent expressions
+        - 3 parameter units:
+            1. Samples (indexes)
+            2. Frames
+            3. Seconds
+        - Each sample number (0 indexed) corresponds to a frame number (based on fps setting) and a moment in time
+        - You select the units in the parameter menu to the right of the parameter value
+    - Sample Rate
+        - This is used if the CHOP contains time-dependent motion or audio data
+    - Various on/off flags (displayed in the upper-left corner of the object)
+        - Display flag: marks the CHOP to be displayed in the CHOP viewer
+        - Export flag: toggles channel exports on / off
+        - Lock flag
+        - ByPass flag
+    - Start/End Interval
+        - Offset indices for start and end- shared by all channels in a CHOP
+- [Sample vs Frames](https://www.derivative.ca/wiki088/index.php?title=CHOP)
+    - Frame refers to the timeline, which is expressed in time (sec) and/or frames
+    - Time_Sec = (Frame-1)/FPS
+    - Sample index may have no relation to time or frame
+        - E.G. when a CHOP is used as a lookup table
+    - When the samples are time oriented, the start/end interval is determined by sample rate
+        - Sample Rate (samples/sec) can be related to FPS as Samples per Frame
+- Channel Data
+![channel info](/resources/images/programming/ChannelsInfo2.gif)
+    - The horizontal axis is called the i-axis or the sample index-axis.
+    - The vertical axis is called the v-axis or the value-axis.
+    - A sample index is a point along the i-axis,denoted by i.
+    - A value is a point along the v-axis, denoted by v.
+    - A sample is an index-value pair (i,v). i.e. the value of a channel at a certain sample index.
+    - A sample is made of a sample index and a sample value.
+    - An interval is an index range, which goes from a start index to an end index.
+    - A value range goes from a start value to an end value.
+    - The index duration is the end index minus the start index + 1.
+    - CHOP data channels are arrays of raw samples, in 32-bit floating point format, all computations are done at 64 bits, and parameters are stored as 64 bits.
+    - CHOPs can be evaluated at integer and non-integer indexes.
+    - Frame is used when the index corresponds to time.
+    - When speaking of animation frames, you can refer to start frame, end frame and frame range.
+    - a "Channel Index" is the channel number of a CHOP, 0 being the first channel.
+
+- **Example 1**:
+    - (notes are based on file: CHOPsDATS.15.toe)
+    - `Mouse In` CHOP -> `Math` CHOP with *Combine Channels* set to *Length* -> `Filter` CHOP to smooth data -> `Slope` CHOP to only record directional changes -> `Logic` CHOP to translate into 0 or 1 *(and possibly only react on larger changes?)* -> `Trigger` CHOP to create an envelope -> `Null` CHOP to export data to two `Cross` TOPs -> `CHOPTo` *(not sure what this is for)*
+    - In making sense of these operators, don't hesitate to find their corresponding operator snippet from **Help->Operator Snippets**
+    - `Math` [CHOP](http://www.derivative.ca/wiki088/index.php?title=Math_CHOP):
+        - Lets you operate on multiple channels from a CHOP (combining them in some fashion), or multiple channels from multiple CHOPS
+        - You have slots pre and post channel/CHOP combining to let you manipulate the data
+        - You can also do range scaling very easily (has a dedicated page)
+        - This example combines the channels using the *Length* method, which treats each channel combination as a vector, which it then uses to calculate the distance. 
+    - `Filter` [CHOP](http://www.derivative.ca/wiki088/index.php?title=Filter_CHOP):
+        - The Filter CHOP smooths or sharpens the input channels. 
+        - It filters by combining each sample and a range of its neighbor samples (determined by Filter Width parameter) to set the new value of that sample.
+        - There are a bunch of filter types, and each one prescribes a weighting factors for the various neighbors.
+        - It can operate on motion and, theoretically, sound but there are other CHOP's that are better for sound (e.g. bandpass, parameteric filter, etc.)  
+    - `Slope` [CHOP](http://www.derivative.ca/wiki088/index.php?title=Slope_CHOP):
+        - The slope is the first derivative of the channel curve. 
+        - The second and third derivatives can also be calculated
+        - Often used in combination with a `Speed` CHOP such that you calculate the slope of some object's motion, do some addtional processing on it, then use the `Speed` CHOP to calculate the new position.  
+            - When you do this, you probably need to capture the original position in a `Constant` CHOP and then feed this into your calculation, as an offset.
+    - `Speed` [CHOP](http://www.derivative.ca/wiki088/index.php?title=Speed_CHOP): 
+        - You feed it a value to increment by, which it interprets as a distance per second.  Then it updates current value by that amount / FPS.
+    - `Logic` [CHOP](http://www.derivative.ca/wiki088/index.php?title=Logic_CHOP):
+        - The Logic CHOP first converts channels of all its input CHOPs into binary (0 = off, 1 = on) channels and then combines the channels using a variety of logic operations.
+        - *Convert Input* parameter determines the method of converting input to binary.   
+            - *Off When Zero*: Returns a logical 0 when channel value is zero;  Non zero values return 1.
+            - *Off When Zero or Less*: Returns a logical 0 when a channel value is zero or less; and 1 when values are positive.
+            - *Off When Outside Bounds*: Returns 0 when channel value is outside the bounds set by the Bounds parameter.
+            - *On When Value Changed*: Returns 1 when the channel value changes.
+            - *On When Channel Name Changed*: Returns 1 when the channel name changes.
+        - *Bounds* Parameter: sets upper and lower bounds when *Convert Input* setting is *Off When Outside Bounds*
+    - `Trigger` [CHOP](http://www.derivative.ca/wiki088/index.php?title=Trigger_CHOP)
+        - The Trigger CHOP starts an audio-style attack/decay/sustain/release (ADSR) envelope to all trigger pulses in the input channels.
+        - A trigger point occurs whenever the first input's channel increases across the trigger threshold value.
+            - In this case, we were saying the threshold is 0
+        - Outputs a value between 0 and 1
+        - The envelope consists of six major sections: delay, attack, peak, decay, sustain and release.
+    - `Cross` [CHOP](http://www.derivative.ca/wiki088/index.php?title=Cross_CHOP)
+        - The Cross CHOP is a multi input OP that blends between 2 inputs at a time
+            - A value of 0 will select the first input, 1 will select the second input, 2 will select the third and so on
+            - Using in between values will blend the 2 closest inputs
+        - This is similar to a `Switch` CHOP however the Cross CHOP allows for interpolation between the inputs.
+    - `CHOP to TOP` [link](http://www.derivative.ca/wiki088/index.php?title=CHOP_to_TOP):
+        - Converts CHOP channel data into an image.
+        - The dimensions of the image are dependent on the specified parameter values.  In this case, the size if 1x1, but it only looks like this if you set it to *Native Resolution*
+        - Refers to the correspondin CHOP by reference, not by a typical network connection.
+    - `Composite` [TOP](http://www.derivative.ca/wiki088/index.php?title=Composite_TOP)
+        - This is like `jit.op`: you specify the operation on how to combine the images.
+        - The parameter *Fixed Layer* defines which of the (possibly multiple) inputs is fixed.
+            - There can be only one fixed layer.
+            - All the other inputs are overlays.
+            - You can define how you want to fit your overlay over the fixed layer with the parameter *Pre-fit Overlay*
+    - `Trail` CHOP: lets you graph channels over time
+- When you center-click on a CHOP, it will show you the start/end range in frames, samples, and seconds
+    - Typically the length is a fraction of a second, but in the case of `Trail` it defaults to around 4sec
+    - It will also tell you the sample rate (default = global FPS)
+- The frame number is relative to the timeline at the bottom, which will loop/reset after the specified number of frames
+- `Noise` CHOP
+    - This can be used as an audio CHOP- and it begins to demonstrate how the FPS and audio rate differ
+    - Sample range defaults to 10sec or 600 frames
+    - You can change the start/end range from the *Channel* parameter page:
+        - Sample rate parameter defaults to an expression pointing to the FPS
+    - When you *activate* the CHOP, you can right-click and view it differently:
+        - You can view each sample (Dots per Sample)
+        - You can use your middle mouse button to zoom around it and change the scaling.
+    - Noise pattern is deterministic, based on the seed.  
+        - So, you can recreate the same noise if you give it the same noise.
+        - Alternately, you could set it via some expression, and it will be more random.
+- `Audio File In` CHOP
+    - Setting the *Lock* flag will freeze your data so you don't see it constantly scrolling around.
+    - The start/end range will be relative to the timeline, as always.
+    - Even though the SR will be 44.1kHz, your audio range may span multiple Frames (whose rate is of course, much slower)
+    - You can downsample the audio, depending on what you want to do with it, with the `Resample` CHOP
+        - Seems to have a lowpass filtering effect
+- `Lookup` CHOP seems good for wavetable stuff
+- CHOPS and Container Components
+    - Even though you might not have any controls, you can have a bunch of generators, and then merge them together as a single output
+- `Keyboard In` CHOP lets you capture triggers from different keyboard buttons (ie QWERTY)
+- `Fan` CHOP lets you combine multiple logical channels into a single integer.
+    - You can *Fan In* which will combine multiple channels to one, or *Fan Out* which will expand the single to multichannel
+    - Non-destructive:  I guess that's the difference between it and `Math` 
+
+## Intro to DATs
+- DAT's are Good For: 
+    - Text
+    - tables
+    - GLSL
+    - JSON
+    - XML
+    - Python Scripts
+    - You can send this to a `Text` TOP to generate an image of the text
+    - Getting / Sending messages to Devices
+        - They come in as text strings
+        - MIDI, OSC, serial, etc.
+    - Protocols from other software
+        - TCP/IP, OSC, WebSockets, http
+    - Defines and runs the TD interface!
+        - To see how each piece works, hover over it and press F10
+    - Give you information about your machine
+        - `Monitors` DAT lets you see what monitors are currently connected
+- `Text` Dat: where you can just add some text.  
+- Certain nodes, like a `Ramp` TOP will have a little button in the bottom right corner which indicates its hiding an associated DAT
+    - Click to see/edit the underlying data
+    - This is called 'Docking to...' and you can do this for any DAT.
+        - Just right-click on the DAT 'Dock To...' and drag it to the associated node
+- `Web` DAT will let you capture the response to an HTTP call
+- MAT shaders often have associated DAT's driving them.
+- `Select` DAT will let us parse and chop up `Table` DATs
+- `Evaluate` DAT lets you run small chunks of python expressions
+- `Merge` DAT will let you overlay/concat/interleave 2 different DATs together
+- `Sort` DAT will let you sort the data in a `Table` DAT
+- You can convert the data in SOPs into a DAT and manipulate it
+
+## Example Audio Visualization
+- Starts with a `Particle` SOP, but it needs an input Geometry in its first inlet, so a `Circle` SOP is connected to it.
+    - You can choose to render as lines or points
+- The point system's direction and force is based on the input geometry's normals.
+- In this case the normals move perpandicular along the z-axis (towards the camera), but the dev wants the points to go outwards.
+    - so the first question is how to manipulate the normals
+- He uses a `SOPTo` CHOP to import the geometry into a CHOP.
+    - There are 3 channels, *tx*, *ty*, and *tz*
+- Then he uses a `NULL` CHOP to export these channels into back into a `CHOPTo` SOP
+    - The paramters for this object have the important manipulation.
+    - He specifies the channels he wants to import with the *Channel Scope* parameter, whose default is rightly set to *tx ty tz*.
+    - The *Attribute Scope* parameter lets you specify what you want to bind these channels to.
+        - The default value is *P(0) P(1) P(2)* implying that Point Position 0 => tx, Point Position 1 => ty, etc.
+        - We could probably have replaced the *P(0) P(1) P(2)* with just a *P* (based on the drop down menu)
+        - He then adds the *N* value to the end, which specifies *Point Normal X, Y, Z*
+        - The menu is additive, so the final value is *P(0) P(1) P(2) N*
+- You can apply other forces (e.g. wind, turbulence) to the particle system, but the initial force is based on the normals
+- When you're done, you need 4 different render objects:
+    - `Geometry` COMP 
+        - Sets the render flag for the associated SOP, so that it knows it should be rendered by `Render` TOP
+        - It does more, but a little confusing
+    - `Camera` COMP
+    - `Light` COMP
+    - `Render` TOP
+        - Rendering down the 3D into 2D
+        - Will have an automatic association with `Geometry`, `Camera`, and `Light`
+        - Click the *Display* Flag and you can see it in the background
+        - If you connect your `Render` to a `Transform` TOP, you can set the background to a particular color
+- You might want to add a MAT to make the particles interact with the light better
+    - He uses the `Constant` MAT which gives a flat shaded view to each particle
+        - For that reason, he figures he can remove the `Light` component
+    - The `Constant` MAT is connected by reference to the `Geometry` COMP's *Material* parameter
+- Right clicking on the `Particle` SOP, you can see the various point attributes that are used.
+    - You'll see there is an array named *life[2]*
+    - With a little inspecting, you can find two different life-related parameters in the SOP, Life Variance and Age
+    - Now you import the `Particle` SOP into a CHOP with a `ToCHOP` SOP
+        - *Attribute Scope* (i.e. the name of the attribute) should be set to *life*
+        - then you want to change the *Rename Scope* parameter to *age* and *lifetime*, this unpacks the two attributes from the array and gives them useful channel names
+- `Pattern` CHOP makes it easy to create waveforms, curves, etc.
+    - you can specify cycles, phase, range, etc.
+    - for animation, it's nice to use curves rather than linear changes
+    - use the parameters, Channel, tab to change the name of the channel that is output
+    - You can use a `Lookup` CHOP to map the input value to a value in the `Pattern`
+        - 1st inlet: the input value
+        - 2nd inlet: the `Pattern`
+- Optimization Tip:
+    - A lot of objects don't need to cook more than once.
+        - You can tell if an object is cooking because it's outlet wires will be animated
+    - But if they have an object feeding them that is cooking all the time, then they will be forced to recook as well.
+    - So it's best to place the static, unchanging things, early in your network so they don't need to recook unnecessarily.
+- `Audio Device Out` CHOP is how you can output audio data
+- `Resample` chop can let you get audio data into a rate that is usable by the frame rate
+    - Turn off TimeSlicing when you use it.  (you almost always do that)
+    - This is fairly complicated... need to read the wiki on this one.
+- He matched each sample in an audio frame matching each point in the circle
+- `Shuffle` CHOP lets you rearrange your samples in a buffer
+- `Cache` TOP lets you add in a delay
+- `Cache Select` TOP lets you assign a `Cache` as a parameter, and then you can can select (so it uses no GPU)
+    - You can create multiple instances of it
+- `Reorder` TOP 
+    - Usually connected from a `Cache Select`
+    - Lets you assign different inputs / Channels to an RGB 
+- Set display flag for last part of your node
+
+## Example Movie Player App
+- Its an app with a UI that has clickable thumbnail buttons for each movie.  When you click the button, it shows the movie.  It pulls the movies out of a movie folder on the file system.
+    - Good for a kiosk or installation
+- Creates a container component, called 'movielib', because it's going to have a UI
+    - sets the *height* and *width* parameters to the appropriate pixel size
+- Uses the `Folder` DAT to point at a folder in the filesystem and with the parameters, you can filter what you want to see (e.g. by filetype, properties, etc.)
+- There will be a master button, stored in a second `Container` comp that he wants to clone for each instance of a movie in the `Folder`
+    - sets the width on the `Container` to the resolution of the movies (they should all be the same)
+    - clones with the `Replicator` COMP
+        - an associated DAT opens with it- just ignore that
+        - Parameter *Template DAT from Table* should refer to the `Folder` DAT
+        - Parameter *Master Operator* should refer to the new `Container` COMP
+    - Then go into the `Container` COMP which we want to use as a template, and set *Clone Master* parameter to the name of itself (e.g. Container1)
+- Then inside the second `Container` (the template): he wants each Container to be able to select out a single row from the `Folder` DAT
+    - He uses a `Select` COMP which refers to the movielist `Folder` DAT.
+    - For the *start index* and *end index* parameters, he uses some Python to get the number appended to the end of the container (which is one): 
+    ```(python) 
+    parent().digits ```
+- To connect a `Movie File In` TOP to the `Select` Comp, change the `Movie File In` *file* parameter to 
+```(python) 
+op("movie")[1,1]```
+- Or you could (even better) reference it by the column name with : 
+```(python) 
+op("movie")[1,"path"]```
+- Next step is to display the movie in the background of each button
+    - Connect the `Movie File In` to a new `Container` COMP and rename it to 'Thumbnail'
+    - set the `Container` comp to the same size as the others
+    - The reason we keep setting every `Container` to the same size is just to get the aspect ratio the same (and this is an easy way).  Later on we can scale everything down appropriately.
+    - In the `Container`, set the *TOP background* parameter to *.out1*.  This will refer to the autocreated outlet node in the container called 'out1'.
+        - There are a couple other ways to do this too...
+- If you start to run out of resources, due to big movies or too many of them, you can change the *Play* parameters on the various `Movie File In` TOPS
+- If you zoom out to the outermost `Container`, you'll see only one movie.  Go to the Layout section of parameters and set *Align* to 'Layout Grid Rows'.
+- To hide the Template `Container` from the     being displayed in the parent `Container`, go to its Panel -> *Display* parameter and set it to 'Off'
+    - Only problem is that the cloned `Containers` will also be hidden.
+    - So go to the `Replicator`'s associated DAT and change the Python script so that all the clones will be displayed.
+    - This is such a regular occurence, that the code is already there, just commented out.  Uncomment and you're in business.
+- Also a good idea to trigger the Pulse button pressed on each `Movie File In` node to load up the next frame in the each movie.
+    - Put this in the `Replicator` callback: 
+    ```(python) 
+    c.op("./moviefilein1").par.cuepulse.pulse();
+    ```
+    - Or you could set the *Cue Point* parameter to something like frame 100 (since most movies fade in from black)
+- How do you get the thumbnails to play when you hover over them?
+    - Remember that the `Container` (called *thumbnail*) is connected into from `Movie File In`
+    - *thumbnail* has a *rollover* property
+    - Each `MovieFileIn` has a *play* parameter
+    - Set *play* to 
+    ```(python) 
+    op("thumbnail").panel.rollover ```
+    - *Panel* is a type of COMP- if you check the COMP menu, you'll see a variety of them (including `Container`)
+        - All Panels have a Panel member, where you can access fields like *rollover*
+    - Don't forget to click the Python help button in the parameter window
+- Now for a bigger viewer, which displays what is selected 
+    - Create a new `Movie File In` called *movieselected* at the level of the template (not in one of the cloned `Container`'s)
+    - There are a bunch of DAT's which respond to events or when something gets executed
+    - in a cloned `Container`, select `Panel Execute`
+        - In the *Panel* property, set it to the *thumbnail* `Container`
+        - For the *Panel Value*, choose 'select'
+        - Select 'Off To On' and customize the corresponding callbacks
+        ```(python) 
+        op("../movieselected").par.file = op("movie")[1, "path"]  # we used this path snippet before in the cloned container.
+        op("../movieselected").par.cuepulse.pulse()
+        return
+        ```
+    - Connect the *movieselected* `Movie File In` to an `Out` TOP (at 18:41)
+    - Then go to the project level (up one level) and connect the *movielib* container to a new `Container` CHOP, and rename it to *viewer*
+        - set the dimensions to 1280x720
+        - set the parameter *Background TOP* to "./out1" 
+- **Remember to use tabs with your python!**            
+
+
+
+
 
 
