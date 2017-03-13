@@ -1,4 +1,4 @@
-Gettings Started With Touch Designer
+Getting Started With Touch Designer
 ======================
 
 - Per [Matthew Ragan's page](https://matthewragan.com/teaching-resources/touchdesigner/):
