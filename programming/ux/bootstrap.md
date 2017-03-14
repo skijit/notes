@@ -59,6 +59,26 @@ BootStrap-Related Utilities and Notes
     - .visible-print-inline
     - .visible-print-inline-block
     - .hidden-print
+- **GOTCHAS**
+    - For column size (e.g. col-md-1, etc.)
+        - Column settings are inherited by larger width unless otherwise specified 
+        > Grid classes apply to devices with screen widths greater than or equal to the breakpoint sizes, and override grid classes targeted at smaller devices. Therefore, e.g. applying any .col-md-* class to an element will not only affect its styling on medium devices but also on large devices if a .col-lg-* class is not present.
+    - For visible/hidden toggle classes (e.g. visible-xs, hidden-m, etc. )
+        - No inheritance: setting applies to only that setting
+        - See [this table](http://getbootstrap.com/css/#responsive-utilities-classes) for clarification
+        - You can get de facto inheritance by using the opposite hide/show class.
+            - To toggle two block's visibility at the md-sm breakpoint:
+            - Block to show when big: `hidden-sm hidden-xs`
+            - Block to show when small: `hidden-lg hidden-md`
+- You can use the less mixins to set a non-integral column size
+    ```(less)
+    #sidebar {
+    .make-lg-column(1.5);
+    }
+
+    #main {
+    .make-lg-column(10.5);
+    }```
 - You can use a bunch of gradient mixins, inside the #gradient namespace
 ```(less)
 #gradient > .vertical(#333; #000);

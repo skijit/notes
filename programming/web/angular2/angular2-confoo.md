@@ -98,6 +98,7 @@ function receivePerson(myPerson:IPerson) {
 - `ng g component <feature-name> --flat`
     - `flat`: do it in the current folder
     - don't forget you can use the integrated terminal (`ctrl-~`)
+    - to navigate to a different file that is in your project use `ctrl-p` and then start typing the file name
     - creates *.spec.ts for tests
     - updates your app.module.ts
 - using @Input and @Output
