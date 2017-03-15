@@ -3,7 +3,7 @@ ASP.NET Core
 - [Notes from Microsoft Virtual Academy](https://mva.microsoft.com/en-US/training-courses/introduction-to-asp-net-core-1-0-16841?l=JWZaodE6C_5706218965)
 - [Intermediate level series here](https://mva.microsoft.com/en-US/training-courses/intermediate-asp-net-core-1-0-16964)
 
-## 1 - Basic Tooling and Project Structure
+## Basic Tooling and Project Structure
 - download from [dot.net](dot.net)
 - `dotnet` is the .net CLI
 - to create a new application: `dotnet new`
@@ -53,7 +53,7 @@ ASP.NET Core
     - Follow instructions for installation- essentially means making a change to project.json.
     - to run, use `dotnet watch run` - basically, it's watching the run task
 
-## 2 - ASP.NET Core and Middleware
+## ASP.NET Core and Middleware
 - From Visual Studio: File -> New -> Projects -> ASP.Net Core Web Application
     - Options:
         - Empty
@@ -138,7 +138,7 @@ ASP.NET Core
     - `dotnet pack` to package as a nuget from the CLI
 - versions in your project.json are by default set to 1.0.0
 
-## 3 - Routing
+## Routing
 - Add a nuget reference to routing middleware: *Microsoft.AspNetCore.Routing*
 ```(csharp)
 //Inside Startup class (Startup.cs)
@@ -172,7 +172,7 @@ public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerF
 }
 ```
 
-## 4 - MVC
+## MVC
 - In the context of .net core, AspNet is another piece of middleware (because it's part of the pipeline)
     - However, it does sit on top of a lot of other middleware
     - It includes routing
@@ -248,5 +248,190 @@ public async Task<IActionResult> Index()
 
 
 
+## Tag Helpers
+```
+<a asp-action="Create">Create New</a>
+<a asp-action="Edit" asp-route-id="@item.ID">Edit</a>
+```
+- Builds the anchor link based on your defined routes
+- prefixed with `asp-`
+- includes:
+    - action
+    - controller
+    - fragment
+    - host
+- forward only: they only affect rendering of that particular tag
+- a little more declarative than the usual Html helpers
+- add `@addTagHelper *, Microsoft.AspNet.Mvc.TagHelpers' to the _ViewImports.cshtml at the root of the Views folder
+    - Since we don't have a web.config anymore
+    - You can also add a bunch of @using declarations for assemblies you want to include in your razor files
+- there are also some unique server side tages:
+    - `cache` : output caching everything inside the tag
+        - ```<cache expires-after="@TimeSpan.FromSeconds(10)">@DateTime.Now.ToLocalTime()</cache>```
+    - `distributed-cache`
+    - `<environment names="Development,Staging">  show this only in production </environment>`
+- You can make your own tag helpers
+    - you just have to inherit from the `TagHelper` base and then override `ProcessAsync()`
+- There are some useful open source tag helpers available via NuGet
+    - One for Markdown
+    - Stuff for Bootstrap
+    - A lot of vendors are making their own
+    - They can interact with Javascript too
 
+## Authentication
+- Skipped this video for now
 
+## Dependency Injection
+- Add dependencies as constructor parameters
+    - Based on a mapping
+    - Often uses an Interface or base-class
+- Object Lifetimes:
+    - Singletons: only one
+    - Scope: lifetime is based on the http instance
+        - DB connections
+    - Transient: new one each time you ask for one
+- Example service configuration (in Startup.cs):
+```(csharp)
+public void ConfigureServices(IServiceCollection services)
+{
+    //these will be available throughout the framework
+    services.AddMvc();
+    services.AddSingleton<MyInterfaceType, MyConcreteClassType>();
+    services.AddScoped<MyInterfaceType, MyConcreteClassType>();
+
+}
+```
+- Note that you need to configure all the dependencies for each top-level registartion (since they have their own tree of dependencies)
+- To inject into a view:
+```
+@inject MyInjectedInterfaceType myInst
+
+@myInst
+```
+
+## APIS and MVC Core
+- A controller is a controller
+    - Doesn't matter whether it's for serving html or a web api
+    - Doesn't even have to inherit from a base controller class
+- In ConfigureServices()
+    - Typically we call 'services.AddMvc();'
+    - Another option is `services.AddMvcCore();'
+        - This is just the MVC essentials.  No Razor, etc.
+        - Faster, but more unlikely to be used.
+        - WOuld be useful for a microcontroller.  
+        - Basically just has controller and routers
+- Routing can be centralized, or you can do attribute routing against the Controllers
+```(csharp)
+//somewhere in the Statup.cs Configure()...
+app.UseMvc(routes => {
+    routes.MapRoute(name:"default", template:"{controller=Products}/{action=Get}/{id?}");
+})
+
+//this routing template (decorating the controller level) will work with a url like /api/products
+//so /api/products/get will work
+//more importantly, /api/products will work if the Http verb is GET!
+[Route("/api/[controller]")]
+public class ProductsController 
+{
+    [HttpGet]
+    public string Get() => "Hello World";
+}
+```
+- The Json formatter is autoincluded with `services.AddMvc()`
+    - You can view this by drilling down into the Reference `Microsoft.AspNetCore.Mvc`
+```(csharp)
+//THIS WILL RETURN JSON BY DEFAULT- NOTICE NO DIRECT CASTING TO Json()
+//THIS IS DRIVEN BY THE FORMATTER, WHICH HAPPENS TO BE SET TO JSON
+
+[Route("/api/[controller]")]
+public class ProductsController : ControllerBase 
+{
+    private IEnumerable<Product> _products; 
+
+    [HttpGet]
+    public IEnumerable<Product> Get() 
+    {
+        //normal code here...
+        
+        return _products;
+    }
+}
+```
+- To change the formatting, just go into project.json and change or remove the *Microsoft.AspNetCore.Mvc.Formatters.Json* (default) or *Microsoft.AspNetCore.Mvc.Formatters.Xml*.
+- If you use `services.AddMvcCore()`, you can just `services.AddMvcCore().AddJsonFormatters();` or `services.AddMvcCore().AddXmlDataContractSerializerFormatter()`
+- With some model binding
+```(csharp)
+[Route("/api/[controller]")]
+public class ProductsController : ControllerBase 
+{
+    private IEnumerable<Product> _products; 
+
+    [HttpGet("{id}")]
+    public IActionResult Get(int id) 
+    {
+        var product = _products.SingleOrDefault(p => p.Id == id);
+
+        if (prodcut== null)
+        {
+            //also fro ControllerBase, returns status code = 404
+            return NotFound();
+        }
+        else 
+        {
+            //inherited from ControllerBase, returns status code = 200
+            return Ok(product);
+        }
+    }
+
+    //CRUD to Http Verb mapping
+    //CREATE - Post
+    //READ - Get
+    //UPDATE - Put
+    //DELETE - Delete
+
+    // suppose you're getting json back, here
+    // we need to have instructions to deserialize from json to Product
+    // 
+    public void Post([FromBody]Product product)
+    {
+        //if model-binding fails, return Http response 400
+        //we use the overload that returns the model state (as json)
+        //which lets us konw why the failure occured.
+        if (!ModelState.IsValid) {
+            return BadRequest(ModelState);
+        }
+
+        _products.Add(product);
+        //response lets you know where you can find the new item (in the Location header)
+        return CreatedAtAction(nameof(Get), new {id=product.Id}, product);
+    }
+}
+```
+- you need to specify the content type on sending json from the client if you want model binding to work
+- you also can specify the content-types that you will accept and it will use that formatter
+- If your controller produces only Json, you can use:
+```(csharp)
+[Route("/api/controller")]
+[Produces("application/json")]
+public class MyController 
+{
+    //...
+}
+```
+
+## With Angular 2
+- They like yeoman generators for building an aspnet core app
+- `npm install -g yo generator-aspnet-spa`
+- `npm install -g webpack`
+    - concatting/minifying css and javascript components
+    - client side build process
+- `yo aspnet core spa`
+    - will set up front end and back end dependencies (even nuget restores)
+- remember to set your Env variable: `ASPNETCORE_ENVIRONMENT` to Development
+- `dotnet watch run`
+- Need to investigate the angular CLI to see which is the best option
+
+## Publishing and Deployment
+- Azure web deployment is super easy
+- The usual Azure Github or Bitbucket-based deployments are also possible
+- 
