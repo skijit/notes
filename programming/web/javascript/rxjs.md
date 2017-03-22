@@ -185,6 +185,18 @@ rx.js
     - `startWith()` emits an initial value
     - `merge()` can also be used to merge two streams (use in fluent syntax or normal)
 
+## Misc Useful 
+- switchmap(): allows you to perform an action with the current value of the Observable, and map it to a new Observable. 
+    ```(typescript)
+    ngOnInit() {
+        this.route.params
+            // (+) converts string 'id' to a number
+            .switchMap((params: Params) => this.service.getHero(+params['id']))
+            .subscribe((hero: Hero) => this.hero = hero);
+        }
+    ```
+- flatmap(): See code from confoo training...
+ 
 ## TODO
 - [Review the rx list of combinator functions](https://github.com/Reactive-Extensions/RxJS/tree/master/doc#getting-started-with-rxjs)
 - [Understand the hot/cold observable differences](https://github.com/Reactive-Extensions/RxJS/blob/master/doc/gettingstarted/creating.md#cold-vs-hot-observables)
