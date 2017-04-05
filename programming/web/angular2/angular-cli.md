@@ -101,17 +101,17 @@ Angular CLI
 - **THIS DOESN'T WORK**
 
 ## Things To Do:
-    - can I do watch if I'm not doing it through serve?
-        - You can do watch through build!
-        - I could always do a serve, but harness everything to npm scripts, so that I'm also serving it through vstudio (on a different port)
-    - can I do aot and prod compilation if it wasn't ejected as such?
-    - probably want a separate bootstrap build task in npm scripts
-    - if I don't have a static entry point, how does webpack build my dependencies?
-        - HtmlWebpackPlugin is the only reference to index.html.
-        - The purpose of the webpack plugin is to automate injection of your webpack bundles into a default, templated html file which you specify (index.html).
-        - So I could possibly use a placeholder index.html file and have the npm script copy the bundles over to aspnet.  **TEST THIS**
-    - test adding static libraries to bundles (bootstrap, jquery) (**lower priority**)
-    - can I watch my less and add compilation there too?
+- can I do watch if I'm not doing it through serve?
+    - You can do watch through build!
+    - I could always do a serve, but harness everything to npm scripts, so that I'm also serving it through vstudio (on a different port)
+- can I do aot and prod compilation if it wasn't ejected as such?
+- probably want a separate bootstrap build task in npm scripts
+- if I don't have a static entry point, how does webpack build my dependencies?
+    - HtmlWebpackPlugin is the only reference to index.html.
+    - The purpose of the webpack plugin is to automate injection of your webpack bundles into a default, templated html file which you specify (index.html).
+    - So I could possibly use a placeholder index.html file and have the npm script copy the bundles over to aspnet.  **TEST THIS**
+- test adding static libraries to bundles (bootstrap, jquery) (**lower priority**)
+- can I watch my less and add compilation there too?
 
 ## Most likely usage:
 - Create a folder with two directories:
