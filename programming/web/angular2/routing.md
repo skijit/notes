@@ -62,6 +62,7 @@ Routing
         - **Remember**: 
             - only import the observable members you need!
             - use lifecycle hooks (e.g. ngOnInit() instead of the constructor b/c the hooks are called by the angular runtime at the appropriate moments... the constructor is based on object scoping which is independent of angular runtime pipeline)
+                - Using the constructor also might delay drawing to the screen.s
 - Observable method `switchMap()`:
     - Good for getting a paricular property from an object passed back.
     ```(typescript)
@@ -202,4 +203,82 @@ closePopup() {
 }```
 
 ## Route Guards
+- Guards control the routers behavior
+    - If a guard returns true, the request proceeds through the router (and then view)
+    - If a guard returns false, request is blocked at the router
+- Use cases
+    - Controlling view authorization
+    - View pre-render actions
+    - View pre-leave actions (e.g. confirm, save, etc.)
+- Typically, the guards have to execute async (returning an Observable<boolean>)
+- Guard Types
+    - `CanActivate()`: mediate navigation to a route
+    - `CanActivateChild()`: mediate navigation to a child route
+    - `CanDeactivate()`: mediate navigation away from a view
+    - `Resolve()`: data retrieval before route activation
+    - `CanLoad()`: Can load a feature module async
+- Example `CanActivate()` Auth Guard
+    - The Auth Guard is a service which will also have an authorization service (AuthService- not shown) injected into it
+    ```(typescript)
+    import { Injectable }       from '@angular/core';
+    import {
+    CanActivate, Router,
+    ActivatedRouteSnapshot,
+    RouterStateSnapshot
+    }                           from '@angular/router';
+    import { AuthService }      from './auth.service';
 
+    @Injectable()
+    export class AuthGuard implements CanActivate {
+    constructor(private authService: AuthService, private router: Router) {}
+
+    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+        let url: string = state.url;
+
+        return this.checkLogin(url);
+    }
+
+    checkLogin(url: string): boolean {
+        if (this.authService.isLoggedIn) { return true; }
+
+        // Store the attempted URL for redirecting
+        this.authService.redirectUrl = url;
+
+        // Navigate to the login page with extras
+        this.router.navigate(['/login']);
+        return false;
+    }
+    }
+    ```
+    - The routing module then references the AuthGuard
+    ```(typescript)
+    import { AuthGuard }                from '../auth-guard.service';
+
+    const adminRoutes: Routes = [
+    {
+        path: 'admin',
+        component: AdminComponent,
+        canActivate: [AuthGuard],
+        children: [
+        {
+            path: '',
+            children: [
+            { path: 'crises', component: ManageCrisesComponent },
+            { path: 'heroes', component: ManageHeroesComponent },
+            { path: '', component: AdminDashboardComponent }
+            ],
+        }
+        ]
+    }
+    ];
+
+    @NgModule({
+    imports: [
+        RouterModule.forChild(adminRoutes)
+    ],
+    exports: [
+        RouterModule
+    ]
+    })
+    export class AdminRoutingModule {}
+    ```

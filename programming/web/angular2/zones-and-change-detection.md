@@ -18,7 +18,7 @@ Angular2 Zones and Change Detection
     - `setInterval()` => `Zone.setInterval()`
     - `addEventListener()` => `Zone.addEventListener()`
     - `removeEventListener` => `Zone.removeEventListener()`
-    - `XMLHttpRequest()` => `Zone.XMLHttpRequest()'
+    - `XMLHttpRequest()` => `Zone.XMLHttpRequest()`
 - each async operation gets its own zone, forked off the parent zone, which allows it track the async operation and then aggregate the results back up to the top.
 
 
@@ -69,4 +69,21 @@ Angular2 Zones and Change Detection
                 });
             }```
         
+### Other Best Practices
+
+- Angular Component Classes don't have a has-a relationship
+    - the has-a relationship is managed by the template
+    - Inheritance for component classes: you get the class code, but nothing in the component's decorator (template, selector, etc.)
+- services & observables: address communication problems
+- immutables address performance problems relating to change detection (and rendering) 
+    - allocation vs rendering: rendering is more expensive
+- Smart vs Dumb Components
+    - Dumb component: keep logic out, so you can set change detection to onPush and all it does is render when it gets new references to it's input properties
+    - Subscriptions to svcs will happen in the smart component
+    - Dumb components should just have inputs and outputs
+    - have lots of dumb components
+- onpush strategy gotcha: 
+    - dom event inside it will also cause re-rendering, doesn't just require reference change to an input property
+- NgOnInit vs Constructor
+    - 
 

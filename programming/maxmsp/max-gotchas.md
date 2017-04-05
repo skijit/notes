@@ -104,3 +104,10 @@ Max/MSP Gotchas and Misc Notes
 - Selecting multiple patch-cords: 'Alt-Drag cursor', then you can drag them to a new input
 
 
+## M4L Scheduling Issues
+- Per [thread](https://cycling74.com/forums/topic/live-object-changes-cannot-be-triggered-by-notifications-2/#.WN0AMW_ythE), the scheduling and some behaviors seem to be very different when in edit mode or not in your M4L device.
+    - For accurate debugging:
+        - add the device but do not edit.
+        - right-click on the device name in Live and show the Max window from there.
+- Per the [M4L api overview](https://docs.cycling74.com/max5/refpages/m4l-ref/m4l_live_api_overview.html): changes to a Live Set and its contents are not possible from a notification. The error message in the Max Window is 'Changes cannot be triggered by notifications'. In many cases putting a deferlow between the notification outlet and the actual change helps to resolve the issue.
+    - **YIKES**: this complicates things
