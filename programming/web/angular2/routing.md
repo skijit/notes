@@ -2,6 +2,8 @@ Routing
 ==========
 - [primary src](https://angular.io/docs/ts/latest/guide/router.html)
 
+## General Stuff
+
 - After the end of each successful navigation lifecycle, the router builds a tree of ActivatedRoute objects that make up the current state of the router. You can access the current RouterState from anywhere in the application using the Router service and the routerState property.
 - CanDeactivate Guard lets you state a warning before moving off the current view (ie Discard Changes?)
 - The browser uses the <base href> value to prefix relative URLs when referencing CSS files, scripts, and images.

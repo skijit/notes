@@ -97,7 +97,7 @@ Angular2 Lessons Learned
             "./less/site.less"
         ]
     ```
-- Bundling 3rd Party Javascript
+- Bundling 3rd Party Javascripts
     - add the following to your angular-cli.json with an array of the appropriate js to bundle (order matters):
     ```(json)
     "scripts": [
@@ -118,4 +118,71 @@ Angular2 Lessons Learned
                 - see [here](https://github.com/angular/angular-cli/wiki/build#build-targets-and-environment-files) for instructions on adding config files for different build profiles
             - prod build uses uglifying and tree-shaking functionality
             - stats-json is an output file which you can use with webpack-bundle-analyzer 
+
+## High Level Angular Architecture
+- Add page modules:
+    - High-Level Approach
+        - Each page will have a root component which we'll create now.
+        - Each page will also have a module and routing information.
+        - (unshared) subcomponents will live inside the page's folder
+    - Generate component
+        - run this from inside your `src` directory
+        - `ng g component AdvancedSearch -cd OnPush --inline-template false --export --inline-style false -v`  
+    - Set up Component nesting and basic compilation
+        - change the selector from *app-advanced-search* to *advanced-search*
+        - fill the html template for the component and add a reference to *advanced-search* in the app component templates
+        - Add *AdvancedSearchComponent* to your App Module's *declarations * property
+        - **Build and TEST**
+    - Add a Module
+        - run this from inside your `src` directory
+        - `ng g module AdvancedSearch --flat -routing true --verbose` 
+        - Add your page component to your module:
+            - Add *AdvancedSearchComponent* to the page module's *Declarations* property            
+        - Add your page module to your app
+            - Remove *AdvancedSearchComponent* from your App Module's *declarations* property
+            - Add *AdvancedSearchComponent* to your App Module's *exports* property
+            - Add *AdvancedSearchModule* to your App Module's *imports* property            
+        - **Build and TEST**
+    - Set up routing
+        - Add a SharedComponents Module with a PageNotFoundComponent
+            - run this from inside your `src` directory
+            - `ng g module SharedComponents true --verbose` 
+            - run this from inside your `src\app\shared-components` directory
+            - `ng g component PageNotFound --inline-template false --export --inline-style false -v`  
+            - Add *SharedComponentsModule* to the *imports* property of your *AppModule*
+            - Note that unlike the Page modules, the SharedComponents module does not have it's own routing module.  
+                - The routes for any of these will be specified at the App routing level.
+            - **Build and TEST**
+        - Set up Global Routing
+            - In the AspNet Core package, download the nuget package: Microsoft.AspNet.SpaServices
+            - Add the following last route to your routing table:
+            ```(csharp)
+                routes.MapSpaFallbackRoute("spa-fallback", new { controller = "Home", action = "Index" });
+            ```
+                - This will map URL's which don't contain a '.' (indicating a file extension) to your default view, while files which do contain a '.' are treated like static files (e.g. cat.jpg) and should resolve properly.  For more info, see [here](http://blog.nbellocam.me/2016/03/21/routing-angular-2-asp-net-core/).
+                - Clear your nuget cache when you load this!
+            - In *app.component.html*, replace `<advanced-search></advanced-search>` with `<router-outlet></router-outlet>`
+            - In *app-routing-module.ts* add `import { PageNotFoundComponent } from './shared-components/page-not-found/page-not-found.component';`
+            - Add the follow to *advanced-search-routing.modules.ts*:
+            ```(typescript)
+            const routes: Routes = [
+                { path: 'advanced-search/:saved-query-id',   component: AdvancedSearchComponent },
+                { path: 'advanced-search',   component: AdvancedSearchComponent, pathMatch: 'full' }
+            ];
+            ```
+            - Make sure you have a `import { AdvancedSearchRoutingModule } from './advanced-search-routing.module';` in  your advanced-search.module.ts.
+            - Add the following to your *app-routing.module.ts*:
+            ```(typescript)
+            const routes: Routes = [  
+                { path: '',   redirectTo: 'advanced-search', pathMatch: 'full' },  //temporary
+                { path: '**', component: PageNotFoundComponent }
+            ];
+            ```
+            - Add RouterLinks in the *app* component layout
+                - Add directives to nav links such as the following:
+                ```(html)
+                <a routerLink='/advanced-search' routerLinkActive="current">Advanced Search</a>
+                ```
+    - Repeat process for other page modules
+
 

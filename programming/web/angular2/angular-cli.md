@@ -8,6 +8,9 @@ Angular CLI
     - `--routing` generates a routing module
 - `ng generate`: generate components, routes, services, pipes with a simple command
     - `ng generate component my-new-component` : will create a new component in a folder *my-new-component* based off cwd, unless you use `--flat`
+    - Top level component generation:
+        - run this from inside your `src` directory
+        - `ng g component AdvancedSearch -cd OnPush --inline-template false --export --inline-style false -v`  
     - `ng generate SCAFFOLD_TYPE my-new-component`
         - Where SCAFFOLD_TYPE includes:
             - component
