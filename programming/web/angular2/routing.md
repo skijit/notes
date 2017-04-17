@@ -284,3 +284,17 @@ closePopup() {
     })
     export class AdminRoutingModule {}
     ```
+
+## Guards
+- guards control the routers behavior.
+- if return true: navigation proceeds, if false: navigation is suspended
+- could execute async:
+    - might require user interaction (e.g. 'Are you sure you want to leave without making changes?') or getting data from server (e.g. is user authorized)
+    - can return an Observable<boolean>
+    - router will wait for the observable to resolve before proceeding routing
+- There are some basic guard classes:
+    - `CanActivate` - controls navigation to a route (e.g. authentication)
+    - `CanActivateChild()`
+    - `CaDeactivate` - controls navigation away from the current route (e.g. confirmation)
+    - `Resolve`
+    - `CanLoad` - controls navigation when the feature module is loaded async

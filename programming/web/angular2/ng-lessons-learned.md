@@ -184,5 +184,9 @@ Angular2 Lessons Learned
                 <a routerLink='/advanced-search' routerLinkActive="current">Advanced Search</a>
                 ```
     - Repeat process for other page modules
-
+- Adding SubComponents
+    - run this inside the parent component's directory.
+    - `ng g component ActivityLog -cd OnPush --inline-template false --export --inline-style false -v --flat=true`
+        - really up to you whether you want to use flat or not
+    
 

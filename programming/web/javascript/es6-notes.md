@@ -422,24 +422,28 @@ stitch together sequences (with branches) of sync and async actions using the ca
 ### Detailed Design
 - Things that return Promises:
     - Promise constructor
-        - ```new Promise((resolve, reject) => { ... })```
+        ```(javascript)
+        new Promise((resolve, reject) => { ... })
+        ```
         - The only parameter passed to the constructor is a function. (called the 'executor')
         - It has a body and 2 parameters:  
-            - Function body ({ ... }):
+            - Function `body ({ ... })`:
                 - This is where you put the code that will either sync or async determine a final value.
             - Function parameters:                        
-                - ```resolve``` 
+                - `resolve` 
                     - a function injected by Promise.  
-                    - Call this in the function body to mark the current Promise as resolved.
-                    - The fundamental *value* (presumably determined by the execution of the function body) that the Promise is a proxy to is passed as a parameter: ```resolve(value)```
-                    - This value is then shared with subsequent ```then()```'s
-                - ```reject``` 
+                    - Call this in the executor to mark the current Promise as resolved.
+                    - The fundamental *value* (presumably determined by the execution of the function body) that the Promise is a proxy to is passed as a parameter: `resolve(value)`
+                    - This value is then shared with subsequent `then()`'s
+                - `reject`
                     - same idea, 
                     - it's a function injected by the Promise
                     - invoked in the function body to settle the Promise as rejected.
-                    - You can pass a value to reject like ```reject(err.mesg)```
+                    - You can pass a value to reject like `reject(err.mesg)`
     - then()
-        - ```then(function(value) { ... }, function(value) { ... })
+        ```(javascript)
+        then(function(value) { ... }, function(value) { ... })
+        ```
         - 1st parm: fulfilled
             - type: function  or null
             - param: value associated with the promise (from calling resolve(value))
@@ -452,13 +456,15 @@ stitch together sequences (with branches) of sync and async actions using the ca
             - executed whenever it's associate Promise is rejected
             - return value is a new Promise - same scenario as with parm 1
     - catch()
-        - ```catch(function(data) = { ... })
+        ```(javascript)
+        catch(function(data) = { ... })
+        ```
         - 1 parameter: rejected
             - type: function
             - param: err mesg associated with the promise when being rejected (from calling rejected(value))
             - executed whenever the associated promise is rejected
             - return value is a new Promise whose corresponding (value* is whatever the handler returns (as with ```then()```)
-    - Promise.resolve(*value)
+    - Promise.resolve(*value*)
         - Shortcut for the constructor where you want to immediately resolve the returned Promise.
         - *value* can be a literal value or another Promise
     - Promise.reject(reason)
@@ -467,9 +473,9 @@ stitch together sequences (with branches) of sync and async actions using the ca
     - In the constructor:
         - resolve(value)
         - reject(value)
-    - In a ```then``` or ```catch``` handler:
+    - In a `then` or `catch` handler:
         - return a value -> will mark as fulfilled
-        - throw an error -> will mark as rejected (triggering any attached ```catch()``` handlers
+        - throw an error -> will mark as rejected (triggering any attached `catch()` handlers
         - **Note**: this means that Promises are by default settled as fulfilled **unless** you explicitly throw an error.
 - Avoiding Race Conditions 
     - Even if a Promise is settled when a then/catch handler is attached, they will be immediately executed.
