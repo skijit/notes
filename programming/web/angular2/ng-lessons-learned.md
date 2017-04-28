@@ -195,4 +195,64 @@ Angular2 Lessons Learned
     - `ng g pipe FilterDelegate --flat`
     - This will declare it in the AppModule, which is probably what you want
 
+## Forms
 
+## Validation
+- Validation design should follow smart/dumb component pattern
+    - You should have dumb validation and smart validation
+    - Dumb Validation => Dumb Component
+        - Form Validation
+        - Best to do the trivial or really easy stuff using the OOB validation functions, and if need be custom validations.
+    - Smart validation => Smart component
+        - Logic is disconnected from validation
+        - Involves business logic or any non-trivial validation checks
+- Why is form validation not smart validation?
+    - Everything has to be (re)validated at server level
+    - It makes sense to write most (at least the non-trivial) validations only at the server level and use them to asynchronously validate on the client 
+    - Async validations on the form is not really good: it's much harder to debounce these events
+        - Conversely, if the dumb component sends change model events to the smart component, the smart component can debounce and fire off async validation calls to the server at a more appropriate rate.
+- Smart Validation is just another state which needs to be maintained
+    - You can manage via a service or just internal to the component
+    - Most importantly, it's just program logic- not directly tethered to the form API.
+- What does smart/dumb validation look like?
+    - The model type which is passed as an input property to the dumb component should have two top-level properties:
+        - Data Model
+        - Validation State
+    - The dumb component should emit this updated model type as an output event whenever (both):
+        - The model has changed (e.g. user input to form)
+        - It passes the form-validation
+    - Smart component listens to dumb component change events, debounce, and fires off an async validation call to the server
+        - Maybe this is delegated to a service or services
+    - Smart component updates its validation state based on the async response(s)
+        - disables/enables it's own UI elements as appropriate  (most of these should live in the dumb component)
+    - Smart component updates the input properties for the associated dumb components
+        - See point about Back End Validation for notes on how the smart component is able to distribute validation error messages to the appropriate 
+    - Validation info passed from smart to dumb component doesn't have to display the validation message in the location of the problematic control 
+        - Example: if the invalid control is buried in a form group in a form array, it's not worth the effort to display the error right next to that control
+            - The validation fail might involve multiple controls - for example a uniqueness violation.  
+        - The error message can be displayed prominently in the top or bottom of the dumb component with the most informative error message possible.
+    - If the dumb component's input property's Validation State (inside the model type) has an error:
+        - Form validation state should not be altered
+        - Any dumb component UI elements which are enabled or disabled based on validation state should take into account the form's validation state as well as the validation state input from parent smart component
+- What about when you try to write to the DB but it fails on that final validation right before the transaction?
+    - Back end retun type should be modeled as something like:
+        - Updated Data Model
+        - Validation Errors
+        - Other Errors
+            - IE exceptions, etc.
+        - Return type: 1= success, 2=validation errors, 3=other errors
+    - If other errors:
+        - Don't update the local model
+        - Inform user of the errors (toast, modal, etc.)
+    - If Validation Errors:
+        - Set smart component's validation state to invalid
+        - Distribute validation errors to appropriate dumb components
+            - See point below
+- Back End Validation and API Design
+    - For each type of API transaction there should be an associated collection of validation methods
+    - There should be a single high-level method that will call all of the appropriate validation methods for a given transaction type
+        - The high level validation method can be called by:
+            - The client: it walks through all the validation steps so the client only has to make one call 
+            - The API: when the client tries to make a change (e.g. write to the DB), the API will call that same high level validation method first.
+    - Each individual validation method should have a return value that gives the smart component sufficient information to distribute the error message to the appropriate dumb component.
+    
