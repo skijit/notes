@@ -118,6 +118,8 @@ Angular2 Lessons Learned
                 - see [here](https://github.com/angular/angular-cli/wiki/build#build-targets-and-environment-files) for instructions on adding config files for different build profiles
             - prod build uses uglifying and tree-shaking functionality
             - stats-json is an output file which you can use with webpack-bundle-analyzer 
+- If you're need to support the non-evergreen browsers, go to `src/polyfill.ts` and uncomment the blocks that relate to IE
+
 
 ## High Level Angular Architecture
 - Add page modules:
@@ -188,5 +190,9 @@ Angular2 Lessons Learned
     - run this inside the parent component's directory.
     - `ng g component ActivityLog -cd OnPush --inline-template false --export --inline-style false -v --flat=true`
         - really up to you whether you want to use flat or not
-    
+- Adding a pipe to the App Module:
+    - cd to `src/app/pipes` (mkdir if necessary)
+    - `ng g pipe FilterDelegate --flat`
+    - This will declare it in the AppModule, which is probably what you want
+
 

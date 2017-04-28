@@ -296,3 +296,13 @@ Bunches of Notes about Forms & Validation in Angular2
     - Each `Control` object has an `EventEmitter` which returns an `Observable`.
 - **Uses In-Built and Custom Validation**
 - **Checks Control States**
+
+## Second pass on form notes
+- [main src](https://angular.io/docs/ts/latest/guide/reactive-forms.html)
+- Note the difference between the form model and the acutal model
+    - form model
+        - subject to validation
+    - actual model
+        - component will have a reference to
+    - how are they connected?
+- Lifecycle gotcha: `ngOnChanges()` gets called before `ngOnInit()`

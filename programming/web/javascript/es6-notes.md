@@ -405,17 +405,20 @@ stitch together sequences (with branches) of sync and async actions using the ca
 - A Promise whose *value* is a literal value or can be eval'ed by executing sync code will be settled as soon as it is instantiated.
 - Conversely, a Promise object whose *value* requires the completion of some async code will have a state of pending, until the return value is provided, at which point it becomes settled.
 - Promise Chaining
-    - A Promise object exposes methods (```then``` and ```catch```) which take functions (aka handlers) as parameters:
+    - A Promise object exposes methods (`then` and `catch`) which take functions (aka handlers) as parameters:
         - ```then(onFulfillment(value), onRejection(value))``` and ```catch(onRejection(value))```
         - These handlers execute when the the Promise they're attached to is settled.
     - The return value of ```then``` and ```catch``` are new Promises, whose *value* is the returned value of the handler(s).
         - Could be void if the handler only executes a ```console.log(whatever)```
         - Could be an object returned by the handler
         - Could be another Promise object wrapping
-    - Since ```then``` and ```catch``` are all returning Promises (wrapping different values), you can chain them into a sequence.  ```(javascript)
-    doTask  .then((rv) => { ... }, (errVal) => { ... })
-            .then((rv) => { ... }, (errVal) => { ... })
-            .catch((errVal) => { ... };```
+    - Since ```then``` and ```catch``` are all returning Promises (wrapping different values), you can chain them into a sequence.  
+    ```(javascript)
+    doTask  
+        .then((rv) => { ... }, (errVal) => { ... })
+        .then((rv) => { ... }, (errVal) => { ... })
+        .catch((errVal) => { ... };
+    ```
 - In the previous example any of the handler bodies could involve sync or async actions.
 - The reason that sync and async actions can be chained seamlessly like this is because Promise wraps a *value* that could be known (in which case the Promise settles quickly) or yet-to-be-determined (in which case the Promise will be initially *pending* ). 
 
