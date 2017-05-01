@@ -218,7 +218,7 @@ Angular2 Lessons Learned
     - The model type which is passed as an input property to the dumb component should have two top-level properties:
         - Data Model
         - Validation State
-    - The dumb component should emit this updated model type as an output event whenever (both):
+    - The dumb component should emit this updated model type as an output   event whenever (both):
         - The model has changed (e.g. user input to form)
         - It passes the form-validation
     - Smart component listens to dumb component change events, debounce, and fires off an async validation call to the server
@@ -256,3 +256,10 @@ Angular2 Lessons Learned
             - The API: when the client tries to make a change (e.g. write to the DB), the API will call that same high level validation method first.
     - Each individual validation method should have a return value that gives the smart component sufficient information to distribute the error message to the appropriate dumb component.
     
+### Changes 
+- Have separate input properties for dumb component:
+    - Model
+    - Validation
+- Clarify that this is for an inline (interactive) validation approach... which is different from the On-demand (only when you save) validation approach.
+- Clarify that there are a number of ways to trigger smart validation from the dumb component.  I could have a separate output event based on typical events like blur or adding a new row. Or I could gate the model change events from the dumb component based on whether it passes form validation, debouncing that input stream, and then let the smart component trigger smart validation on any of those model change events.  (i'm following the former for now)
+- <dumb [model]="myModel" [validationState]="state" (onChange)="updateModel($event)">
