@@ -78,7 +78,7 @@ NgStore
 
 - [Src](https://www.youtube.com/watch?v=mhA7zZ23Odw&feature=youtu.be)
 - Redux: predictable state container for javascript (generally used w/ React)
-- Based on the concept of the reducer:
+- Based on the concept of the reducer (something)
 
 ```(javascript)
 let myArray = [1, 2, 3];
