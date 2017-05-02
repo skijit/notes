@@ -13,12 +13,14 @@ NgStore
 - Rely on `OnPush` change detection strategy, and gives you fast, smart cd throughout the application
 
 ## Mapping to Smart-Dumb Component Arch
+
 - Only your smart components will interact with your state service
 - Your dumb components will receive updated models from their parent smart components
     - You will set the dumb component change detection strategy to OnPush
     - Dumb components will emit output events, but the smart component will translate that into state service calls
 
 ## Similarities to other patterns
+
 - Very similar to event sourcing and CQRS
 - One of many transactional message-passing patterns.
 - Redux is based on the Flux pattern which is roughly event sourcing and command flow that work well on React
@@ -34,6 +36,7 @@ NgStore
         - That's why the default case in the reducer switch statement is usually to return state[] unmodified.
 
 ## Cast of Characters in NgRx Store Arch
+
 - State can be:
     1. A collection of objects
     2. A single object
@@ -72,6 +75,7 @@ NgStore
 
 
 ## Reactive Angular 2 Video
+
 - [Src](https://www.youtube.com/watch?v=mhA7zZ23Odw&feature=youtu.be)
 - Redux: predictable state container for javascript (generally used w/ React)
 - Based on the concept of the reducer:
