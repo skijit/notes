@@ -87,6 +87,7 @@ function sum(total, value) {
 //parm 2: initial value
 let rv = myArray.reduce(sum, 0);  //returns 6
 ```
+
     - So the array object manages calling it with the appropriate parameters (accumulator, current value)
 - Expanding on this concept:
 ```(javascript)
@@ -100,6 +101,7 @@ function counter(total, action) {
 }
 ['INCREMENT', 'INCREMENT', 'DECREMENT'].reduce(counter, 0);
 ```
+
 - Quick explanation of [Object.assign()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign)
     - copies values of all enumerable own properties from one (OR MORE!) source objects to a target object AND returns the target object.
     - `finalTarget = Object.assign(target, ...sources)`;
@@ -109,6 +111,7 @@ function counter(total, action) {
         var copy = Object.assign({}, obj);
         console.log(copy); // { a: 1 }
     ```
+
     - Or another more involved version (tldr: use stringify to get deep clones...)
     ```(javascript)
     let a = { b: {c: 4} , d: { e: {f: 1} } };
@@ -128,6 +131,7 @@ function counter(total, action) {
     console.log(JSON.stringify(a)); // { b: { c: 4 }, d: { e: 32 } }
     console.log(JSON.stringify(h)); // { b: { c: 4 }, d: { e: 54 } }
     ```
+
     - check this out for merging objects with the same properties...
     ```(javascript)
     var o1 = { a: 1, b: 1, c: 1 };
@@ -137,6 +141,7 @@ function counter(total, action) {
     var obj = Object.assign({}, o1, o2, o3);
     console.log(obj); // { a: 1, b: 2, c: 3 }
     ```
+
     - Remember though- the output is always a new object!  
         - So you have a de facto state immutability when you assign/modify state using Object.assign()
         - The same is true of `map()`, and `filter()`
@@ -159,6 +164,7 @@ function todos(allTodos, action) {
 //action { type : string, payload : any}
 //payload should be any bc the parms wil depend on the various actions
 ```
+
 - The next step now is to connect this idea with a stream...
 ```(typescript)
 let initialState = [];
@@ -179,6 +185,7 @@ state.subscribe(todoState => {
     console.log(todoState);
 });
 ```
+
     - Cast of characters:
         - `todos()`: reducer function
         - `Action` type: has the type of ation and parameters (payload)
@@ -221,6 +228,7 @@ export function todos(allTodos = [], action) {
     };
 }
 ```
+
 - Here's another reducer:
 ```(typescript)
 export const visibilityFilter = (state='SHOW_ALL', action) => {
@@ -250,6 +258,7 @@ import { todos } from './todos';
 })
 export class AppModule {}
 ```
+
 - Define an interface that represents all the state you maintain:
 ```(typescript)
 export interface AppState {
@@ -257,6 +266,7 @@ export interface AppState {
     visibilityFilter: string;
 }
 ```
+
 - Then in the your app and smart components, you'll inject `Store<AppState>` into your constructor.
 - And you can now subscribe to state changes...
 ```(typescript)
@@ -272,6 +282,7 @@ export class MyComponent {
     }
 }
 ```
+
 - Examples of store-component interactions:
 ```(typescript)
 //output any state changes to the console
@@ -325,8 +336,8 @@ addTodo() {
 //if you do this then you can dispatch to the store from your smart component's
 //template:
 //<new-todo (action)="store.dispatch($event)"></new-todo>
-
 ```
+
 - The Time Travelling Debugger
     - use the component `<ngrx-devtools>`
 - Nifty rxjs operator: combineLatest()
