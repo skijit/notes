@@ -24,7 +24,14 @@ rx.js
     - **Communication Bus**: RX simplifies the overhead associated with propagating data changes through a sequence of hierarchical structures (like ng components).  Instead of setting up communication channels for components with their immediate ancestor/descendant, you can have them subscribe to observables returned by some services.  This combination is similar to an ESB.
     
     
-- Observables emit events
+- Observables are wrappers for values that emit 3 kinds of events:
+    1. Next
+    2. Error
+    3. Complete
+- Observers are listeners to the Observable which have handler functions for each of those three events:
+    1. next()
+    2. error()
+    3. complete()
 - They do not contain reference to their corresponding observers
 - Events are emitted over an event bus - decoupling observables from observers
 - Rxjs gives you

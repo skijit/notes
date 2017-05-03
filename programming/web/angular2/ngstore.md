@@ -199,7 +199,7 @@ state.subscribe(todoState => {
     - `state` is an observable of `Todo[]`
     - `scan()`: just like `reduce()` EXCEPT the problem with `reduce()` is it waits till the end of the array to give you the result, whereas `scan()` also gives you the intermediate values. 
 - Put this in your main.ts:
-    `import {provideStore} from '@ngrx/store';
+    `import {provideStore} from '@ngrx/store`;
     - provideStore() takes application configuration as a parameter.
         - It's like an in-memory db for your application
         - And each reducer is analogous to a table (roughly)
@@ -366,6 +366,79 @@ addTodo() {
 
 ## Notes from Comprehensive Github Gist
 - [src](https://gist.github.com/btroncone/a6e4347326749f938510)
-
-
-
+- Store<AppState> such that AppState is an interface which has all the high-level models you need to track.
+- Best practice- rather than creating separate streams, combine and update them in a single aggregate stream using the following methods:
+    - `Observable.combineLatest(Observable<T>, ...)`: Lets you combine a bunch of Observables into a single stream, and will emit the latest values whenever one of the observables (in parameters) emits. 
+    - `Observable.withLatestFrom(Observable<T>)`: Gives you the latest T when the source observable emits
+    - Example usage:
+    
+    ```(typescript)
+    @Component({
+        selector: 'app',
+        template: `
+        <h3>@ngrx/store Party Planner</h3>
+        <party-stats
+            [invited]="(model | async)?.total"
+            [attending]="(model | async)?.attending"
+            [guests]="(model | async)?.guests"
+        >
+        {{guests | async | json}}
+        </party-stats>
+        <filter-select
+            (updateFilter)="updateFilter($event)"
+        >
+        </filter-select>
+        <person-input
+            (addPerson)="addPerson($event)"
+        >
+        </person-input>
+        <person-list
+            [people]="(model | async)?.people"
+            (addGuest)="addGuest($event)"
+            (removeGuest)="removeGuest($event)"
+            (removePerson)="removePerson($event)"
+            (toggleAttending)="toggleAttending($event)"
+        >
+        </person-list>
+        `,
+        directives: [PersonList, PersonInput, FilterSelect, PartyStats]
+    })
+    export class App {
+        public model;
+        
+        constructor(
+        private _store: Store
+        ){
+        /*
+            Every time people or partyFilter emits, pass the latest
+            value from each into supplied function. We can then calculate
+            and output statistics.
+        */
+        this.model = Observable.combineLatest(
+            _store.select('people')
+            _store.select('partyFilter'),
+            (people, filter) => {
+            return {
+                total: people.length
+                people: people.filter(filter),
+                attending: people.filter(person => person.attending).length,
+                guests: people.reduce((acc, curr) => acc + curr.guests, 0)
+            }
+            });
+        }
+        //...rest of component
+    }
+    ```
+- You can use `Observable.let()` to apply a *selector* to an observable
+    - [simple explanation of let](https://www.learnrxjs.io/operators/utility/let.html)
+    - [more complicated example](https://gist.github.com/btroncone/a6e4347326749f938510#extracting-selectors-for-reuse)
+    - It's similar to `Observable.map()`.
+        - They both return Observables.
+        - `map()` parameter gives you access to the value/collection
+        - `let()` parameter gives you access to the Observable, so you can change what you're actually listening to.
+    - Implementing Undo is pretty easy:
+        - Create a meta-reducer, which just wraps any reducer
+        - In the meta-reducer, 
+            - in normal circumstances, route each dispatched action to the appropriate reducer 
+            - if the action is UNDO, recall the previous state for the given reducer and return that.
+        - So you don't actually implement the reverse action, you just recall the previous state.
