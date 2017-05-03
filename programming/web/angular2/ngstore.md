@@ -93,8 +93,7 @@ function sum(total, value) {
 //parm 2: initial value
 let rv = myArray.reduce(sum, 0);  //returns 6
 ```
-
-    - So the array object manages calling it with the appropriate parameters (accumulator, current value)
+- So the array object manages calling it with the appropriate parameters (accumulator, current value)
 - Expanding on this concept:
 ```(javascript)
 function counter(total, action) {
@@ -171,7 +170,8 @@ function todos(allTodos, action) {
 //payload should be any bc the parms wil depend on the various actions
 ```
 
-- The next step now is to connect this idea with a stream...
+- The next step now is to connect this idea with a stream:
+
 ```(typescript)
 let initialState = [];
 
@@ -192,18 +192,19 @@ state.subscribe(todoState => {
 });
 ```
 
-    - Cast of characters:
-        - `todos()`: reducer function
-        - `Action` type: has the type of ation and parameters (payload)
-        - `Todo[]`: The state we're maintaining is an array of Todo items which have a `text` and `completed` property
-        - `state` is an observable of `Todo[]`
-        - `scan()`: just like `reduce()` EXCEPT the problem with `reduce()` is it waits till the end of the array to give you the result, whereas `scan()` also gives you the intermediate values. 
+- Cast of characters in this example:
+    - `todos()`: reducer function
+    - `Action` type: has the type of ation and parameters (payload)
+    - `Todo[]`: The state we're maintaining is an array of Todo items which have a `text` and `completed` property
+    - `state` is an observable of `Todo[]`
+    - `scan()`: just like `reduce()` EXCEPT the problem with `reduce()` is it waits till the end of the array to give you the result, whereas `scan()` also gives you the intermediate values. 
 - Put this in your main.ts:
     `import {provideStore} from '@ngrx/store';
     - provideStore() takes application configuration as a parameter.
         - It's like an in-memory db for your application
         - And each reducer is analogous to a table (roughly)
 - Example reducer:
+
 ```(typescript)
 export interface Todo {
     id?:number;  //? after an interface property indicates that it is not required
@@ -249,7 +250,8 @@ export const visibilityFilter = (state='SHOW_ALL', action) => {
 
 ### Integration w Actual App
 - Write your reducers (as above)
-- Register your reducers with provideStore in your app module...
+- Register your reducers with provideStore in your app module:
+
 ```(typescript)
 import { NgModule } from '@angular/core'
 import { StoreModule } from '@ngrx/store';
@@ -290,6 +292,7 @@ export class MyComponent {
 ```
 
 - Examples of store-component interactions:
+
 ```(typescript)
 //output any state changes to the console
 store.subscribe(state => console.log(state));
@@ -348,6 +351,7 @@ addTodo() {
     - use the component `<ngrx-devtools>`
 - Nifty rxjs operator: combineLatest()
     - lets you combine observables and anytime any one of them is updated, you can can emit the latest values for both of them.
+    
     ```(typescript)
     Observable.combineLatest(
         store.select('people'),  //this is a state observable
@@ -358,6 +362,7 @@ addTodo() {
             return people.filter(filter);  
         }
     )
+    ```
 
 ## Notes from Comprehensive Github Gist
 - [src](https://gist.github.com/btroncone/a6e4347326749f938510)

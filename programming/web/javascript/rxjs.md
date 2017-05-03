@@ -241,6 +241,7 @@ rx.js
 
 ### Basic Observers
 - Here's a formal approach to building an Observer on an Observable
+
 ```(typescript)
 //observer is an interface
 import { Observable, Observer } from "rxjs";
@@ -285,8 +286,10 @@ source.subscribe(new MyObserver);
 //value: 10
 //complete
 ```
-    - You can have multiple subscribers to the same observable
+
+- You can have multiple subscribers to the same observable
 - Here's a less formal way of setting up an Observer
+
 ```(typescript)
 source.subscribe(
     //next()
@@ -303,8 +306,11 @@ source.subscribe(
     }
 );
 ```
+
 ### Basic Observables
+
 - Using the create() method...
+
 ```(typescript)
 let numbers = [1, 5, 10];
 
@@ -349,6 +355,7 @@ source.subscribe(
 //error value: Something went wrong!
 ```
 - Invoking these steps over time...
+
 ```(typescript)
 let numbers = [1, 5, 10];
 
@@ -368,21 +375,26 @@ let source = Observable.create(observer => {
     produceValue();
 });
 ```
+
 - RXJS Operators
     - Some Transform
     - Some Change timing
     - All composable
 - Some Common Operators
+
 ```(typescript)
 source
     .map(n => n * 2) //still in Observable-land
     .filter(n = n > 4); //still in Observable-land
 ```
+
 - Tip: In VSCode, press f12 over the "rxjs" in the import statement and then pull in only the operators, classes you need
 
 ### Intermediate Observables
+
 - Basic approach: Transforming things into Observable sequences of data
 - DOM event -> Stream
+
 ```(typescript)
 //make DOM mousemove events into a stream, transform to
 //only keep the X,Y coordinates where x < 500, and then
@@ -397,7 +409,9 @@ let source = Observable.fromEvent(document, "mousemove")
                         .filter(value => value.x < 500)
                         .delay(300);
 ```
+
 - Server Data -> Stream (basic case)
+
 ```(typescript)
 //button will get clicked, at which point the load method
 //will get data and insert into document.
@@ -430,7 +444,9 @@ click.subscribe(
     () => console.log('complete!')
 );
 ```
+
 - Next version: refactoring a bit
+
 ```(typescript)
 
 function load(url : string) {
@@ -480,7 +496,8 @@ click.flatMap(e => load("movies.json"))
 //because that is not called on the outer
 //subscription.  (see gotcha below)
 ```
-    - **BIG GOTCHA**
+
+- **BIG GOTCHA**
     - flatmap() is **not replacing** the outer Observable with the innter observable.
     - It is combining them such that the outer observable's values (from it's next() event) are combined into the outer observable.
     - That is why the inner complete() has no effect!
@@ -489,6 +506,7 @@ click.flatMap(e => load("movies.json"))
 - Adding retry logic 
     - `retry()` operator
     - `retryWhen()` operator takes an observable (of the parent observables error() stream) and return an observable
+
 ```(typescript)
 function load(url : string) {
     return Observabe.create(observer => {
@@ -520,6 +538,7 @@ function load(url : string) {
     });
 }
 ```
+
 - Observables and Promises
     - Promises only return a single value, but they're also part of the ECMA spec now
         - This would make using promises with certain event types (user clicks), very difficult 
@@ -527,6 +546,7 @@ function load(url : string) {
     - Basically Observables are a much more ambitious way of dealing with event (streams)
     - Promises, unlike Observables, are not lazy.  They'll execute independent of whether there are "subscribers" (or thenners?)
         - but see the second example to overcome this problem
+
 ```(typescript)
 //using fetch (a new function that may be added to the browser specs),
 //and the return value is a promise.
@@ -535,18 +555,22 @@ function loadWithFetch(url : string) {
     return Observable.fromPromise(fetch(url).then(r => r.json));
 }
 ```
-    - If you want to use the previous example but have it lazily executed, wrap it in Obserable.defer()
-    ```(typescript)
-    function loadWithFetch(url : string) {
-        return Observable.defer(() => {
-            return Observable.fromPromise(fetch(url).then(r => r.json));
-        });
-    }
-    ```
+
+- If you want to use the previous example but have it lazily executed, wrap it in Obserable.defer()
+
+```(typescript)
+function loadWithFetch(url : string) {
+    return Observable.defer(() => {
+        return Observable.fromPromise(fetch(url).then(r => r.json));
+    });
+}
+```
 
 ### Error Handling
+
 - Typical try/catch won't work
 - If there's no error handler when an error occurs, an exception will be thrown (and perhaps not caught)
+
 ```(typescript)
 let source = Observable.create(observer => {
     observer.next(1);
@@ -564,7 +588,9 @@ source.subscribe(
 //value: 2
 //Uncaught Stop!
 ```
+
 - `complete()` is typically not called if `error()` is called
+
 ```(typescript)
 let source = Observable.merge(
     Observable.of(1);
@@ -586,7 +612,9 @@ source.subscribe(
 //value: 5
 //complete
 ```
+
 - Now if there is an error in the middle...
+
 ```(typescript)
 //so here you can "throw" an error, but it won't
 //have the same repercussion as a thrown exception
@@ -612,6 +640,7 @@ source.subscribe(
 ```
 - To be able to complete the last sequence, use `onErrorResumeNext`
     - Basically lets you swallow any errors
+
 ```(typescript)
 //so here you can "throw" an error, but it won't
 //have the same repercussion as a thrown exception
@@ -637,6 +666,7 @@ source.subscribe(
 //complete
 ```
 - Using catch lets you catch an error and branch
+
 ```(typescript)
 //so here you can "throw" an error, but it won't
 //have the same repercussion as a thrown exception
@@ -658,12 +688,14 @@ let source = Observable.onErrorResumeNext(
 //caught: Error: Stop
 //value: 10
 ```
+
 - To generate an error in an Observable when converting from a Promise, just call the `Promise.reject()`
 - Some operators lets you throw a real exception (Error) and it will be mapped to the `error()` event.
     - You just have to play/test with them to verify their behavior
 - Unsubscribing
     - Calling unsubscribe will abort your request/stream
     - Just return an anonymous function from your Observable create() lambda
+
     ```(typescript)
     function load(url : string) {
         return Observabe.create(observer => {
