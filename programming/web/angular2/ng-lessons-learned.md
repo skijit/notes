@@ -197,69 +197,149 @@ Angular2 Lessons Learned
 
 ## Forms
 
-## Validation
-- Validation design should follow smart/dumb component pattern
-    - You should have dumb validation and smart validation
-    - Dumb Validation => Dumb Component
-        - Form Validation
-        - Best to do the trivial or really easy stuff using the OOB validation functions, and if need be custom validations.
-    - Smart validation => Smart component
-        - Logic is disconnected from validation
-        - Involves business logic or any non-trivial validation checks
-- Why is form validation not smart validation?
-    - Everything has to be (re)validated at server level
-    - It makes sense to write most (at least the non-trivial) validations only at the server level and use them to asynchronously validate on the client 
-    - Async validations on the form is not really good: it's much harder to debounce these events
-        - Conversely, if the dumb component sends change model events to the smart component, the smart component can debounce and fire off async validation calls to the server at a more appropriate rate.
-- Smart Validation is just another state which needs to be maintained
-    - You can manage via a service or just internal to the component
-    - Most importantly, it's just program logic- not directly tethered to the form API.
-- What does smart/dumb validation look like?
-    - The model type which is passed as an input property to the dumb component should have two top-level properties:
-        - Data Model
-        - Validation State
-    - The dumb component should emit this updated model type as an output   event whenever (both):
-        - The model has changed (e.g. user input to form)
-        - It passes the form-validation
-    - Smart component listens to dumb component change events, debounce, and fires off an async validation call to the server
-        - Maybe this is delegated to a service or services
-    - Smart component updates its validation state based on the async response(s)
-        - disables/enables it's own UI elements as appropriate  (most of these should live in the dumb component)
-    - Smart component updates the input properties for the associated dumb components
-        - See point about Back End Validation for notes on how the smart component is able to distribute validation error messages to the appropriate 
-    - Validation info passed from smart to dumb component doesn't have to display the validation message in the location of the problematic control 
-        - Example: if the invalid control is buried in a form group in a form array, it's not worth the effort to display the error right next to that control
-            - The validation fail might involve multiple controls - for example a uniqueness violation.  
-        - The error message can be displayed prominently in the top or bottom of the dumb component with the most informative error message possible.
-    - If the dumb component's input property's Validation State (inside the model type) has an error:
-        - Form validation state should not be altered
-        - Any dumb component UI elements which are enabled or disabled based on validation state should take into account the form's validation state as well as the validation state input from parent smart component
-- What about when you try to write to the DB but it fails on that final validation right before the transaction?
-    - Back end retun type should be modeled as something like:
-        - Updated Data Model
-        - Validation Errors
-        - Other Errors
-            - IE exceptions, etc.
-        - Return type: 1= success, 2=validation errors, 3=other errors
-    - If other errors:
-        - Don't update the local model
-        - Inform user of the errors (toast, modal, etc.)
-    - If Validation Errors:
-        - Set smart component's validation state to invalid
-        - Distribute validation errors to appropriate dumb components
-            - See point below
-- Back End Validation and API Design
-    - For each type of API transaction there should be an associated collection of validation methods
-    - There should be a single high-level method that will call all of the appropriate validation methods for a given transaction type
-        - The high level validation method can be called by:
-            - The client: it walks through all the validation steps so the client only has to make one call 
-            - The API: when the client tries to make a change (e.g. write to the DB), the API will call that same high level validation method first.
-    - Each individual validation method should have a return value that gives the smart component sufficient information to distribute the error message to the appropriate dumb component.
-    
-### Changes 
-- Have separate input properties for dumb component:
-    - Model
-    - Validation
-- Clarify that this is for an inline (interactive) validation approach... which is different from the On-demand (only when you save) validation approach.
-- Clarify that there are a number of ways to trigger smart validation from the dumb component.  I could have a separate output event based on typical events like blur or adding a new row. Or I could gate the model change events from the dumb component based on whether it passes form validation, debouncing that input stream, and then let the smart component trigger smart validation on any of those model change events.  (i'm following the former for now)
-- <dumb [model]="myModel" [validationState]="state" (onChange)="updateModel($event)">
+## Form Architecture
+- Quick Summary
+    - Based on Smart and Dumb Component Paradigm
+    - Uses Dumb and Smart Validation
+    - Uses Discrete Validation, but Continuous when data is invalid
+    - Uses Reactive Forms Paradigm
+    - Uses OnPush Dumb Components with immutable input properties provided by a state service (e.g. ngrx store)
+    - Changes to global state are observed and injected into dumb components via smart components
+        - Dumb component chooses which events to update state with
+    - Global State contains smart-component specific View Models and other shared data
+    - Minimum coupling over layers
+- (P)Layers 
+    - Form
+        - **Reactive Forms**: Based on Reactive (aka Model-Driven) Forms paradigm instead of template-based
+            - Discussion of the relative merits of each approach is out-of-scope, but it is discussed [widely](http://blog.angular-university.io/introduction-to-angular-2-forms-template-driven-vs-model-driven/)
+            - You still use an Angular-HTML template, but much of the functionality (and some of the structure, if it is dynamic) is wired up in code rather than via use of directives such as `ngModel`
+        - **Template**: The HTML form element is decorated with the `formGroup` directive, which corresponds to a component property, of type `FormGroup`
+        - **API**: The `FormGroup` contains any number of other Angular Form API objects, which are bound to a *Form Model* object.
+            - [Abstract Control](https://angular.io/docs/ts/latest/api/forms/index/AbstractControl-class.html)
+            - [FormControl](https://angular.io/docs/ts/latest/api/forms/index/FormControl-class.html)
+            - [FormArray](https://angular.io/docs/ts/latest/api/forms/index/FormArray-class.html) 
+        - **Form Model**: The *Form Model* can be the same as the Data Model, but the former's structure should reflect the `FormGroup`'s structure, which may not be the case with the Data Model.
+            - Form Models classes should be able to converto to and from the Data Model type.
+    - Dumb Component
+        - Encapsulates the Form and associated functionality:
+            - Initialization / Wireup
+            - CRUD Output Events
+            - validators and validation-related events
+        - Inputs Properties:
+            - Data Model
+            - *Smart Validation* Results
+        - Outputs:
+            - Form Validation Status Change: emitted to the parent (Smart) Component whenever there is an update to local (aka dumb) or injected (aka smart) validation status.
+            - Do Smart Validation: emitted to the parent component whenever a smart validation needs to (re)occur.
+            - CRUD Output Events: The component decides which internal events will trigger an output event to the smart component for CRUD-related purposes.
+                - The smart component will decide whether the destination of the data will be the local store or to the db / server
+        - Uses OnPush Change Detection Strategy: Change Detection and thus a re-render will only occur when a new (immuatable) input property is passed to it.
+        - Functionality provided by the Base Class, `DumbFormComponent<T, K>` (T = Data Model Type, K = Form Model Type):
+            - Validation:
+                - Since validation is provided by both the dumb and smart components (more on that later), this functionality stitches is all together into a coherent whole
+            - Data Flow:
+                - Since there are two primary ways in which the form model (and thus the form) is updated, the base component manages keeping these consistent:
+                    1. Direct Entry by User
+                    2. Synchronization with the State (e.g. ngStore) data
+                        - Via Injection of updated Data Model input property
+                        - Consistent with the ngRX, Flux, single-flow-of-data paradigm
+    - Smart Component
+        - Like a controller- it orchestrates all the interactions between dumb components and the underlying services, but tries to stay lean/generic in terms of underlying logic, delegating that to the services it calls.
+            - Not reusable, unlike a dumb controller
+        - Responds to output events emitted by dumb components
+        - Uses services (shared or component-specific) to:
+            - trigger state changes
+            - validate
+            - observe state changes
+        - Injects observer updates into corresponding dumb components
+    - Services
+        - Shared and Component-Specific Services provide all sorts of functionality for validation, server-interactions, local state updates, etc.
+    - State Service
+        - E.G. ngrx Store, redux, etc. 
+        - A local state service and the functions which transact changes against them (e.g. reducers)  
+        - The State provided by the State Service has various 'slices'.
+            - Slices of state can be shared or smart-component specific (aka View Models)
+    - View Model
+        - Each smart component has a specific slice of state data- its view model 
+- Coupling over layers
+    - Form Model: Data Model
+    - Form: Form Model
+    - Dumb Component: Form Model, Data Model
+    - Smart Component: Data Model, Services
+    - Services: only shared services if they are used
+- Validation Approach
+    - Smart validation and Dumb Validation
+        - To avoid redundancy in validation code since validation has to occur at server-level, only the simplest, framework-based *dumb* validators are run locally within the dumb component, and the rest is managed by the smart component which triggers server-based smart validation.
+        - Smart Validation should NOT be re-evaluated when any existing dumb validation fails exist, because the smart validations will be encompass many/most/all of the dumb validations.
+        - Smart Validation fail messages should be informative enough that they do not need to be placed next to the offending control since mapping the fail to a specific control would be an additional, unnecessary responsibility for the smart component.
+    - Two Validation Approaches:
+        - Continuous: data is (re)validated after each user input/event
+        - Discrete: data is (re)validated only after predetermined event(s) (e.g. blur)
+    - Adaptive Validation: (for lack of a better term) The most useable validation approach uses discrete and continuous approaches
+        - When data is valid (or on first validation), validation updates to the user should be discrete
+        - Once identified as invalid, the data should be revalidated continuously
+    - Angular form (i.e. dumb) validation is continuous but we can use tricks to simulate adaptive validation
+        - Touched vs Not Touched
+            - A when a control loses focus, it is marked as Touched by the Angular Form API
+            - The base dumb component class contains a method which the derived dumb component can call: `updateTouchedValues()`
+                - This marks all valid controls as untouched
+        - The base dumb form component class also has a helper method, `hideControlValidationMesg(control)`, which can be used by the form template to hide validation fail messages whenever the control is marked 'dirty'.
+        - Therefore, controls which are invalid, but still untouched (because they haven't lost focus) will not display error messages (ie Discrete Validation)
+        - Only once they lose focus and are invalid will the validation appear continuous.
+- Form Update and Validation Control Flow
+    - TODO: Trace execution of 4th drawing
+
+    - 2 ways form's value observable fires:
+        - Component Input Property change:
+            - dataModel
+                - Triggered by a dc output event (e.g. blur)
+            - Smart validation Results
+                - Triggered by a base-dc output event
+        - Direct user input
+            - Any events on the form components (includes blur)
+    - The form change subscriber cannot directly change any values bc 
+        - the dumb component is OnPush - only re-renders when input properties are changed.
+            - changed values would not trigger change detection or a re-render (unless manually- which is bad)
+        - it can only output events (see below), which might eventually trigger an update of the input properties. 
+    - Two Possible Events Emitted:
+        - onFormValidationStatusChange
+            - triggered by both
+                - Component Input Property Change: bc what if smart validation has changed?
+                - Form Value change: Dumb validators might have invalidated the form, in which case the smart component would need to be notified.
+        - onDoSmartValidation
+            - triggered only by direct user input and if there was an existing smart validation fail (continuous validation)
+
+![layers](/resources/images/programming/Angular2ArchDrawings/Slide1.PNG)
+![smart-dumb-component-io](/resources/images/programming/Angular2ArchDrawings/Slide2.PNG)
+![Form-update-flow](/resources/images/programming/Angular2ArchDrawings/Slide3.PNG)
+![Form-update-and-validation-flow](/resources/images/programming/Angular2ArchDrawings/Slide4.PNG)
+
+### Questions
+- TODO: Make sure smart Validation doesn't get triggered if local validation fails exist, otherwise there will be duplications.
+- Will I need something more granular than a single *do-smart-validation* output event in the dumb component?
+- Remember to include error messages as separate- are these handled by the smart or dumb component? e.g. some DB transaction fail
+- Consider for the future a way of mapping smart validation results back to the individual fields in the dumb component
+- Possibly incorporate these notes:
+    - Validation design should follow smart/dumb component pattern
+        - You should have dumb validation and smart validation
+        - Dumb Validation => Dumb Component
+            - Form Validation
+            - Best to do the trivial or really easy stuff using the OOB validation functions, and if need be custom validations.
+        - Smart validation => Smart component
+            - Logic is disconnected from validation
+            - Involves business logic or any non-trivial validation checks
+    - Why is form validation not smart validation?
+        - Everything has to be (re)validated at server level
+        - It makes sense to write most (at least the non-trivial) validations only at the server level and use them to asynchronously validate on the client 
+        - Async validations on the form is not really good: it's much harder to debounce these events
+            - Conversely, if the dumb component sends change model events to the smart component, the smart component can debounce and fire off async validation calls to the server at a more appropriate rate.
+    - Smart Validation is just another state which needs to be maintained
+        - You can manage via a service or just internal to the component
+        - Most importantly, it's just program logic- not directly tethered to the form API.
+    - Back End Validation and API Design
+        - For each type of API transaction there should be an associated collection of validation methods
+        - There should be a single high-level method that will call all of the appropriate validation methods for a given transaction type
+            - The high level validation method can be called by:
+                - The client: it walks through all the validation steps so the client only has to make one call 
+                - The API: when the client tries to make a change (e.g. write to the DB), the API will call that same high level validation method first.
+        - Each individual validation method should have a return value that gives the smart component sufficient information to distribute the error message to the appropriate dumb component.
