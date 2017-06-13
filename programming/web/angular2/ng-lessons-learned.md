@@ -195,17 +195,17 @@ Angular2 Lessons Learned
     - `ng g pipe FilterDelegate --flat`
     - This will declare it in the AppModule, which is probably what you want
 
-## Forms
 
 ## Form Architecture
-- Quick Summary
+- Summary
     - Based on Smart and Dumb Component Paradigm
-    - Uses Dumb and Smart Validation
-    - Uses Discrete Validation, but Continuous when data is invalid
+    - Uses both *Dumb* and *Smart Validation*
+    - Uses *Adaptive Validation*- a combination of *Discrete* and *Continuous* Validation (all terms I've made up- described below)
     - Uses Reactive Forms Paradigm
     - Uses OnPush Dumb Components with immutable input properties provided by a state service (e.g. ngrx store)
     - Changes to global state are observed and injected into dumb components via smart components
         - Dumb component chooses which events to update state with
+    - Basic control flow for validation and form data are provided through base classes
     - Global State contains smart-component specific View Models and other shared data
     - Minimum coupling over layers
 - (P)Layers 
@@ -267,27 +267,53 @@ Angular2 Lessons Learned
     - Dumb Component: Form Model, Data Model
     - Smart Component: Data Model, Services
     - Services: only shared services if they are used
-- Validation Approach
-    - Smart validation and Dumb Validation
-        - To avoid redundancy in validation code since validation has to occur at server-level, only the simplest, framework-based *dumb* validators are run locally within the dumb component, and the rest is managed by the smart component which triggers server-based smart validation.
-        - Smart Validation should NOT be re-evaluated when any existing dumb validation fails exist, because the smart validations will be encompass many/most/all of the dumb validations.
-        - Smart Validation fail messages should be informative enough that they do not need to be placed next to the offending control since mapping the fail to a specific control would be an additional, unnecessary responsibility for the smart component.
-    - Two Validation Approaches:
-        - Continuous: data is (re)validated after each user input/event
-        - Discrete: data is (re)validated only after predetermined event(s) (e.g. blur)
-    - Adaptive Validation: (for lack of a better term) The most useable validation approach uses discrete and continuous approaches
+- Validation 
+    - Smart vs Dumb Validation
+        - Dumb Validation => Dumb Component
+            - Form Validation
+            - Executed on client, in Dumb Component
+            - Synchronous
+            - Simple validations using the OOB validation functions, and if need be custom validators.
+                - The more of these you use, the less DRY since they overlap with smart validations
+            - **Don't use async dumb validators**: it introduces difficult-to-test data flow into the form code
+        - Smart validation => Smart component
+            - Triggered by smart component
+            - Executed asynch, server-side
+            - Not based on the Angular forms API
+            - Smart Validation == All server-side validation
+                - All validation checks ultimately need to be run server side.  
+                - Could refer to simple server validations or more complex business logic oriented validations
+            - **Precedence**: Smart Validation should NOT be (re)evaluated when any existing dumb validation fails exist
+            - Smart Validation fail messages should be informative enough that they do not need to be placed next to the offending control since mapping the fail to a specific control would be an additional, unnecessary responsibility for the smart component.
+    - Two General Validation Approaches:
+        - **Continuous**: data is (re)validated after each user input/event
+        - **Discrete**: data is (re)validated only after predetermined event(s) (e.g. blur)
+    - **Adaptive Validation**: This is a very user-friendly validation method that incorporates discrete AND continuous approaches
         - When data is valid (or on first validation), validation updates to the user should be discrete
         - Once identified as invalid, the data should be revalidated continuously
-    - Angular form (i.e. dumb) validation is continuous but we can use tricks to simulate adaptive validation
-        - Touched vs Not Touched
-            - A when a control loses focus, it is marked as Touched by the Angular Form API
-            - The base dumb component class contains a method which the derived dumb component can call: `updateTouchedValues()`
-                - This marks all valid controls as untouched
-        - The base dumb form component class also has a helper method, `hideControlValidationMesg(control)`, which can be used by the form template to hide validation fail messages whenever the control is marked 'dirty'.
-        - Therefore, controls which are invalid, but still untouched (because they haven't lost focus) will not display error messages (ie Discrete Validation)
-        - Only once they lose focus and are invalid will the validation appear continuous.
-- Form Update and Validation Control Flow
-    - TODO: Trace execution of 4th drawing
+        - Basically: you give the user a chance to get the input right without complaining, then when you have displayed validation fail messages, you update the data for each successive input.
+    - How to do Adaptive Validation with Angular
+        - Dumb validation (via angular forms api) 
+            - Angular forms validators are continuous but we can simulate adaptive validation
+            - Touched vs Not Touched
+                - A when a control loses focus, it is marked as Touched by the Angular Form API
+                - The base dumb component class contains a method which the derived dumb component can call: `updateTouchedValues()`
+                    - This marks all valid controls as untouched
+            - The base dumb form component class also has a helper method, `hideControlValidationMesg(control)`, which can be used by the form template to hide validation fail messages whenever the control is marked 'dirty'.
+            - Therefore, controls which are invalid, but still untouched (because they haven't lost focus) will not display error messages (ie Discrete Validation)
+            - Only once they lose focus and are invalid will the validation appear continuous.
+        - Smart validation:
+            - Occurs whenever:
+                1. CRUD output event is emitted to the smart component.  The service will do it in inline before dispatching the appropriate update action. 
+                2. The base dumb form component emits the DoSmartValidation event to the smart component whenever:
+                    - The dumb component has existing smart validation errors AND
+                    - Any user input occurs 
+
+- Form Update Flow
+
+- Form Validation Flow
+    
+- TODO: Trace execution of 4th drawing
 
     - 2 ways form's value observable fires:
         - Component Input Property change:
@@ -320,22 +346,7 @@ Angular2 Lessons Learned
 - Remember to include error messages as separate- are these handled by the smart or dumb component? e.g. some DB transaction fail
 - Consider for the future a way of mapping smart validation results back to the individual fields in the dumb component
 - Possibly incorporate these notes:
-    - Validation design should follow smart/dumb component pattern
-        - You should have dumb validation and smart validation
-        - Dumb Validation => Dumb Component
-            - Form Validation
-            - Best to do the trivial or really easy stuff using the OOB validation functions, and if need be custom validations.
-        - Smart validation => Smart component
-            - Logic is disconnected from validation
-            - Involves business logic or any non-trivial validation checks
-    - Why is form validation not smart validation?
-        - Everything has to be (re)validated at server level
-        - It makes sense to write most (at least the non-trivial) validations only at the server level and use them to asynchronously validate on the client 
-        - Async validations on the form is not really good: it's much harder to debounce these events
-            - Conversely, if the dumb component sends change model events to the smart component, the smart component can debounce and fire off async validation calls to the server at a more appropriate rate.
-    - Smart Validation is just another state which needs to be maintained
-        - You can manage via a service or just internal to the component
-        - Most importantly, it's just program logic- not directly tethered to the form API.
+    
     - Back End Validation and API Design
         - For each type of API transaction there should be an associated collection of validation methods
         - There should be a single high-level method that will call all of the appropriate validation methods for a given transaction type
