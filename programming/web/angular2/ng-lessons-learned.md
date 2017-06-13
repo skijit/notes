@@ -208,7 +208,8 @@ Angular2 Lessons Learned
     - Basic control flow for validation and form data are provided through base classes
     - Global State contains smart-component specific View Models and other shared data
     - Minimum coupling over layers
-- (P)Layers 
+- Architecture 
+![layers](/resources/images/programming/Angular2ArchDrawings/Slide1.PNG)
     - Form
         - **Reactive Forms**: Based on Reactive (aka Model-Driven) Forms paradigm instead of template-based
             - Discussion of the relative merits of each approach is out-of-scope, but it is discussed [widely](http://blog.angular-university.io/introduction-to-angular-2-forms-template-driven-vs-model-driven/)
@@ -252,6 +253,7 @@ Angular2 Lessons Learned
             - validate
             - observe state changes
         - Injects observer updates into corresponding dumb components
+        ![smart-dumb-component-io](/resources/images/programming/Angular2ArchDrawings/Slide2.PNG)
     - Services
         - Shared and Component-Specific Services provide all sorts of functionality for validation, server-interactions, local state updates, etc.
     - State Service
@@ -308,11 +310,18 @@ Angular2 Lessons Learned
                 2. The base dumb form component emits the DoSmartValidation event to the smart component whenever:
                     - The dumb component has existing smart validation errors AND
                     - Any user input occurs 
-
+- Control Flow
+    - There are two interconnected logical flows of data in this architecture:
+    1. Form Update Flow
+    2. Validation Flow
 - Form Update Flow
+![Form-update-flow](/resources/images/programming/Angular2ArchDrawings/Slide3.PNG)
+- Validation Flow
+![validation-flow](/resources/images/programming/Angular2ArchDrawings/Slide4.PNG)
+- Complete Form Update and Validation Flow
+![Form-update-and-validation-flow](/resources/images/programming/Angular2ArchDrawings/Slide5.PNG)
 
-- Form Validation Flow
-    
+
 - TODO: Trace execution of 4th drawing
 
     - 2 ways form's value observable fires:
@@ -335,10 +344,10 @@ Angular2 Lessons Learned
         - onDoSmartValidation
             - triggered only by direct user input and if there was an existing smart validation fail (continuous validation)
 
-![layers](/resources/images/programming/Angular2ArchDrawings/Slide1.PNG)
-![smart-dumb-component-io](/resources/images/programming/Angular2ArchDrawings/Slide2.PNG)
-![Form-update-flow](/resources/images/programming/Angular2ArchDrawings/Slide3.PNG)
-![Form-update-and-validation-flow](/resources/images/programming/Angular2ArchDrawings/Slide4.PNG)
+
+
+
+
 
 ### Questions
 - TODO: Make sure smart Validation doesn't get triggered if local validation fails exist, otherwise there will be duplications.
