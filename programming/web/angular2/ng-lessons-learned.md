@@ -381,3 +381,58 @@ Angular2 Lessons Learned
     - State managed should include visual elements (e.g. what is hidden and not)
         - This will make things more testable
 ![relationship-between-vm-sc-dc-reducer-action](/resources/images/programming/Angular2ArchDrawings/Slide6.PNG)
+
+## Modules and DI
+- Services and Components (among other things, like directives) go in Modules
+- A module can specify which other modules it wants to import- in the decorator's `imports` field
+    - It will get everthing the specified module(s) have exported
+- A module's decorator's `export` field only allows Components - not services?
+    - services are registered with the `providers` field
+- Typically, you want to register services at the app (root) level- this gives you a global singleton which can be DI'ed wherever
+- But it's crummy to associate each service in the app (root) level - it would be more convenient to put them into a module.
+- **QUESTION**: how do you inject a service at the root level, while still keeping it in a module?
+- **Answer**: You use the ModuleWithProviders class.
+    - Example.
+    ```(typescript)
+    //In the module the service lives in
+    @NgModule({
+        imports: [
+            //...
+        ],
+        exports: [
+            //your components (that you want to export)
+        ],
+        declarations: [
+            //you components
+        ]
+    })
+    export class CommonModule {
+        static forRoot(): ModuleWithProviders {
+            return {
+                ngModule: CommonModule,                     
+                providers: [
+                    MyService
+                ]
+            };
+        }
+    }
+    ```
+    - And then in App root module...
+    ```(typescript)
+    @NgModule({
+        declarations: [
+            //...
+        ],
+        imports: [
+            //various modules here...
+            CommonModule.forRoot(),
+        ],
+        providers: [
+            //services which are registered at the app level
+        ],
+        bootstrap: [AppComponent],
+        exports: [ ]
+        })
+    export class AppModule { }
+    ```
+    - **But remember**: when you import this (common) module into other modules (to get access to the components), you can use the normal method- you don't need to call `forRoot()` (i.e. use ModuleWithProviders)
