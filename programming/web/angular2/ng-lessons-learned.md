@@ -311,12 +311,13 @@ Angular2 Lessons Learned
                 2. The base dumb form component emits the DoSmartValidation event to the smart component whenever:
                     - The dumb component has existing smart validation errors AND
                     - Any user input occurs 
-    - Back End Validation and API Design
+    - **Back End Validation and API Design**
         - For each type of API transaction there should be an associated collection of validation methods
-        - There should be a single high-level method that will call all of the appropriate validation methods for a given transaction type
-            - The high level validation method can be called by:
-                - The client: it walks through all the validation steps so the client only has to make one call 
-                - The Back End API: when the client tries to make a change (e.g. write to the DB), the API will call that same high level validation method first (inline).
+        - There should be a single entry-point method that will call all of the appropriate validation methods for a given transaction type
+            - It should take a parameter which indicates whether to do **comprehensive** or **smart-only** validation (just those which don't overlap with dumb validation)
+            - The entry-point validation method can be called by:
+                - The client: it walks through all the validation steps so the client only has to make one call (**smart-only**)
+                - The Back End API: when the client tries to make a change (e.g. write to the DB), the API will call that same high level validation method first (inline). (**comprehensive**)
         - Each individual validation method should have a return value that gives the smart component sufficient information to distribute the error message to the appropriate dumb component.
 - Control Flow
     - There are two interconnected logical flows of data in this architecture:
@@ -361,8 +362,22 @@ Angular2 Lessons Learned
     - Only then will the component be re-rendered with the updated input property values sent to it via the Smart Component (via Observing the Store)
 
 ### Questions
-- TODO: Make sure smart Validation doesn't get triggered if local validation fails exist, otherwise there will be duplications.
 - Will I need something more granular than a single *do-smart-validation* output event in the dumb component?
 - Consider streamlining how we handle smart and dumb validation
 - Consider for the future a way of mapping smart validation results back to the individual fields in the dumb component.
 - Another drawing which clearly designates what is handled by the Base Dumb Form Component vs the actual dumb component.
+
+## Dialogs and State and View
+- I started using the bootstrap modal dialog helper ng2-bs3-modal with a dialog service (providing `show()` and `hide()` methods, among others).
+- Then I re-considered the design: why not have the modals be driven by the ngrx store properties?
+    - It would be nice to have more state centralized in the ngrx store
+    - It probably would be easier to test my services if they don't keep state themselves, but just assist with transitions
+- But then after talking it through, I realized this approach wouldn't work bc the ng2-bs3-modal is not designed as a dumb component:
+    - It doesn't get it's instructions based purely on input properties
+    - It might emit events, for example on dismissal, but that's only for notification purposes: it will manage closing the dialog on its own rather than wait for some instruction from the smart component.
+- Perhaps in the future, using a true dumb component, compatible with the ngrx methodology, it will be worth it.
+- Future Goal:
+    - Less state managed in services, more in the store
+    - State managed should include visual elements (e.g. what is hidden and not)
+        - This will make things more testable
+![relationship-between-vm-sc-dc-reducer-action](/resources/images/programming/Angular2ArchDrawings/Slide6.PNG)
