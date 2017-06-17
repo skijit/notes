@@ -1,6 +1,8 @@
 Generative Art
 ==============
 
+## Lecture 1
+
 - Generative Art: works of art that rely on an autonomous system for part or all of their production
     - not a movement or aesthetic
     - it's just a technique
@@ -25,6 +27,7 @@ Generative Art
     - The [Continuator](http://francoispachet.fr/continuator/continuator.html)
         - Listens to human and then tries to immitate and extend the human/style
         - Based on Markov Chains
+    - David Cope's [EMI](http://artsites.ucsc.edu/faculty/cope/experiments.htm) is very interesting, and worthy of more research.
 
 - Elements of Creativity
     - Aristototelian Approach involves 3 dimensions
@@ -74,4 +77,135 @@ Generative Art
             - decoupling generative phase from the evaluative phase
         - Interactive and adaptive: has a feedback loop with it's environment
         
-     
+## Lecture 2
+
+- BowerBird select and arrange blue objects in an artful way
+- "Art is about form" : in other words an alternative objective from the utilitarian 
+- Co-Evolution of Art and available tools
+    - Types of tools
+        - Physical tools
+        - Intellectual Tools
+            - Language, mathematics, philosophy, etc.
+    - Generative art is no different
+- History of Art
+    - 40,000 BC: Cave painting, tools, woodcarving, etc.
+    - 3,000 BC: language develops, enabling storytelling, poetry
+- History of Generative Art
+    - Any geometrical / rule-based pattern
+    - Lots of rule-based systems
+        - islamic art
+    - Early machines
+        - Based on energy sources:
+            - Hydraulic Power -> water organs, basic automatons (al jazari)
+            - Mechanical, Steam Power -> various automaton (see the Writer)
+    - Automaton are the precursor of AI
+- decoupe: cut up technique for poetry
+- vaserely
+- Generative Artists in visual arts
+    - Desmond Paul Henry
+    - Joeseph Schillinger
+    - SPRIROGRAPH!
+    - Nake
+- Delegating control in favor of a process
+    - Common approach is to use chance or random operations
+- Randomness and Noise
+    - Randomness is observed in a sequence when order and pattern seems to be lacking
+    - There used to be books full of random numbers!
+    - Another technique is to measure any physical, entropic system
+    - pseudorandom numbers are generated algorithmically: obviously deterministic, based on the seed (which itself is random)
+    - Popular Probabalistic Distributions
+        - Uniform : each option is equally likely
+        - Bernoulli : when you have two possible outcomes.
+            - Probs are P and 1-P
+            - In flipping a coin, P = 0.5, but other P values are possible
+        - Binomial: Probability of X successes in a series of N Success/Failure experiments.  
+            - Similar to Bernoulli, but see how it involves more than one event
+        - HyperGeometric: 
+        - Poisson: models the number of times, K, a given event, X, occurs within a time interval.
+            - If they're independent, then the rate is constant
+            - Very useful in simulations
+        - In max, `itable` is used for these distributions
+        - Geometric: how many failures before a given outcome occurs in a series of trials.
+    - When a distribution applies to a continuous variable, we call it a *Probability Density Function*
+        - Gaussian / Normal
+            - defined by it's mean and variance
+    - When each element in a sequence is decided at random, we call it noise.
+    - Lots of different kinds of noise:
+        - We characterize the different kinds of noise based on the amount of correlation between the different values in the sequence.
+        - White noise = no correlation
+            - uniform distribution
+        - `noisetilt` in Max will generate
+            - 1d, 2d, 3d all possible
+        - types of audio noise are distinguished by power distributions in spectrum
+        - Brownian noise (aka Brown noise or red noise)
+            - produced by Brownian motion
+            - random walk noise
+                - a sequence of steps in which each step is chosen randomly
+            - less treble than white noise
+            - frequency spectrum is ramp down from the lower frequencies
+        - Pink Noise
+            - Spectral Power is inversely proportional to the frequency buckets
+            - very useful in generative art and simulation
+            - many phenomena observe this kind of distribution (natural and synthetic)
+            - see 1/f
+        - Other kinds of noise:
+            - Blue
+            - Purple
+            - Gray noise
+        - Perlin noise:
+            - developed for the movie Tron!
+            - good for animation purposes and modelling of things like:
+                - marble
+                - smoke
+                - terrain
+                - flame
+                - clothes
+                - liquid
+            - often introduced into geometric patterns to create variety in texture in graphics
+            - TODO: add pictures of different kinds of noise
+- Chance as a Generator
+    - Aleatoric: process is defined in general, but the details are chance-driven
+    - Mozart, Duchamp, Cage, Xenakkis
+    - Formalized Music, Xenakkis (1971)
+    - Jean Arp (painter- used randomness)
+    - Ellsworth Kelly (painter- see spectrum colors arranged by chance)
+- Two types of approaches
+    - Combinatorial
+    - Procedural
+- Some purposes of Generative Art:
+    - question intentionality
+    - strategy for exploratory creativity
+- Chaos and Fractals
+    - Model dynamic systems
+    - A dynamic system can converge to 1 of 4 behaviors:
+        - Fixed Point behavior 
+            - stable or unstable equilibrium
+        - Periodic Behavior
+        - Quasi-Periodic Behavior
+        - Chaotic Behavior:
+            - Can only be predicted in the short term
+            - Very sensitive to initial conditions
+            - Small changes in input can make the output different / hard to predict
+            - Popularized by Lorenz
+                - Coined the 'butteryfly effect' describing how the existing weather prediction formula / mechanisms could be affected (globally) by the incredibly small, local turbulences caused by a single butterflies flapping wings
+            - Different from stochastic processes in that they're very deterministic
+    - Fractals are chaotic system
+        - have self similariy
+        - patterns repeat themselves at different scales
+            - siepinski gasket
+        - mandelbroit set: it's a series formula with 2 variables:
+            - for each combination of those variables, you test whether it's growth is bounded (covervges to infinity) or not, and draw that coordinate accordingly.
+    - fractals occur all over the place in nature
+    - in music, analagous to repetition and variation
+        - xcomposer, fractmuse
+    - Attractor
+        - its a point (or sets of points) that a function will converge to after a range of conditions or infinite iterations
+        - types of attractors:
+            - single point attractor
+            - periodic attractors
+            - chaotic attractors, strange attractor
+                - 
+
+- Sample/Loop serial music
+
+
