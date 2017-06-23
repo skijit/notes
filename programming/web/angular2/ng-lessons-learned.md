@@ -436,3 +436,52 @@ Angular2 Lessons Learned
     export class AppModule { }
     ```
     - **But remember**: when you import this (common) module into other modules (to get access to the components), you can use the normal method- you don't need to call `forRoot()` (i.e. use ModuleWithProviders)
+
+## 2 Ways for Getting PolyMorphic DI
+1. Using a factory.
+```(typescript)
+import { AjaxCallsService } from './../ajax-calls.service';  //cannot use a barrel importation here or it will fail
+import { Store } from '@ngrx/store';
+//more ES imports ...
+
+//factory has AjaxCallsSvc injected because of the providers deps property (below)
+//the ajaxCallSvc itself has a dependency on Store, and since that's in the 
+//deps property too, that will work.
+let logginsServiceFactory = (ajaxCallSvc : AjaxCallsService) => {
+    
+    //use the default provider, LogginsDefaultSvc
+    let liveListener = new ConsoleLiveListener();
+    let offlineListener = new ConsoleOfflineListener();
+    let config = <LogginsConfig>{
+    isOn: false,
+    bufferSize: 10,
+    levelFilter: LogLevel.Error,
+    tagFilter: [ LogTag.FormProcessing, LogTag.BogusTag ],
+    liveListeners: new Map().set(liveListener.getName(), liveListener),
+    offlineListeners: new Map().set(offlineListener.getName(), offlineListener),
+    formatter: (entry:LogEntry) => `${entry.message}`
+    };
+    
+    //polymorphic injection: service contract is interface-based, but 
+    //a concrete implementation is injected when using this provider
+    return new LogginsDefaultService(config, ajaxCallSvc);
+};
+
+export let LogginsServiceProvider = {
+    provide: LogginsService,
+    useFactory: logginsServiceFactory, 
+    deps: [ AjaxCallsService, Store ]
+};
+```
+2. In the module decorator's providers property, use `{ provide, useClass }` instead of a concrete Service name
+```(typescript)
+providers: [
+    SchemaService,
+    //...
+    ApiService,
+    AuthUnitService,
+    CacheService,
+    //HERE: HttpService is an abstract class, JQueryHttpService is a concrete implementation
+    { provide: HttpService, useClass: JQueryHttpService }
+],
+```
