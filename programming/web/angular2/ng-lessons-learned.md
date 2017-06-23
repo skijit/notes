@@ -438,7 +438,8 @@ Angular2 Lessons Learned
     - **But remember**: when you import this (common) module into other modules (to get access to the components), you can use the normal method- you don't need to call `forRoot()` (i.e. use ModuleWithProviders)
 
 ## 2 Ways for Getting PolyMorphic DI
-1. Using a factory.
+
+1. Using a factory:
 
 ```(typescript)
 import { AjaxCallsService } from './../ajax-calls.service';  //cannot use a barrel importation here or it will fail
@@ -488,3 +489,55 @@ providers: [
     { provide: HttpService, useClass: JQueryHttpService }
 ],
 ```
+
+## Misc Best Practices
+- **Enums**
+    - Enums are good for representing a property as one of many alternatives (e.g. configuration), but the semantics are a little different than in C#.
+        - Design Time : They act as a **type**
+        - Run Time : They act as an **object** (where each value is a property)
+    - Design Time:
+        - You can use them for type annotations
+
+    ```(typescript)
+    enum LogLevel {
+    Error,
+    Warning,
+    Info,
+    Debug
+    }
+
+    export interface LogginsConfig {
+    //...other properties
+    levelFilter: LogLevel;
+    //...other properties
+    }
+    ```
+
+    - Run Time:
+        - The enum is compiled into an object that has mappings from Name->Val and Val->Name (as long as you don't mark it a const enum)
+        - Now that it is an object, any runtime manipulation such as assignments and comparisons require you to treat it as such.
+
+        ```(typescript)
+        console.log(LogLevel.Error);  //prints 0
+        ```
+
+        - Angular-specific gotcha:
+            - If you want an enum in your Component, you need to define a property in the Component Class that refers to the enum (now an object)
+                
+            ```(typescript)
+
+            export class LoggingLevelFormComponent {
+                //this class property is initialized to the enum type, which at runtime is 
+                //not a type but an object.
+                LogLevel : typeof LogLevel = LogLevel; 
+            }
+
+            ```
+
+        - For more info on this usage of `typeof` see [this blog post](https://blog.mariusschulz.com/2016/05/31/type-queries-and-typeof-in-typescript) or my typescript notes.
+            - You could just as well leave this typeof annotation out.
+        
+    - Helper Methods:
+        - I've added an enum service that lets you enumerate names and values in an enum object.
+
+        
