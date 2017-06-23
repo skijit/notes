@@ -439,6 +439,7 @@ Angular2 Lessons Learned
 
 ## 2 Ways for Getting PolyMorphic DI
 1. Using a factory.
+
 ```(typescript)
 import { AjaxCallsService } from './../ajax-calls.service';  //cannot use a barrel importation here or it will fail
 import { Store } from '@ngrx/store';
@@ -473,7 +474,9 @@ export let LogginsServiceProvider = {
     deps: [ AjaxCallsService, Store ]
 };
 ```
+
 2. In the module decorator's providers property, use `{ provide, useClass }` instead of a concrete Service name
+
 ```(typescript)
 providers: [
     SchemaService,
