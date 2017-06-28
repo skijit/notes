@@ -209,6 +209,13 @@ Angular2 Lessons Learned
     - Global State contains smart-component specific View Models and other shared data
     - Minimum coupling over layers
     - Remember that none of this addresses error messages.  Only validation.
+- When to use:
+    - Needs adaptive validation
+    - Lots of text inputs
+    - Want to follow smart / dumb component architecture
+    - When there is a benefit to a model-driven approach (e.g. dynamic amounts of things)
+- Future:
+    - TODO: Consider an alternative of having a dumb component emit all DOM events you're interested in up to a smart component which manages validation and inject messages appropriately.
 - Architecture 
 ![layers](/resources/images/programming/Angular2ArchDrawings/Slide1.PNG)
     - Form Layer
@@ -490,6 +497,14 @@ providers: [
 ],
 ```
 
+## OnPush and Change Detection
+- [one source](https://stackoverflow.com/questions/36815706/does-changedetection-changedetectionstrategy-onpush-in-angular2-only-works-in/36845604#36845604)
+- There are 3 conditions in which an OnPush Component will be marked for Change Detection
+    1. An Input Property Changes
+    2. It fires an (angular) event
+    3. An observable referenced in the template and used with the `Async` pipe fires an event.
+        - note that my OnPush components are usually dumb components and therefore not subscribed to an observable (as this typically happens in the smart component).
+
 ## Misc Best Practices
 - **Enums**
     - Enums are good for representing a property as one of many alternatives (e.g. configuration), but the semantics are a little different than in C#.
@@ -540,4 +555,38 @@ providers: [
     - Helper Methods:
         - I've added an enum service that lets you enumerate names and values in an enum object.
 
+- **Event and Handler Naming**
+    - In the traditional DOM scenario, there are 3 things involved in wiring up an event handler.    
+    1. The event (e.g. `click`)
+    2. The property to assign a handler to (e.g. `onclick`)
+    3. The handler method (e.g. `DoSomething(event)`)
+    - So you end up with:
+
+    ```(html)
+    <button onclick="return handleClick(event);">
+    ```
+
+    - In Angular event wireup, there are really only two things.
+    1. The event
+    2. The handler method
+
+    ```(html)
+    <button (onClick)="handleClick($event);">
+    ```
+    - There's no property to assign the handler to... you reference the event directly
+    - So a good nomenclature rule for angular events is:
+        - Event: `on<Event>`
+        - Handler: `handle<Event>`
+    - Another option is not to prefix your Event names with `on` because you can use the following alternative syntax to wire up angular events.
+    ```(html)
+    <button on-Click="handleClick($event);">
+    ``` 
+        - The dash seems to separate it from the normal DOM event property syntax
+    - If you want to handle (in Angular) a DOM event for a HTML object that lives in a component tempalte, just refer to it by the event name.
+    
+    ```(html)
+        <button (click)="handleClick($event);">        
+        <!-- OR -->
+        <button on-click="handleClick($event);">        
+    ```
         

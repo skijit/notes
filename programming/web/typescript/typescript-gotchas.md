@@ -82,3 +82,15 @@ typeof "foo";     // "string"
 let rectangle1 = { width: 100, height: 200 };
 let rectangle2: typeof rectangle1;
 ```
+
+## Best Interface Use-Cases
+- (i.e. When to use Interfaces vs an Abstract Class)
+- Always: Anything involving deserialization
+- Maybe if there are no methods and is very small in scope
+- Conversely, when to use Abstract Class
+    - Always: When it has runtime implications
+        - Ex: Angular's DI functionality is obviously runtime, not design time.
+            - If you want to inject something polymorphically, you need to use Abstract Classes.  
+            - Interfaces will not work.
+
+
