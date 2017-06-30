@@ -504,6 +504,10 @@ providers: [
     2. It fires an (angular) event
     3. An observable referenced in the template and used with the `Async` pipe fires an event.
         - note that my OnPush components are usually dumb components and therefore not subscribed to an observable (as this typically happens in the smart component).
+- For non-OnPush Components, change detection runs whenever an async event occurs:
+    1. Events - click, submit, …
+    2. XHR - Fetching data from a remote server
+    3. Timers - setTimeout(), setInterval()
 
 ## Misc Best Practices
 - **Enums**
@@ -556,6 +560,9 @@ providers: [
         - I've added an enum service that lets you enumerate names and values in an enum object.
 
 - **Event and Handler Naming**
+    - Quick reminder on differences between DOM and Angular events:
+        - DOM events are async
+        - Angular Events are extensions of rxjs Subject class- they can be async, but by default, are not.
     - In the traditional DOM scenario, there are 3 things involved in wiring up an event handler.    
     1. The event (e.g. `click`)
     2. The property to assign a handler to (e.g. `onclick`)
