@@ -484,12 +484,15 @@ describe('Standalone Component IO', () => {
 - before, we would use an injector.get() in the setup to get an instance of the service in the setup, but now we're doing it in the it()
 - guide becomes pretty hard to follow - TODO revisit
 
+## NgRX Store Testing
+
+
 
 ## TODO
-    - Jasmine
-    - NgRx testing
-    - Goal: Know how to test (in order of importance)
-        - All services
-        - Reducers
-        - Smart Component
-        - Dumb Components
+    
+- NgRx testing
+- Goal: Know how to test (in order of importance)
+    - All services
+    - Reducers
+    - Smart Component
+    - Dumb Components
