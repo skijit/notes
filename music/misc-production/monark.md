@@ -1,8 +1,9 @@
 Monark
 ======
 
-music/monark_1.jpg
-music/monark_signal_routing.png
+![monark-1](/resources/images/music/monark_1.jpg)
+![monark-2](/resources/images/music/monark_signal_routing.png)
+
 
 - Signal Path: 3 Oscs -> (optional 4th Osc) -> Filter -> Filter Env Gen -> Amp -> Env Gen -> (optional feedback to filter)
 - SR needs to be 96 KHz
@@ -41,8 +42,8 @@ music/monark_signal_routing.png
 	3. Using Modulation source:
 		- You have to turn on Filter MOdulation and then it depends on the Mod wheel and it's config
 
--
 
+## Preset Notes
 - Lots of presets just filter on white noise, w/ no oscillators
 - Preset "warp" is kinda tobacco-y
 - R2D2- use a lot of resonance (you can even use it with no oscs on)
