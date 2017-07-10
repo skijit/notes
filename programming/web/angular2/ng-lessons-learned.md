@@ -596,4 +596,27 @@ providers: [
         <!-- OR -->
         <button on-click="handleClick($event);">        
     ```
-        
+
+## Barrel Strategy
+
+- Problem: To import other ES6 modules, each ES6 modules need to know both:
+    - it's location to the root
+    - the location of the module to import, relative to the root
+    - **So: Coupling the code to the source tree structure in a bunch of different files makes refactoring hard**
+        - And as I'm still learning the ng2 ropes, I find I want to refactor often.
+- Solution:
+    - **Disclaimer**: There is probably a better solution, but this is what I'm doing currently
+    - Create a root level directory 'Barrels'
+        - Create a barrel file for commom modules, services, models, ng modules, store components, and mocks
+    - Any ES6 module which is explicitly re-exported in barrel needs to be referenced (imported) through that barrel.        
+    - I don't have a barrel for non-shared components because I think whatever source tree refactoring I do will not alter their location.
+- Downsides:
+    - makes it a little more challenging to namespace
+    - a little more maintenace in front (but less when you have to refactor)
+    - makes it harder to bulk import `import * from './blah';`
+- Upsides:
+    - Less paths to remember
+    - Less disruptive when I want to refactor
+    - Less lines of code (although they are longer... but vertical space is scarcer than horizontal, so that's ok)
+        - Since ES6 imports in an angular project are basically boilerplate/noise, this collapses them into a smaller space, letting me see more informative code above the fold.
+
