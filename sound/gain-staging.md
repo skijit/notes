@@ -11,7 +11,7 @@ Level and Gain Staging Notes
 
 ## Intro
 - The big question is how much do you want to increase the gain at each stage of your signal path.
-     - Applies to full signla path: instruments, mics, preamps, to final stereo mix.
+     - Applies to full signal path: instruments, mics, preamps, to final stereo mix.
 - **What's the Point?**:
     - Lets you get the Best SNR
     - Leave enough headroom to prevent clipping
@@ -20,7 +20,7 @@ Level and Gain Staging Notes
         - *non-linear* refers to devices where the output may not linearly proportional to the input
         - Analog hardware devices (and software models based on them) are often sensitive to the particular input levels (i.e. they have a sweet spot).  
 - Gain staging can be applied to an audio signal in 3 different domains:
-   - **Acoustic**
+    - **Acoustic**
         - In the air
         - Analog
     - **Analog Electronic**
