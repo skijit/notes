@@ -1,6 +1,7 @@
 Monark
 ======
 - The Native Instrument MiniMoog Clone
+- The upper right corner of panel A is master volume
 
 ## Signal Path & Basics
 
@@ -37,6 +38,9 @@ Monark
 		- Does not self modulate
 		- Can be used as a sound and modulation source at the same time if you output it's signal in the mixer section.
 	- Noise Osc (in the Mixer section)
+		- Supports two kids of noise:
+			- white: equal energy per frequency
+			- pink: equal energy per octave
 		- Like OSC3:
 			- Does not self modulate (not sure this would matter anyways)
 			- Can be used as a sound and modulation source at the same time if you output it's signal in the mixer section.
@@ -84,8 +88,10 @@ Monark
 		- So if you trigger another note while a release of a previous note is in progress, the attack will start not from 0, but the current value (based on the previous note's release phase)
 - Envelope Polarity (switch under filter contour knob)
 	- Normally the filter envlope (positive polarity) is used to sweep the cutoff from left to right.
+	- Basically, whatever the envelope value is (y-coordinate), this is added to the cutoff.
 	- In a negative polarity, it sweeps the filter cutoff from right to left during attack, and then back up in the sustain phase.	
 	![negative-adsr](/resources/images/music/negative-VCF-ADSR.gif)
+- Put simply, most envelopes specify a start and end point (typically the same value).  This envelope can be applied to the cutoff value, describing where it starts and ends (again, typically the same location).  Contour just describes the degree to which the envelope applies.
 
 
 ### Amp Envelope
@@ -95,6 +101,8 @@ Monark
 	- Note that I have a hard time aurally verifying these different settings, so for the most part envelopes aren't retriggered.  But there's definitely some variation.
 
 ## Other stuff
+
+
 
 ### Pulse Width Modulation
 
@@ -123,6 +131,9 @@ Monark
 	- Now slowly add back in just feedback
 		- You'll get full cancellation at some point
 		- Then at another point as you increase the feedback, all hell breaks loose
+- Another way to get self oscillation is to turn off all the oscillators, but turn on filter-envelope key tracking.
+	- This is a way to approximate a sine wave
+
 
 ### Glide
 
@@ -172,14 +183,67 @@ Monark
 		- The behavior is hard to verify.
 		- Be sure to turn off the Release phase on the amplitude envelope if you want to hear more clearly.
 
+## Ableton Integration
+
+- Terminology Note: I say 'Preset' but actually mean 'Snapshot' which lives in the ensemble file.  
+- Saving a Monark Preset
+	- Create an instrument rack
+	- Drop the reaktor plugin into it
+	- Open reaktor, choose 'Disk' tab in the browser and find your 'local copy' of the ensemble it in the filesystem
+	- For each new snapshot in the User Snapshot bank:
+		- In the file menu, click 'create local copy' and overwrite your current (local)
+		- Put the ensemble in edit mode (the Tree icon in the main surface)
+		- Go to the snapshot mode and use the 'Append' button at the bottom
+			- This will create the snapshot in the next slot
+			- Once named, just press return
+	- Rename and save your instrument rack to your instrument rack library
+- Updating a Preset
+	- You can overwrite the snapshot using the 'Store' button
+- Recalling a Monark Preset
+	- Once you've loaded the local copy of the ensemble, change the browser tab to snapshots and click off, and then back on to the snapshot you want- this will clear the cache (which might be old).
+- Saving a Monark Track / Device / Clip
+	- Once you've saved your instrument rack, you can save the whole track including:
+		- device
+		- clips
+	- drag the track into your monark folder in ableton
+- After saving- commit to the folder's git repository so info isn't lost
+
 
 ## Preset Notes
 - Lots of presets just filter on white noise, w/ no oscillators
-- Preset "warp" is kinda tobacco-y
+- *warp* is kinda tobacco-y
 - R2D2- use a lot of resonance (you can even use it with no oscs on)
-- preset caged rain has some filtered guitary qualities (a lot depends on resonance and feedback)
+- *caged rain* has some filtered guitary qualities (a lot depends on resonance and feedback)
+- *Blockbuster* is a good pad example.  Is a chord with long envelope.
+- *Black market* has a theremin-like vibratro
+- *WTFunk* has a phaser-like effect when played in the bass, similar to some funk bass
+
+## Suggested Patches to Program
+
+- Fat bass
+- Simple sub-bass, w blend with another instr
+- Funky sq wave for lead riff
+- Tobacco-esque
+- Hi arp, computer, calm (triangle)
+- Pads aplenty
+- Med-High melodic
+- Video game sound effects
+- Other squeaky sound effects
+
 
 ## TODO
 - Watch [this video series](https://www.youtube.com/watch?v=4MvRQ23i8wk)
 - Review more about the sound design notes in the manual
 - Walk through the presets again
+
+## Misc Observations
+
+- easy way to get getting key clicks is with a lot of contour on 
+- a fast filter oscillation sounds better with the LP2 (12db/octave0 filter)
+	- see preset Classic\Glassic
+- more dramatic effects on filter modulation when you have a lot of contour, fast attack/decay, and low sustain.
+- mixing in very narrow pulses at a lower volume, same pipe lenth, adds an almost modulation-sounding effect, but retain the character
+-  
+
+
+
