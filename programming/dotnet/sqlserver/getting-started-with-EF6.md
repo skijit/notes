@@ -177,3 +177,13 @@ Notes from a pluralsight [course](https://app.pluralsight.com/library/courses/en
         - In the Context, you can override ```SaveChanges()``` such that the DateChanged, DateCreated are automatically set and persisted.
 - Use ```AsNoTracking()``` to save time when retrieving data you will not change
     - You can't use this with ```Find()``` though
+- Configuring Loading Behaviors:
+    - Use eager loading with explicit calls to `Include()`
+    - Disable lazy loading by adding the following line to the derived DbContext constructor: `Configuration.LazyLoadingEnabled = false;`
+    - You don't have to turn off the proxy usage
+    - If you're able to use `AsNoTracking()`, do that!
+    - Change or reconfigure Navigation properties
+        - A lot of navigation properties aren't necessary.  Just remove them.
+        - For the ones you do want to keep, change them so they are not virtual. 
+    - Be aware of [relationship fixup](https://stackoverflow.com/questions/16357141/lazyloadingenabled-setting-doesnt-seem-to-work-in-ef-5) problems        
+        - `AsNoTracking()` can fix this a lot of times 
