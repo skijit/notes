@@ -70,6 +70,30 @@ Positive Discipline Notes
         - "Do you want me to with you?"
         - Model this behavior by going yourself
 
+## Misc Notes From Meg Anne
+
+- find ways to encourage the child to be driven by internal not external factors
+- share stories of personal failures to destigmatize failure
+    - emphasize how it is a necessary part of the learning process
+- Sibling Fights and the 3'd B's in Positive Discipline
+    - Beat it: The adult leaves the scene
+    - Bear it: The adult looks at what the children are doing, without getting involved.
+    - Boot them out: The adult separates the children from the scene.
+    - **Point**: Let them sort it out but have clear boundaries if it escalates into unacceptable behaviors
+- Dealing with potential lies:
+    - "I'm gonna trust you"
+    - Casually: "Is this real or not"
+- Kids need a safe, private place to go when angry
+- Narrating instead of reacting
+    - Rather than matching the kids anger, say "I see you're angry..."
+- The Flipped Lid
+    - People can be rational once they've reached a certain state of anger/arousal
+    - Do not engage with anger
+    - Give them a choice to make (e.g. You can go here or you can go there...)
+- Assessing kid's evaluation of social circumstances / dissapointments
+    - Ask: "Are you ok with that?"
+
+    
 
 ## Class Photos
 
