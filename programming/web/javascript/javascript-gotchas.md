@@ -82,6 +82,13 @@ JavaScript Gotchas and Misc Notes
     - It catches some common coding bloopers, throwing exceptions.
     - It prevents, or throws errors, when relatively "unsafe" actions are taken (such as gaining access to the global object).
     - It disables features that are confusing or poorly thought out.
+
+## Pass by reference behavior
+
+- Primitives are passed by value
+- Objects are similar to pass by reference, but actuall different.
+    - They are: pass by copy of reference
+    - Good explanation [here](https://stackoverflow.com/questions/13104494/does-javascript-pass-by-reference)
     
 ---------------------------
 **TODO**  
