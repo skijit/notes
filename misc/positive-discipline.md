@@ -93,6 +93,3 @@ Positive Discipline Notes
     - Give them a choice to make (e.g. You can go here or you can go there...)
 - Assessing kid's evaluation of social circumstances / dissapointments
     - Ask: "Are you ok with that?"
-
-    
-
