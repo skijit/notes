@@ -50,8 +50,22 @@ Angular2 Zones and Change Detection
 ### Optimizations
 - Based on usage of **Immutables** and **Observables**
 - **Immutables**
-    - Other than primitives, all objects are mutable by default in JavaScript
-    - `changeDetection: ChangeDetectionStrategy.OnPush`: set in the component decorator, specifies that change detection only occur if an input property (ie `@Input`) has changed (ie change = reference change)
+    - Other than primitives and strings, all objects are mutable by default in JavaScript
+        - *mutable* = the internal state can change, but the variable remains the same
+        - for primitives, there is no difference between the reference and the internal state so, for example, changing a number means changing the value referred to (the state) by the variable, which means it's now a different.
+
+        ```(javascript)
+        let a = 1; //a refers to 0000001
+        a=2; //a now refers to 0000011
+        //'a' is different by virtue of a state change.  
+        //thus primitives are immutable.
+        ```
+
+        - this is not the case with most objects.
+
+    - `changeDetection: ChangeDetectionStrategy.OnPush`: set in the component decorator, specifies that change detection only occur if 
+        1. an input property (ie `@Input`) has changed (ie change = reference change)
+        2. dom event inside the component occurs
     - For each component Input property, use an Immutable library
     - This will let you skip entire subtrees in the Component-Change Detection-Tree
 - **Observables**
@@ -83,7 +97,7 @@ Angular2 Zones and Change Detection
     - Dumb components should just have inputs and outputs
     - have lots of dumb components
 - onpush strategy gotcha: 
-    - dom event inside it will also cause re-rendering, doesn't just require reference change to an input property
+    - 
 - NgOnInit vs Constructor
     - 
 
