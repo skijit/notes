@@ -93,3 +93,34 @@ Positive Discipline Notes
     - Give them a choice to make (e.g. You can go here or you can go there...)
 - Assessing kid's evaluation of social circumstances / dissapointments
     - Ask: "Are you ok with that?"
+
+- Goals
+    - Consistency with PD
+    - Anger in family
+    - Empathy in kids 
+
+## Next Meeting
+
+- Rewind
+    - Rather than accepting the kids not listening to a request, back up the situation again.
+    - Explain the situation.
+    - Try again.
+    - Ex. Getting into the car and strapping in
+    - This is a good stopping in the moment
+    - This is good for practicing when you have time
+
+- One way to avoid rebellion is to emphasize that they are making choices
+    - 'I'm going to respect your choice...'
+    - Another thing is to make a connection: 'I see you want to do this...'
+
+- To avoid the meaningless of 'you made this choice'... or making it just seem like a retroactive punishment instrument, try to frame the situation proactively: 
+    - you can choose to do this thing I want or you can choose to do this crappy thing
+
+- WRT Nina playing mean with Penny, have a talk with Penny and ask her what she's ok with.
+    - Encourage her to see whether she plays with Nina as her choice, and review her options.
+    - Facillitate her working it out with Nina on her own
+    - Similarly, we don't get involved in the kids until they break our consent (i.e. what *we* are ok with)
+    - Offer to play with Penny if Nina isn't being nice.
+        - We're going to play nice with each other
+
+
