@@ -113,7 +113,7 @@ Positive Discipline Notes
     - 'I'm going to respect your choice...'
     - Another thing is to make a connection: 'I see you want to do this...'
 
-- To avoid the meaningless of 'you made this choice'... or making it just seem like a retroactive punishment instrument, try to frame the situation proactively: 
+- To avoid the meaningless of 'you madeS this choice'... or making it just seem like a retroactive punishment instrument, try to frame the situation proactively: 
     - you can choose to do this thing I want or you can choose to do this crappy thing
 
 - WRT Nina playing mean with Penny, have a talk with Penny and ask her what she's ok with.
@@ -123,4 +123,4 @@ Positive Discipline Notes
     - Offer to play with Penny if Nina isn't being nice.
         - We're going to play nice with each other
 
-
+ 
