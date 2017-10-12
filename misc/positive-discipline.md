@@ -99,7 +99,7 @@ Positive Discipline Notes
     - Anger in family
     - Empathy in kids 
 
-## Next Meeting
+## Meeting 10-4
 
 - Rewind
     - Rather than accepting the kids not listening to a request, back up the situation again.
@@ -122,5 +122,18 @@ Positive Discipline Notes
     - Similarly, we don't get involved in the kids until they break our consent (i.e. what *we* are ok with)
     - Offer to play with Penny if Nina isn't being nice.
         - We're going to play nice with each other
+
+## Meeting 10-11
+
+- Emphasis on asking vs telling, esp. when making a connection bc of an angry kid and attempting to deal with their anger.
+- Avoid the telling them to do stuff:
+    - Ex: Cleaning X
+        - Penny: can you help me keep a clean house
+        - Nina: ask her to do it, but if she doesn't do it, i'll get praise from Jennifer
+            - Effort praising remember
+- Ask Nina what her goal is for a soccer game
+    - Then you can talk about how she did in relation to that
+- Regarding Nina and social circumstances : be a bridge and not a crutch.
+    - interact with both her and her friends/teammates
 
  
