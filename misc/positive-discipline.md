@@ -136,4 +136,17 @@ Positive Discipline Notes
 - Regarding Nina and social circumstances : be a bridge and not a crutch.
     - interact with both her and her friends/teammates
 
- 
+## Meeting 10-25
+
+- scenario: nina gets upset bc she wants a cookie.  we deal with her anger by saying, 'I see youre so angry bc you don't think this is fair'
+    - validate their feelings - and leave it at that
+    - this is different from saying you agree
+- scenario: penny gets a 14 out of 15 on a worksheet and looses it
+    - acknowledge her feelings
+    - ask how she feels about the good parts of the worksheet
+    - if she wants to write a note to a teacher, the teacher can talk about it (with more legitimacy)
+- book: love languages
+    - how you give love (act of service, words of affirmation, time, touch, gifts) is the kind of love you want to receive
+    - encourage nina to offer that to other kids (think she's encouragement / attention)
+
+
