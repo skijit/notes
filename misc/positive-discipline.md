@@ -150,3 +150,10 @@ Positive Discipline Notes
     - encourage nina to offer that to other kids (think she's encouragement / attention)
 
 
+## Meeting 11-1
+
+- handling potty talk:
+    - check consent
+    - am i ok with the consequences
+    - parameters: when is it ok, amonst whom
+ 
