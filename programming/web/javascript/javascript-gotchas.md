@@ -159,6 +159,14 @@ e === f           // true
 
 - **Best Practice**: always use the `===` and `!==` operators
 
+### Apply, Call, Bind
+- Recall in javascript, all functions are objects
+- Apply, Call, and Bind are 3 methods which are available to all function objects
+- **Bind**
+    - Bind is used primarily to set the `this` value in a function
+    - Depending on how the function is called, the `this` value in the function might not be what you expect it.  That unexpectedness can cause problems.
+    - 
+
 
 ---------------------------
 **TODO**  
