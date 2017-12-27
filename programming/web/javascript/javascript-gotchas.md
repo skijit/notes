@@ -82,10 +82,95 @@ JavaScript Gotchas and Misc Notes
     - It catches some common coding bloopers, throwing exceptions.
     - It prevents, or throws errors, when relatively "unsafe" actions are taken (such as gaining access to the global object).
     - It disables features that are confusing or poorly thought out.
-    
+
+## Pass by reference behavior
+
+- Primitives are passed by value
+- Objects are similar to pass by reference, but actuall different.
+    - They are: pass by copy of reference
+    - Good explanation [here](https://stackoverflow.com/questions/13104494/does-javascript-pass-by-reference)
+
+## Undefined vs Null
+- `undefined` means a variable has been declared but not assigned a value.
+    - `undefined` is itself a type
+- `null` is what you assign to a variable when you want to show it has no value.
+    - `null` is an object
+
+```(javascript)
+var TestVar;
+alert(TestVar); //shows undefined
+alert(typeof TestVar); //shows undefined
+
+var TestVar = null;
+alert(TestVar); //shows null
+alert(typeof TestVar); //shows object
+
+null === undefined // false
+null == undefined // true
+null === null // true
+
+null = 'value' // ReferenceError
+undefined = 'value' // 'value'
+```
+
+### Equality operators
+- The `===` operator behaves identically to the `==` operator, except that no type conversion is done.
+    - The types must be the same to be considered equal.
+- The `==` uses type coersion to evaluate. 
+- Type coersion rules are a little weird.
+
+```(javascript)
+'' == '0'           // false
+0 == ''             // true
+0 == '0'            // true
+
+false == 'false'    // false
+false == '0'        // true
+
+false == undefined  // false
+false == null       // false
+null == undefined   // true
+
+' \t\r\n ' == 0     // true
+```
+
+- For reference types (objects), the `==` and `===` are pretty much the same as they inspect the references (presumably a pointer to somewhere in memory- and thus they're the same types).
+    - Only exception to the rule of comparing the underlying references is if the type of the object is a string, it will do string equality rather than compare the pointers.
+
+```(javascript)
+var a = [1,2,3];
+var b = [1,2,3];
+
+var c = { x: 1, y: 2 };
+var d = { x: 1, y: 2 };
+
+var e = "text";
+var f = "te" + "xt";
+
+a == b            // false
+a === b           // false
+
+c == d            // false
+c === d           // false
+
+e == f            // true
+e === f           // true
+```
+
+- **Best Practice**: always use the `===` and `!==` operators
+
+### Apply, Call, Bind
+- Recall in javascript, all functions are objects
+- Apply, Call, and Bind are 3 methods which are available to all function objects
+- **Bind**
+    - Bind is used primarily to set the `this` value in a function
+    - Depending on how the function is called, the `this` value in the function might not be what you expect it.  That unexpectedness can cause problems.
+    - 
+
+
 ---------------------------
 **TODO**  
 - [this](http://stackoverflow.com/questions/2485423/is-using-var-to-declare-variables-optional) javascript scoping page
 - more about closures and this ambiguities
-- "use strict"
+
 

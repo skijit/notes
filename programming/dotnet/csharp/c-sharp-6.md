@@ -138,16 +138,39 @@ C# 6 (and a bit of 7)
     ```
 
 - **Quick Review on Async / Await**
-    - async keyword is applied to a method
+    - `async` keyword is applied to a method
     - this tells the compiler that we want to use aynchronous execution in the method.
         - there's additional overhead in the code which is generated (wraps everything in a state machine), so don't add this unless you plan on using it.
-    - this doesn't change the method's signature.
+    - async != parallel
+        - Although they both use Tasks (which are analogous to Promises), async methods are still single-threaded.
+        - Async methods just have a different (i.e. async) control-flow such that async code will not block code until it is awaited. 
+        - `async` methods are ideal for i/o-bound operations involving waiting for a response
+        - new threads are good for CPU-bound activities with no waiting... they just need to process.
+    - adding `async` doesn't change the method's signature.
         - this **cannot** be used as the basis of an overload
-    - applying async doesn't make the method asynchronous, it just lets the compiler know our intention to possibly use some asynchronous execution.
-    - Inside the method marked async, you'll insert an await.
-    - the await keyword proceeds a call which whould be executed asynchronously.  
+    - applying `async` doesn't make the method asynchronous, it just lets the compiler know our intention to possibly use some asynchronous execution.
+    - Inside the method marked `async`, you'll insert an `await`.
+    - the `await` keyword proceeds a call which whould be executed asynchronously.  
         - when the asychrnonous method returns, the rest of the async'ed calling method will be executed synchronously
         - the await'ed method needs to return a Task
+    - Every method in an async call stack...
+        - Should return a `Task<>` even if it is a concrete value with no apparent wrapping in a task (to support the underlying state machine that drives async/await)
+        - Does NOT need to be called with async!
+            - Async is only necessary for your method to be await-able.
+            - IE only necessary for synchronization points
+            - Adding await will often unwrap the Task<> to just the result.
+    - `await` is like the trigger to begin asynchronous processing:
+        - If you put an `await` on the same line as an async call (see [this so post](https://stackoverflow.com/questions/21267307/practical-usage-of-await-on-the-same-line-as-the-async-call)), it would appear the `await` is making the async call de facto synchronous (and therefore bad- bc you have the overhead of async with no performance benefits)
+        - but actually, this is the trigger to yield control to the calling process.
+        - `await` triggers two different things:
+            1. within the current method, it means `waitForReal`: this means that no further statements in this scope can be executed until the value is resolved.
+            2. to the parent (calling) method, it means `doYourOtherStuffNow`: it signals to parent to continue processing, at least until the parent executes it's own `await` on the called method's returned `Task`.
+    - Ultimately, async tasks will be composed of individually sync methods and operations. 
+        - So if you need to call a sync task, that's no big deal.  Blocking happens.  That's normal programming.
+        - It becomes more difficult the other way around: when you have sync calling async.
+            - It works fine, but to fully realize the benefits, it's best if your entire (or as much as possible) call chain is factored for async - thereby minimizing blocking. 
+
+        
         
     - Example:
     ```(csharp)
@@ -171,6 +194,10 @@ C# 6 (and a bit of 7)
             });
     }
     ```
+
+    - References:
+        - [Good async-await reference](https://stephenhaunts.com/2014/10/10/simple-async-await-example-for-asynchronous-programming/)
+        - https://stackoverflow.com/questions/41953102/using-async-await-or-task-in-web-api-controller-net-core
 
 **TODO: review the following url https://msdn.microsoft.com/en-us/magazine/dn879355.aspx**
 

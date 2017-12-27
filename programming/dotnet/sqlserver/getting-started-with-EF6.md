@@ -177,3 +177,33 @@ Notes from a pluralsight [course](https://app.pluralsight.com/library/courses/en
         - In the Context, you can override ```SaveChanges()``` such that the DateChanged, DateCreated are automatically set and persisted.
 - Use ```AsNoTracking()``` to save time when retrieving data you will not change
     - You can't use this with ```Find()``` though
+- Configuring Loading Behaviors:
+    - Use eager loading with explicit calls to `Include()`
+    - Disable lazy loading by adding the following line to the derived DbContext constructor: `Configuration.LazyLoadingEnabled = false;`
+    - You don't have to turn off the proxy usage
+    - If you're able to use `AsNoTracking()`, do that!
+    - Change or reconfigure Navigation properties
+        - A lot of navigation properties aren't necessary.  Just remove them.
+        - For the ones you do want to keep, change them so they are not virtual. 
+    - Be aware of [relationship fixup](https://stackoverflow.com/questions/16357141/lazyloadingenabled-setting-doesnt-seem-to-work-in-ef-5) problems        
+        - `AsNoTracking()` can fix this a lot of times 
+
+
+## Async
+- EF6 has a number of operations to support async operations, but **BEWARE**, a DbContext instance will only support one 1 async operation at a time.
+- Therefore a divide and conquer strategy for extractions, such as below will NOT work:
+
+```(csharp)
+
+//Each of these async methods is essentially a passthrough to an EF async extraction
+var header = await GetMixHeaderAsync(mixVersionId);
+var blendStudy = await GetMixBlendStudyAsync(mixVersionId);
+var headspace = await GetMixHeadspaceAsync(mixVersionId);
+var mixInventory = await GetMixInventoryAsync(mixVersionId);
+var mixVersion = await GetMixVersionAsync(mixVersionId);
+
+//Seems reasonable, but EF context will barf (assuming it is a shared instance) bc it only
+//supports one async extraction at a time.
+Task.WaitAll(header, blendStudy, headspace, mixInventory, mixVersion);
+
+```

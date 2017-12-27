@@ -2,6 +2,7 @@ Positive Discipline Notes
 =====================
 
 - Misc Notes from book/worksheet/class on Positive Discipline
+- See [class photos from class](/misc/positive-discipline-class-photos)
 
 ## Chapter 1
 - Children will listen to you AFTER they feel listened to
@@ -70,221 +71,89 @@ Positive Discipline Notes
         - "Do you want me to with you?"
         - Model this behavior by going yourself
 
-
-## Class Photos
-
-![this is the alt title](/resources/images/misc/IMG_3081.JPG)
-
-&nbsp;
-&nbsp;  
-  
-![this is the alt title](/resources/images/misc/IMG_3082.JPG)
-
-&nbsp;  
-&nbsp;  
-
-![this is the alt title](/resources/images/misc/IMG_3083.JPG)
-
-&nbsp;  
-&nbsp;  
-
-
-![this is the alt title](/resources/images/misc/IMG_3084.JPG)
-
-&nbsp;  
-&nbsp;  
-
-
-![this is the alt title](/resources/images/misc/IMG_3085.JPG)
-
-&nbsp;  
-&nbsp;  
-
-
-![this is the alt title](/resources/images/misc/IMG_3086.JPG)
-
-&nbsp;  
-&nbsp;  
-
-
-![this is the alt title](/resources/images/misc/IMG_3087.JPG)
-
-&nbsp;  
-&nbsp;  
-
-
-![this is the alt title](/resources/images/misc/IMG_3088.JPG)
-
-&nbsp;  
-&nbsp;  
-
-
-![this is the alt title](/resources/images/misc/IMG_3089.JPG)
-
-&nbsp;  
-&nbsp;  
-
-
-![this is the alt title](/resources/images/misc/IMG_3090.JPG)
-
-&nbsp;  
-&nbsp;  
-
-
-![this is the alt title](/resources/images/misc/IMG_3091.JPG)
-
-&nbsp;  
-&nbsp;  
-
-
-![this is the alt title](/resources/images/misc/IMG_3092.JPG)
-
-&nbsp;  
-&nbsp;  
-
-
-![this is the alt title](/resources/images/misc/IMG_3093.JPG)
-
-&nbsp;  
-&nbsp;  
-
-
-![this is the alt title](/resources/images/misc/IMG_5623.JPG)
-
-&nbsp;  
-&nbsp;  
-
-
-![this is the alt title](/resources/images/misc/IMG_5624.JPG)
-
-&nbsp;  
-&nbsp;  
-
-
-![this is the alt title](/resources/images/misc/IMG_5625.JPG)
-
-&nbsp;  
-&nbsp;  
-
-
-![this is the alt title](/resources/images/misc/IMG_5626.JPG)
-
-&nbsp;  
-&nbsp;  
-
-
-![this is the alt title](/resources/images/misc/IMG_5627.JPG)
-
-&nbsp;  
-&nbsp;  
-
-
-![this is the alt title](/resources/images/misc/IMG_5628.JPG)
-
-&nbsp;  
-&nbsp;  
-
-
-![this is the alt title](/resources/images/misc/IMG_5665.JPG)
-
-&nbsp;  
-&nbsp;  
-
-
-![this is the alt title](/resources/images/misc/IMG_5666.JPG)
-
-&nbsp;  
-&nbsp;  
-
-
-![this is the alt title](/resources/images/misc/IMG_5667.JPG)
-
-&nbsp;  
-&nbsp;  
-
-
-![this is the alt title](/resources/images/misc/IMG_5668.JPG)
-
-&nbsp;  
-&nbsp;  
-
-
-![this is the alt title](/resources/images/misc/IMG_5669.JPG)
-
-&nbsp;  
-&nbsp;  
-
-
-![this is the alt title](/resources/images/misc/IMG_5876.JPG)
-
-&nbsp;  
-&nbsp;  
-
-
-![this is the alt title](/resources/images/misc/IMG_5877.JPG)
-
-&nbsp;  
-&nbsp;  
-
-
-![this is the alt title](/resources/images/misc/IMG_5884.JPG)
-
-
-&nbsp;  
-&nbsp;  
-
-
-![this is the alt title](/resources/images/misc/IMG_5885.JPG)
-
-&nbsp;  
-&nbsp;  
-
-
-![this is the alt title](/resources/images/misc/IMG_5886.JPG)
-
-&nbsp;  
-&nbsp;  
-
-
-![this is the alt title](/resources/images/misc/IMG_5921.JPG)
-
-&nbsp;  
-&nbsp;  
-
-
-![this is the alt title](/resources/images/misc/IMG_5922.JPG)
-
-&nbsp;  
-&nbsp;  
-
-
-![this is the alt title](/resources/images/misc/IMG_5923.JPG)
-
-&nbsp;  
-&nbsp;  
-
-
-![this is the alt title](/resources/images/misc/IMG_5925.JPG)
-
-&nbsp;  
-&nbsp;  
-
-
-![this is the alt title](/resources/images/misc/IMG_5926.JPG)
-
-&nbsp;  
-&nbsp;  
-
-
-![this is the alt title](/resources/images/misc/IMG_5927.JPG)
-
-&nbsp;  
-&nbsp;  
-
-
-![this is the alt title](/resources/images/misc/IMG_5928.JPG)
-
-&nbsp;  
-&nbsp;  
-
-
+## Misc Notes From Meg Anne
+
+- find ways to encourage the child to be driven by internal not external factors
+- share stories of personal failures to destigmatize failure
+    - emphasize how it is a necessary part of the learning process
+- Sibling Fights and the 3'd B's in Positive Discipline
+    - Beat it: The adult leaves the scene
+    - Bear it: The adult looks at what the children are doing, without getting involved.
+    - Boot them out: The adult separates the children from the scene.
+    - **Point**: Let them sort it out but have clear boundaries if it escalates into unacceptable behaviors
+- Dealing with potential lies:
+    - "I'm gonna trust you"
+    - Casually: "Is this real or not"
+- Kids need a safe, private place to go when angry
+- Narrating instead of reacting
+    - Rather than matching the kids anger, say "I see you're angry..."
+- The Flipped Lid
+    - People can be rational once they've reached a certain state of anger/arousal
+    - Do not engage with anger
+    - Give them a choice to make (e.g. You can go here or you can go there...)
+- Assessing kid's evaluation of social circumstances / dissapointments
+    - Ask: "Are you ok with that?"
+
+- Goals
+    - Consistency with PD
+    - Anger in family
+    - Empathy in kids 
+
+## Meeting 10-4
+
+- Rewind
+    - Rather than accepting the kids not listening to a request, back up the situation again.
+    - Explain the situation.
+    - Try again.
+    - Ex. Getting into the car and strapping in
+    - This is a good stopping in the moment
+    - This is good for practicing when you have time
+
+- One way to avoid rebellion is to emphasize that they are making choices
+    - 'I'm going to respect your choice...'
+    - Another thing is to make a connection: 'I see you want to do this...'
+
+- To avoid the meaningless of 'you madeS this choice'... or making it just seem like a retroactive punishment instrument, try to frame the situation proactively: 
+    - you can choose to do this thing I want or you can choose to do this crappy thing
+
+- WRT Nina playing mean with Penny, have a talk with Penny and ask her what she's ok with.
+    - Encourage her to see whether she plays with Nina as her choice, and review her options.
+    - Facillitate her working it out with Nina on her own
+    - Similarly, we don't get involved in the kids until they break our consent (i.e. what *we* are ok with)
+    - Offer to play with Penny if Nina isn't being nice.
+        - We're going to play nice with each other
+
+## Meeting 10-11
+
+- Emphasis on asking vs telling, esp. when making a connection bc of an angry kid and attempting to deal with their anger.
+- Avoid the telling them to do stuff:
+    - Ex: Cleaning X
+        - Penny: can you help me keep a clean house
+        - Nina: ask her to do it, but if she doesn't do it, i'll get praise from Jennifer
+            - Effort praising remember
+- Ask Nina what her goal is for a soccer game
+    - Then you can talk about how she did in relation to that
+- Regarding Nina and social circumstances : be a bridge and not a crutch.
+    - interact with both her and her friends/teammates
+
+## Meeting 10-25
+
+- scenario: nina gets upset bc she wants a cookie.  we deal with her anger by saying, 'I see youre so angry bc you don't think this is fair'
+    - validate their feelings - and leave it at that
+    - this is different from saying you agree
+- scenario: penny gets a 14 out of 15 on a worksheet and looses it
+    - acknowledge her feelings
+    - ask how she feels about the good parts of the worksheet
+    - if she wants to write a note to a teacher, the teacher can talk about it (with more legitimacy)
+- book: love languages
+    - how you give love (act of service, words of affirmation, time, touch, gifts) is the kind of love you want to receive
+    - encourage nina to offer that to other kids (think she's encouragement / attention)
+
+
+## Meeting 11-1
+
+- handling potty talk:
+    - check consent
+    - am i ok with the consequences
+    - parameters: when is it ok, amonst whom
+ 
