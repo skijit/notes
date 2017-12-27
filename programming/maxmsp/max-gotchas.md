@@ -49,7 +49,28 @@ Max/MSP Gotchas and Misc Notes
         - `metro` runs in the high-priority thread and is for time-critical applications (music, triggers, etc)
         - `qmetro` runs in the low-priority thread and its for less time-critical applications, such as driving a video, where the perception of motion can be maintained with a variable and lower frequency.
             - note that some objects are smart enough to *dropframe* (cancel fulfillment of their request if they can't be serviced in realtime), but others (e.g. OpenGL drawing commands) and not able to do this.  Therefore, it is better to use `qmetro` to drive them
+- When **overdrive** is selected, you can also enable another key performance-related configuration: **Audio Interrupt**.
+    - It runs the Max event scheduler before each I/O vector.
+        - Max has both I/O vectors and signal vectors, and sometimes people confuse them.
+        - I/O vector determines the chunk sizes that are sent to your audio card, and therefore affects latency.
+        - Signal vector <= I/O vector and determines the size of computational chunks within the I/O vector.
+            - It can affect your CPU utilization, but no other audio-related factors (like latency).
+        - I typically default to a signal vector equal to the I/O vector (perhaps this is why they're often confused.)    
+    - Essentially, it is a way of getting control-rate processing running at audio rate.
+    - Keep in mind, if you select **Audio Interrupt**, you're still dependendent on the vector size (as this determines overall latency).
+        - Assuming 44.1 kHz:
+            - Vector size of 512 samples => 11.61 ms latency
+            - Vector size of 256 samples => 5.8ms ms latency
+            - Latency = (1/SR)*Vector size
+- [Info on running separate instances of max](https://cycling74.com/forums/running-multiple-max-applications-on-the-same-machine/)
 
+## Building a Standalone Application From Max Patch
+- Take a finished max patch and select File->Build Collective/Application
+- In the script window, you can do things like specify an icon, etc.
+- You choose a file format:
+    - Max Collective: still depends on the max or the max runtime, but it is cross-platform
+    - Application: standalone.  But you need to develop on the platform (mac, windows) you're targeting
+- The `standalone` object lets you configure the standalone and reduce the total size of the application
 
 ## M4L Folder
 - To register a M4L Device with Ableton, you drop it into a track and it will populate in the Ableton Browser.
@@ -73,6 +94,26 @@ Max/MSP Gotchas and Misc Notes
     - ```comments``` is what shows up when you use the abstraction
     - ```hint``` shows up when you hover over the inlet from within the abstraction
 
+## Live Objects and Abstractions
+- You can't use any `live.*` objects (e.g. `live.object`, `live.path`, ...) in an abstraction, even if that abstraction is called by a M4L device.  
+- They need to live in the amxd file
+- They can live in an encapsulation, though.
+
+## Search Path and Projects
+- Search Path is evaluated in the following order:
+    1. Folder of the most recently loaded patch
+    2. Anything in or under the Cycling 74 folder.
+        - This is also where the Max application runs from
+    3. There are two predefined folders (and their subfolders):
+        - patches
+        - examples
+    4. Any folders you have added via Options->File Preferences
+
+- Project Best Practices
+    - 
+    - Create a project, this will create a folder named, 'WhateverProject', with a single file 'WhateverProject.maxproj' inside.
+- I think project search path doesn't work with m4l devices...
+
 ## Max 7 Projects
 - Helps you collect all the dependencies (patches, abstractions, javscript files, media files, data files, 3rd party externals, etc.) into a single place and allow you to find/link to them outside the typical Search Path mechanism in Max.  Your project folder will be searched first! 
 - Each M4L device is a project (when unfrozen, unpacks to a M4L Device Project folder) to help organize and manage it's dependencies.  Freezing a device includes all project files/dependencies into  the device.  [Details](https://docs.cycling74.com/max7/vignettes/projects_devices)
@@ -91,10 +132,22 @@ Max/MSP Gotchas and Misc Notes
 ## Scopes
 - In objects like `v`, `pv`, `send`, `receive`...
     - Prefixing the name with '#0' in an abstraction will prepend a unique integer to the name (which is making it local)
-        - Doesn't work in subpatchers
+        - #0 Doesn't work in subpatchers
         - The '#1', '#2', etc. are used to reference arguments in the abstraction
-    - Prefixing the name with '-' (e.g. `send -foo`) will make the value local to that **instance of the patch** ([source](https://cycling74.com/forums/topic/local-sendreceive-within-the-same-patch-only/))
-        - This might only work in M4L patches (need confirmation)
+    - Prefixing the name with '---' (e.g. `send ---foo`) will make the value local to that **instance of the patch** ([source](https://cycling74.com/forums/topic/local-sendreceive-within-the-same-patch-only/))
+        - This only works in M4L patches (need confirmation)
+
+## BPatcher - Nutshell
+- Great for components and also as a top-level wrapper
+- To use:
+    - Create a `bpatcher` object in the parent patch
+    - Then go to the inspector for that object and select another patch for the property 'Patcher File'
+    - Set the Patching Rectangle property to size the patch properly
+    - Offset will move view of your bpatcher within the rectangle
+    - Set the property to open in presentation view for the internal patch
+    - You can use inlets and outlets as you normally would
+    - You can create as many instance of the bpatcher as you would like
+
 
 ## Patching Mechanics
 - To insert a new object between two connected objects:
@@ -111,3 +164,22 @@ Max/MSP Gotchas and Misc Notes
         - right-click on the device name in Live and show the Max window from there.
 - Per the [M4L api overview](https://docs.cycling74.com/max5/refpages/m4l-ref/m4l_live_api_overview.html): changes to a Live Set and its contents are not possible from a notification. The error message in the Max Window is 'Changes cannot be triggered by notifications'. In many cases putting a deferlow between the notification outlet and the actual change helps to resolve the issue.
     - **YIKES**: this complicates things
+
+## Patch Cord Alternatives
+- Order of execution for patch cords when a single outlet has multiple destinations (i.e. a choise has to be made) depends on the position of the receiving object.
+    1. right to left
+    2. bottom to top
+    3. depth first
+- Sends and receives are decent alternatives for getting a message from one place to another without and you can use scoping prefixes (see above).
+    - BUT the order of reception by two or more receive objects is not deterministic.
+    - If you have multiple receivers, there's no telling who will get the value first.
+- Values and Private values:
+    - For sharing values (number, list, anything else), the `value` object might be a better option bc the value will be there when you need it
+    - You can still use scoping prefixes too
+- Best Practices:
+    - Send/receive when you need to trigger something
+        - Not for when there are multiple receivers
+    - Value for when you need to share a value
+        - And you can bang it when you need that value.
+     
+    
