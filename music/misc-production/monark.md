@@ -217,6 +217,8 @@ Monark
 - *Blockbuster* is a good pad example.  Is a chord with long envelope.
 - *Black market* has a theremin-like vibratro
 - *WTFunk* has a phaser-like effect when played in the bass, similar to some funk bass
+- Effects *Old school sci fi* has a fun bubble to it
+- Effects *animal* is totally fun and chaotic
 
 ## Suggested Patches to Program
 
