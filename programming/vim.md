@@ -1,0 +1,60 @@
+Using Vim
+=================
+
+- `i` : Insert Mode (writing mode)
+- `ESC` : Normal Mode (navigate & manipulate mode)
+- Cursor Control:
+  - `h` : left
+  - `j` : down
+  - `k` : up
+  - `l` : right
+  - `w` : start next word
+  - `e` : end of word
+  - `b` : beginning of word
+  - Variations:
+    - `3w` : like pressing w 3 times
+    - *sim*
+    - `3` `i` `go` `ESC` : Inserts 'go' 3 times
+- Finding (character level)
+  - `f` `o` : finds the next o character
+  - `3` `f` `o` : finds the third o character
+- `%` : Skip to matching bracket
+- `0` : beginning of line
+- `$` : end of line
+- `*` : next occurence of the current word
+- `#` : previous occurence of the current word
+- `gg` : beginning of a file
+- `G` : end of the file
+- Goto a specific line:
+  - `2` `G` : go to line 2
+- Search
+  - `/text` : searches for the next instance of 'text'
+  - `n` : next instance of search
+  - `N` : prev instance of search
+  - You can also use regexps
+- Insert a new line:
+  - `o` : new line after current
+  - `O` : new line before current
+  - After which, you're in insert mode
+- Delete character:
+  - `x` : delete char to the left
+  - `X` : delete char to the right
+- Replace a character in place:
+  - `r` then whatever character
+- Delete
+  - `dw` : delete first word to the right of the cursor
+  - `d2e` : delete the next two words
+- Repeat Last command:
+  - `.`
+- Unlike Vi, VIM has Visual mode
+  - `v` : visual mode
+  - The point is to select text using movement keys before deciding what to do
+- Other Commands:
+  - `:w` : save
+  - `:q` : quit
+  - `:q!` : quit without saving
+  - `u` : undo
+  - ctrl + `R` : redo
+  - `:help` : help
+
+
