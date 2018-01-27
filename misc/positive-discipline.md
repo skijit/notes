@@ -149,11 +149,14 @@ Positive Discipline Notes
     - how you give love (act of service, words of affirmation, time, touch, gifts) is the kind of love you want to receive
     - encourage nina to offer that to other kids (think she's encouragement / attention)
 
-
 ## Meeting 11-1
 
 - handling potty talk:
     - check consent
     - am i ok with the consequences
     - parameters: when is it ok, amonst whom
- 
+
+- netflix docs:
+    - missrepresentation
+    - the mask you live in
+
