@@ -129,7 +129,7 @@ SSRS Outline
             - Just add a parameter to the SQL
                 - `select top 100 * from table wehere OderDate=@OrderDate`
             
-        - Report Parmeters
+        - Report Parmeters (ie a user interface)
             - Allow a user to pass something into the report
             - Report data pane: go to parameters and add a parameter
             - Specify a data type (primitives)
@@ -141,7 +141,7 @@ SSRS Outline
     - You can use a text field and interpret it as HTML (similar approach as above): but it only recognizes a limited number of HTML tags (see books online for the list)
 - Expression
     - Use Visual Basic
-    - Being with '=' signs
+    - Begin with '=' signs
     - Can drive:
         - Txtboxes
         - Group and Sort definitions
@@ -204,3 +204,140 @@ SSRS Outline
 - To deploy from SSDT
     - Check the solution/report properties
     - Right-click the solution and select 'deploy'
+
+
+-------------------------------
+- Don't right-click 'add new report'
+    - That takes you through report wizard which sucks
+    - Add new ...
+        - 
+
+- Each query that you use, should come from a dataset
+    - possibly share
+
+- to deploy, you have to build, then pick up the rdl files from the bin folder
+- the data source is not deployed, that already lives on the report server
+
+
+- https://www.youtube.com/watch?v=CZRmcWrPxzc&list=PLmhoQ1nd8VnQvdlWb7Z4fc7kBvsL-aXhW
+    - most controls from toolbox can be data bound
+    - data region
+        - table
+        - matrix
+        - chart
+        - list
+        - gauge
+    - matrix: dynamic columns and rows
+        - static column:
+            - header: column name (e.g. Country Name)
+            - data row: column field (e.g. [CountryName])
+        - dynamic column:
+            - header: put a column field in here (each distinct value will get a column) (e.g. [Year])
+                - creates an implicit group
+            - data row: aggregation function (e.g. [Sum(AMount)])
+        - you can create row or column-wise totals automatically
+            - right-click cell: Add Total-> Choose 'Row' or 'Column'
+    - list 
+        - no layout : sounds like a repeater that can hold other data regions
+        - also can probably do detail rows?
+        - you can put a table in a list
+        - in a list you need to set the row group, which sets a context for the other controls in the current list control
+    - chart reports
+        - data fields are divided into:
+            - Series  (Group 1)
+            - Categories (Group 2)
+            - Values
+    - report wizard
+        - has limitations
+            - only 1 dataset
+            - no parameterized report
+            - only table, matrix items
+        - only good for basic stuff
+    - expressions:
+        - uses:
+            - can perform calculations
+            - dynamic behaviors for report items
+            - pass parameters
+            - display detailed or aggregated data
+        - report types:
+            - parameterized reports
+            - linked reports
+            - snapshot reports
+            - cascaeded reports
+            - ad hoc reports
+            - drilldown reports
+            - drill through reports
+            - subreports
+    - parameterized reports (not query string based)
+        - two types:
+            - single value parameterized report
+            - multiple value parameterized report
+        - single value parameterized report
+            - steps:
+                - create a parameter                    
+                - create a dataset
+                    - query looks like: select * from blah where col = @myParamName
+            - this creates the parameter in the top of the report
+    - multivalued parameterized reports
+        - select multivalues
+        - query looks like: select * from blah where col in (@myParamName)
+
+    - how does ssrs parameter visibility work?
+    
+    - actions
+        - enable hyperlink options in report
+            - use onclick option
+        - Goto bookmark, report, or url in a data row cell
+        - select Text box properties in cell, go to Actions tab
+
+    - lookup in SSRS
+        - when you need to join the data between two datasets in SSRS
+        - create 2 datasets
+        - in a drow data cell, select expression..
+            - =Lookup(...)  (use query builder)
+    
+    - you can add a calculated field to a dataset using an expression builder
+
+    - custom net code in ssrs
+        - 2 ways
+            - embedded .net code in ssrs
+            - add a dll of .net code
+        - report properties -> code -> add vb
+            - then refer to your functions in expressions by prefacing them with 'Code': e.g. = Code.MyFunction
+    
+    - subreports
+        - first create the subreport with a parameter
+        - then move to the parent report
+            - in a data row cell, select insert then 'subreport'
+            - double click- choose subreport properties
+                - choose the subreport (should be in same project)
+                - select the parameters and values you want to pass in
+        - drill through reports work similarly, but you select an action -> new report
+        - "drill down reports": expose inline detail
+            - actually just merge rows
+            - click on the data row cell you want to be a parent (for merging)
+                - for row group, choose 'parent group...'
+                - groupby: select the field 
+                - will add a new column, which you can remove
+            - in the group properties, you can set the visibility based on expression or toggle
+
+    
+
+
+
+
+
+
+
+
+
+        
+                
+        
+        
+
+
+
+
+         
+        

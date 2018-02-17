@@ -2,7 +2,7 @@ Angular State Mgmt
 =================
 
 - [source 1: Victor Savkin Talk](https://www.youtube.com/watch?v=brCGZ8Lk-HY)
-
+- [source 2: State Mgmt Best Practices with ngrx - also Victor Savkin](https://www.youtube.com/watch?v=vX2vG0o-rpM)
 ## Types of State
 
 - Server State:
@@ -319,8 +319,144 @@ export function reducer(store:Store<any>) {
 - I should look into immutable.js to see if it really makes immutable code look nicer (cause it ugly)
 - he uses optimistic updating, but there's no provision for rolling back to a previous version... should think about that in future.
 
-    
+## NgRx and Why to Use it
+- It is programming with messages (aka Actions)
+- Timeline:
+  - Create an Action, populating the payload
+  - Dispatch the action
+  - Recieved and processed by:
+    - Reducer
+    - Effects class
+      - taps into Actions class (bus of all actions)
+- Usually want both reducers and effects:
+  - effect: interaction with server
+  - reducer: state
 
+## Actions
+- message we dispatch
+  - type : string
+  - payload: any data
+- categories of actions:
+  1. Commands
+    - analogous to invoking a method
+    - expect a reply
+    - usually a single handler    
+  2. Documents
+    - an entity has been updated
+    - no reply
+    - might have more than one handler
+  3. Events
+    - Some change has occurred
+    - Often more than one handler
+    - Fire and forget
+- Typically need more than 1 action to model an interaction
+- Example:
+  - Command: ADD_ITEM -> dispatch action to effect class
+  - When effect class gets update from server, it calls another action, ITEM_ADDED
+  - Event: ITEM_ADDED -> update state
+- Request / Reply
+  - Sometimes we expect a reply
+    - dispatch() has no return value
+  - Timeline
+    - Dispatch an action
+      - Expect a boolean return value, which will be written to state
+    - Listen for changes to state, possibly using a correlation id
 
-    
+  ```(typescript)
+  @Component(
+    //...
+  )
+  class TodoComponent {
+    @Input todo: Todo;
+
+    constructor(private store : Store<any>) {}
+
+    delete() {
+      this.store.dispatch({
+        type: 'CONFIRM_TODO_DELETION',
+        payload: {todoId: this.todo.id}
+      });
+
+      //notice usage of 'correlation id'
+      this.store.select('confirmTodoDeletionResponse')
+        .filter(t => t.id === this.todo.id)
+        .first()
+        .subscribe(r => {
+          //r is either true or false
+        })
+    }
+  }
+  ```
+
+## Store   
+
+- most of the time, people focus on the reducer aspect of the store
+- effects classes on the other hand talk to the backend, deal with asynchronicity, etc.
+- Note that effects classes return a new action (without having to call dispatch)
+
+## Effect Class Types
+- Action Deciders
+  - How to process an action
+  - Filter Decider: decide what kind of action to take based on the 'type' of action
+
+  ```(typescript)
+  @Effect() addTodo = 
+    this.actions
+    .ofType('ADD_TODO')
+    .concatMap(todo => http.post(...))
+    .map(() => ({type:'TODO_ADDED', payload: todo});
+  ```
+
+ - Content based Decider: decide what kind of action to take based on the content of the action
+
+  ```(typescript)
+  @Effect() addTodo =
+      this.actions
+      .typeof('ADD_TODO')
+      .map(add => {
+        if (add.payload.addLast)
+          return ({type:'APPEND_TODO', payload: add.payload})
+        else 
+          return ({type:'INSERT_TODO', payload: add.payload})
+      })
+  ```
+
+  - Context-Based Decider  
+
+  ```(typescript)
+  @Effect() addTodo =
+    this.actions
+    .ofType('ADD_TODO')
+    .map(add => {
+      if (this.env.confirmationIsOn)
+        return //...
+      else 
+        return //...
+    })
+  ```
+
+  - Splitter (into multiple methods)
+
+  ```(typescript)
+  @Effect() addTodo = 
+    this.actions.ofType('ADD_TODO')
+    .flatMap(add => [
+      {type: 'ADD_TODO', payload: add.payload},
+      {type: 'LOG_OPERATION', payload: { loggedAction: 'ADD_TODO', payload: add.payload}},
+    ])
+  ```
+
+  - Aggregator (the opposite of splitter)
+
   
+    
+  ## Other things to consider
+  - Message passing in a client app: is it worth the trouble?
+    - it obviously makes sense when communicating over process boundaries
+    - but this client is all in process
+    - its a lot like a command pattern: each action is an abstracted object
+    - you can overcome the annoying magic stringiness with factory patterns
+    - its verbose
+    - how is it better than just using observables?
+      - Compare to matt's arch
+      
