@@ -71,6 +71,9 @@ Max/MSP Gotchas and Misc Notes
     - Max Collective: still depends on the max or the max runtime, but it is cross-platform
     - Application: standalone.  But you need to develop on the platform (mac, windows) you're targeting
 - The `standalone` object lets you configure the standalone and reduce the total size of the application
+    - you can enable overdrive
+- If you have resources (e.g. audio files) you want included, add them to a folder and then in the build modal, specify that folder.
+- Set the patcher level properties to open in presentation mode
 
 ## M4L Folder
 - To register a M4L Device with Ableton, you drop it into a track and it will populate in the Ableton Browser.
