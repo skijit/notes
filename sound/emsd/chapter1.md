@@ -27,8 +27,15 @@ Chapter 1: Electronic Music and Sound Design
         - halving an amplitude = reducing it by 6 dB  
             - Original sample level = `- x`
             - Original dB level = `- -20 \log{x} ` dB, since FS=1
-            - New sample level = `- \frac{x}{2}`
+            - New sample level = `- \frac{x}{2} `
             - New dB Level = `- -20 \log{\frac{x}{2}} `
             - `- -20 \log{\frac{x}{2}} = -20 \left(\log{x} - \log{2} \right) = - 20 \log{x} - 6.02 `
-            - Orig db level `- -20 \log{x} `  so new Db Level = Orig Db Level - 6.02
-         
+            - Orig db level is `- -20 \log{x} `  so new Db Level = Orig Db Level - 6.02
+        - divide the amplitude by 10 = reduce by 20 dB
+            - Original sample level = `- x`
+            - Original dB level = `- -20 \log{x} ` dB, since FS=1
+            - New sample level = `- \frac{x}{10} `
+            - New dB Level = `- -20 \log{\frac{x}{10}} `
+            - `- -20 \log{\frac{x}{10}} = -20 \left(\log{x} - \log{10} \right) = - 20 \log{x} - 20 `
+            - Orig db level is `- -20 \log{x} `  so new Db Level = Orig Db Level -10
+            - **TODO**: the sign is coming out positive when it should be negative - look into this...

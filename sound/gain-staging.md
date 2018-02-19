@@ -56,9 +56,9 @@ Level and Gain Staging Notes
 ## Decibel Types By Domain
 - **Acoustic** 
     - measure sound pressure
-    - **dB SPL** = ```- 20 \log{\frac{P}{P_{ref}}}  ```
+    - **dB SPL** = `- 20 \log{\frac{P}{P_{ref}}}  `
     - P = sound pressure in dynes/cm2
-    - ```- P_{ref} ``` = 0.0002 dyne/cm2 = **the (lower) threshold of hearing**
+    - `- P_{ref} ` = 0.0002 dyne/cm2 = **the (lower) threshold of hearing**
         - A lot of times the reference amplitude will be a higher threshold (making our decibels negative).
         - **In this case**, it's a lower threshold, the dB is a positive value.
     - Note also that there are different weights (e.g. A, B, C) to adjust for the fact that our ears perceive level differently across frequency bands.  
@@ -66,9 +66,9 @@ Level and Gain Staging Notes
 - **Analog Electronic** 
     - measure electrical power
     - There are a couple different formats here:
-    - **dBm** = ```- 10 \log{\frac{p}{0.001}} ``` because ```- P_{ref}``` =1 milliwatt
+    - **dBm** = `- 10 \log{\frac{p}{0.001}} ` because `- -P_{ref}` =1 milliwatt
         - Since we're already dealing with Power units, they've been squared.  Hence the factor of 10 instead of 20.        
-    - **dBu** = ```- 20 \log{\frac{V}{V_{ref}}} ``` where ```- V_{ref} = 0.775V ```
+    - **dBu** = `- 20 \log{\frac{V}{V_{ref}}} ` where `- V_{ref} = 0.775V `
         - Usually used to measure max amplitude
         - Particularly useful for ADC devices
         - Each ADC has a different conversion rate:
@@ -76,7 +76,7 @@ Level and Gain Staging Notes
             - Europe: +18 dBu = 0 FS
             - etc.
     - **dBv** is same as **dBu**
-    - **dBV** = ```- 20 \log{\frac{V}{V_{ref}}} ``` where ```- V_{ref} = 1V ```
+    - **dBV** = `- 20 \log{\frac{V}{V_{ref}}} ` where `- V_{ref} = 1V `
     - **dBVU**
         - VU = volume units .  
         - These are the units displayed on Volume Meter.
@@ -84,11 +84,11 @@ Level and Gain Staging Notes
         - dbVU = +4 dBu
             - The volume meter is actually 4 dB's louder than dBu
             - The reason for this is because in the old days when tape came out, you could record louder (getting a better SNR) but they wanted to keep the Volume meter at the same level.
-            - So it uses the same ```- P_{ref} ``` as dBu.
-        - This is what you would use to monitor amplitude in a purely analog setup
+            - So it uses the same `- -P_{ref} ` as dBu.
+        - This is what you would us-e to monitor amplitude in a purely analog setup
 - **Digital Electronic** 
     - measure bit values 
-    - **dbFS** = ```- 20 \log{\frac{SL}{FS}} ```
+    - **dbFS** = `- -20 \log{\frac{SL}{FS}} `
         - *SL* = the current sample level
         - *FS* = the maximum value you can record.  (Full-Scale)
             - This value is often 1.
@@ -97,16 +97,16 @@ Level and Gain Staging Notes
 - **Example: Adding Decibels**
     - Say we have 2 signals of the same magnitude (-20 dBFS) that are getting added together, such as in a mixer.
     - What will the new dBFS level be?
-    - Remember ```- dbFS = -20 \log{\frac{SL}{FS}} ```
+    - Remember `- dbFS = -20 \log{\frac{SL}{FS}} `
         - Where **FS = 1**, and (**this part is new**) **SL = SL_1 + SL_2 + ... SL_N**
     - **First let's get signal level from dBFS:**
-        - ```- -20 dBFS = 20 \log{\frac{x}{1}} ```
-        - ```- -1 = \log{\frac{x}{1}} ```
-        - ```- 10^{-1} = x ```
-        - ```- x = \frac{1}{10} = 0.10 ``` 
+        - `- -20 dBFS = 20 \log{\frac{x}{1}} `
+        - `- -1 = \log{\frac{x}{1}} `
+        - `- 10^{-1} = x `
+        - `- x = \frac{1}{10} = 0.10 ` 
         - **Signal level = 0.10**
     - **Now let's add the signals together:**
-        - ```- 20 \log{\frac{0.1 + 0.1}{1}} = 20 \log 0.2 = -13 ```
+        - `- -20 \log{\frac{0.1 + 0.1}{1}} = -20 \log 0.2 = -13 `
         - **New dBFS is -13 dBFS**
     - **So**: we doubled a signal at -20 dB and it only became -13 dB.
 
