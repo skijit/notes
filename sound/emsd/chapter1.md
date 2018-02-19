@@ -26,9 +26,9 @@ Chapter 1: Electronic Music and Sound Design
     - Proofs:
         - halving an amplitude = reducing it by 6 dB  
             - Original sample level = ```x```
-            - Original dB level = ```- 20 \log{x} ``` dB, since ```FS=1```
+            - Original dB level = ``` -20 \log{x} ``` dB, since FS=1
             - New sample level = ```\frac{x}{2}```
-            - New dB Level = ```- 20 \log{\frac{x}{2}} ```
-            - ```- 20 \log{\frac{x}{2}} = -20 \left(\log{x} - \log{2} \right) = - 20 \log{x} - 6.02 ```
-            - Orig db level ``` - 20 \log{x} ```  so new Db Level = Orig Db Level - 6.02
+            - New dB Level = ``` -20 \log{\frac{x}{2}} ```
+            - ``` -20 \log{\frac{x}{2}} = -20 \left(\log{x} - \log{2} \right) = - 20 \log{x} - 6.02 ```
+            - Orig db level ``` -20 \log{x} ```  so new Db Level = Orig Db Level - 6.02
          
