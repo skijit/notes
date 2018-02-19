@@ -15,7 +15,7 @@ Chapter 1: Electronic Music and Sound Design
     - -12 dB = 0.25
     - -18 dB = 0.125
     - -inf DB = 0    
-    - **dbFS** = ```- 20 \log{\frac{SL}{FS}} ```
+    - **dbFS** = `- -20 \log{\frac{SL}{FS}} `
         - *SL* = the current sample level
         - *FS* = the maximum value you can record.  (Full-Scale)
             - This value is often 1.        
@@ -25,10 +25,10 @@ Chapter 1: Electronic Music and Sound Design
     - notice we're able to turn multiplicative operations into additive operations (thanks to logs)
     - Proofs:
         - halving an amplitude = reducing it by 6 dB  
-            - Original sample level = ```x```
-            - Original dB level = ``` -20 \log{x} ``` dB, since FS=1
-            - New sample level = ```\frac{x}{2}```
-            - New dB Level = ``` -20 \log{\frac{x}{2}} ```
-            - ``` -20 \log{\frac{x}{2}} = -20 \left(\log{x} - \log{2} \right) = - 20 \log{x} - 6.02 ```
-            - Orig db level ``` -20 \log{x} ```  so new Db Level = Orig Db Level - 6.02
+            - Original sample level = `- x`
+            - Original dB level = `- -20 \log{x} ` dB, since FS=1
+            - New sample level = `- \frac{x}{2}`
+            - New dB Level = `- -20 \log{\frac{x}{2}} `
+            - `- -20 \log{\frac{x}{2}} = -20 \left(\log{x} - \log{2} \right) = - 20 \log{x} - 6.02 `
+            - Orig db level `- -20 \log{x} `  so new Db Level = Orig Db Level - 6.02
          
