@@ -20,6 +20,7 @@ Logarithms
 * Some common scales which are logarithmic:
 	* Decibels
 	* Richter
+	* ph scale
 	* Google Page Rank
 * Graphs which use logarithmic scales make an exponential curve linear.
 ![enter image description here](https://github.com/skijit/Notes/blob/master/resources/images/math/image002.jpg?raw=1)

@@ -1,24 +1,34 @@
 Chapter 1: Electronic Music and Sound Design
 =============
 
+## Sound Characteristics
+
 - ![Sound wave](/resources/images/music/molecules.png)
 - Speed of sound in air is approx 344 m/s.
     - Therefore a 1 Hz sound would have a wavelength of 344 m
     - Sim...
         - 10 Hz : wavelength = 34.4 m
         - 100 Hz : wavelength = 3.44 m
-- In computer contexts:
-    - raw amplitude range = 0 - 1
-        - anything outside that range is clipping
+- In computer contexts, raw amplitude range = 0 - 1
+    - anything outside that range is clipping    
+- In mathematical contexts, raw amplitude usually goes between -1 and 1
+- dB is a ratio (not a unit!) for measuring something logarithmically
+    - lots of other things are measured logarithmically:
+        - richter scale (earthquakes)
+        - pH scale (acidity)
+        - google page rank
+    - there are lots of different sound-based logarithmic measurements depending on context.
+- In computer contexts, we use dbFS or Full-Scale dB
+    - **dbFS** = `- -20 \log{\frac{SL}{FS}} `
+        - *SL* = the current sample level
+        - *FS* = the maximum value you can record.  (Full-Scale)
+            - This value is often 1.        
+- dBFS to amplitudes
     - 0 dB = 1
     - -6 dB = 0.5 
     - -12 dB = 0.25
     - -18 dB = 0.125
     - -inf DB = 0    
-    - **dbFS** = `- -20 \log{\frac{SL}{FS}} `
-        - *SL* = the current sample level
-        - *FS* = the maximum value you can record.  (Full-Scale)
-            - This value is often 1.        
 - basic decibel math facts
     - halving an amplitude = reducing it by 6 dB    
     - divide the amplitude by 10 = reduce by 20 dB
@@ -39,3 +49,46 @@ Chapter 1: Electronic Music and Sound Design
             - `- -20 \log{\frac{x}{10}} = -20 \left(\log{x} - \log{10} \right) = - 20 \log{x} - 20 `
             - Orig db level is `- -20 \log{x} `  so new Db Level = Orig Db Level -10
             - **TODO**: the sign is coming out positive when it should be negative - look into this...
+- Psychoacoustically, frequency and intensity have a variable relationship:
+    - Example 1: Above 2,000 Hz if you increase intensity while holding frequency fixed, it will be perceived to be rising
+    - Example 2: Below 1,000 Hz if you increase intensity while holding frquency fixed, it will be percieved to be decreasing
+    - Example 3: We are less sensitive to intensity decreases at lower frequencies 
+        - And conversely more senstive to intensity descreases at high/midrange frequencies
+    - Recall the mixing trick with [pink noise](https://www.soundonsound.com/techniques/mixing-pink-noise-reference)
+- Isophonic curves represent the contours of equal loudness.
+    - The curve represents a constant percived intensity (measured in 'phons') across varying actual intensity and spectrum
+    - ![Equal Loudness Contour](/resources/images/music/equal-loudness.png)
+- Common Waveforms
+    - ![Simple Waveforms](/resources/images/music/simplewaves.jpeg)
+    - triangle wave has odd numbered harmonics, such that energy level =  `- \frac{1}{N^2} ` where N = harmonic number
+    - sawtooth (or a ramp) has both even and odd harmonics which decrease over time at `- \frac{1}{N} `
+        - in digital audio, you need to put a limit on the amount of harmonics present or they will exceed the nyquist frequency and create aliasing
+    - Pulse (or rectangle or square) waveforms have energy over a broad area of the spectrum, but only for a brief period of time.
+        - Square has only odd harmonics
+- Duty cycle affects the width of a square (actually rectangular) wave
+    - it is a number between 0 and 1
+    - refers to the percentage of time the phase is positive
+    - ![Duty Cycle](/resources/images/music/duty-cycle.JPG)
+- Bipolar waves are those which go above and below 0
+    - These are generall audible because they need to include compression and rarefication
+- Unipolar waves are those which only say above or below 0.
+    - These are typically used to modify a sound parameter
+
+## Envelopes
+- Envelope is the particular macro-countour of a sound's amplitude over time.
+- Phases include:
+    - Attack
+    - Decay
+    - Sustain
+    - Release
+- ![ADSR](/resources/images/music/note-adsr.gif)
+- Many instruments may not have all these envelope phases - it just depends
+- ![Real-life envelopes](/resources/images/music/Envelope.gif)
+- During attack phase, frequency is often unstable
+- Application of an envelope to a sound in a computer equates to scaling (multiplying) the sounds amplitude by a value between 0 and 1
+- Envelope phases can be:
+    - Linear
+    - Exponential
+    - Logarithmic
+- ![non-linear envelopes](/resources/images/music/nord_shape.jpg)
+- Large instantaneous jumps (discontinuities) in envelopes will create audible 'clicks'
