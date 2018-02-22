@@ -16,7 +16,8 @@ Chapter 1: Electronic Music and Sound Design
     - lots of other things are measured logarithmically:
         - richter scale (earthquakes)
         - pH scale (acidity)
-        - google page rank
+        - musical pitch
+        - google page rank        
     - there are lots of different sound-based logarithmic measurements depending on context.
 - In computer contexts, we use dbFS or Full-Scale dB
     - **dbFS** = `- -20 \log{\frac{SL}{FS}} `
@@ -92,3 +93,43 @@ Chapter 1: Electronic Music and Sound Design
     - Logarithmic
 - ![non-linear envelopes](/resources/images/music/nord_shape.jpg)
 - Large instantaneous jumps (discontinuities) in envelopes will create audible 'clicks'
+- Many instruments have logarithmic or exponential envelopes, particularly plucked strings or percussion sounds
+
+## Glissandi
+- A glissando is a sound whose frequency moves up, down or both throughout it's duration
+- Since the distance between adjacent pitches grows exponentially, a glissando is typically an exponential curve
+
+## Frequency and Interval
+- The octave is a musical interval used in all musical cultures
+    - Other cultures use different intervals
+- Dominant western tuning since the beginning of the 18th century is **equal temperment**   
+    - The octave is divided into 12 equal regions (semitones)
+    - displays *intevallic equivalence*: all intervals of the same type share a constant frequency ratio
+- Deriving the base semitone ratio:
+    - First begin with the observation that octaves (see above: the only real true octave) is a logarithmic unit.
+    - The frequency of a note I octaves from a base frequency is: ```- f_{new} = f_{base} \cdot 2^I```
+    - That means if you want to know how many octaves, I, are between any two frequencies: ```- I = \log_2 \left( \frac{f_{new}}{f_{base}} \right) ```
+        - QED, octaves are logarithmic.  (And really this means pitch is logarithmic function of frequency)
+    - Each octave I is divided in to 12 semitones, so to express interval in units of semitones (H) instead of octaves (I):
+        ```+ H = 12 \cdot I```
+        or
+        ```+ I = H / 12 ```
+        So...
+        ```+ f_{new} = f_{base} \cdot 2^{\frac{H}{12}}```
+        and because ```- x^{\frac{m}{n}} = \sqrt[n]{m}``` ...
+         ```+ f_{new} = f_{base} \cdot \sqrt[12]{2^H}```
+    - Given a semitone interval of one (i.e. adjacent notes)
+        ```+ \sqrt[12]{2} = 1.059463```
+    - So...
+        ```+ f_{C4} = f_{B3} \cdot 1.059463```
+        
+- Psychoacoustically:
+    - Under 600 Hz, a frequency ration of 2:1 will sound like the octave was somewhat compressed
+    - Above 600 Hz, a frequency ratio of 2:1 will sound like the octave was somewhat compressed
+    - The effect increases the farther we get from 600 Hz
+- The Reality of tuning stringed instruments:
+    - None of the actual strings are completely ideal, insofar as the set of harmonics they produce
+    - In a perfect, theoretical string, the only force wanting to bring a vibrating string back to rest is the tension between its two ends.
+    - In reality, strings have a slight reluctance to being bent.  This additional resistance affects the set of partials created by it's vibration.
+        - This property is known as it's *inharmonicity*
+    - Piano tuners know this well and have to accomodate this.
