@@ -31,16 +31,13 @@ NuGet Notes
 - Best to have 1 assembly per nuget package (generally) unless you have a couple assemblies which aren't independently useful or are mutually interdependent
 
 ## Compile Sources
-
 - In most cases, packaging is independent from compilation.
   - However, for .NET core projects using Visual Studio 2017, NuGet uses information from your project file.  Basically, you can use NuGet pack as a build target.  
   - [More info](https://docs.microsoft.com/en-us/nuget/reference/msbuild-targets)
 - When you are distributing a class library as a nuget package, it is best to to select a .NET Standard class library.
-  - A class library that targets the .NET Standard 2.0 allows your library to be called by [any .NET implementation that supports that version of .NET Standard](https://docs.microsoft.com/en-us/dotnet/standard/net-standard#net-implementation-support).
-    - 
+  - A class library that targets the .NET Standard 2.0 allows your library to be called by [any .NET implementation that supports that version of .NET Standard](https://docs.microsoft.com/en-us/dotnet/standard/net-standard#net-implementation-support).    
 
 ## Creating The Manifest
-
 - There are a variety of...
   - required and optional properties that can be used in the Manifest...
   - methods for creating the manifest...
@@ -288,10 +285,14 @@ NuGet Notes
   - NuGet falls back to installing from the cache when installing or reinstalling packages without a connection.
   - To list caches: `nuget locals all -list`
   - You will see something like:
-  > http-cache: C:\Users\user\AppData\Local\NuGet\v3-cache   #NuGet 3.x+ cache
-  > packages-cache: C:\Users\user\AppData\Local\NuGet\Cache  #NuGet 2.x cache
-  > global-packages: C:\Users\user\.nuget\packages\          #Global packages folder
-  > temp: C:\Users\user\AppData\Local\Temp\NuGetScratch      #Temp folder
+  
+  ```
+  http-cache: C:\Users\user\AppData\Local\NuGet\v3-cache   #NuGet 3.x+ cache
+  packages-cache: C:\Users\user\AppData\Local\NuGet\Cache  #NuGet 2.x cache
+  global-packages: C:\Users\user\.nuget\packages\          #Global packages folder
+  temp: C:\Users\user\AppData\Local\Temp\NuGetScratch      #Temp folder
+  ```
+
   - to clear a cache: `nuget locals <cache-name> -clear`
 - NuGet config files
   - Config files exist at the following levels and are applied from general to specific:
@@ -349,8 +350,8 @@ NuGet Notes
 
   | Notation | Applied Rule | Description |
   | :---: | :---: | :---: | 
-  | 1.0	|1.0 ≤ x	|Minimum version, inclusive |
-  | (1.0,) |1.0 < x	| Minimum version, exclusive |
+  | 1.0	| 1.0 ≤ x	| Minimum version, inclusive |
+  | (1.0,) | 1.0 < x	| Minimum version, exclusive |
   | [1.0] |	x == 1.0 | Exact version match |
   | (,1.0] | x ≤ 1.0 |	Maximum version, inclusive |
   | (,1.0) | x < 1.0	| Maximum version, exclusive |
