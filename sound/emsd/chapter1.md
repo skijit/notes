@@ -118,11 +118,11 @@ Chapter 1: Electronic Music and Sound Design
         ```+ f_{new} = f_{base} \cdot 2^{\frac{H}{12}}```
         and because ```- x^{\frac{m}{n}} = \sqrt[n]{m}``` ...
          ```+ f_{new} = f_{base} \cdot \sqrt[12]{2^H}```
-    - Given a semitone interval of one (i.e. adjacent notes)
+    - Given a semitone interval of one (i.e. adjacent notes, H=1)
         ```+ \sqrt[12]{2} = 1.059463```
     - So...
         ```+ f_{C4} = f_{B3} \cdot 1.059463```
-        
+
 - Psychoacoustically:
     - Under 600 Hz, a frequency ration of 2:1 will sound like the octave was somewhat compressed
     - Above 600 Hz, a frequency ratio of 2:1 will sound like the octave was somewhat compressed
@@ -133,3 +133,5 @@ Chapter 1: Electronic Music and Sound Design
     - In reality, strings have a slight reluctance to being bent.  This additional resistance affects the set of partials created by it's vibration.
         - This property is known as it's *inharmonicity*
     - Piano tuners know this well and have to accomodate this.
+
+## Panning
