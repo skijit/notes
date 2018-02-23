@@ -348,17 +348,17 @@ NuGet Notes
 
   - Version specification notation:
 
-  | Notation | Applied Rule | Description |
-  | :---: | :---: | :---: | 
-  | 1.0	| 1.0 ≤ x	| Minimum version, inclusive |
-  | (1.0,) | 1.0 < x	| Minimum version, exclusive |
-  | [1.0] |	x == 1.0 | Exact version match |
-  | (,1.0] | x ≤ 1.0 |	Maximum version, inclusive |
-  | (,1.0) | x < 1.0	| Maximum version, exclusive |
-  | [1.0,2.0]	| 1.0 ≤ x ≤ 2.0	| Exact range, inclusive |
-  | (1.0,2.0)	| 1.0 < x < 2.0	| Exact range, exclusive |
-  | [1.0,2.0)	| 1.0 ≤ x < 2.0	| Mixed inclusive minimum and exclusive maximum version |
-  | (1.0)	| invalid |	invalid |
+| Notation | Applied Rule | Description |
+| :---: | :---: | :---: | 
+| 1.0	| 1.0 ≤ x	| Minimum version, inclusive |
+| (1.0,) | 1.0 < x	| Minimum version, exclusive |
+| [1.0] |	x == 1.0 | Exact version match |
+| (,1.0] | x ≤ 1.0 |	Maximum version, inclusive |
+| (,1.0) | x < 1.0	| Maximum version, exclusive |
+| [1.0,2.0]	| 1.0 ≤ x ≤ 2.0	| Exact range, inclusive |
+| (1.0,2.0)	| 1.0 < x < 2.0	| Exact range, exclusive |
+| [1.0,2.0)	| 1.0 ≤ x < 2.0	| Mixed inclusive minimum and exclusive maximum version |
+| (1.0)	| invalid |	invalid |
 
   - If you are using a dependency purely as a dev tool, you can specify it as a [PrivateAsset](https://docs.microsoft.com/en-us/nuget/consume-packages/package-references-in-project-files#controlling-dependency-assets)
   - Package Reference Condition:
