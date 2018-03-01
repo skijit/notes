@@ -582,11 +582,47 @@ from [this](http://www.developerhandbook.com/git/git-for-net-developers/) blog p
 	git push
 	```
 
-## Git and Binary Files
+## Binary Files and LFS
+- [good src](https://www.atlassian.com/git/tutorials/git-lfs?_ga=2.86702992.943598762.1519654222-1482898529.1515427249)
+- **Problem**: Git is crazy-slow when it comes to handling binary resources
+	- This is exacerbated by the design of git: since it is distributed, the entire revision history is transferred to each clone
+- Git LFS (Large File Storage) replaces your binary files with pointer files to those binaries, and only loads them lazily (rather that all at once.)
+	- You'll get a binary file in your working set (not the text pointer file), but the repository will have only downloaded that one copy
+	- All other versions in your repo will have the corresponding versions of the pointer file
+- So where are the binary files stored:
+	- Locally, you have an LFS Cache
+	- Remotely (ie bitbucket, github, etc.), there will be a designated Git LFS Store
+		- So your remote service needs to support LFS
+- **Takeaway**
+	- If you're making revisions to your binary files, you definitely want to use git LFS
+	- It's transparent to everything else because it will download your normal binaries to your working set (just not their revisions in the .git directory, as it would otherwise)
+- How to use:
+	- **Install Git LFS**: 
+		- On a mac, its probably easiest to install via homebrew
+		- On a pc, download and install from [here](https://git-lfs.github.com/)
+		- Make sure git-lfs is in your path from wherever you use it.
+	- **Global Initialize Git LFS**: (you only have to do this once per machine/user)
+		- run `git lfs install`
+	- **Initialize per repo**:
+		- when you create your new repo, run `git lfs install`
+		- This installs a special pre-push Git hook in your repository that will transfer Git LFS files to the server when you git push.
+		- Make sure your remote repo is configured to use LFS
+	- **Shortcuts LFS-enabled repos**
+		- Normal cloning method will work, but `git lfs clone` will work even faster
+		- Normal pull method will work, but `git lfs pull` will work even faster
+	- **Identifying binary files**
+		- to see what file extensions are being tracked: `git lfs track`
+		- to add a new file extension, run this in your repo root: `git lfs track "*.ogg"`
+			- important: make sure to use the double quotes or your shell may try to expand them!		
+			- you can use the same file/directory patterns as you would use in a .gitignore file (except negative patterns)
+		- this lfs config data gets written to the .gitattributes file.
+			- make sure you add this to your repo and commit any changes.
+	- **Tidying up**
+		- to clear your local Git LFS cache (non-destructive), run `git lfs prune`
+	- **Other stuff**
+		- There's more utilities for tracking, etc.  See the source listed above for more info.
 
-### LFS With Bitbucket Repos
-- [src](https://confluence.atlassian.com/bitbucket/use-git-lfs-with-bitbucket-828781636.html)
-- [another scr](https://www.atlassian.com/git/tutorials/git-lfs?_ga=2.86702992.943598762.1519654222-1482898529.1515427249)
+
 
 
 -------------------------------
