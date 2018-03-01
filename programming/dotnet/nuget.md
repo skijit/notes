@@ -171,7 +171,7 @@ NuGet Notes
 - There are integrated methods for creating, packing, and publishing packages via Visual Studio 2017
   - [documentation here](https://docs.microsoft.com/en-us/nuget/quickstart/create-and-publish-a-package-using-visual-studio)
   - I've heard it's rather buggy though, so might be best to stay away from the packing/publishing at least.
-    - TODO: any experiences?
+    - My experience: I've made it work, but I ran into troubles when I wanted to include debugging symbols.  Probably other stuff like this is not so easy using VS instead of the CLI.  See [this](https://stackoverflow.com/questions/41713693/include-pdb-files-into-my-nuget-nupkg-files)
   
 ### Method 4: From New file with default values
 - the most manual method
@@ -186,10 +186,8 @@ NuGet Notes
   - Major: Breaking changes
   - Minor: New features, but backwards compatible
   - Patch: Backwards compatible bug fixes only
-  - Suffix: an optional prerelease version
-    - alpha
-    - beta
-    - rc
+  - Suffix: an optional prerelease version (e.g. alpha, beta, rc) followed by a number:
+    - `alpha1`    
   - [Semantic version 1.0 info](http://semver.org/spec/v1.0.0.html)
 - NuGet 4.3 also supports [semantic version 2.0.0](http://semver.org/spec/v2.0.0.html)
   - changes include:
@@ -254,6 +252,7 @@ NuGet Notes
   - `<sourcePath>` specifies the folder-based package source to which the package will be added
   - [Options documentation](https://docs.microsoft.com/en-us/nuget/tools/cli-ref-add#options)    
   - Example: `nuget add foo.nupkg -Source \\ricwebprd\newMarketNuGet`
+    - Note: if you run from git-bash, change your path delimeters: `nuget add foo.nupkg -Source //ricwebprd/newMarketNuGet`
 
 ## NuGet CLI and General Behavior
 - In most of nuget operations, aside from package install, probably the CLI is going to be the better bet.
