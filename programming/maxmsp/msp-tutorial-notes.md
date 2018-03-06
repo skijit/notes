@@ -289,8 +289,8 @@ MSP Tutorial Notes
             - i guess there are a couple ways we could handle this, but for sheer usability, we need to maintain 64 as the center point
         2. the intensity of the overall sound is proportional to the sum of the **square** of the amplitudes, not the sum of the amplitudes.  therefore, you perceive greater intensity when it's NOT panned center.  [See this aside](#Loudness-Aside)
             - example:
-                - Side panned: ```- \lparen(0.75 \cdot 0.25\rparen)^2 + \lparen(0.25 \cdot 0.25\rparen)^2 = 0.0390625 ```
-                - Center panned: ```- \lparen(0.5 \cdot 0.25\rparen)^2 + \lparen(0.5 \cdot 0.25\rparen)^2 = 0.03125 ```
+                - Side panned: ```- \left(0.75 \cdot 0.25\right)^2 + \left(0.25 \cdot 0.25\right)^2 = 0.0390625 ```
+                - Center panned: ```- \left(0.5 \cdot 0.25\right)^2 + \left(0.5 \cdot 0.25\right)^2 = 0.03125 ```
             - this is crappy because this means we won't maintain the impression of the same distance from the speaker as we pan.
                 - this is especially crappy bc it should be loudest at the center, bc that's where it's actually closest to your head.  this totally flips that logic.
 2. Equal Distance Crossfade
