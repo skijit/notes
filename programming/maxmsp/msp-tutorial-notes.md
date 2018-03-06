@@ -287,10 +287,10 @@ MSP Tutorial Notes
     - two issues though:
         1. 64 is supposed to be centered, but since midi range is 0-127, 64 would actually be center of 0-128 range. so we divide the cc value by 128 if between 0 - 64, and 127 if greater.
             - i guess there are a couple ways we could handle this, but for sheer usability, we need to maintain 64 as the center point
-        2. the intensity of the overall sound is proportional to the sum of the **square** of the amplitudes, not the sum of the amplitudes.  therefore, you perceive greater intensity when it's NOT panned center.
+        2. the intensity of the overall sound is proportional to the sum of the **square** of the amplitudes, not the sum of the amplitudes.  therefore, you perceive greater intensity when it's NOT panned center.  [See this aside](#Loudness-Aside)
             - example:
-                - (0.75 \* 0.75) + (0.25 \* 0.25) = 0.625
-                - (0.5 \* 0.5) + (0.5 \* 0.5) = 0.5
+                - Side panned: ```- \lparen(0.75 \cdot 0.25\rparen)^2 + \lparen(0.25 \cdot 0.25\rparen)^2 = 0.0390625 ```
+                - Center panned: ```- \lparen(0.5 \cdot 0.25\rparen)^2 + \lparen(0.5 \cdot 0.25\rparen)^2 = 0.03125 ```
             - this is crappy because this means we won't maintain the impression of the same distance from the speaker as we pan.
                 - this is especially crappy bc it should be loudest at the center, bc that's where it's actually closest to your head.  this totally flips that logic.
 2. Equal Distance Crossfade
@@ -324,6 +324,40 @@ MSP Tutorial Notes
                 - Blue line: ```- A_{right} ```
                 - Green line: ```- A_{left} ``` + ```- A_{right} ```
 
+### Loudness Aside
+- In the previous tutorial, we saw that the (perceived) loudness is proportional to the **sum of the squares of amplitudes** instead of the sum of amplitudes.
+    - E.G. Two speakers playing at an amplitude of 0.5 do not have the same loudness as 1 speaker with an amplitude of 1
+    - For whatever reason, this doesn't sit well. 
+    - **How does this make sense??**
+- Start with what we know:
+    - We use decibels to measure amplitude because:
+        - It compresses the huge dynamic range available for audible sounds (just based on amplitudes)        
+        - If we listen to a series of sounds having, what we perceive, a constant step in loudness the corresponding sound waves in fact have a multiplicative factor in their amplitudes. 
+            - Therefore, it is more convenient to use a logarithmic scale to measure loudness.
+- Ok: so we know that (raw) amplitude and loudness are not linearly related.
+- We also know Loudness is driven by a lot of information:
+    - Frequency content
+    - Amplitude
+    - Distance from listener
+    - If you're blending signal, the various phase relationships
+    - Therefore: we know amplitude is NOT everything when we talk about loudness
+- There is no unit for Loudness: it's qualitative measurement
+    - If there were a unit for it, it would be logarithmic 
+    - So to say loudness is proportional (linearly related) to the square of amplitude makes sense!
+        - The square of the amplitude is 'undone' by the logarithm of the loudness
+- So why does loudness track with the square of amplitude rather than the cube or something like that?
+    - This is based on physics, [see here](http://hep.physics.indiana.edu/~rickv/Sound_intensity.html)    
+    - For a sound wave, the amount of energy transported is proportional to the square of the amplitude of the wave
+        - The reason: This is just the math of a wave and it's kinetic and potential energies.
+    - Going a little further:
+        - Loudness of some noise, from a physical point of view, can factor in 2 things:
+            - Amount of sound energy produced
+            - Distance between the sound and our ear
+        - Sound is created by a mechanical motion: mechanical energy is converted into sound energy
+        - The loudness of a sound depends on how rapidly it converts mechanical energy into sound energy
+            - This is called Sound Power
+        - Sound intensity is like Sound Power, but it factors in distance of the listener from the sound
+        
 ## 23 - Viewing Signal Data
 - `number~` and `meter~` are updating every 250 ms by default, but you can change this with it's 'interval' attribute
 - you can use the `number~` inspector to allow/block its different modes:

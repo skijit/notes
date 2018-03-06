@@ -53,7 +53,7 @@ Sample Title
 - [Link to a local page](/math/desmos)
 - [Link to an in-page anchor](#Block-Quotes)
     - Note the case-sensitivity
-- [Link to an anchor in a given page](/programming/dotnet/tools/vs-2015-power-user-essentials#Video-7-Letting-Visual-Studio-Help-You)
+- [Link to an anchor in a given page](/programming/maxmsp/msp-tutorial-notes#22-MIDI-Panning)
 
 ## Images
 - Images hosted locally

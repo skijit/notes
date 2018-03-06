@@ -135,3 +135,4 @@ Chapter 1: Electronic Music and Sound Design
     - Piano tuners know this well and have to accomodate this.
 
 ## Panning
+- [See this other set of notes for panning stuff](/programming/maxmsp/msp-tutorial-notes#22-MIDI-Panning)
