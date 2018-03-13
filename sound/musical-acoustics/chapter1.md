@@ -161,7 +161,7 @@ Acoustics - Chapter 1
 6. **Question**: How many octaves are there in the human hearing range (btween 20-20,00 Hz)?
 
 - **Answer**: 
-- The function for octaves (```- I ```) is: ```- I = \log_2 \frac{f}{f_ref} ```
+- The function for octaves (```- I ```) is: ```- I = \log_2 \frac{f}{f_{ref}} ```
 - We'll make ```- f_{ref} = 20 ``` and  ```- f = 20000```
 - ```- log_2 \frac{20000}{20} = log_2 1000 = 9.96 ```, so basically there are 10 octaves in the human hearing range
 
