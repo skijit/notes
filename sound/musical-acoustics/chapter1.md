@@ -116,7 +116,53 @@ Acoustics - Chapter 1
 - Bit-Depth => Signal to Noise
 
 
+## Questions
+1. **Question**: A recorded sinusoid has a sample rate of 48 kHz and frequency of 440 Hz.  What is its period in samples?
 
+- **Answer**: 
+- ```- R = 48 kHz```, ```- f = 440 Hz```, need the period ```- \tau ```, in samples.
+- ```- \tau_{sec} = \frac{1}{f} = \frac{1}{440}  ``` 
+- ```- \tau_{samp} = ``` units will be ```- \frac{samples}{cycle} ```
+- ```- \tau_{samp} =  \frac{1}{f} \cdot \frac{48000}{1} = \frac{48000}{440} = 109.09```
+- Unit analysis: ```- \frac{sec}{cycle} \cdot \frac{samp}{sec} = \frac{samp}{cycle} ```
 
+2. **Question**: If a 1 volt amplitude signal is raised by 6 decibels, whats the resulting voltage?
+
+- **Answer**: 
+-  ```-A = 1V ``` mens current dB is 0 bc 1V is the usual ```- a_{ref}```
+- so new ```- A = 0 dB + 6 dB = 6 dB ```
+- pluging into dB equation: ```- 6 dB = 20 \log \frac{V_{new}}{1} ```
+- ```- 6 = 20 log V_{new}  \to \frac{6}{20} = \log V_{new} \to 10^{\frac{6}{20}} = V_{new} = 2```
+- But this makes sense anyways bc adding 6 dB always doubles the amplitude!
+
+3. **Question**: What frequency is 1/2 octave above 440 Hz?
+
+- **Answer**: 
+- 1 octave above 440: ```- 440 \cdot 2^{1} ```
+- 1/2 octage above 440: ```- 440 \cdot 2^{\frac{1}{2}} = 440 \cdot \sqrt{2} = 660.25 ``` and that equals D#, which is a tritone above A.  So that works!
+- But why doesn't this work?
+    - A5 = 880, A4 = 440.  Halfway there will equal 440 + 220 = 660.
+    - Because pitch is not linear!  It's (obviously) logarithmic function of the frequency, with a base of 2.
+
+4. **Question**: If you record a signal with a word length of 8 bits, what is the theoretical signal-to-noise ratio?
+
+- **Answer**: 
+- SNR = 6N where N = Bit depth.  8 * 6 = 48 dB SNR.
+
+5. **Question**: If you generate a sinusoid of frequency 40 kHz, but only sample your sinusoid at a rate of 44.1 kHz, what frequency will you hear when you play it?
+
+- **Answer**: 
+- ```- R = 44.1 kHz```, ```- f = 40 kHz ```
+- ```- f_{aliased} = \lvert f - I_R \rvert ``` where ```- I_R =  n * R ``` for integer ```- n``` and such that ```- \lvert I_R - f \rvert ``` is minimal
+- Basically, ```- I_R``` is the multiple of the sampling rate, ```- R ```, that is closest to the frequency that will be folded over ```- f_{aliased} ```
+- In this case, ```- n = 1 ```
+- ```- f_{heard} = \lvert 44100-44000 \rvert = 100 Hz```
+
+6. **Question**: How many octaves are there in the human hearing range (btween 20-20,00 Hz)?
+
+- **Answer**: 
+- The function for octaves (```- I ```) is: ```- I = \log_2 \frac{f}{f_ref} ```
+- We'll make ```- f_{ref} = 20 ``` and  ```- f = 20000```
+- ```- log_2 \frac{20000}{20} = log_2 1000 = 9.96 ```, so basically there are 10 octaves in the human hearing range
 
 
