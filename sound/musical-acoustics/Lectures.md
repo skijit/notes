@@ -56,8 +56,19 @@ Lecture Notes
     - Filters are composed of these three things
     - Things that can't be realized by these operations:
         - Nonlinear stuff like distortion
+    - The things you multiply, add, or delay by are scalars, not signals
 - This concludes chapter one of the book notes.
-    
+
+## Lecture 4 
+
+- note the bicycle wheel graphic in chapter 2 is missing f in the formula
+- how to calculate harmonics: you can multiply frequency f by 2,3,4,5,6,7, etc and you get the 2nd, 3rd, 4th, etc. harmonics
+- you can use this to create additive synthesis
+    - interesting to see how you see things as single vs multiple pitches
+    - the higher harmonics need to be a little quieter to hear as a single note (in general)
+    - the individual tones will 'fuse' into a single sometimes... into a single percept
+- f * sqrt(2) = tritone!
+
     
     
     

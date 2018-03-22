@@ -112,7 +112,65 @@ db.createUser({
 - Iterating
     - `db.customers.find().forEach(function(doc){ print("Customer Name:" + doc.first_name)})`
 
+## Another source
+- [src](https://www.youtube.com/watch?v=UFVFIKduXpo)
+- see cap triangle
+- you can index on field(s)
+    - if you want to shard, this is index-based
+- hierarchy
+    - databases
+    - collections
+    - documents
+- you can't reference collections across databases
+- architecture
+    - replication sets
+        - you have one single master database instance which can then replicate transactions via it's operation log to any number of secondary db instances
+        - those db instances could be operational OR they could be used for backup (basically- this is about durability, not scaling)
+        - if the primary/master instance goes down, the secondaries will choose another secondary as the de facto primary
+            - then when the original primary comes back up, the operation logs can be applied to it to get it up to date.
+        - quirks:
+            - a majority of the servers in your set must agree on the primary
+            - meaning: you need at least 3 servers if you do replication
+                - or you can set up an 'arbiter' node which will decide which to use.
+            - apps need to know who is the primary or secondary and be able to failover
+            - delayed secondaries can be set up as insurance against accidental mistakes
+     - sharding
+        - application server will talk to a proces called 'mongos'
+        - mongos talks to one of 3 different config servers which analyze the operation to figure out which primary instance you should talk with
+        - there will be X multiple primary instances, each dividing a collection into groups (shards) based on the value of some indexed field(s)
+        - each primary still will have its own sets of secondaries
+        - mongos runs a balancer, so it can rebalance your shards in real-time if things are not evenly distributed
+        - quirks:
+            - auto-sharding sometimes fails
+                - split storms: can't reshard the data
+                - mongos processes restarted too often
+            - you need 3 config servers
+                - if one goes down, your DB is down
+            - mongodb's loose document model can be att odds with effective sharding
+- supports many indices
+    - only 1 can be used for sharding
+    - more than 2-3 are discouraged
+    - full text indices for text searches
+    - spatial indices
+- built in aggregation capabilities
+    - you can run MapReduce (going into Hadoop territory)
+    - Has it's own file system GridFS
+    - Integrates with Hadoop, Spark, and most languages
+
+## Another Source
+- [src](https://www.youtube.com/watch?v=bKjH8WhSu_E)
+- `db.users.insertOne({object})`
+
+## Questions
+- How do you replicate from one server to another
+    - [src](https://stackoverflow.com/questions/31715980/mongodb-data-from-windows-server-to-linux)
+- How do you install on Linux and Windows
+    - [src](https://docs.mongodb.com/tutorials/)
+    - [src on community edition](https://docs.mongodb.com/manual/administration/install-community/)
+
+
     
+
 
     
 
