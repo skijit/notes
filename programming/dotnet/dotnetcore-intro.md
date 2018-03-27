@@ -97,14 +97,14 @@
       - myapp.PrecompiledViews.pdb (if precompiling Razor Views)
       - myapp.runtimeconfig.json
       - web.config (if included in publishOptions)
-  - ` -c|--configuration {Debug|Release}`
-  - ` -f|--framework <FRAMEWORK>`
-  - ` --self-contained`
+  - `  -c|--configuration {Debug|Release}`
+  - `  -f|--framework <FRAMEWORK>`
+  - `  --self-contained`
     - Publishes the .NET Core runtime with your application so the runtime doesn't need to be installed on the target machine. 
     - If a runtime identifier is specified, its default value is true
-  - ` --version-suffix <VERSION_SUFFIX>`
+  - `  --version-suffix <VERSION_SUFFIX>`
     - Defines the version suffix to replace the asterisk (*) in the version field of the project file.
-  - ` --manifest <PATH_TO_MANIFEST_FILE>`
+  - `  --manifest <PATH_TO_MANIFEST_FILE>`
     - This is a path to a file which gives you a custom set of dependencies to include, primarily because you know the target deployment will include shared packages in some specified location.  The point is to make applications more lightweight.
     - this manifest file is what is created by the `dotnet store` command
   - `o|--output <OUTPUT_DIRECTORY>`
