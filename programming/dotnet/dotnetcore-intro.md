@@ -19,11 +19,11 @@
     - **webconfig**
     - **nugetconfig**
     - **globaljson**
-  - ` --force`: overwrite files
-  - ` -i|--install <PATH|NUGET_ID>`: Installs a source or template pack from the PATH or NUGET_ID provided.
+  - ` \--force`: overwrite files
+  - ` \-i|--install <PATH|NUGET_ID>`: Installs a source or template pack from the PATH or NUGET_ID provided.
   - ` lang|--language {C#|F#|VB}`
-  - ` -n|--name <OUTPUT_NAME>`: The name for the created output. If no name is specified, the name of the current directory is used.
-  - ` -o|--output <OUTPUT_DIRECTORY>`: Location to place the generated output. The default is the current directory.
+  - ` \-n|--name <OUTPUT_NAME>`: The name for the created output. If no name is specified, the name of the current directory is used.
+  - ` \-o|--output <OUTPUT_DIRECTORY>`: Location to place the generated output. The default is the current directory.
   - Template Options:
     - ` --no-restore`: Doesn't perform an implicit restore (ie nuget packages) during project creation.
     - ` -f|--framework <FRAMEWORK>` - for classlib - specifies the framework to taret (e.g. netcoreapp2.0, netstandard2.0)
