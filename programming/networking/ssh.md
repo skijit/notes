@@ -65,6 +65,9 @@ SSH Notes
         - you can leave the passphrase if you want
     - better to use rsa instead of dsa, so use:
         - `ssh-keygen -t rsa`
+- to scp a directory from local host to remote host:
+    - works just like `cp`
+    - `scp -r publish/ user@some-ip-address:~/destination-dir`
 - to copy your public key to a server:
     - `scp id_rsa.pub your-user-name@your-server-ip:~`
     - the tilde is just telling where you want to copy it
