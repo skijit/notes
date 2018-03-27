@@ -168,3 +168,16 @@
     - Since the framework is included in your deployment package, you select target platforms for deployment packages in advance
     - if you have multiple apps deployed to a single server, will result in a larger footprint
   
+## CLI-Created ASP.NET Core project
+
+- In some root development directory, run: `dotnet new mvc -n test-mvc`
+- `cd` to the new test-mvc directory and start vscode in that folder: `code .`
+- click open the Startup.cs file.  If you get a suggestion to install C# tools or extensions, select 'yes'.
+  - when loading extensions, etc. are complete (you can monitor the progress in the terminal), restart VSCode and go back to Startup.cs
+  - You will also likely get the warning "Required assets to build and debug are missing from 'MvcMovie'. Add them?" select Yes!
+  - restart vscode again and go to Startup.cs
+- press debug (F5) to build and debug the program.
+  - this will start hosting the initial site with Kestrel
+  - your browser will open up to http://localhost:5000/.
+
+  
