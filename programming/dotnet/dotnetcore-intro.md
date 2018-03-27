@@ -19,25 +19,25 @@
     - **webconfig**
     - **nugetconfig**
     - **globaljson**
-  - ` \--force`: overwrite files
-  - ` \-i|--install <PATH|NUGET_ID>`: Installs a source or template pack from the PATH or NUGET_ID provided.
-  - ` lang|--language {C#|F#|VB}`
-  - ` \-n|--name <OUTPUT_NAME>`: The name for the created output. If no name is specified, the name of the current directory is used.
-  - ` \-o|--output <OUTPUT_DIRECTORY>`: Location to place the generated output. The default is the current directory.
+  -  --force: overwrite files
+  -  -i|--install <PATH|NUGET_ID>: Installs a source or template pack from the PATH or NUGET_ID provided.
+  -  lang|--language {C#|F#|VB}
+  -  -n|--name <OUTPUT_NAME>: The name for the created output. If no name is specified, the name of the current directory is used.
+  -  -o|--output <OUTPUT_DIRECTORY>: Location to place the generated output. The default is the current directory.
   - Template Options:
-    - ` --no-restore`: Doesn't perform an implicit restore (ie nuget packages) during project creation.
-    - ` -f|--framework <FRAMEWORK>` - for classlib - specifies the framework to taret (e.g. netcoreapp2.0, netstandard2.0)
-    - ` --sdk-version <VERSION_NUMBER>` - for globaljson template - Specifies the version of the .NET Core SDK to use in the global.json file.
-    - ` --use-launch-settings` - for web -  Includes launchSettings.json in the generated template output.
+    -  --no-restore: Doesn't perform an implicit restore (ie nuget packages) during project creation.
+    -  -f|--framework <FRAMEWORK> - for classlib - specifies the framework to taret (e.g. netcoreapp2.0, netstandard2.0)
+    -  --sdk-version <VERSION_NUMBER> - for globaljson template - Specifies the version of the .NET Core SDK to use in the global.json file.
+    -  --use-launch-settings - for web -  Includes launchSettings.json in the generated template output.
       - launchSettings allows you to create different launch profiles (for running in different environments), which include values such as environment variables, etc.
     - there are a bunch of authentication settings for webapi, mvc, and razor projects [see here](https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-new?tabs=netcore2x)
-- `dotnet restore`
+- dotnet restore
   - uses NuGet to restore dependencies as well as project-specific tools that are specified in the project file. By default, the restoration of dependencies and tools are performed in parallel.
   - nuget feeds specified by 3 locations:
     - default: NuGet.config in same location as CLI tools installed.  
     - NuGet.config file in project directory
-    - On command line for `dotnet restore`
-  - this is typically implicitly run when you execute a `new`, `build`, `run`, `test`, `publish`, `pack`
+    - On command line for dotnet restore
+  - this is typically implicitly run when you execute a new, build, run, test, publish, pack
 - `dotnet build`
   - Builds a project and all of its dependencies.
   - `dotnet build [<PROJECT>] [-c|--configuration] [-f|--framework] [--force] [--no-dependencies] [--no-incremental]
@@ -50,20 +50,20 @@
     - also accepts MSBuild options
     - see [here](https://docs.microsoft.com/en-us/visualstudio/msbuild/msbuild-command-line-reference) for MSBuild Command Line ref
   - `PROJECT`: if project is not specified, it searches current working directory for any file extension that ends in `proj` (e.g. .csproj, etc.)
-  - ` -c|--configuration {Debug|Release}`
-  - ` --no-incremental` forces a clean before incremental build
-  - ` -f|--framework <FRAMEWORK>` compiles for a specific framework.  E.g.
+  -  -c|--configuration {Debug|Release}
+  -  --no-incremental forces a clean before incremental build
+  -  -f|--framework <FRAMEWORK> compiles for a specific framework.  E.g.
     - `netstandard2.0`  
     - `netcoreapp2.0`
     - `net471`
-  - ` -o|--output <OUTPUT_DIRECTORY>` Directory in which to place the built binaries. You also need to define `--framework` when you specify this option.
-  - ` -v|--verbosity <LEVEL>`  values are:
+  -  -o|--output <OUTPUT_DIRECTORY> Directory in which to place the built binaries. You also need to define --framework when you specify this option.
+  -  -v|--verbosity <LEVEL>  values are:
     - q[uiet]
     - m[inimal]
     - n[ormal]
     - d[etailed]
     - diag[nostic]
-  - ` -r|--runtime <RUNTIME_IDENTIFIER>` specifies a target runtime, which is used to identify platform-specific resources in nuget packages.  e.g.
+  -  -r|--runtime <RUNTIME_IDENTIFIER> specifies a target runtime, which is used to identify platform-specific resources in nuget packages.  e.g.
     - linux-x64
     - ubuntu.14.04-x64
     - win7-x64
@@ -97,17 +97,17 @@
       - myapp.PrecompiledViews.pdb (if precompiling Razor Views)
       - myapp.runtimeconfig.json
       - web.config (if included in publishOptions)
-  - `  -c|--configuration {Debug|Release}`
-  - `  -f|--framework <FRAMEWORK>`
-  - `  --self-contained`
+  -   -c|--configuration {Debug|Release}
+  -   -f|--framework <FRAMEWORK>
+  -   --self-contained
     - Publishes the .NET Core runtime with your application so the runtime doesn't need to be installed on the target machine. 
     - If a runtime identifier is specified, its default value is true
-  - `  --version-suffix <VERSION_SUFFIX>`
+  -   --version-suffix <VERSION_SUFFIX>
     - Defines the version suffix to replace the asterisk (*) in the version field of the project file.
-  - `  --manifest <PATH_TO_MANIFEST_FILE>`
+  -   --manifest <PATH_TO_MANIFEST_FILE>
     - This is a path to a file which gives you a custom set of dependencies to include, primarily because you know the target deployment will include shared packages in some specified location.  The point is to make applications more lightweight.
-    - this manifest file is what is created by the `dotnet store` command
-  - `o|--output <OUTPUT_DIRECTORY>`
+    - this manifest file is what is created by the dotnet store command
+  - o|--output <OUTPUT_DIRECTORY>
     - path for the output directory
     - defaults 
       - ./bin/[configuration]/[framework]/[runtime] for a self-contained deployment
