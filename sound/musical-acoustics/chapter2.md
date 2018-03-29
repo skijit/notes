@@ -58,7 +58,9 @@ Acoustics - Chapter 2 - Sinusoids
         - The amplitude of the sinusoid is given by the length of ray
         - The ray rotates around the origin at ```- f ``` rad/sec
         - The instantaneous amplitude of the sinusoid is given by the same function ```- x(t) ```
-            - It could also be given by ```- \sin ```-based function of a wave, you just need to alter the ```- \phi_0 ``` appropriately
+            - The instantaneous amplitude is a scalar value - not a coordinate, like we see when we graph the signal in a unit circle.
+            - Doesn't matter: the instantaneous amplitude could be given by either ```- \sin ``` or ```- \cos ```.
+                - you just need to alter the ```- \phi_0 ``` appropriately            
             - This gets to an important point...
 - The '2 sides' of a Sinusoid
     - It doesn't make sense to say: 'is this sinusoid a sine or a cosine?'
@@ -83,7 +85,7 @@ Acoustics - Chapter 2 - Sinusoids
 
 ### Mixing Frequencies
 - Mixing frequencies is slightly more complicated than applying (linear) gain and delay
-- Adding signals with matching ```- f ```
+- **Adding signals with matching ```- f ```**
     - In this case, we can just add the rays ```- a ``` and ```- b ``` together.
     ![adding signals](/resources/images/music/adding-signals.png)
     - sinusoid ```- a ``` is being added to sinusoid ```- b ```, resulting in ```- c ```
@@ -107,13 +109,23 @@ Acoustics - Chapter 2 - Sinusoids
         - ```- c^2 = a^2 + b^2 + 2ab \cos (\phi_b - \phi_a) ```            
     - intuitively, we know how ```- c ``` is largely dependent on phase and magnitude
         - full cancellation is possible here with phase difference of 180 degrees and equal magnitude
-- Adding signals with different frequencies:
+- **Adding signals with different frequencies:**
     - not that different...
     - at ```- t_0 ```, it's the same as adding signals with the same ```- f ```, like above
         - along with the amplitudes, it's dependent on ```- \phi_{a0} ``` and ```- \phi_{b0} ```
     - but then ```- \phi_b - \phi_a ``` increases at a rate of ```- f_a - f_b ```
     - the resulting sinusoid will cycle at ```- f_a - f_b ``` times the unit of time.
         - todo: unit analysis here
+- **Adding signals with equal amplitude and frequency**
+    - So only difference is ```- \phi_1``` and ```- \phi_2 ```
+    - The previous law of cosines-derived formula will undergo some simplifications to become:
+    - ```- c = 2a \cdot \cos(\frac{\phi_2 - \phi_1}{2}) ```
+    - The cool thing about this is that the initial phase ```- \phi_c ```, which was difficult to calculate in case 1, is actually the average of original 2 
+- **Adding sinusoids of different frequencies but the same amplitude**
+    - We can generalize the last formula to two sinusoids with different frequencies:
+    - ```- a \cos (2 \pi f t) + a \cos (2 \pi g t ) = 2a \cdot \cos(2 \pi \frac{f-g}{2} t) \cos(2 \pi \frac{f+g}{2}t ) ```
+    - This is an important identity
+        - I'm a little confused as to why it doesn't include phase though
 
 
 ### Periodic Tones
@@ -137,3 +149,71 @@ Acoustics - Chapter 2 - Sinusoids
         - Sometimes a mixture of (unrelated) sinusoids will still be understood by the ear as a single tone
         - individual components here are called **partials**
         - this is called a **complex inharmonic tone**
+
+## Power
+
+### Review of Physics terms
+- **Power**: The *rate* at which work is done
+    -  Unit: Watt (W)
+        - 1 W = 1 Joule / sec
+        - Think of it as 'Energy per Second'
+- **Work**: The ability to cause a change in energy
+    - Unit: Joule (J)
+- **Energy**: There are tons of types of energy: Kinetic, Potential, Heat, etc.
+    - Unit: Joule (J)
+    - Typically only measured by observing changes in energy
+- **Presure**: Force acting on a surface area, ```- P = F/A ```
+    - Unit: Pascals (Pa)
+        - 1 Pa = 1 N/m^2    
+- **Force**: The *attempt* of energy to move another object
+    - *attempt* bc a force can be applied without moving something.  EG a dam.s
+    - Unit: Newtons (N)
+- So to sum up power: it is Energy Transfer over time.
+
+### Motivation
+
+- We want to measure the strength of signals
+- Peak amplitude of a sinusoid is a decent measure of overall strength but there are 3 problems:
+    1. Most real life signals aren't sinusoids
+    2. Non-sinusoidal signals' peak amplitudes don't give you a good idea of their strength
+    3. It would be nice to have a measure of strength that is additive, such that:
+        - when you add 2 signals, their strengths are added too
+- A good candidate for measuring strength is concept of average power.
+
+### Analogy of Electronics to Acoustics
+
+- Ohm's law states that ```- V = IR ```
+- The definition of power, P, is ```- P = VI ```
+    - Unit analysis: 
+    ![electrical power unit analysis](/resources/images/programming/electrical-power-unit-analysis.png)
+    - Confirmed: electrical power is energy per second
+- Therefore: 
+    - ```- P = V^2 / R ```  (based on the last two formulae)
+    - Power is proportional to the square of the voltage!
+    - It is always non-negative
+- To find an analogous definition for musical signals, let's work backwards with a unit analysis:
+    - Power = 'energy per second'
+    - Voltage in the Electrical system is analogous to pressure in the acoustic setting
+    - Pressure units are N/m^2
+        - N is the unit of Force
+        - So Pressure is Force over an area
+    - Force times displacement is Work because work is the ability to cause a change in energy
+        - Change in energy requires force
+        - Change in energy also requires something to be moved (aka be displaced)
+    - Displacement over time is velocity
+    - So for an acoustic setting:
+        - Power = force x displacement/time = force x velocity        
+        - force is the pressure of the acoustic signal
+        - velocity is the speed at which it moves
+            - this is mostly characteristic of the medium (in air, typically sound moves at 343 m/s)
+            - however in the book, he says the velocity is proportional to the pressure (divided by the resistance of the medium) 
+                - that doesn't sound right - ask about this (TODO)
+            - if velocity IS proportional pressure (ie amplitude), then we get the same result as with the electrical analogy:
+                - Power is proportional to the amplitude squared (divided by the resistance)
+        - We can simplify this further as a digital recording has no analog to resistance: ```- P(t) = [x(t)]^2 ```
+            - That is our definition of **instantaneous power**
+- **Average Power**
+    - This is the measure we're more interested in
+    - What is the average strength over some period of time
+    
+                
