@@ -231,8 +231,49 @@ Acoustics - Chapter 2 - Sinusoids
         - ```- \frac{a^2}{2} \cos (2 \pi f t) + \frac{a^2}{2} = a^2 \cdot \cos^2 (2 \pi f t) ```
         - ```- \frac{a^2}{2} \cos (2 \pi f t) + \frac{a^2}{2} =  \text{power} ```
     3. On average, the ```- \frac{a^2}{2} \cos (2 \pi f t) ``` is going to be zero (assuming the signal is zero-centered), so therefore we arrive at:
-        - ```- \text{avg power} = \frac{a^2}{2} ```
+        - ```- \text{avg power} = P_{avg} = \frac{a^2}{2} ```
+- Compare the signal to the instantaneous power and avg power
+ ![electrical power unit analysis](/resources/images/music/avg-power.png)
 
-## Average Power and Additivity
+### Additivity of Average Power
+
+- **Case 1**: Adding Signals with same frequency and different amplitudes
+    - We already know from our law of cosines derivation that the resulting amplitude ```- c ``` is given by: ```- c^2 = a^2 + b^2 + 2ab \cos ( \phi_2 - \phi_1) ```
+    - And we know that ```- P_{a_{avg}} = \frac{a^2}{2} ``` and so on...
+    - So if we multiply both sizes of the first formula by ```- 1/2 ```, we get:
+        - ```- P_{c_{avg}} = P_{a_{avg}} + P_{b_{avg}} + ab \cos(\phi_2 - \phi_1) ```
+    - Conclusion: The powers are somewhat additive, but ultimately dependent on the phase relationship of the 2 signals
+        - Note: when the cosine argument is a variable, then we can assume it will average to 0.  When it is a constant (as in this case above), we cannot make that assumption.
+- **Case 2**: Adding Signals with different frequencies:
+    - This is simlar to the above, but here the phase difference changes in time based on the difference between the two frequencies
+    - ```- c^2 = a^2 + b^2 + 2ab \cos (\lvert f - g \rvert t (\phi_2 - \phi_1)) ```
+    - Since the cosine argument is not a constant, but something changing in time, we can assume it is zero
+    - Conclusion: Power is additive in this case.  ```- P_{c_{avg}} = P_{a_{avg}} + P_{b_{avg}} ```
+- **Counterexample**: As long as the frequencies are different, we might conclude that always ```- P_{c_{avg}} = P_{a_{avg}} + P_{b_{avg}} ```.
+    - This is NOT true when you add a sinusoid to itself.
+    - You might expect Power to double but it actually increases by a factor of 4.
+    - **Proof**:
+        - given a sinusoid with amplitude ```- a ```
+        - added to itself, the amplitude is now ```- 2a ```
+        - In general, ```- P_{avg_a} = \frac{a^2}{2} ```
+        - Average power of ```- 2a ```: ```- P_{avg_{a+a}} = \frac{(2a)^2}{2} = 4 \cdot \frac{a^2}{2} = 4 \cdot P_{avg_a} ```
+- **Conclusion**:
+    - When the sinusoids are **uncorrelated** their powers are additive
+        - 2 sinusoids with different frequencies are uncorrelated.
+    - When the sinsoids are **not uncorrelated** (ie same frequency), their powers are dependent on their phase differences.
+        - 2 sinusoids with the same frequency are correlated.
+    - Scaling a signal by a factor of ```- k ``` scales the average power by ```- k^2 ```
+    - Adding ```- k ``` uncorrelated signals should only be expected to multiply power by ```- k ```
+
+### Decibels and Average Power
+- In the past, ```- L ``` (via decibels) has been used to compare instantaneous amplitudes.
+- Now that we have a way to describe the average strength of signals, applying this to decibels might also be useful
+- But first we need to verify that it is mathematically consistent with the original definition of ```- L ```.
+- ```- L  = 10 \log \frac{P_{avg_1}}{P_{avg_2}} ```
+- ```- L =  10 \log \frac{\frac{a^2_1}{2}}{\frac{a^2_2}{2}} = 10 \log \frac{a^2_1}{a^2_2} = 10 \log ( \frac{a_1}{a_2} )^2 = 20 \log \frac{a_1}{a_2}```
+    - And this matches our original formula for ```- L ``` based on instantaneous amplitude.  
+    - So yes, this is consistent
+
+
 
                 
