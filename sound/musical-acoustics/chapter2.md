@@ -117,6 +117,7 @@ Acoustics - Chapter 2 - Sinusoids
     - the resulting sinusoid will cycle at ```- f_a - f_b ``` times the unit of time.
         - todo: unit analysis here
 - **Adding signals with equal amplitude and frequency**
+    ![adding signals with same amp and freq](/resources/images/music/add-signals-same-amp-freq.png)
     - So only difference is ```- \phi_1``` and ```- \phi_2 ```
     - The previous law of cosines-derived formula will undergo some simplifications to become:
     - ```- c = 2a \cdot \cos(\frac{\phi_2 - \phi_1}{2}) ```
@@ -126,9 +127,10 @@ Acoustics - Chapter 2 - Sinusoids
     - ```- a \cos (2 \pi f t) + a \cos (2 \pi g t ) = 2a \cdot \cos(2 \pi \frac{f-g}{2} t) \cos(2 \pi \frac{f+g}{2}t ) ```
     - This is an important identity
         - I'm a little confused as to why it doesn't include phase though
+        - Author calls this the Fundamental Law of Electronic Music (FLEM)
 
 
-### Periodic Tones
+## Periodic Tones
 - Signal is periodic when there is some non-zero delay ```- \tau ``` which can be applied which makes no difference:
     - ```- f(x) = f(x - \tau)```
 - The smallest value of ```- \tau ``` is the period
@@ -179,6 +181,7 @@ Acoustics - Chapter 2 - Sinusoids
     3. It would be nice to have a measure of strength that is additive, such that:
         - when you add 2 signals, their strengths are added too
 - A good candidate for measuring strength is concept of average power.
+- Remember, we're only interested in periodic signals here
 
 ### Analogy of Electronics to Acoustics
 
@@ -190,6 +193,7 @@ Acoustics - Chapter 2 - Sinusoids
 - Therefore: 
     - ```- P = V^2 / R ```  (based on the last two formulae)
     - Power is proportional to the square of the voltage!
+        - It's quadratic (parabolic)! 
     - It is always non-negative
 - To find an analogous definition for musical signals, let's work backwards with a unit analysis:
     - Power = 'energy per second'
@@ -212,8 +216,23 @@ Acoustics - Chapter 2 - Sinusoids
                 - Power is proportional to the amplitude squared (divided by the resistance)
         - We can simplify this further as a digital recording has no analog to resistance: ```- P(t) = [x(t)]^2 ```
             - That is our definition of **instantaneous power**
-- **Average Power**
-    - This is the measure we're more interested in
-    - What is the average strength over some period of time
-    
+## Average Power
+
+- We're more interested in average power than instantaneous power
+    - Average power characterizes the average strength over some period of time
+- We can arrive at a definition for average power by:
+    1. squaring the instantenous amplitude function to give us instantaneous power:
+        - ```- \text{power} = a^2 \cdot \cos^2 (2 \pi f t) ```
+    2. Apply the FLEM with ```- g = 0 ``` and notice that is very similar to the above equation:
+        - FLEM: ```- a \cos (2 \pi f t) + a \cos (2 \pi g t ) = 2a \cdot \cos(2 \pi \frac{f-g}{2} t) \cos(2 \pi \frac{f+g}{2}t ) ```
+        - FLEM with ```- g = 0 ```: ```- a \cdot \cos(2 \pi f t) + a = 2a \cdot \cos^2(2 \pi f t) ```  
+            - since ```- \cos 0 = 1```
+        - Notice how similar the right term is to the equation in 1?  So we multiply by ```- a/2 ```
+        - ```- \frac{a^2}{2} \cos (2 \pi f t) + \frac{a^2}{2} = a^2 \cdot \cos^2 (2 \pi f t) ```
+        - ```- \frac{a^2}{2} \cos (2 \pi f t) + \frac{a^2}{2} =  \text{power} ```
+    3. On average, the ```- \frac{a^2}{2} \cos (2 \pi f t) ``` is going to be zero (assuming the signal is zero-centered), so therefore we arrive at:
+        - ```- \text{avg power} = \frac{a^2}{2} ```
+
+## Average Power and Additivity
+
                 
