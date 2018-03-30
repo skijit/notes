@@ -208,12 +208,11 @@ Acoustics - Chapter 2 - Sinusoids
     - So for an acoustic setting:
         - Power = force x displacement/time = force x velocity        
         - force is the pressure of the acoustic signal
-        - velocity is the speed at which it moves
-            - this is mostly characteristic of the medium (in air, typically sound moves at 343 m/s)
-            - however in the book, he says the velocity is proportional to the pressure (divided by the resistance of the medium) 
-                - that doesn't sound right - ask about this (TODO)
-            - if velocity IS proportional pressure (ie amplitude), then we get the same result as with the electrical analogy:
-                - Power is proportional to the amplitude squared (divided by the resistance)
+        - velocity is the speed at which it moves            
+        - velocity IS proportional pressure (ie amplitude)
+            - note: this is velocity of air.  Not the velocity of the wave propagating.
+        - we get the same result as with the electrical analogy:
+            - Power is proportional to the amplitude squared (divided by the resistance)
         - We can simplify this further as a digital recording has no analog to resistance: ```- P(t) = [x(t)]^2 ```
             - That is our definition of **instantaneous power**
 ## Average Power
