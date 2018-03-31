@@ -14,7 +14,11 @@ Citizen Chord Changes
 - Move to a IV, then a vi-V resolution back to I is expected BUT then we get a key change
     - vi-V resolution:
         - has the diatonic stepwise motion so common in this tune
-        - its just the usual vi-ii-V without the ii but we get the Ab.
+        - its just the usual vi-ii-V without the ii but we get the Ab.        
+- The resolution to Ab (next works well) because it ends on V and we're expecting the I again.
+    - So this is an excellent location for a deceptive cadence.
+    - The Ab is just a substitution for a C-
+- The IV just invites a question (what now?) that is then answered by the vi V and then the deceptive cadence
 
 ## B Section
 
@@ -30,13 +34,15 @@ Citizen Chord Changes
 | Ab | Bb | Ab | Bb | Ab | Bb | C | C |
 
 - Begins sounding like the B section, but then moves to the Bb.  Then it vacillates between these two chords until it comes to rest on the C, which is a familar tonal center (from the A section.)
-- Not suprisinly, then we go to back to the A secion.
+- Not suprisingly, then we go to back to the A secion.
 
 ## D Section
 
 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 |
 | :---: | :---: | :---: | :---: | :---: | :---: |
 | Eb | F- | G-  | F- | Eb | F- | Db  | F-  |
+
+- Not sure whether the Db should be thought of as a sub for the G- since then it just repeats OR if the Db is a sub for the F- (by common tones)
 
 ## Form
 - A, Bx4, C, A, D

@@ -1,7 +1,7 @@
 International Coloring Contest
 ========
 
-![International color contest tr](/resources/docs/music/international-coloring-contest.png)
+![International color contest tr](/resources/docs/music/international-coloring-contest-stereolab.png)
 
 &nbsp;  
 &nbsp;  

@@ -3,33 +3,36 @@ Look into the Sun
 - Jethro Tull
 - in 3/4
 
-**Intro**
+## Intro
 
-| 1 | 2 | 3 | 4 
-| :---: | :---: |
+| 1 | 2 | 3 | 4 |
+| :---: | :---: | :---: | :---: |
 | A | A | G | G |
 | I | I | bVII | bVII |
 
-**A**
-
-
-| A | A | A | E | C | A |
-|E | C | D | A
-
-
-| A | Dsus4 | G
-  
+## Section A
 
 | 1 | 2 | 3 | 4 |
-| :---: | :---: | :---: | :---: | 
-| E | D | G | F |
-| I | bVII | tr up 4th: I | bVII |
+| :---: | :---: | :---: | :---: |
+| A | A | A | E | 
+| C | A | A | E | 
+| C | D | D | D | 
+| A | A | A | A |
 
-- I -> bVII always creates some ambiguity.  
-- Resolves up a fourth, which is a new sound in E
-- The logic becomes clear when it goes to F, beause its a harmonic 2-bar sequence repeated a fourth apart:
-    - I -> bVII
-    - I think this kind of device is often used in jazz... (e.g. a ii-V up a half-step)  
+- Melody has a pickup bar, still on A
+- The C is the most interesting chord here
+    - It's a passing chord between the A and the E
+    - All major chords and stepping down in root motions of M3
+    - The E is constant throughout this, I think that's part of why it works
+        - If you're trying to connect two chords which have a common tone, try a passing chord that also shares that tone.
+    - Vaguely reminds me of Caetano Veloso's *Irene* which keeps a F pedal for: F, Db, Bb, F
+        - Same thing in a Section Young Pilgrims by the Shins
+        - The root movement sketches out a minor tria
+        - These are all similar: and it sounds best when you pedal on the common tone
 
-&nbsp;  
-&nbsp;  
+## Section B
+
+| 1 | 2 | 3 | 4 |
+| :---: | :---: | :---: | :---: |
+| A | A | Dsus4 | D | 
+
