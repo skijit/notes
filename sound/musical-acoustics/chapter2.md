@@ -129,6 +129,40 @@ Acoustics - Chapter 2 - Sinusoids
         - I'm a little confused as to why it doesn't include phase though
         - Author calls this the Fundamental Law of Electronic Music (FLEM)
 
+### Beating and FLEM Applications
+- Beating is the resulting sinusoid of two different frequencies being super-imposed
+    - You wouldn't get it if the sinusoids had the same frequency (regardless of offset)
+    - the beating frequency is always ```- \lvert f-g \rvert ```
+- **Case 1**: Given two sinusoids...
+    - 440 Hz
+    - 441 Hz
+    - Beating is happening at 1 Hz
+    - It basically sounds like a 1 Hz amplitude modulation
+- **Case 2**: Given two sinusoids of...
+    - 440.5 Hz multiplied by...
+    - 0.5 Hz
+    - You get the same sound (except lower amplitude) as the previous example!
+    - Why?
+        - Second sinusoid controls is the beating
+            - it is multiplied to the first sinusoid.
+            - The 0.5 (instead of 1 Hz) is because a cycle typically includes two peaks (one positive, one negative).
+                - We don't care whether a peak is positive or negative, so we just halve the rate we want to modulate by.
+        - first sinusoid is the interpolation (avg) of the two previous frequencies
+    - Amplitude modulation in the multiplication example
+- **Conclusion**: Case 1 and Case 2 is a demonstration of FLEM!
+    - Case 1 refers to the additive part: ```- a \cos (2 \pi f t) + a \cos (2 \pi g t ) ```
+    - Case 2 refers to the multiplicative part: ```- 2a \cdot \cos(2 \pi \frac{f-g}{2} t) \cos(2 \pi \frac{f+g}{2}t ) ```
+- **Another example**:
+    - Given two sinusoids of...
+        - 440
+        - 460
+        - This will match another two sinusoids:
+            - 450 being multiplied by a sinusoid of 10
+- From a synthesis point of view, this multiplicative component is very similar to amplitude modulation and in particular, ring modulation.
+    - Multiplying two frequencies ```- f ```, ```- g ```, together will produce two different frequencies (the additive part of FLEM) based on:
+        - ```- f - g ```
+        - ```- f + g ```
+    - **Todo**: discuss ring modulation in more detail
 
 ## Periodic Tones
 - Signal is periodic when there is some non-zero delay ```- \tau ``` which can be applied which makes no difference:
@@ -237,8 +271,11 @@ Acoustics - Chapter 2 - Sinusoids
  ![electrical power unit analysis](/resources/images/music/avg-power.png)
 - If average power is half the square of the peak amplitude, what do we know about squaring a cosine wave.
     1. Trig Identity: ```- \cos \alpha \cos \beta = \frac{1}{2} [ \cos(\alpha + \beta) + \cos(\alpha - \beta)] ```
-    2. So squaring ```- \cos \alpha ``` gives us: ```- \cos^2 \alpha = \frac{1}{2} \cos(2 \alpha) ``` 
-    3. **Conclusion**: The frequency doubles (moves up an octave) AND the amplitude is halved.
+    2. So squaring ```- \cos \alpha ``` gives us: ```- \cos^2 \alpha = \frac{1}{2} \cos(2 \alpha) + \frac{1}{2}``` 
+    3. **Conclusions** 
+        - The frequency doubles (moves up an octave) 
+        - The amplitude is halved
+        - The sinusoid is shifted upwards by a half (so it can never be negative)
 
 ### Additivity of Average Power
 
@@ -279,6 +316,13 @@ Acoustics - Chapter 2 - Sinusoids
     - And this matches our original formula for ```- L ``` based on instantaneous amplitude.  
     - So yes, this is consistent
 
-
-
-                
+### Application in a DAW Meter
+- Are audio meters in a DAW typically measuring power?
+    - Must be, because we wouldn't measure amplitude directly
+    - Also because Non-sinusoidal signals' peak amplitudes don't give you a good idea of their strength
+    - They're definitely using decibels.
+    - It's not clear whether they'd use instanteous power or avg power (calculated over some window)
+        - Probably instantaneous power because they need to capture peaks.
+            - Which is really just ```- [x(t)]2 ```
+        - Avg power would have some useful applications too, though.
+            - Which is really just ```- 0.5 \cdot [x(t)]2 ```

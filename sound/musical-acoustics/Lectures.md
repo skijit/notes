@@ -138,4 +138,7 @@ Lecture Notes
 - are audio meters typically measuring power?
     - I would guess so because Non-sinusoidal signals' peak amplitudes don't give you a good idea of their strength
     - remember instanteous power is x(t)^2, avg power is half that
+- things to add to chapter notes:
+    - flem applications
+    - audio meters and power
 
