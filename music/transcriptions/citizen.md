@@ -17,7 +17,7 @@ Citizen Chord Changes
         - its just the usual vi-ii-V without the ii but we get the Ab.        
 - The resolution to Ab (next works well) because it ends on V and we're expecting the I again.
     - So this is an excellent location for a deceptive cadence.
-    - The Ab is just a substitution for a C-
+    - The Ab is just a substitution for a C- (invoking the parallel minor key)
 - The IV just invites a question (what now?) that is then answered by the vi V and then the deceptive cadence
 
 ## B Section
@@ -26,7 +26,18 @@ Citizen Chord Changes
 | :---: | :---: | :---: | :---: |
 | Ab | G | F | F |
 
-- Key change to F is nice especially because it starts with a strong chromatic Ab and we don't really know where it's going until it rests on F, only to repeat and reinforce
+- I'm tempted to say this is a key change to F, but actually, it still seems like we're in C- (parallel minor) and just resolving to the IV.
+    - Centering around the IV is a good technique in a B section.
+    - Technically, the IV should be an iv if we're in C-, but playing around with parallel minor and chord qualities seems to work well.  Especially when you make a minor into a major.
+- Another reason this makes sense is that we just played: F, A-, G With the suggestion that F could be the destination.  Ab, G, F sounds familiar.
+    - It's good that we're avoiding C on the way to F.
+- Other options to get to a IV:
+    - Db, C, F
+    - D, F#-, F
+    - Bb/D, Db, F
+        - In this case, replace the preceding A-, G, with a B-.
+
+
 
 ## C Section
 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 |
