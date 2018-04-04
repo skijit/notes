@@ -224,15 +224,21 @@ Acoustics - Chapter 2 - Sinusoids
         - ```- \text{power} = a^2 \cdot \cos^2 (2 \pi f t) ```
     2. Apply the FLEM with ```- g = 0 ``` and notice that is very similar to the above equation:
         - FLEM: ```- a \cos (2 \pi f t) + a \cos (2 \pi g t ) = 2a \cdot \cos(2 \pi \frac{f-g}{2} t) \cos(2 \pi \frac{f+g}{2}t ) ```
-        - FLEM with ```- g = 0 ```: ```- a \cdot \cos(2 \pi f t) + a = 2a \cdot \cos^2(2 \pi f t) ```  
+        - FLEM with ```- g = 0 ```: ```- a \cdot \cos(2 \pi f t) + a = 2a \cdot \cos^2(\pi f t) ```  
             - since ```- \cos 0 = 1```
         - Notice how similar the right term is to the equation in 1?  So we multiply by ```- a/2 ```
         - ```- \frac{a^2}{2} \cos (2 \pi f t) + \frac{a^2}{2} = a^2 \cdot \cos^2 (2 \pi f t) ```
-        - ```- \frac{a^2}{2} \cos (2 \pi f t) + \frac{a^2}{2} =  \text{power} ```
+        - ```- \frac{a^2}{2} \cos (2 \pi f t) + \frac{a^2}{2} =  \text{power} ```        
     3. On average, the ```- \frac{a^2}{2} \cos (2 \pi f t) ``` is going to be zero (assuming the signal is zero-centered), so therefore we arrive at:
-        - ```- \text{avg power} = P_{avg} = \frac{a^2}{2} ```
+        - ```- \text{avg power} = P_{avg} = \frac{a^2}{2} ```  
+        - Not surprisingly, it has nothing to do with the frequency
+            - More important- it probably has nothing to with the **frequencies**
 - Compare the signal to the instantaneous power and avg power
  ![electrical power unit analysis](/resources/images/music/avg-power.png)
+- If average power is half the square of the peak amplitude, what do we know about squaring a cosine wave.
+    1. Trig Identity: ```- \cos \alpha \cos \beta = \frac{1}{2} [ \cos(\alpha + \beta) + \cos(\alpha - \beta)] ```
+    2. So squaring ```- \cos \alpha ``` gives us: ```- \cos^2 \alpha = \frac{1}{2} \cos(2 \alpha) ``` 
+    3. **Conclusion**: The frequency doubles (moves up an octave) AND the amplitude is halved.
 
 ### Additivity of Average Power
 

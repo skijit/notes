@@ -70,6 +70,72 @@ Lecture Notes
 - f * sqrt(2) = tritone!
 
     
-    
-    
-    
+## Lecture 5
+
+- Listened to a tape piece, Somges, by Risset which involved real instruments playing music using the tempered/western scale, followed by sinusoidal segments also tuned to tempered, but containing harmonics which (by definition, are whole number multiples of the F0).
+    - Plays with onsets and how you hear a single or multiple tones
+    - he uses harmonics which do not match the spectra of the real instruments
+- Beating is the resulting sinusoid of two different frequencies being super-imposed
+    - You wouldn't get it if the sinusoids had the same frequency (regardless of offset)
+    - the beating frequency is always |f-g|
+- Given two sinusoid of:
+    - 440 Hz
+    - 441 Hz
+    - beating is happening at 1 Hz
+- Given two sinusoids of:
+    - 440.5 Hz multiplied by...
+    - another sinsoid with a frequency of 0.5 Hz
+    - You get the same sound (except lower amplitude) as the previous example!
+    - Why?
+        - Second sinusoid controls is the beating
+            - it is multiplied to the first sinusoid.
+            - The 0.5 is because a cycle typically includes two peaks (one positive, one negative).
+                - We don't care whether a peak is positive or negative, so we just halve the rate we want to modulate by.
+        - first is the interpolation (avg) of the two previous frequencies
+    - We're doing amplitude modulation in the multiplication example
+- Given two sinusoids of
+    - 440
+    - 460
+    - This will match another two sinusoids:
+        - 450 being multiplied by a sinusoid of 10
+- so this is an interesting lesson about getting equivalent results when you multiplying two sinusoids (f, g) as as when you add them (a, b), particularly when there's a beat.
+    - **This is a demonstration of the fundamental law of electronic music**
+- example:
+    - input tone of 100 Hz being multiplied by a sinusoid of 75 hz
+    - will produce two frequencies:
+        - 25 hz
+        - 175 Hz
+    - This is Ring modulation
+        - when you pass in a complex periodic tone, this operation is going to break down the harmonic relationship between the F0 and harmonics
+    - this is all given the F.L.E.M.
+    - there is an input in ring modulation which will produce a harmonic sound (ie a complex periodic tone)
+        - TODO: look into this
+    - ring modulation: multiply by a sinusoid to mess up the inner frequencies
+        - term derives from the way the electronic components are laid out
+- power: energy per time
+- how you measure power depends on the medium you're in
+- although on avg, a particular light bulb might be consuming 60 Watts, at any given time it could be anything since the voltage cycles at 60 hz
+- in a sound wave, the spots where the pressure is the highest is also where the individual air molecules are moving fastest
+- avg power adds a bias to the output.  everything will be above 0.
+- your typical meter is measuring power not amplitude 
+- meters 
+    - have to be in decibels
+    - we don't measure amplitude directly, we measure power
+        - probably bc its more robust for nonsinusoidal content
+    - in his example, 100 will correspond with an average power of 1
+        - that means the ref power is 10-5
+        - you can meter in many ways... 
+            - metering the output that is sent to a DAC, you will typically see the ref amplitude set to 1 (max output), so clipping occurs at 0 dB
+            - in this example, he making the ref power 10-5, so the powers will be mostly positive
+- some decibel / power conversions
+    - given a signal whose peak amplitude is 1, we'd expect the power to be 1/2 * 1^2 = 0.5
+    - power in decibels uses the formula: 10 * log10(P) = 10 * log10(0.5) = -3.0103    
+    - therefore a meter based on power in decibels will drop by 3
+    - power to decibels:
+        - take the log of power and mulitply by 10
+    - decibels to power:   
+        - take the db and divide it by 10 and raise to to that power
+- are audio meters typically measuring power?
+    - I would guess so because Non-sinusoidal signals' peak amplitudes don't give you a good idea of their strength
+    - remember instanteous power is x(t)^2, avg power is half that
+
