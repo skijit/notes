@@ -149,3 +149,6 @@ Angular CLI
 - scripts.bundle.js: stuff you put in your script declarations in angular-cli.json.  Things like jquery, bootstrap, etc.
 - styles: 
 
+## Upgrading
+- `npm install -g @angular/cli@latest`
+
