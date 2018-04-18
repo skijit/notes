@@ -151,4 +151,9 @@ Angular CLI
 
 ## Upgrading
 - `npm install -g @angular/cli@latest`
+- Note: you might also need to update your node and npm packages.
+    - update npm: `npm install -g npm`
+        - use sudo if you're on a mac
+    - update node: lots of ways to do this, depending on your platform
+
 
