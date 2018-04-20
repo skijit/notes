@@ -258,7 +258,7 @@ Acoustics - Chapter 2 - Sinusoids
         - ```- \text{power} = a^2 \cdot \cos^2 (2 \pi f t) ```
     2. Apply the FLEM with ```- g = 0 ``` and notice that is very similar to the above equation:
         - FLEM: ```- a \cos (2 \pi f t) + a \cos (2 \pi g t ) = 2a \cdot \cos(2 \pi \frac{f-g}{2} t) \cos(2 \pi \frac{f+g}{2}t ) ```
-        - FLEM with ```- g = 0 ```: ```- a \cdot \cos(2 \pi f t) + a = 2a \cdot \cos^2(\pi f t) ```  
+        - FLEM with ```- g = 0 ```: ```- a \cdot \cos(2 \pi f t) + a = 2a \cdot \cos^2(2 \pi f t) ```  
             - since ```- \cos 0 = 1```
         - Notice how similar the right term is to the equation in 1?  So we multiply by ```- a/2 ```
         - ```- \frac{a^2}{2} \cos (2 \pi f t) + \frac{a^2}{2} = a^2 \cdot \cos^2 (2 \pi f t) ```
