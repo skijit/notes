@@ -399,5 +399,9 @@ This can be solved experimentally and mathematically.  I'll start with the latte
         - ```- \phi_c = \frac{\phi_2 + \phi_1}{2} ```
     - therefore ```- x(t) = 2a \cdot \cos (\frac{\phi_2 - \phi_1}{2}) \cdot \cos(2 \pi f t + \frac{\phi_2 + \phi_1}{2}) ```
 - Now the question is how do we square ```- x(t) ``` (since ```- P(t) = [x(t)]^2 ```):
-    - ```- [x(t)]^2 = 4a^2 \cos^2 (\frac{\phi_2 - \phi_1}{2}) \cos^2 (2 \pi f t + \frac{\phi_2 + \phi_1}{2}) ```
-    
+    - ```- P(t) = [x(t)]^2 = 4a^2 \cos^2 (\frac{\phi_2 - \phi_1}{2}) \cos^2 (2 \pi f t + \frac{\phi_2 + \phi_1}{2}) ```
+    - Remember: ```- \cos^2 \alpha = \frac{1}{2} \cos(2 \alpha) + \frac{1}{2}``` 
+    - ```- P(t) = 4a^2 \cdot [\frac{1}{2} \cos ( \phi_2 - \phi_1) + \frac{1}{2} ] \cdot [\frac{1}{2} \cos (2 \cdot ( 2 \pi f t + \frac{\phi_1 + \phi_2}{2})) + \frac{1}{2}] ```
+    - ```- P(t) = [ 2a^2 \cos(\phi_2 - \phi_1) + 2a^2 ] \cdot [ \frac{1}{2} \cos ( 4 \pi f t + \phi_1 + \phi_2) + \frac{1}{2}]```
+    - Now let ```- \alpha = \phi_2 - \phi_1 ```, and ```- \beta = 4 \pi f t + \phi_1 + \phi_2 ```
+    - ```- P(t) = [ 2a^2 \cos \alpha + 2a^2 ] \cdot [ \frac{1}{2} \cos \beta + \frac{1}{2}]```
