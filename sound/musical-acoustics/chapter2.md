@@ -374,3 +374,30 @@ Acoustics - Chapter 2 - Sinusoids
     - ```- \frac{1000-f_b}{2} = 5 ```, so ```- f_b = -990 ```
     - beat frequencies can be in the audible range (which is how a theremin works), or if they are less than the audible range, it is heard as amplitude modulation.
     - Another  possibility is that ```- f_a ``` is unknown.  In that case: ```- \frac{f_a - 1000}{2} = 5 ``` and therefore ```- f_a = 1010 ```
+5. **Question**: A signal is amplified, multiplying it by 3.  By how many decibels is the level raised?
+    - **Answer**:
+    - ```- g_{dB} = 20 \log \frac{a}{a_{ref}} ```
+    - ```- g_{dB} = 20 \log 3 = 9.54 ```
+6. **Question**: What is the pitch, in octaves, of the second harmonic of a complex hamonic tone, relative to the first harmonic.
+    - **Answer**:
+    - Given the fundamental ```- f_0 ```, the first harmonic is```- f_1 = 2f_0 ```, the second harmonic ```- f_2 = 3f_0 ```
+    - Octaves ```- I = \log_2 \frac{f_{new}}{f_{ref}}```
+    - ```- I = \log_2 \frac{3f_0}{2f_0} = \log_2 \frac{3}{2} = 0.58 ```
+
+## Project
+**Comb Filter**: When combining a sinusoid with a lagged version of itself, what is the affect of the delay amount on the gain in decibels?
+This can be solved experimentally and mathematically.  I'll start with the latter.
+- First of all, we don't need to think so much about the delay factor since the sinusoids are the essentially the same.  
+    - We'll just treat this as a difference of two phases, ```- \phi_1 ``` and ```- \phi_2 ```.
+- We already know that the peak amplitude of a sinusoid added to a delayed copy of itself is given by: ```- c = 2a \cdot \cos (\frac{\phi_2 - \phi_1}{2}) ```
+- This passes the first sanity check because it allows ```- 0 \leq c \leq 2a ```
+- Instantaneous Power, ```- P(t) = [x(t)]^2 ```
+    -  In general, ```- x(t) = a_{pk} \cos (2 \pi f t + \phi) ```
+    - and we know (from the above) that ```- a_{pk} = c = 2a \cdot \cos (\frac{\phi_2 - \phi_1}{2}) ```
+    - but then we don't know how to characterize ```- \phi ```
+        - if we look at the drawing of two of the same sinusoid being added to itself, we see tha the resulting phase of ```- c ``` is the average of ```- \phi_2 ``` and ```- \phi_1 ```
+        - ```- \phi_c = \frac{\phi_2 + \phi_1}{2} ```
+    - therefore ```- x(t) = 2a \cdot \cos (\frac{\phi_2 - \phi_1}{2}) \cdot \cos(2 \pi f t + \frac{\phi_2 + \phi_1}{2}) ```
+- Now the question is how do we square ```- x(t) ``` (since ```- P(t) = [x(t)]^2 ```):
+    - ```- [x(t)]^2 = 4a^2 \cos^2 (\frac{\phi_2 - \phi_1}{2}) \cos^2 (2 \pi f t + \frac{\phi_2 + \phi_1}{2}) ```
+    
