@@ -282,7 +282,7 @@ Acoustics - Chapter 2 - Sinusoids
 - **Case 1**: Adding Signals with same frequency and different amplitudes
     - We already know from our law of cosines derivation that the resulting amplitude ```- c ``` is given by: ```- c^2 = a^2 + b^2 + 2ab \cos ( \phi_2 - \phi_1) ```
     - And we know that ```- P_{a_{avg}} = \frac{a^2}{2} ``` and so on...
-    - So if we multiply both sizes of the first formula by ```- 1/2 ```, we get:
+    - So if we multiply both sides of the first formula by ```- 1/2 ```, we get:
         - ```- P_{c_{avg}} = P_{a_{avg}} + P_{b_{avg}} + ab \cos(\phi_2 - \phi_1) ```
     - Conclusion: The powers are somewhat additive, but ultimately dependent on the phase relationship of the 2 signals
         - Note: when the cosine argument is a variable, then we can assume it will average to 0.  When it is a constant (as in this case above), we cannot make that assumption.
@@ -323,6 +323,54 @@ Acoustics - Chapter 2 - Sinusoids
     - They're definitely using decibels.
     - It's not clear whether they'd use instanteous power or avg power (calculated over some window)
         - Probably instantaneous power because they need to capture peaks.
-            - Which is really just ```- [x(t)]2 ```
+            - Which is really just ```- [x(t)]^2 ```
         - Avg power would have some useful applications too, though.
-            - Which is really just ```- 0.5 \cdot [x(t)]2 ```
+            - Which is really just ```- 0.5 \cdot [x(t)]^2 ```
+
+## Questions
+1.  **Question**:  What are the max and min peak amplitudes of the sinusoid that results from two sinusoids being mixed, both with frequencies of 440 Hz and amplitudes of 2 and 3?
+    - **Answer**: 
+    - ```- x(t) = 2 \cdot \cos (2 \pi \cdot 440 +  \phi_{{0}_{x}}) ```
+    - ```- y(t) = 3 \cdot \cos (2 \pi \cdot 440 +  \phi_{{0}_{y}}) ```
+    - Since they have the same frequency, everything really depends on their initial phases.
+    - min and max *instantaneous amplitudes* would be easy b/c we can just add them with ```- \phi_{{0}_{x}} = \phi_{{0}_{y}} ``` (max) and ```- \phi_{{0}_{x}} - \pi = \phi_{{0}_{y}} ``` (min).
+        - ```- \pi ``` = 180 degrees = full cancellation
+    - But we want *peak* amplitude, so this is a problem like the law of cosines example:
+        - ```- c^2 = a^2 + b^2 + 2ab \cos ( \phi_2 - \phi_1) ```
+    - Max phase difference: ```- \phi_{{0}_{x}} - \pi = \phi_{{0}_{y}} ``` 
+        - ```- c^2 = 2^2 + 3^2 + 2 \cdot 2 \cdot 3 \cdot \cos (\phi_{{0}_{x}} - \phi_{{0}_{x}} - \pi) ```
+        - ```- c^2 = 4 + 9 + 12 \cdot \cos(- \pi) = 13 +12(-1) = 1 ```
+        - ```- c = \sqrt{1} = 1 ```
+    - Min phase difference: ```- \phi_{{0}_{x}} = \phi_{{0}_{y}} ``` 
+        - ```- c^2 = 2^2 + 3^2 + 2 \cdot 2 \cdot 3 \cdot \cos(\phi_{{0}_{x}} - \phi_{{0}_{x}}) ```
+        - ```- c^2 = 13 + 12 \cdot \cos(0) = 13 + 12 = 25 ```
+        - ```- c = 5 ```
+2. **Question**: Two sinusoids with different frequencies, whose averae powers are 3 and 4, are added.  What is the average power of the resulting digital signal?
+    - **Answer**:
+    - We learned that we can derive the following from the law of cosines to apply to mixing two sinusoids of the same frequency: ```- c^2 = a^2 + b^2 + 2ab \cos ( \phi_2 - \phi_1) ```
+    - From this, we can also derive: ```- P_{c_{avg}} = P_{a_{avg}} + P_{b_{avg}} + ab \cos(\phi_2 - \phi_1) ```
+        - because we know ```- P_{a_{avg}} = \frac{a^2}{2} ``` and we can multiply each side of the first equation by ```- 1/2 ```.
+    - We can also extrapolate from the law of cosines to mixing two sinusoids of different frequencies: ```- c^2 = a^2 + b^2 + 2ab \cos (\lvert f - g \rvert t (\phi_2 - \phi_1)) ```    
+        - It is essentially the same as before except the phase difference precesses at a rate of ```- \lvert f - g \rvert t ```.
+        - So we can again multiply this by ```- 1/2 ``` to get the following: ```- P_{c_{avg}} = P_{a_{avg}} + P_{b_{avg}} + ab \cos(\lvert f - g \rvert t (\phi_2 - \phi_1)) ```
+        - However last term, ```- ab \cos(\lvert f - g \rvert t (\phi_2 - \phi_1)) ``` is the beatin, and it averages out to 0.
+        - So we get ```- P_{c_{avg}} = P_{a_{avg}} + P_{b_{avg}} ```
+    - So ```- P_{c_{avg}} = 3 + 4 = 7 ```
+3. **Question**: Two sinusoids, of period 4 and 6 ms, are added.  What is the period of the resulting waveform?
+    - **Answer**:
+    - 2 sinusoids: ```- \tau_a ``` = 4 ms, ```- \tau_b ``` = 6 ms
+    - I think this is a trick question: there will probably be 2 resulting frequencies (and thus periods)
+        1. The "main" audible one
+        2. The beating frequency
+    - This should be given by the FLEM: ```- a \cos (2 \pi f t) + a \cos (2 \pi g t ) = 2a \cdot \cos(2 \pi \frac{f-g}{2} t) \cos(2 \pi \frac{f+g}{2}t ) ```
+    - So the resulting frequencies are: ```- \frac{f - g}{2} ``` (beating) and ```- \frac{f + g}{2} ``` (audible)
+    - remember: ```- \tau = \frac{1}{f} ```
+        - ```- \frac{\frac{1}{4} + \frac{1}{6}}{2} = \frac{5}{24} = 0.208 \text{cycles\ms}``` and so ```- \tau = 1 / 0.208 = 4.8 \text{ms} ```
+        - ```- \frac{\frac{1}{4} - \frac{1}{6}}{2} = \frac{1}{24} = 0.042 \text{cycles\ms}``` and so ```- \tau = 1 / 0.042 = 238 \text{ms} ```
+4. **Question**: Two sinusoids are added.  One has a frequency of 1 kHz.  The resulting signal "beats 5 times per second.  What are the possible frequencies of the other sinusoids?
+    - **Answer**:
+    - ```- f_a = 1 \text{kHz} ```, and ```- f_b = x ```.
+    - Resulting signal beats at 5 Hz.  In other words, ```- \frac{f_a-f_b}{2} = 5 ```
+    - ```- \frac{1000-f_b}{2} = 5 ```, so ```- f_b = -990 ```
+    - beat frequencies can be in the audible range (which is how a theremin works), or if they are less than the audible range, it is heard as amplitude modulation.
+    - Another  possibility is that ```- f_a ``` is unknown.  In that case: ```- \frac{f_a - 1000}{2} = 5 ``` and therefore ```- f_a = 1010 ```
