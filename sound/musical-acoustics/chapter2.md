@@ -405,3 +405,27 @@ This can be solved experimentally and mathematically.  I'll start with the latte
     - ```- P(t) = [ 2a^2 \cos(\phi_2 - \phi_1) + 2a^2 ] \cdot [ \frac{1}{2} \cos ( 4 \pi f t + \phi_1 + \phi_2) + \frac{1}{2}]```
     - Now let ```- \alpha = \phi_2 - \phi_1 ```, and ```- \beta = 4 \pi f t + \phi_1 + \phi_2 ```
     - ```- P(t) = [ 2a^2 \cos \alpha + 2a^2 ] \cdot [ \frac{1}{2} \cos \beta + \frac{1}{2}]```
+    - ```- P(t) =  a^2 \cos \alpha cos \beta + a^2 cos \alpha + a^2 cos \beta + a^2 ```
+    - ```- P(t) =  a^2 ( \cos \alpha \cos \beta + \cos \alpha + \cos \beta + 1) ```
+    - Recall identity: ```- \cos \alpha \cos \beta = \frac{1}{2} [ \cos( \alpha + \beta) + \cos(\alpha - \beta)] ```
+    - ```- P(t) =  a^2 [ \frac{1}{2} (\cos (\alpha + \beta) + \cos (\alpha - \beta)) + \cos \alpha + \cos \beta + 1 ]```
+    - ```- P(t) =  a^2 [ \frac{1}{2} (\cos (\phi_2 - \phi_1 + 4 \pi f t + \phi_1 + \phi_2) + \cos ( \phi_2 - \phi_1 - 4 \pi f t - \phi_1 - \phi_2)) + \cos \alpha + \cos \beta + 1 ]```
+    - ```- P(t) =  a^2 [ \frac{1}{2} (\cos ( 2 \phi_2 + 4 \pi f t) + \cos ( -2 \phi_1 - 4 \pi f t)) + \cos(\phi_2 - \phi_1) + cos(4 \pi f t + \phi_1 + \phi_2 ) + 1 ] ```
+    - ```- P(t) =  a^2 [ \frac{1}{2} \cos ( 2 \phi_2 + 4 \pi f t) + \frac{1}{2} \cos ( -2 \phi_1 - 4 \pi f t) + \cos(\phi_2 - \phi_1) + cos(4 \pi f t + \phi_1 + \phi_2 ) + 1 ] ```
+    - **So**: this is a really ugly formulat to give us *instantaneous* power.  Maybe it can be simplified.  Doesn't really matter bc we are interested in *average* power, and this lets us apply some big simplifications.
+        - Any ```- \cos ``` term that has a ```- t ``` in it is 0-centered and on average will be 0!
+    - so...
+- ```- P_{avg}(t) = a^2 [ \cos (\phi_2 - \phi_1) + 1] ```
+    - **sanity check**: if both signals are 180 degrees out of phase then the ```- \phi_2 - \phi_1 = \pi ```.  ```- \cos \pi = -1```, which makes ```- P_{avg}(t) = 0 ```.  Good!
+- Now let's relate delay to gain (```- g ```).
+    - ```- g_{avg_{dB}} = 10 \log g_{avg}```
+        - this is 10 because we're using power, not instantaneous amplitude, the latter of which must be squared- which introduces the ```- 2 \cdot 10 ```
+    - ```- g_{avg} = \frac{P_{avg_1}}{P_{avg_0}} ```
+    - ```- {P_{avg_0}} = \frac{a^2}{2} ``` by definition
+    - ```- {P_{avg_1}} =  a^2 [ \cos (\phi_2 - \phi_1) + 1]``` 
+    - ```- g_{avg_{dB}} = 10 \log \frac{a^2 [ \cos (\phi_2 - \phi_1) + 1]}{\frac{a^2}{2}} ```
+    - ```- g_{avg_{dB}} = 10 [\log a^2 (\cos(\phi_2 - \phi_1)+1) - \log \frac{a^2}{2}]```
+    - ```- g_{avg_{dB}} = 10 [ \log a^2 + \log(\cos ( \phi_2 - \phi_1) + 1) - \log a^2 - \log \frac{1}{2} ]```
+    - ```- g_{avg_{dB}} = -3.01 \log [ \cos(\phi_2 - \phi_1) + 1 ]```
+    - This makes sense.  The gain will not depend on the amplitude but only on the delay, ```- \phi_2 - \phi_1 ```
+
