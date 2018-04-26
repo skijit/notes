@@ -8,14 +8,12 @@ Acoustics - Chapter 2 - Sinusoids
     - This gif illustrates the relationship of sine to cosine in a unit circle
         - Cosine is the horizontal axis
         - Sine is the vertical axis
-    - Why sine = cosine offset by 90 degrees
-    - Those 90 degrees being the right angle of a right triangle    
+        - sine = cosine offset by 90 degrees (the 90 degrees of the inner right triangle)
+        - the sin x + cos x always is the same.  It show the tradeoff of horizontal to vertical components as a radius traces through a circle.    
 - Radians:
 ![radians](/resources/images/music/Circle_radians.gif)
-    - Radians just measure arc length on a circle relative to (i.e. divided by) the radius
-    - So radius (thus circle) size is dialed out of the equation.  
-    - You can compare arc lengths of different size circles without getting messed up.
-    - 'Arc length' in this context, really means we're measuring the inner angle
+    - Radians measure angles
+        - the angle is obtained by measuring the the arc length (distance on the circumference) on a circle divided by the radius
 - Recall also some basic radian to degree conversions:
     - ```- 2 \pi \rightarrow 360^\circ ```
     - ```- \pi \rightarrow 180^\circ ```
@@ -53,7 +51,7 @@ Acoustics - Chapter 2 - Sinusoids
     - Similar to the top animation...
     - The ray has a fixed base at the origin of an x-y plane
     - The ray's length is fixed and the other endpoint is rotating, tracing out a circle
-    - the horizontal axis is ```- \cos t ``` and the vertical axis is ```- sin t ```
+    - the horizontal axis is ```- \cos t ``` and the vertical axis is ```- \sin t ```
     - Analog to a sinusoid:
         - The amplitude of the sinusoid is given by the length of ray
         - The ray rotates around the origin at ```- f ``` rad/sec
@@ -68,20 +66,38 @@ Acoustics - Chapter 2 - Sinusoids
     - The sine and cosine represent both:
         - the shifting position of sinusoid in time
         - the way the sinusoid as a whole maintains balance while it's position shifts (bc ```- \sin + \cos = 1 ```)
+    - Here, we just have 2 sides of a sinusoid because we're moving in two different dimensions (horizontal and veritcal).
+        - I wonder how this translates into higher dimensions.
     
 ## Operations on Sinusoids
 
-- Amplifying a sinusoid: ```- x(t) = g a \cdot \cos(2 \pi ft + \phi_0) ```
+### Gain
+- In the context of a sinusoidal function, gain is a multiplier:
+    - ```- x(t) = g a \cdot \cos(2 \pi ft + \phi_0) ```
     - ```- g ``` is linear gain
+- It's not a relative level measurement ```- L ```
+- In electronics, gain is a ratio of an input to an output measurement.
+    - Power gain: ```- \text{gain}_{dB} = 10 \log \frac{p_{out}}{p_{in}}```
+- For acoustics:
+    - we will define gain as a ratio of strengths (new and old) of a sinusoid
+    - Finding the right measurement of strength will occupy a big part of this chapter.
+        - Short version is we want to use average power instead of peak or instantaneous amplitude (or instanteous amplitude squared)
+- There are two types of gain:
+    - ```- g ``` which is plugged into the instanteous amplitude function, ```- x(t) ```, is the **linear gain**.
+    - ```- g_{dB} ``` is gain in decibels.  
+- Question:
+    - Does it matter whether the power values we plug in to the gain function are in dB or not ?
+    - Is ```- g_{dB} ``` additive? 
 - If gain is specified in dB, you get: ```- g = 10^\frac{g_{dB}}{20} ```
     - **Proof**:
         - ```- g = \frac{a}{a_{ref}} ```
         - ```- g_{dB} = 20 \log{g} ```
         - ```- \frac{g_{dB}}{20} = \log{g} ```
         - ```- 10^\frac{g_{dB}}{20} = g ```
-- Delaying a sinusoid:
-    - ```- x(t - \tau) = a \cdot \cos (2 \pi f(t - \tau) + \phi_0) = a \cdot \cos (2 \pi f t + ( \phi_0 - 2 \pi \tau f))```
-    - in other words, you still get a sinuoid but it is delayed by a constant amount - basically treated like a phase shift
+
+### Delay
+- ```- x(t - \tau) = a \cdot \cos (2 \pi f(t - \tau) + \phi_0) = a \cdot \cos (2 \pi f t + ( \phi_0 - 2 \pi \tau f))```
+- in other words, you still get a sinuoid but it is delayed by a constant amount - basically treated like a phase shift
 
 ### Mixing Frequencies
 - Mixing frequencies is slightly more complicated than applying (linear) gain and delay
