@@ -78,16 +78,18 @@ Acoustics - Chapter 2 - Sinusoids
 - It's not a relative level measurement ```- L ```
 - In electronics, gain is a ratio of an input to an output measurement.
     - Power gain: ```- \text{gain}_{dB} = 10 \log \frac{p_{out}}{p_{in}}```
-- For acoustics:
-    - we will define gain as a ratio of strengths (new and old) of a sinusoid
-    - Finding the right measurement of strength will occupy a big part of this chapter.
+- For acoustics, it's analogous:
+    - it's a ratio of strengths- new over old - of a wave/sinusoid
+    - Finding the right way to characterize "strength" will occupy a big part of this chapter.
         - Short version is we want to use average power instead of peak or instantaneous amplitude (or instanteous amplitude squared)
 - There are two types of gain:
     - ```- g ``` which is plugged into the instanteous amplitude function, ```- x(t) ```, is the **linear gain**.
     - ```- g_{dB} ``` is gain in decibels.  
-- Question:
-    - Does it matter whether the power values we plug in to the gain function are in dB or not ?
-    - Is ```- g_{dB} ``` additive? 
+- **Question**: Do you plug in regular power values to gain, or do you convert them to dB first?
+    - Regular values: don't convert Power values to dB.  That is more for ```- L ``` and ```- g ```.
+- **QUestion**: Is ```- g_{dB} ``` additive?
+    - Nope.  Since the logarithmic scale is non-linear, it's not additive.
+    - Decibels can simplify some calculations but this is not an example.
 - If gain is specified in dB, you get: ```- g = 10^\frac{g_{dB}}{20} ```
     - **Proof**:
         - ```- g = \frac{a}{a_{ref}} ```
