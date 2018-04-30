@@ -23,7 +23,8 @@ Chapter 1: Electronic Music and Sound Design
     - **dbFS** = `- -20 \log{\frac{SL}{FS}} `
         - *SL* = the current sample level
         - *FS* = the maximum value you can record.  (Full-Scale)
-            - This value is often 1.        
+            - This value is often 1.
+        - **NOTE**: I think this is a mistake.  It should probably be a positive (not-negative) 20 bc the sample level will always be less than or equal to 1 and the FS will be 1, making the log a negative value (bc log of a fraction is going to be negative always) and we want the ultimate dB value to be negative with a max value of 0.
 - dBFS to amplitudes
     - 0 dB = 1
     - -6 dB = 0.5 

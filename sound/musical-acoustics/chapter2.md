@@ -13,7 +13,8 @@ Acoustics - Chapter 2 - Sinusoids
 - Radians:
 ![radians](/resources/images/music/Circle_radians.gif)
     - Radians measure angles
-        - the angle is obtained by measuring the the arc length (distance on the circumference) on a circle divided by the radius
+        - the angle is obtained by measuring the the arc length in units of the radius.
+        - Since it's in units of the radius, the actual radius doesn't matter.
 - Recall also some basic radian to degree conversions:
     - ```- 2 \pi \rightarrow 360^\circ ```
     - ```- \pi \rightarrow 180^\circ ```
@@ -31,7 +32,7 @@ Acoustics - Chapter 2 - Sinusoids
 
 ## Sinusoids
 
-- 3 reasons Sinusoids are Important
+- 3 reasons Sinusoids are important
     1. They occur in nature        
     2. They behave in predictable ways, particularly to elemental operations:
         - amplify
@@ -53,7 +54,7 @@ Acoustics - Chapter 2 - Sinusoids
     - The ray's length is fixed and the other endpoint is rotating, tracing out a circle
     - the horizontal axis is ```- \cos t ``` and the vertical axis is ```- \sin t ```
     - Analog to a sinusoid:
-        - The amplitude of the sinusoid is given by the length of ray
+        - The peak amplitude of the sinusoid is given by the length of ray
         - The ray rotates around the origin at ```- f ``` rad/sec
         - The instantaneous amplitude of the sinusoid is given by the same function ```- x(t) ```
             - The instantaneous amplitude is a scalar value - not a coordinate, like we see when we graph the signal in a unit circle.
@@ -75,21 +76,22 @@ Acoustics - Chapter 2 - Sinusoids
 - In the context of a sinusoidal function, gain is a multiplier:
     - ```- x(t) = g a \cdot \cos(2 \pi ft + \phi_0) ```
     - ```- g ``` is linear gain
-- It's not a relative level measurement ```- L ```
+- It's not a relative level measurement, like ```- L ```
 - In electronics, gain is a ratio of an input to an output measurement.
     - Power gain: ```- \text{gain}_{dB} = 10 \log \frac{p_{out}}{p_{in}}```
 - For acoustics, it's analogous:
-    - it's a ratio of strengths- new over old - of a wave/sinusoid
-    - Finding the right way to characterize "strength" will occupy a big part of this chapter.
+    - it's a ratio of *strengths*- new over old - of a wave/sinusoid
+    - Finding the right way to characterize *strength* will occupy a big part of this chapter.
         - Short version is we want to use average power instead of peak or instantaneous amplitude (or instanteous amplitude squared)
 - There are two types of gain:
     - ```- g ``` which is plugged into the instanteous amplitude function, ```- x(t) ```, is the **linear gain**.
     - ```- g_{dB} ``` is gain in decibels.  
-- **Question**: Do you plug in regular power values to gain, or do you convert them to dB first?
-    - Regular values: don't convert Power values to dB.  That is more for ```- L ``` and ```- g ```.
+- **Question**: Do you plug in regular *strength* values to gain, or do you convert them to dB first?
+    - **Answer**: Regular values: don't convert *strength* values (like power or peak ampltitude) to dB.  That is more for ```- L ``` and ```- g ```.
 - **QUestion**: Is ```- g_{dB} ``` additive?
-    - Nope.  Since the logarithmic scale is non-linear, it's not additive.
+    - **Answer**: Nope.  Since the logarithmic scale is non-linear, it's not additive.
     - Decibels can simplify some calculations but this is not an example.
+        - Example of how decibels simplify some calculations: rather than multiplying a sinusoid by 1/2 to see what it's new strength is, you can just subtract 6 dB.  [Proof](/sound/emsd/chapter1)
 - If gain is specified in dB, you get: ```- g = 10^\frac{g_{dB}}{20} ```
     - **Proof**:
         - ```- g = \frac{a}{a_{ref}} ```
@@ -103,49 +105,60 @@ Acoustics - Chapter 2 - Sinusoids
 
 ### Mixing Frequencies
 - Mixing frequencies is slightly more complicated than applying (linear) gain and delay
-- **Adding signals with matching ```- f ```**
-    - In this case, we can just add the rays ```- a ``` and ```- b ``` together.
-    ![adding signals](/resources/images/music/adding-signals.png)
-    - sinusoid ```- a ``` is being added to sinusoid ```- b ```, resulting in ```- c ```
-    - but how do you calculate ```- c ```?
-    - basically with some properties of parallelograms and the law of cosines! (see above)
-    - **we already know**: 
-        - ```- f ``` will be the same
-        - the amplitudes ```- a ``` and ```- b ```
-        - ```- \phi_{a0} ```, ```- \phi_{b0} ```
-    - **we want**: the amplitude of the new sinusoid ```- c ```    
-    - we wont bother with: the resulting ```- \phi_{c0} ``` 
-    - we want to use the law of cosines to calculate c, see above.
-        - ```- c^2 = a^2 + b^2 - 2ab \cos C ```
-        - ```- c ``` is the diagonal of the parallelogram, which creates two triangles and which can be calculated by this law.
-    - **problem** : our ```- C ``` is unknown.
-    - **solution**: we are rescued by the parallelogram property that consecutive angles are supplementary
-        - therefore ```- C = 180 - \phi_b - \phi_a ```
-        - where ```- \phi_b ``` is the angle between the horizontal axis and ```- b ``` and ```- \phi_a ``` is the angle between the horizontal axis and ```- a ```
-    - we also know that when you rotate a value 180 degrees, the ```- cos ``` is the same but the sign is switched.
-    - so we switch the sign on the ```- \cos ``` term such that:        
-        - ```- c^2 = a^2 + b^2 + 2ab \cos (\phi_b - \phi_a) ```            
-    - intuitively, we know how ```- c ``` is largely dependent on phase and magnitude
-        - full cancellation is possible here with phase difference of 180 degrees and equal magnitude
-- **Adding signals with different frequencies:**
-    - not that different...
-    - at ```- t_0 ```, it's the same as adding signals with the same ```- f ```, like above
-        - along with the amplitudes, it's dependent on ```- \phi_{a0} ``` and ```- \phi_{b0} ```
-    - but then ```- \phi_b - \phi_a ``` increases at a rate of ```- f_a - f_b ```
-    - the resulting sinusoid will cycle at ```- f_a - f_b ``` times the unit of time.
-        - todo: unit analysis here
-- **Adding signals with equal amplitude and frequency**
-    ![adding signals with same amp and freq](/resources/images/music/add-signals-same-amp-freq.png)
-    - So only difference is ```- \phi_1``` and ```- \phi_2 ```
-    - The previous law of cosines-derived formula will undergo some simplifications to become:
-    - ```- c = 2a \cdot \cos(\frac{\phi_2 - \phi_1}{2}) ```
-    - The cool thing about this is that the initial phase ```- \phi_c ```, which was difficult to calculate in case 1, is actually the average of original 2 
-- **Adding sinusoids of different frequencies but the same amplitude**
-    - We can generalize the last formula to two sinusoids with different frequencies:
-    - ```- a \cos (2 \pi f t) + a \cos (2 \pi g t ) = 2a \cdot \cos(2 \pi \frac{f-g}{2} t) \cos(2 \pi \frac{f+g}{2}t ) ```
-    - This is an important identity
-        - I'm a little confused as to why it doesn't include phase though
-        - Author calls this the Fundamental Law of Electronic Music (FLEM)
+- This will require a new section.  But first a sanity check.
+
+## Units Summary
+
+
+## Mixing Sinusoids
+
+###Adding signals with matching frequencies
+
+- In this case, we can just add the rays ```- a ``` and ```- b ``` together.
+![adding signals](/resources/images/music/adding-signals.png)
+- sinusoid ```- a ``` is being added to sinusoid ```- b ```, resulting in ```- c ```
+- but how do you calculate ```- c ```?
+- basically with some properties of parallelograms and the law of cosines! (see above)
+- **we already know**: 
+    - ```- f ``` will be the same
+    - the amplitudes ```- a ``` and ```- b ```
+    - ```- \phi_{a0} ```, ```- \phi_{b0} ```
+- **we want**: the amplitude of the new sinusoid ```- c ```    
+- we wont bother with: the resulting ```- \phi_{c0} ``` 
+- we want to use the law of cosines to calculate c, see above.
+    - ```- c^2 = a^2 + b^2 - 2ab \cos C ```
+    - ```- c ``` is the diagonal of the parallelogram, which creates two triangles and which can be calculated by this law.
+- **problem** : our ```- C ``` is unknown.
+- **solution**: we are rescued by the parallelogram property that consecutive angles are supplementary
+    - therefore ```- C = 180 - \phi_b - \phi_a ```
+    - where ```- \phi_b ``` is the angle between the horizontal axis and ```- b ``` and ```- \phi_a ``` is the angle between the horizontal axis and ```- a ```
+- we also know that when you rotate a value 180 degrees, the ```- cos ``` is the same but the sign is switched.
+- so we switch the sign on the ```- \cos ``` term such that:        
+    - ```- c^2 = a^2 + b^2 + 2ab \cos (\phi_b - \phi_a) ```            
+- intuitively, we know how ```- c ``` is largely dependent on phase and magnitude
+    - full cancellation is possible here with phase difference of 180 degrees and equal magnitude
+
+### Adding sinusoids with different frequencies:**
+- not that different...
+- at ```- t_0 ```, it's the same as adding signals with the same ```- f ```, like above
+    - along with the amplitudes, it's dependent on ```- \phi_{a0} ``` and ```- \phi_{b0} ```
+- but then ```- \phi_b - \phi_a ``` increases at a rate of ```- f_a - f_b ```
+- the resulting sinusoid will cycle at ```- f_a - f_b ``` times the unit of time.
+    - todo: unit analysis here
+
+### Adding sinusoids with equal amplitude and frequency
+![adding signals with same amp and freq](/resources/images/music/add-signals-same-amp-freq.png)
+- So only difference is ```- \phi_1``` and ```- \phi_2 ```
+- The previous law of cosines-derived formula will undergo some simplifications to become:
+- ```- c = 2a \cdot \cos(\frac{\phi_2 - \phi_1}{2}) ```
+- The cool thing about this is that the initial phase ```- \phi_c ```, which was difficult to calculate in case 1, is actually the average of original 2 
+
+### Adding sinusoids of different frequencies but the same amplitude
+- We can generalize the last formula to two sinusoids with different frequencies:
+- ```- a \cos (2 \pi f t) + a \cos (2 \pi g t ) = 2a \cdot \cos(2 \pi \frac{f-g}{2} t) \cos(2 \pi \frac{f+g}{2}t ) ```
+- This is an important identity
+    - I'm a little confused as to why it doesn't include phase though
+    - Author calls this the Fundamental Law of Electronic Music (FLEM)
 
 ### Beating and FLEM Applications
 - Beating is the resulting sinusoid of two different frequencies being super-imposed
