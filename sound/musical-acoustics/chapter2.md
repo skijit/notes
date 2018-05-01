@@ -14,7 +14,7 @@ Acoustics - Chapter 2 - Sinusoids
 ![radians](/resources/images/music/Circle_radians.gif)
     - Radians measure angles
         - the angle is obtained by measuring the the arc length in units of the radius.
-        - Since it's in units of the radius, the actual radius doesn't matter.
+        - Since it's in units of the radius, the actual radius doesn't matter, and thus circle size doesn't matter.
 - Recall also some basic radian to degree conversions:
     - ```- 2 \pi \rightarrow 360^\circ ```
     - ```- \pi \rightarrow 180^\circ ```
@@ -65,10 +65,9 @@ Acoustics - Chapter 2 - Sinusoids
     - It doesn't make sense to say: 'is this sinusoid a sine or a cosine?'
     - It's both: the sine and cosine are attributes of all sinusoids.
     - The sine and cosine represent both:
-        - the shifting position of sinusoid in time
-        - the way the sinusoid as a whole maintains balance while it's position shifts (bc ```- \sin + \cos = 1 ```)
-    - Here, we just have 2 sides of a sinusoid because we're moving in two different dimensions (horizontal and veritcal).
-        - I wonder how this translates into higher dimensions.
+        - the horizontal ( ```- \cos ```) and vertical (```- \sin ```) components of the sinusoid.        
+        - the way the sinusoid as a whole maintains balance while it's position shifts (bc ```- \sin + \cos = 1 ```)    
+    - I wonder how this translates into higher dimensions.
     
 ## Operations on Sinusoids
 
@@ -90,7 +89,7 @@ Acoustics - Chapter 2 - Sinusoids
     - **Answer**: Regular values: don't convert *strength* values (like power or peak ampltitude) to dB.  That is more for ```- L ``` and ```- g ```.
 - **QUestion**: Is ```- g_{dB} ``` additive?
     - **Answer**: Nope.  Since the logarithmic scale is non-linear, it's not additive.
-    - Decibels can simplify some calculations but this is not an example.
+    - Remember decibels can simplify some calculations but this is not an example.
         - Example of how decibels simplify some calculations: rather than multiplying a sinusoid by 1/2 to see what it's new strength is, you can just subtract 6 dB.  [Proof](/sound/emsd/chapter1)
 - If gain is specified in dB, you get: ```- g = 10^\frac{g_{dB}}{20} ```
     - **Proof**:
@@ -103,16 +102,12 @@ Acoustics - Chapter 2 - Sinusoids
 - ```- x(t - \tau) = a \cdot \cos (2 \pi f(t - \tau) + \phi_0) = a \cdot \cos (2 \pi f t + ( \phi_0 - 2 \pi \tau f))```
 - in other words, you still get a sinuoid but it is delayed by a constant amount - basically treated like a phase shift
 
-### Mixing Frequencies
-- Mixing frequencies is slightly more complicated than applying (linear) gain and delay
-- This will require a new section.  But first a sanity check.
+### Mixing
+- Mixing is more complicated than applying (linear) gain and delay.  It all depends on the details of the frequencies, amplitude, and phase.
 
-## Units Summary
+## Mixing Sinusoids...
 
-
-## Mixing Sinusoids
-
-###Adding signals with matching frequencies
+### With matching frequencies
 
 - In this case, we can just add the rays ```- a ``` and ```- b ``` together.
 ![adding signals](/resources/images/music/adding-signals.png)
@@ -138,29 +133,30 @@ Acoustics - Chapter 2 - Sinusoids
 - intuitively, we know how ```- c ``` is largely dependent on phase and magnitude
     - full cancellation is possible here with phase difference of 180 degrees and equal magnitude
 
-### Adding sinusoids with different frequencies:**
+### With different frequencies
 - not that different...
 - at ```- t_0 ```, it's the same as adding signals with the same ```- f ```, like above
     - along with the amplitudes, it's dependent on ```- \phi_{a0} ``` and ```- \phi_{b0} ```
 - but then ```- \phi_b - \phi_a ``` increases at a rate of ```- f_a - f_b ```
 - the resulting sinusoid will cycle at ```- f_a - f_b ``` times the unit of time.
-    - todo: unit analysis here
+    - This cycle of ```- f_a - f_b ``` is called **beating**.  See below for more info.
 
-### Adding sinusoids with equal amplitude and frequency
+### With equal amplitude and frequency
 ![adding signals with same amp and freq](/resources/images/music/add-signals-same-amp-freq.png)
 - So only difference is ```- \phi_1``` and ```- \phi_2 ```
 - The previous law of cosines-derived formula will undergo some simplifications to become:
 - ```- c = 2a \cdot \cos(\frac{\phi_2 - \phi_1}{2}) ```
 - The cool thing about this is that the initial phase ```- \phi_c ```, which was difficult to calculate in case 1, is actually the average of original 2 
 
-### Adding sinusoids of different frequencies but the same amplitude
+### With different frequencies but the same amplitude
 - We can generalize the last formula to two sinusoids with different frequencies:
 - ```- a \cos (2 \pi f t) + a \cos (2 \pi g t ) = 2a \cdot \cos(2 \pi \frac{f-g}{2} t) \cos(2 \pi \frac{f+g}{2}t ) ```
 - This is an important identity
-    - I'm a little confused as to why it doesn't include phase though
-    - Author calls this the Fundamental Law of Electronic Music (FLEM)
+    - In words, it is revealing that adding two different frequencies (of the same amplitude) is equivalent to multiplying two other frequencies (which are the average and half the difference of the original 2 frequencies).
+    - It practice, it comes in handy for simplifying various math.  It also comes in handy for explaining amplitude and ring modulation (see below) 
+    - Author calls this the **Fundamental Law of Electronic Music (FLEM)**
 
-### Beating and FLEM Applications
+## Beating and FLEM Applications
 - Beating is the resulting sinusoid of two different frequencies being super-imposed
     - You wouldn't get it if the sinusoids had the same frequency (regardless of offset)
     - the beating frequency is always ```- \lvert f-g \rvert ```
@@ -300,7 +296,7 @@ Acoustics - Chapter 2 - Sinusoids
             - More important- it probably has nothing to with the **frequencies**
 - Compare the signal to the instantaneous power and avg power
  ![electrical power unit analysis](/resources/images/music/avg-power.png)
-- If average power is half the square of the peak amplitude, what do we know about squaring a cosine wave.
+- If average power is half the square of the peak amplitude, what do we know about squaring a cosine wave?
     1. Trig Identity: ```- \cos \alpha \cos \beta = \frac{1}{2} [ \cos(\alpha + \beta) + \cos(\alpha - \beta)] ```
     2. So squaring ```- \cos \alpha ``` gives us: ```- \cos^2 \alpha = \frac{1}{2} \cos(2 \alpha) + \frac{1}{2}``` 
     3. **Conclusions** 
@@ -320,9 +316,9 @@ Acoustics - Chapter 2 - Sinusoids
 - **Case 2**: Adding Signals with different frequencies:
     - This is simlar to the above, but here the phase difference changes in time based on the difference between the two frequencies
     - ```- c^2 = a^2 + b^2 + 2ab \cos (\lvert f - g \rvert t (\phi_2 - \phi_1)) ```
-    - Since the cosine argument is not a constant, but something changing in time, we can assume it is zero
+    - Since the cosine argument is not a constant, but something changing in time, we can assume it averages to zero
     - Conclusion: Power is additive in this case.  ```- P_{c_{avg}} = P_{a_{avg}} + P_{b_{avg}} ```
-- **Counterexample**: As long as the frequencies are different, we might conclude that always ```- P_{c_{avg}} = P_{a_{avg}} + P_{b_{avg}} ```.
+- **Case 3**: As long as the frequencies are different, we might conclude that always ```- P_{c_{avg}} = P_{a_{avg}} + P_{b_{avg}} ```.
     - This is NOT true when you add a sinusoid to itself.
     - You might expect Power to double but it actually increases by a factor of 4.
     - **Proof**:
@@ -347,16 +343,17 @@ Acoustics - Chapter 2 - Sinusoids
     - And this matches our original formula for ```- L ``` based on instantaneous amplitude.  
     - So yes, this is consistent
 
-### Application in a DAW Meter
-- Are audio meters in a DAW typically measuring power?
-    - Must be, because we wouldn't measure amplitude directly
-    - Also because Non-sinusoidal signals' peak amplitudes don't give you a good idea of their strength
-    - They're definitely using decibels.
-    - It's not clear whether they'd use instanteous power or avg power (calculated over some window)
-        - Probably instantaneous power because they need to capture peaks.
-            - Which is really just ```- [x(t)]^2 ```
-        - Avg power would have some useful applications too, though.
-            - Which is really just ```- 0.5 \cdot [x(t)]^2 ```
+## Summary
+| Name | Abbrev | Category | Desc | Log (dB) or Linear? | Formula(e) | Notes |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| Relative Level | ```- L ``` | Relative Loudness | A measurement of how loud something is relative to a **fixed** reference amplitude or power. | log (dB) | ```- L = 20 \log \frac{a_1}{a_{ref}} ``` ```+ L = 10 \log \frac{P_1}{P_{ref}} ``` | The reference strength (amplitude or power) can be an upper or lower bound.  In computer contexts, it is typically an upper bound of 1, since all audio values sent to a DAC will be between 0 and 1.  ```- L ``` in this context (also called ```- dB_{full scale} ```) will have a range of ```- - \infty ``` to 0.  Acoustic contexts often choose a lower bound for ```- a_{ref} ``` and so the range would be 0 to ```- \infty ```. |
+| Linear Gain | ```- g ``` | Change in relative loudness | Measures a **change** in loudness.  Similar to ```- L ``` except that we compare the new amplitude (or power) to a previous value (rather than a fixed amount).  Also appears as a multiplier to the instantaneous amplitude function. | Linear | ```+ g = \frac{a_{new}}{a_{old}} ``` ```+ g = \frac{P_{new}}{P_{old}}``` ```+ x(t) = g \cdot \cos(2 \pi f t + \phi_0) ```  |  |
+| Logarithmic Gain | ```- g_{dB} ``` | Change in relative loudness | Similar to linear gain, except we change the scale to decibels to allow a larger range. | log (dB) | ```+ g_{dB} = 20 \log \frac{a_{new}}{a_{old}} ``` ```+ g_{dB} = 10 \log \frac{P_{new}}{P_{old}} ``` ```+ g_{dB} = 20 \log g ``` | Remember that ```- g_{dB} ``` is not additive |
+| Peak Amplitude | ```- a ``` | Strength (not relative) | The sinusoid's peak (max) amplitude | linear | ```- x(t) = a \cdot \cos (2 \pi f t + \phi_0) ```  | This is an ok way to characterize strength if we're just talking about sinusoids, but it's useless once we deal with a more complicated waveform. |
+| Instantaneous Amplitude | ```- x(t) ``` | Strength (not relative)| The sinusoid's value (whether we're looking at the horizontal (```- \cos ```) component or the vertical (```- \sin ```) component) as a function of time, ```- x(t) ``` | linear | ```- x(t) = a \cdot \cos (2 \pi f t + \phi_0) ``` | This changes so much that it's not really a good measurement of strength - although it has many other important uses (obvs) |
+| Instantaneous Power | ```- P ``` or ```- \text{power} (t) ``` | Strength (not relative) | The power at any moment as a function of time ```- t ``` | linear | ```- \text{power} (t) = [x(t)]^2 ```  which expands to ```- \text{power} (t) = \frac{a^2}{2} \cos (2 \pi f t) + \frac{a^2}{2}```| So far, the instantaneous power function is not that useful - maybe this will change.  More importantly, we use it derive the average power function, which is easy because the term ```-  \frac{a^2}{2} \cos (2 \pi f t) ``` always averages out to 0. |
+| Average Power | ```- P_{avg} ``` or ```- P_a ``` | Strength (not relative) | This is the measure of strength that we've built up to the entire chapter.  The pro's include: 1) it being useful for non-sinusoidal waves 2) having some additivity (*some restrictions apply*) 3) Being analogous to electrical power 4) Being mathematically compatible with all the formulae we've defined thus far. | linear | ```- P_{avg} = \frac{a^2}{2}``` | Average power is additive when the signals are uncorrelated (i.e. have different frequencies, or not being multiples of each other) |
+
 
 ## Questions
 1.  **Question**:  What are the max and min peak amplitudes of the sinusoid that results from two sinusoids being mixed, both with frequencies of 440 Hz and amplitudes of 2 and 3?
