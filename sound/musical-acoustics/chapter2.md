@@ -189,7 +189,9 @@ Acoustics - Chapter 2 - Sinusoids
     - Multiplying two frequencies ```- f ```, ```- g ```, together will produce two different frequencies (the additive part of FLEM) based on:
         - ```- f - g ```
         - ```- f + g ```
-    - **Todo**: discuss ring modulation in more detail
+    - Ring modulation is basically amplitude modulation at an audible rate.  
+        - It will apply a modulation to each component sinusoid in a sound and it will break any harmonic relationship that they have creating a funky sound.        
+        - TODO: discuss ring modulation in more detail
 
 ## Periodic Tones
 - Signal is periodic when there is some non-zero delay ```- \tau ``` which can be applied which makes no difference:
@@ -384,6 +386,7 @@ Acoustics - Chapter 2 - Sinusoids
         - However last term, ```- ab \cos(\lvert f - g \rvert t (\phi_2 - \phi_1)) ``` is the beatin, and it averages out to 0.
         - So we get ```- P_{c_{avg}} = P_{a_{avg}} + P_{b_{avg}} ```
     - So ```- P_{c_{avg}} = 3 + 4 = 7 ```
+    - **Note**: We already knew that power is additive as long as the frequencies are uncorrelated (which they are - since they're different).  So we just took the scenic route.
 3. **Question**: Two sinusoids, of period 4 and 6 ms, are added.  What is the period of the resulting waveform?
     - **Answer**:
     - 2 sinusoids: ```- \tau_a ``` = 4 ms, ```- \tau_b ``` = 6 ms
