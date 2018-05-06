@@ -57,11 +57,17 @@ app.UseMvc(routes =>
 
 ### Front-End (FE) Project Creation with Angular CLI
 
+- **Updates for Angular 6**
+- Install/update the CLI: `npm install -g @angular/cli`
+    - run `ng --version` to verify you're on v6
+- Install SASS: `npm install -g sass`
+    - run `sass --version` to make sure you're up to date (1.3.2)
+    - Noe that it may refer to 'Dart SASS': that's ok.  This just means it's the version of SASS that doesn't have Ruby dependencies.
 - stay in the parent (updated-test-angular) directory
-- `ng new 'fe' --verbose --skip-git --routing`        
+- `ng new 'fe' --verbose --skip-git --style=scss --routing`
 - go to the package.json to make sure it's using the expected version of the angular cli        
-- goto src/polyfills.ts and uncomment the necessary lines for IE compatibility (or other appropriate polyfills - some may require package installations but this documented)
-- add an appropriate .gitignore to the root 'fe' directory
+- goto src/polyfills.ts and uncomment the necessary lines for IE compatibility (or other appropriate polyfills - some may require package installations but this is documented in that file)
+- verify that the cli added a .gitignore file.add an appropriate .gitignore to the root 'fe' directory
     - here's one I grabbed from the CLI when you don't use the **skip-git** flag
 
 ```(git)
@@ -103,15 +109,50 @@ testem.log
 Thumbs.db
 ```
 
+- Create a `styles` directory in the `src` directory and then move the `src/styles.scss` into it
+    - Then update the `angular.json` file with the following updated paths:
+
+    ```(json)
+    "styles": [
+        "src/styles/styles.scss"
+    ],
+    ```
+
+    - There are 2 places you'll need to make this update.
+
 - test build/serve non-aot:
-    - `ng build --dev --progress --verbose`
-    - `ng serve --progress -dev`  note: this will recompile
+    - `ng build --progress --verbose`
+    - `ng serve --progress`  note: this will recompile
         - it will tell you where it is being hosted, then open your browser
-        - eg http://localhost:4200/
+            - eg http://localhost:4200/
+        - you might need to add the `--port x` option to specify a different port        
 - test build/serve aot:
-    - `ng build --prod --progress --verbose`
-    - `ng serve --progress -prod -aot`
-        - test in the same as with dev        
+    - `ng build --aot --prod --progress --verbose`
+    - `ng serve --progress --prod --aot`
+        - you might also need to use `--port` again
+- **Adding Angular Material**    
+    - Run `ng add @angular/material`
+        - You may need to add the following dependency to the package.json and the rerun `npm install`
+            - `"@angular/cdk": "^6.0.0",`
+    - Use ng generate with angular material to generate a *quick-start* dashboard component:
+        - `ng generate @angular/material:material-nav --name=nav`
+    - Clear out the app component template and insert `<nav></nav>`.
+    - Inside `<mat-sidenav-content>` and after `<mat-toolbar>` is where you put your content
+        - Rebuild and view results
+
+- **Module/View Scaffolding**
+    - TODO:
+    - Refactor App-level components
+        - Add router outlet
+    - Feature Modules
+        - With views
+        - With corresponding router modules
+        - Integrate an angular material test page here?
+    - Common Module
+        - Perhaps this is not necessary as module with providers is no longer necessary?
+
+
+
 
 ### Create the Back-End (BE) project with dotnet CLI
 - `cd updated-test-angular`
