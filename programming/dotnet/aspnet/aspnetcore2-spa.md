@@ -1,52 +1,18 @@
 ASPNet Core 2 SPA
 =================
 
-## Using a PreBuilt SPA Template from DotNet SDK
-- basic idea: you can use the dotnet CLI to create an ASP.NET Core project that integrates with a SPA framework (e.g. angular)
-- [primary src](https://docs.microsoft.com/en-us/aspnet/core/spa/angular?tabs=visual-studio)
-- run `dotnet --version` to verify you're at version >= 2.1.  Otherwise update the SDK.
-- run `dotnet new --install Microsoft.DotNet.Web.Spa.ProjectTemplates::2.0.0` to get latest project templates
-- to create a project using this template (in a new directory), run `dotnet new angular -o test-ang-mvc-templ8`
-- running from vs code (first time):
-    - open up from the current directory and wait 
-    - when you get a warning about required assets needing to be installed before being able to build, select 'yes'
-    - press F5 to debug: this will take a while as it restores nuget and npm packages
-    - **RESULTS**: Doesn't work.  Builds but cannot run.  
-- **CONCLUSION**: DONT USE THIS METHOD
-    - I already had doubts that this approach would be worthwhile, but this convinces me.
-    
+- This document covers how to set up an asp.net core 2 site with an angular 6 front-end
+    - It will use the dotnet core CLI and the Angular CLI
 
-## Other SPA Services From DotNet
-
-- There is a lot of code from the Microsoft.AspNetCore.SpaServices in the template, but their purpose is to integrate the front and back ends into a single project.
-- I don't want to use that approach.  It's easier to treat the two projects separately, and use different development environments.
-- Recall that most of our content (js (app code, polyfills, vendor, etc), css, ) will be bundled by the front end build process into *.bundle.js.
-- The main thing we need to use is the routing:
-
-```(csharp)
-app.UseMvc(routes =>
-{
-    routes.MapRoute(
-        name: "default",
-        template: "{controller=Home}/{action=Index}/{id?}");
-
-    routes.MapSpaFallbackRoute(
-        name: "spa-fallback",
-        defaults: new { controller = "Home", action = "Index" });
-});
-```
-
-- [SpaServices Routing Helpers](https://docs.microsoft.com/en-us/aspnet/core/client-side/spa-services#routing-helpers)
-- [documentation](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.builder.sparouteextensions.mapspafallbackroute?view=aspnetcore-2.0)
-- This is the default route, but it also ignores any files which might be static files (i.e. anything with a filename extension).
-    - Front-end routes will not likely contain filename extensions, so these get routed to the default controller action.
-    - If there is a filename extension, it will be treated as a static file and look for the specified path inside the webroot (usually `wwwroot`).
-    - If the user sends in a fake front-end route, unfortunately, there's not a good way to return a 404.
-
-## Manual Integration with Angular CLI (Preferred Method)
-
-### Root Level Setup
-- Upgrade the Angular CLI and dotnet sdk
+## Root Project Level Setup
+- Upgrade tools:
+    - Angular CLI: `npm install -g @angular/cli`
+        - run `ng --version` to verify you're on v6    
+    - dotnet sdk
+        - download most recent version
+    - Install SASS: `npm install -g sass`
+        - run `sass --version` to make sure you're up to date (1.3.2)
+        - Note that it may refer to 'Dart SASS': that's ok.  This just means it's the version of SASS that doesn't have Ruby dependencies.
 - `mkdir updated-test-angular` (this is the root project name- change it to whatever you want.)
 - `cd updated-test-angular`
 - create a .gitignore file with the following contents:
@@ -55,14 +21,9 @@ app.UseMvc(routes =>
 [Ss]taging/
 ```
 
-### Front-End (FE) Project Creation with Angular CLI
+## Front-End (FE) Project Setup 
 
-- **Updates for Angular 6**
-- Install/update the CLI: `npm install -g @angular/cli`
-    - run `ng --version` to verify you're on v6
-- Install SASS: `npm install -g sass`
-    - run `sass --version` to make sure you're up to date (1.3.2)
-    - Noe that it may refer to 'Dart SASS': that's ok.  This just means it's the version of SASS that doesn't have Ruby dependencies.
+### Initialize
 - stay in the parent (updated-test-angular) directory
 - `ng new 'fe' --verbose --skip-git --style=scss --routing`
 - go to the package.json to make sure it's using the expected version of the angular cli        
@@ -118,11 +79,13 @@ Thumbs.db
     ],
     ```
 
-    - There are 2 places you'll need to make this update.
+    - There are 2 places in this file you'll need to make this update.
 
+### Local Build Steps
 - test build/serve non-aot:
     - `ng build --progress --verbose`
-    - `ng serve --progress`  note: this will recompile
+    - `ng serve --progress`  
+        - this will recompile
         - it will tell you where it is being hosted, then open your browser
             - eg http://localhost:4200/
         - you might need to add the `--port x` option to specify a different port        
@@ -130,31 +93,263 @@ Thumbs.db
     - `ng build --aot --prod --progress --verbose`
     - `ng serve --progress --prod --aot`
         - you might also need to use `--port` again
-- **Adding Angular Material**    
-    - Run `ng add @angular/material`
-        - You may need to add the following dependency to the package.json and the rerun `npm install`
-            - `"@angular/cdk": "^6.0.0",`
-    - Use ng generate with angular material to generate a *quick-start* dashboard component:
-        - `ng generate @angular/material:material-nav --name=nav`
-    - Clear out the app component template and insert `<nav></nav>`.
-    - Inside `<mat-sidenav-content>` and after `<mat-toolbar>` is where you put your content
-        - Rebuild and view results
 
-- **Module/View Scaffolding**
-    - TODO:
-    - Refactor App-level components
-        - Add router outlet
-    - Feature Modules
-        - With views
-        - With corresponding router modules
-        - Integrate an angular material test page here?
-    - Common Module
-        - Perhaps this is not necessary as module with providers is no longer necessary?
+### Adding Angular Material
+- Run `ng add @angular/material`
+    - You may need to add the following dependency to the package.json and the rerun `npm install`
+        - `"@angular/cdk": "^6.0.0",`
+- Use ng generate with angular material to generate a *quick-start* dashboard component:
+    - `ng generate @angular/material:material-nav --name=nav`
+- Clear out the app component template and insert `<nav></nav>`.
+- Inside `<mat-sidenav-content>` and after `<mat-toolbar>` is where you put your content
+    - To prove this, put an `<h1>your content here</h1>` and rebuild / view results  
+        - you can remove this when you've proven it
+    - Also, enter a `<router-outlet></router-outlet>` underneath/replacing the h1
 
+### Refactor App-level components
+- We're going to get rid of the 'nav' component and move it into the app component.
+    - Then we'll add the router outlet to the component
+    - Then we'll just shuffle around the way the app component is organized
+- app.module.ts
 
+    ```(typescript)
+    //Core
+    import { BrowserModule } from '@angular/platform-browser';
+    import { NgModule } from '@angular/core';
+    import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+    import { LayoutModule } from '@angular/cdk/layout';
+    import { MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatListModule } from '@angular/material';
 
+    //Feature Modules
+    //TODO
 
-### Create the Back-End (BE) project with dotnet CLI
+    //App-Level
+    import { AppRoutingModule } from './app-routing.module';
+    import { AppComponent } from './app.component';
+
+    @NgModule({
+    declarations: [
+        AppComponent
+    ],
+    imports: [
+        BrowserModule,                 
+        BrowserAnimationsModule,
+        LayoutModule,
+        MatToolbarModule,
+        MatButtonModule,
+        MatSidenavModule,
+        MatIconModule,
+        MatListModule,
+        AppRoutingModule //order matters: this should always be last
+    ],
+    providers: [],
+    bootstrap: [AppComponent]
+    })
+    export class AppModule { }
+    ```
+
+- app-routing.module.ts
+    - no changes        
+- app.component.html
+    - Copy the nav.component.html content here
+- app.component.scss
+    - Copy the nav.component.css content here
+- app.component.ts
+    - Combine the existing code with the nav.component.ts file
+- now rebuild (aot) and test
+
+### Common Module
+- Create the following folders under 'app'
+    - common
+        - add folders:
+            - components
+            - guards
+            - helpers
+            - models
+            - pipes
+            - services
+    - constants
+        - empty for now
+    - features
+        - empty for now
+    - barrels (optional)
+        - add files:
+            - common.ts
+            - constants.ts
+            - mocks.ts
+            - models.ts
+            - modules.ts
+            - services.ts
+        - it's just a centralized registry of various es6 modules (broken out by type) which decouples your import statements from the actual project folder structure.
+            - occasionally, there are some black-magic bugs dealing with barrel's so be sure to test this carefuly.
+        - Basic format should look like:
+
+        ```(typescript)
+        export { MixDetailService } from './../features/mix-detail/mix-detail.service';
+        export { UnlinkedMaterialsService } from './../features/shared/unlinked-materials.service';
+        // ...
+        ```
+
+- Copy the common files (to appropriate directories) from previous projects that you want
+- Add references to the barrels/common.ts as appropriate.  E.G.
+
+```(typescript)
+export { PageNotFoundComponent } from './../common/components/page-not-found.component';
+export { NotAuthorizedComponent } from './../common/components/not-authorized.component';
+```
+
+- Add a ref to the common module to the barrels/module.ts
+
+```(typescript)
+export { CommonModule } from "../common/common.module";
+```
+
+- Create `app/common/common.module.ts` in the root directory:
+
+    ```(typescript)
+    import { NgModule, ModuleWithProviders } from '@angular/core';
+    import { BrowserModule } from '@angular/platform-browser';
+    import { FormsModule, ReactiveFormsModule }    from '@angular/forms';  //presumably will need both
+
+    //components
+    import { PageNotFoundComponent, NotAuthorizedComponent } from './../barrels/common';
+
+    @NgModule({
+        imports: [
+            BrowserModule,
+            FormsModule,
+            ReactiveFormsModule
+        ],
+        exports: [        
+            PageNotFoundComponent, 
+            NotAuthorizedComponent
+        ],
+        declarations: [
+            PageNotFoundComponent, 
+            NotAuthorizedComponent
+        ]
+    })
+    export class CommonModule {}
+    ```
+
+- Update the app.module.ts to include common.  
+    - Add the following line under '//Feature Modules':
+
+    ```(typescript)       
+    import { CommonModule }  from './barrels/modules';
+    ```
+
+    - Also add import the module reference...
+
+    ```(typescript)
+    imports: [
+        BrowserModule,   
+        CommonModule, //<- NEW
+        HomeModule, 
+        BrowserAnimationsModule,
+        LayoutModule,
+        MatToolbarModule,
+        MatButtonModule,
+        MatSidenavModule,
+        MatIconModule,
+        MatListModule,
+        AppRoutingModule //order matters: this should always be last
+    ],
+    ```
+
+### Feature Modules and Components
+    
+- Components will be grouped into Feature Modules
+- There will be smart components and dumb components, the latter of which use on-push change detection
+- **Create a feature module**
+    - Assume the feature will be 'home'
+    - Make a directory 'features/home/_module'
+    - change to the _module directory            
+    - `ng g module home --flat --routing`
+        - note: you can add the flag `--dry-run` for any of these to see the changes without making changes
+    - add these lines to your barrels/modules.ts: 
+
+    ```(typescript)
+    export { HomeRoutingModule } from "../features/home/_module/home-routing.module";
+    export { HomeModule } from "../features/home/_module/home.module";
+    ```
+
+    - Update the app.module by updating this line:
+
+    ```(typescript)
+    import { CommonModule, HomeModule, HomeRoutingModule }  from './barrels/modules';
+    ```
+
+    - Also in the app.module, add the reference to the HomeModule in the imports section...
+
+    ```(typescript)
+    imports: [
+        BrowserModule,   
+        HomeModule, 
+        BrowserAnimationsModule,
+        LayoutModule,
+        MatToolbarModule,
+        MatButtonModule,
+        MatSidenavModule,
+        MatIconModule,
+        MatListModule,
+        AppRoutingModule //order matters: this should always be last
+    ],
+    ```
+
+- **Create a smart component**
+    - Assume this smart component will also be called Home (and it lives inside the Home Feature module)
+    - change directory to the home/ (i.e. no longer in the _module directory)
+    - `ng g component home --export --flat --styleext scss --selector home  --module _module/home.module.ts --inline-template`
+    - Add a route:
+        - Add the following to your app-routing.module.ts:
+
+        ```(typescript)
+        import { PageNotFoundComponent} from './barrels/common';
+
+        const routes: Routes = [   
+        { path: '', redirectTo: '/home', pathMatch: 'full'},   
+        { path: 'page-not-found', component: PageNotFoundComponent, pathMatch: 'full' },   
+        { path: '**', component: PageNotFoundComponent } 
+        ];
+        ```
+
+        - Add the following to your home/_module/home-routing.module.ts:
+
+        ```(typescript)
+        import { HomeComponent} from './../home.component';
+
+        const routes: Routes = [    
+        { path: 'home',   component: HomeComponent, pathMatch: 'full' }  
+        ];
+        ```
+    
+- **Create a dumb component**
+    - Assume this dumb component will be called SearchListingsComponent and live inside the Home module.
+    - change directory to home/
+    - `ng g component SearchListings --styleext scss --selector search-listings --module _module/home.module.ts --inline-template --change-detection OnPush`
+        - Note: if you plan on reusing this component in other projects, you might want to encapsulate the markup with `--view-encapsulation Emulated` or `--view-encapsulation Native`
+            - Background: normally, component css gets copied to the document <head>.  If you want a super-portable component, a la web components, you can encapsulate this markup in the ShadowDom (which could be Emulated or Native - depending on what browsers you intend to target).  Of course, with careful namespacing in your css, you might avoid any collisions - this approach would just guarantee it.
+    - Add the following to the HomeComponent template: `<search-listings> </search-listings>`
+
+### Additional javascript Resources
+- Add References to any other javascript files you might need
+    - add the following to your angular.json with an array of the appropriate js to bundle (order matters):
+    ```(json)
+    "scripts": [
+        "../node_modules/jquery/dist/jquery.js",
+        "../node_modules/bootstrap/dist/js/bootstrap.js",
+        "./assets/js/ie10-viewport-bug-workaround.js"
+    ]
+    ```
+- Add the folowing useful npm components:
+    - `npm install moment`
+    - `npm install immutable`
+
+### Additional Angular Material Setup
+- TODO
+
+## Back-End (BE) Project Setup
 - `cd updated-test-angular`
 - `mkdir be`
 - `cd be`
@@ -186,8 +381,7 @@ Thumbs.db
     - back in root directory, (`updated-test-angular`) `mkdir staging`            
 - Build tools and NPM
     - cd to the fe directory again
-    - Add the folowing npm components:
-        `npm install moment`
+    
     - Add the following build tools:
         - `npm install --save-dev shx`
         - `npm install --save-dev npm-watch`
@@ -199,7 +393,7 @@ Thumbs.db
     
     ```(json)
     //...
-    "config" : { "outputPath": "be" },
+    "config" : { "outputPath": "be/web" },
     "watch": {
         "fill-targets-dist": {
             "patterns": [
@@ -211,28 +405,36 @@ Thumbs.db
     //...
     ```
 
-    - Note the `outputPath` config variable might need to change
-        - e.g. you might want to change it to `be/web`
+    - Note the `outputPath` config variable might need to change depending on how you set up your be project
+        
     - Add the following to your npm package scripts section
 
     ```(json)
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "test": "ng test",
+    "lint": "ng lint",
+    "e2e": "ng e2e",
     "prebuild-dev": "npm run clean-targets",
-    "build-dev": "ng build --dev --output-path=../staging/dist --output-hashing=none --progress --sourcemap --verbose",
+    "build-dev": "ng build --output-path=../staging/dist --output-hashing=none --progress --source-map --verbose",
     "postbuild-dev": "npm run fill-targets",
     "prebuild-prod": "npm run clean-targets",
     "build-prod": "ng build --prod --aot --output-path=../staging/dist --output-hashing=none --progress --verbose",
     "postbuild-prod": "npm run fill-targets",
     "clean-targets": "npm run clean-target-1 && npm run clean-target-2",
     "clean-target-1": "path-exists ../staging/dist && shx rm -r ../staging/dist || echo ../staging/dist already removed",
-    "clean-target-2": "path-exists ../%npm_package_config_outputPath%/wwwroot/dist && shx rm -r ../%npm_package_config_outputPath%/wwwroot/dist && shx mkdir -p ../%npm_package_config_outputPath%/wwwroot/dist/fonts || echo wwwroot/dist already removed && shx mkdir -p ../%npm_package_config_outputPath%/wwwroot/dist/fonts ",
+    "clean-target-2": "path-exists ../$npm_package_config_outputPath/wwwroot/dist && shx rm -r ../$npm_package_config_outputPath/wwwroot/dist && shx mkdir -p ../$npm_package_config_outputPath/wwwroot/dist/fonts || echo wwwroot/dist already removed && shx mkdir -p ../$npm_package_config_outputPath/wwwroot/dist/fonts ",
     "fill-targets": "npm run fill-targets-dist && npm run fill-targets-fonts",
-    "fill-targets-dist": "copyfiles -u 3 ../staging/dist/*.{js,map,css} ../%npm_package_config_outputPath%/wwwroot/dist",
-    "fill-targets-fonts": "copyfiles -u 5 ../staging/dist/assets/fonts/glyphicons* ../%npm_package_config_outputPath%/wwwroot/dist/fonts",
+    "fill-targets-dist": "copyfiles -u 3 ../staging/dist/*.{js,map,css} ../$npm_package_config_outputPath/wwwroot/dist",
+    "fill-targets-fonts": "copyfiles -u 5 ../staging/dist/assets/fonts/glyphicons* ../$npm_package_config_outputPath/wwwroot/dist/fonts",
     "prewatch": "npm run clean-target-1",
     "watch": "parallelshell \"npm run watch-ng\" \"npm run watch-output\"",
+    "watch-prod": "parallelshell \"npm run watch-ng-prod\" \"npm run watch-output\"",
     "watch-output": "npm-watch",
-    "watch-ng": "ng build --dev --output-path=../staging/dist --output-hashing=none --progress --sourcemap --verbose --watch",
-    "test-config-var": "echo ./../%npm_package_config_outputPath%/whatever"
+    "watch-ng": "ng build --output-path=../staging/dist --output-hashing=none --progress --source-map --verbose --watch",
+    "watch-ng-prod": "ng build --prod --aot --output-path=../staging/dist --output-hashing=none --progress --verbose --watch",
+    "test-config-var": "echo ./../$npm_package_config_outputPath/whatever"
     ```
 
     - **warning - NOT CROSSPLATFORM**: config variables on windows need to be enclosed in `%` but in linux/max, they probably need to be enclosed in `$`
@@ -242,7 +444,7 @@ Thumbs.db
         - `npm run build-dev`
         - `npm run watch`
             - note: nodemon section sometimes barfs but it's mostly reliable
-            - since we're watching two different types of things (source and compiled output), you could easily change `watch-ng` to use a prod/aot build config.
+        - `npm run watch-prod`
         - `npm run build-prod`
 
 ### SPA and Back-End Route Integration
@@ -315,6 +517,10 @@ public IActionResult Index()
     <title>@ViewData["Title"]</title>
     <base href="/">
 
+    <environment names="Staging,Production">
+        <link rel="stylesheet" href="~/dist/styles.css">
+    </environment>
+
     <!-- OPTIONAL CSS FILES: Include depending on your project -->
     <link href="/assets/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="/assets/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
@@ -333,19 +539,19 @@ public IActionResult Index()
     <script src="/assets/lib/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="/assets/lib/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
 
+    <!-- TODO: Review the prod bundles that need to be included -->
     <environment names="Development">
-        <script src="~/dist/inline.bundle.js" asp-append-version="true"></script>
-        <script src="~/dist/polyfills.bundle.js" asp-append-version="true"></script>
-        <script src="~/dist/styles.bundle.js" asp-append-version="true"></script>
-        <script src="~/dist/vendor.bundle.js" asp-append-version="true"></script>
-        <script src="~/dist/main.bundle.js" asp-append-version="true"></script>
+        <script src="~/dist/runtime.js" asp-append-version="true"></script>
+        <script src="~/dist/polyfills.js" asp-append-version="true"></script>
+        <script src="~/dist/styles.js" asp-append-version="true"></script>
+        <script src="~/dist/vendor.js" asp-append-version="true"></script>
+        <script src="~/dist/main.js" asp-append-version="true"></script>
     </environment>
         
-    <environment names="Staging,Production">        
-        <script src="~/dist/inline.bundle.js" asp-append-version="true"></script>
-        <script src="~/dist/polyfills.bundle.js" asp-append-version="true"></script>        
-        <script src="~/dist/vendor.bundle.js" asp-append-version="true"></script>
-        <script src="~/dist/main.bundle.js" asp-append-version="true"></script>
+    <environment names="Staging,Production">                
+        <script src="~/dist/runtime.js" asp-append-version="true"></script>
+        <script src="~/dist/polyfills.js" asp-append-version="true"></script>        
+        <script src="~/dist/main.js" asp-append-version="true"></script>
     </environment>
     
     @RenderSection("scripts", required: false)
@@ -375,10 +581,14 @@ public IActionResult Index()
 
 - The angular root component's template doesn't need to updated at the moment.
 
-### Checking in your changes
-- Presumably your root directory has a git repo in it.
-- First only add and commit your various .gitignore files.
-- Then add everything else and push to your remote server.
+### Local Debugging
+- Your FE build settings need to match your BE build settings, bc there is a slight difference in the FE output between AOT and DEV:
+    - Aot has no styles or vendor bundle
+    - Aot just uses a styles.css file, whereas DEV uses a styles bundle
+- So your build environment needs to have the correct setting for the env variable, ASPNETCORE_ENVIRONMENT
+    - Possible values: Development, Staging, Production
+- In VSCode, just go to the ./vscode/launch.json and you'll see where you can update this.
+    - **Warning**: You might have multiple ./vscode/launch.json files.  Be sure to change the environment variable in the root directory of your solution.
 
 ### Build/Publishing
 - Depends on your publish platform and method.
@@ -386,4 +596,48 @@ public IActionResult Index()
         
 ### Further Development Steps
 - see [this documentation](/programming/web/angular2/ng-lessons-learned) in addition to whatever other sources
+
+## Useless BE Approaches
+
+### Using a PreBuilt SPA Template from DotNet SDK
+- basic idea: you can use the dotnet CLI to create an ASP.NET Core project that integrates with a SPA framework (e.g. angular)
+- [primary src](https://docs.microsoft.com/en-us/aspnet/core/spa/angular?tabs=visual-studio)
+- run `dotnet --version` to verify you're at version >= 2.1.  Otherwise update the SDK.
+- run `dotnet new --install Microsoft.DotNet.Web.Spa.ProjectTemplates::2.0.0` to get latest project templates
+- to create a project using this template (in a new directory), run `dotnet new angular -o test-ang-mvc-templ8`
+- running from vs code (first time):
+    - open up from the current directory and wait 
+    - when you get a warning about required assets needing to be installed before being able to build, select 'yes'
+    - press F5 to debug: this will take a while as it restores nuget and npm packages
+    - **RESULTS**: Doesn't work.  Builds but cannot run.  
+- **CONCLUSION**: DONT USE THIS METHOD
+    - I already had doubts that this approach would be worthwhile, but this convinces me.
+    
+
+### Other SPA Services From DotNet
+
+- There is a lot of code from the Microsoft.AspNetCore.SpaServices in the template, but their purpose is to integrate the front and back ends into a single project.
+- I don't want to use that approach.  It's easier to treat the two projects separately, and use different development environments.
+- Recall that most of our content (js (app code, polyfills, vendor, etc), css, ) will be bundled by the front end build process into *.bundle.js.
+- The main thing we need to use is the routing:
+
+```(csharp)
+app.UseMvc(routes =>
+{
+    routes.MapRoute(
+        name: "default",
+        template: "{controller=Home}/{action=Index}/{id?}");
+
+    routes.MapSpaFallbackRoute(
+        name: "spa-fallback",
+        defaults: new { controller = "Home", action = "Index" });
+});
+```
+
+- [SpaServices Routing Helpers](https://docs.microsoft.com/en-us/aspnet/core/client-side/spa-services#routing-helpers)
+- [documentation](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.builder.sparouteextensions.mapspafallbackroute?view=aspnetcore-2.0)
+- This is the default route, but it also ignores any files which might be static files (i.e. anything with a filename extension).
+    - Front-end routes will not likely contain filename extensions, so these get routed to the default controller action.
+    - If there is a filename extension, it will be treated as a static file and look for the specified path inside the webroot (usually `wwwroot`).
+    - If the user sends in a fake front-end route, unfortunately, there's not a good way to return a 404.
 
