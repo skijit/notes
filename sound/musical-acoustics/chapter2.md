@@ -468,3 +468,20 @@ This can be solved experimentally and mathematically.  I'll start with the latte
 | ```- \pi ``` | ``` - \infty ``` | 96.98 | 0 | 0 | Correct |
 | ```- \frac{3 \pi}{2} ``` | 3.01 | 96.98 | 99.99 | 3 | Correct |
 
+## PostScript
+- We've talked about a sinusoid's average power.  But how do you calculate powers of complicated, real-world signals?
+    - For that matter, how do you go about building an audio meter?
+    - At least in the digital world, this is going to require a sampling window.
+- There are two types of meters:
+    - Peak Meters -> measures Peak Amplitude
+    - RMS Meters -> measures RMS Amplitude
+- RMS Amplitude
+    - You take the square root of the mean of the individual values squared.
+    - The squaring removes the sign and gives an approximation of magnitude, while the square root tries to remove the slight magnitude distortion introduced by squaring it.
+    - RMS is used for fitting a curve to data
+    - It also estimates the amount of voltage required to drive a signal of a given magnitude.
+    - The peak amplitude of a typical sign wave is 1.  The average amplitude is 0.  The RMS amplitude is 0.71.
+- Some sources:
+    - [link 1](https://en.wikipedia.org/wiki/Root_mean_square)
+    - [link 2](http://www.open.edu/openlearn/science-maths-technology/engineering-and-technology/technology/sound-music-technology-introduction/content-section-6.3)
+    - [link 3](https://support.biamp.com/General/Audio/Peak_vs_RMS_Meters)
