@@ -461,9 +461,9 @@ This can be solved experimentally and mathematically.  I'll start with the latte
 
     - This makes sense.  The gain will not depend on the amplitude but only on the delay, ```- \phi_2 - \phi_1 ```
 
-    | Delay Amount (rad) | Predicted ```- G_{dB} ``` Change | Observed ```- dB ``` signal 1 | Observed ```- dB ``` signal 2 | Observed ```- G_{dB} |
-    | :---: | :---: | :---: | :---: | :---: | 
-    | 0 | TBD | 96.98 | 103.01 | 6 |
-    | ```- \frac{\pi}{2} ``` |TBD |TBD |TBD |TBD |
-    | ```- \pi ``` | TBD | TBD | TBD |TBD |
-    | ```- \frac{3 \pi}{2} ``` | TBD | TBD | TBD | TBD |
+| Delay Amount (rad) | Predicted ```- G_{dB} ``` Change | Observed ```- dB ``` signal 1 | Observed ```- dB ``` signal 2 | Observed ```- G_{dB} |
+| :---: | :---: | :---: | :---: | :---: | 
+| 0 | TBD | 96.98 | 103.01 | 6 |
+| ```- \frac{\pi}{2} ``` |TBD |TBD |TBD |TBD |
+| ```- \pi ``` | TBD | TBD | TBD |TBD |
+| ```- \frac{3 \pi}{2} ``` | TBD | TBD | TBD | TBD |
