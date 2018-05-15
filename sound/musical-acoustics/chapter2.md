@@ -455,8 +455,15 @@ This can be solved experimentally and mathematically.  I'll start with the latte
     - ```- {P_{avg_0}} = \frac{a^2}{2} ``` by definition
     - ```- {P_{avg_1}} =  a^2 [ \cos (\phi_2 - \phi_1) + 1]``` 
     - ```- g_{avg_{dB}} = 10 \log \frac{a^2 [ \cos (\phi_2 - \phi_1) + 1]}{\frac{a^2}{2}} ```
-    - ```- g_{avg_{dB}} = 10 [\log a^2 (\cos(\phi_2 - \phi_1)+1) - \log \frac{a^2}{2}]```
-    - ```- g_{avg_{dB}} = 10 [ \log a^2 + \log(\cos ( \phi_2 - \phi_1) + 1) - \log a^2 - \log \frac{1}{2} ]```
-    - ```- g_{avg_{dB}} = -3.01 \log [ \cos(\phi_2 - \phi_1) + 1 ]```
+    - ```- g_{avg_{dB}} = 10 \log \frac{[ \cos (\phi_2 - \phi_1) + 1]}{\frac{1}{2}} ```
+    - ```- g_{avg_{dB}} = 10 \log [2 ( \cos (\phi_2 - \phi_1) + 1) ] ```
+    - ```- g_{avg_{dB}} = 10 \log [2\cos (\phi_2 - \phi_1) + 2 ] ```
+
     - This makes sense.  The gain will not depend on the amplitude but only on the delay, ```- \phi_2 - \phi_1 ```
 
+    | Delay Amount (rad) | Predicted ```- G_{dB} ``` Change | Observed ```- dB ``` signal 1 | Observed ```- dB ``` signal 2 | Observed ```- G_{dB} |
+    | :---: | :---: | :---: | :---: | :---: | 
+    | 0 | 0.906 | 96.98 | 103.01 | 6 |
+    | ```- \frac{\pi}{2} ``` | | | | |
+    | ```- \pi ``` | | | | |
+    | ```- \frac{3 \pi}{2} ``` | | | | |
