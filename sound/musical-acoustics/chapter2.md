@@ -84,19 +84,34 @@ Acoustics - Chapter 2 - Sinusoids
         - Short version is we want to use average power instead of peak or instantaneous amplitude (or instanteous amplitude squared)
 - There are two types of gain:
     - ```- g ``` which is plugged into the instanteous amplitude function, ```- x(t) ```, is the **linear gain**.
+        - ```- g = \frac{a_{new}}{a_{old}} ``` 
+        - ```- g = \frac{P_{new}}{P_{old}}``` (we'll learn about ```- P ``` and why it's different soon...)
+        - ```- x(t) = g \cdot \cos(2 \pi f t + \phi_0) ```
     - ```- g_{dB} ``` is gain in decibels.  
+        - ```- g_{dB} = 20 \log \frac{a_{new}}{a_{old}} ```
+        - ```- g_{dB} = 10 \log \frac{P_{new}}{P_{old}} ```
+        - ```- g_{dB} = 20 \log g ```
+        - ```- g_{dB} = L_{new} - L_{old} ```
 - **Question**: Do you plug in regular *strength* values to gain, or do you convert them to dB first?
     - **Answer**: Regular values: don't convert *strength* values (like power or peak ampltitude) to dB.  That is more for ```- L ``` and ```- g ```.
-- **QUestion**: Is ```- g_{dB} ``` additive?
-    - **Answer**: Nope.  Since the logarithmic scale is non-linear, it's not additive.
-    - Remember decibels can simplify some calculations but this is not an example.
-        - Example of how decibels simplify some calculations: rather than multiplying a sinusoid by 1/2 to see what it's new strength is, you can just subtract 6 dB.  [Proof](/sound/emsd/chapter1)
+- **QUestion**: Is ```- g_{dB} ``` additive?  (i.e. ```- g_{dB_{new}} = g_{dB_1} + g_{dB_2}  ``` )
+    - **Answer**: Nope.  Since the logarithmic scale is non-linear, it's not additive in that sense.
+    - Remember decibels can simplify some calculations but this is not in that way.
+    - They even can replace multiplicative operations with additive ones, but in a different way:
+        - Example: rather than multiplying a sinusoid by 1/2 to see what it's new strength is, you can just subtract 6 dB.  [Proof](/sound/emsd/chapter1)
 - If gain is specified in dB, you get: ```- g = 10^\frac{g_{dB}}{20} ```
     - **Proof**:
         - ```- g = \frac{a}{a_{ref}} ```
         - ```- g_{dB} = 20 \log{g} ```
         - ```- \frac{g_{dB}}{20} = \log{g} ```
         - ```- 10^\frac{g_{dB}}{20} = g ```
+- Proof that ```- g_{dB} = L_{new} - L_{old} ```:
+    - ```- L = 20 \log \frac{a}{a_{ref}} ```
+    - ```- g_{dB} = 20 \log \frac{a_1}{a_2} ```
+    - ```- L_2 - L_1 = 20 \log \frac{a_2}{a_{ref}} - 20 \log \frac{a_1}{a_{ref}} ```
+    - ```- L_2 - L_1 = 20 [ \log \frac{a_2}{a_{ref}} - \log \frac{a_1}{a_{ref}}] ```
+    - ```- L_2 - L_1 = 20 \log \frac{\frac{a_2}{a_{ref}}}{\frac{a_1}{a_{ref}}} ```
+    - ```- L_2 - L_1 = 20 \log \frac{a_2}{a_1} = g_{dB} ```
 
 ### Delay
 - ```- x(t - \tau) = a \cdot \cos (2 \pi f(t - \tau) + \phi_0) = a \cdot \cos (2 \pi f t + ( \phi_0 - 2 \pi \tau f))```
@@ -350,7 +365,7 @@ Acoustics - Chapter 2 - Sinusoids
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | Relative Level | ```- L ``` | Relative Loudness | A measurement of how loud something is relative to a **fixed** reference amplitude or power. | log (dB) | ```- L = 20 \log \frac{a_1}{a_{ref}} ``` ```+ L = 10 \log \frac{P_1}{P_{ref}} ``` | The reference strength (amplitude or power) can be an upper or lower bound.  In computer contexts, it is typically an upper bound of 1, since all audio values sent to a DAC will be between 0 and 1.  ```- L ``` in this context (also called ```- dB_{full scale} ```) will have a range of ```- - \infty ``` to 0.  Acoustic contexts often choose a lower bound for ```- a_{ref} ``` and so the range would be 0 to ```- \infty ```. |
 | Linear Gain | ```- g ``` | Change in relative loudness | Measures a **change** in loudness.  Similar to ```- L ``` except that we compare the new amplitude (or power) to a previous value (rather than a fixed amount).  Also appears as a multiplier to the instantaneous amplitude function. | Linear | ```+ g = \frac{a_{new}}{a_{old}} ``` ```+ g = \frac{P_{new}}{P_{old}}``` ```+ x(t) = g \cdot \cos(2 \pi f t + \phi_0) ```  |  |
-| Logarithmic Gain | ```- g_{dB} ``` | Change in relative loudness | Similar to linear gain, except we change the scale to decibels to allow a larger range. | log (dB) | ```+ g_{dB} = 20 \log \frac{a_{new}}{a_{old}} ``` ```+ g_{dB} = 10 \log \frac{P_{new}}{P_{old}} ``` ```+ g_{dB} = 20 \log g ``` | Remember that ```- g_{dB} ``` is not additive |
+| Logarithmic Gain | ```- g_{dB} ``` | Change in relative loudness | Similar to linear gain, except we change the scale to decibels to allow a larger range. | log (dB) | ```+ g_{dB} = 20 \log \frac{a_{new}}{a_{old}} ``` ```+ g_{dB} = 10 \log \frac{P_{new}}{P_{old}} ``` ```+ g_{dB} = 20 \log g ``` ```+ g_{dB} = L_{new} - L_{old} ``` | Remember that ```- g_{dB} ``` is not additive |
 | Peak Amplitude | ```- a ``` | Strength (not relative) | The sinusoid's peak (max) amplitude | linear | ```- x(t) = a \cdot \cos (2 \pi f t + \phi_0) ```  | This is an ok way to characterize strength if we're just talking about sinusoids, but it's useless once we deal with a more complicated waveform. |
 | Instantaneous Amplitude | ```- x(t) ``` | Strength (not relative)| The sinusoid's value (whether we're looking at the horizontal (```- \cos ```) component or the vertical (```- \sin ```) component) as a function of time, ```- x(t) ``` | linear | ```- x(t) = a \cdot \cos (2 \pi f t + \phi_0) ``` | This changes so much that it's not really a good measurement of strength - although it has many other important uses (obvs) |
 | Instantaneous Power | ```- P ``` or ```- \text{power} (t) ``` | Strength (not relative) | The power at any moment as a function of time ```- t ``` | linear | ```- \text{power} (t) = [x(t)]^2 ```  which expands to ```- \text{power} (t) = \frac{a^2}{2} \cos (2 \pi f t) + \frac{a^2}{2}```| So far, the instantaneous power function is not that useful - maybe this will change.  More importantly, we use it derive the average power function, which is easy because the term ```-  \frac{a^2}{2} \cos (2 \pi f t) ``` always averages out to 0. |
@@ -443,23 +458,29 @@ This can be solved experimentally and mathematically.  I'll start with the latte
     - ```- P(t) =  a^2 [ \frac{1}{2} (\cos (\phi_2 - \phi_1 + 4 \pi f t + \phi_1 + \phi_2) + \cos ( \phi_2 - \phi_1 - 4 \pi f t - \phi_1 - \phi_2)) + \cos \alpha + \cos \beta + 1 ]```
     - ```- P(t) =  a^2 [ \frac{1}{2} (\cos ( 2 \phi_2 + 4 \pi f t) + \cos ( -2 \phi_1 - 4 \pi f t)) + \cos(\phi_2 - \phi_1) + cos(4 \pi f t + \phi_1 + \phi_2 ) + 1 ] ```
     - ```- P(t) =  a^2 [ \frac{1}{2} \cos ( 2 \phi_2 + 4 \pi f t) + \frac{1}{2} \cos ( -2 \phi_1 - 4 \pi f t) + \cos(\phi_2 - \phi_1) + cos(4 \pi f t + \phi_1 + \phi_2 ) + 1 ] ```
-    - **So**: this is a really ugly formulat to give us *instantaneous* power.  Maybe it can be simplified.  Doesn't really matter bc we are interested in *average* power, and this lets us apply some big simplifications.
+    - **So**: this is a really ugly formula to give us *instantaneous* power.  Maybe it can be simplified.  Doesn't really matter bc we are interested in *average* power, and this lets us apply some big simplifications.
         - Any ```- \cos ``` term that has a ```- t ``` in it is 0-centered and on average will be 0!
     - so...
 - ```- P_{avg}(t) = a^2 [ \cos (\phi_2 - \phi_1) + 1] ```
     - **sanity check**: if both signals are 180 degrees out of phase then the ```- \phi_2 - \phi_1 = \pi ```.  ```- \cos \pi = -1```, which makes ```- P_{avg}(t) = 0 ```.  Good!
 - Now let's relate delay to gain (```- g ```).
-    - ```- g_{avg_{dB}} = 10 \log g_{avg}```
+    - ```- g_{dB} = 10 \log g```
         - this is 10 because we're using power, not instantaneous amplitude, the latter of which must be squared- which introduces the ```- 2 \cdot 10 ```
-    - ```- g_{avg} = \frac{P_{avg_1}}{P_{avg_0}} ```
-    - ```- {P_{avg_0}} = \frac{a^2}{2} ``` by definition
-    - ```- {P_{avg_1}} =  a^2 [ \cos (\phi_2 - \phi_1) + 1]``` 
-    - ```- g_{avg_{dB}} = 10 \log \frac{a^2 [ \cos (\phi_2 - \phi_1) + 1]}{\frac{a^2}{2}} ```
-    - ```- g_{avg_{dB}} = 10 \log \frac{[ \cos (\phi_2 - \phi_1) + 1]}{\frac{1}{2}} ```
-    - ```- g_{avg_{dB}} = 10 \log [2 ( \cos (\phi_2 - \phi_1) + 1) ] ```
-    - ```- g_{avg_{dB}} = 10 \log [2\cos (\phi_2 - \phi_1) + 2 ] ```
-
+    - ```- g = \frac{P_1}{P_0} ```
+    - ```- P_0 = \frac{a^2}{2} ``` by definition
+    - ```- P_1 =  a^2 [ \cos (\phi_2 - \phi_1) + 1]``` 
+    - ```- g_{dB} = 10 \log \frac{a^2 [ \cos (\phi_2 - \phi_1) + 1]}{\frac{a^2}{2}} ```
+    - ```- g_{dB} = 10 \log \frac{[ \cos (\phi_2 - \phi_1) + 1]}{\frac{1}{2}} ```
+    - ```- g_{dB} = 10 \log [2 ( \cos (\phi_2 - \phi_1) + 1) ] ```
+    - ```- g_{dB} = 10 \log [2\cos (\phi_2 - \phi_1) + 2 ] ```
+- **Final answer**: ```- g_{dB} = 10 \log [2\cos (\phi_2 - \phi_1) + 2 ] ```
     - This makes sense.  The gain will not depend on the amplitude but only on the delay, ```- \phi_2 - \phi_1 ```
+- Here is a graph of the gain response for this sinusoidal comb filter: 
+![gain response for sinusoidal comb filter](/resources/images/math/sinusoidal-comb-filter-gain-response.png)
+    - Notice how it goes down to ```- - \infty ``` at 180 degrees?  That's because it's trying to take the log of 0, which is undefined.
+
+- The actual puredata script which implements this is stored in another repo.
+- Table of predicted vs observed results:
 
 | Delay Amount (rad) | Predicted ```- G_{dB} ``` Change | Observed ```- dB ``` signal 1 | Observed ```- dB ``` signal 2 | Observed ```- G_{dB} ``` | Result |
 | :---: | :---: | :---: | :---: | :---: | :---: | 
@@ -477,9 +498,8 @@ This can be solved experimentally and mathematically.  I'll start with the latte
     - RMS Meters -> measures RMS Amplitude
 - RMS Amplitude
     - You take the square root of the mean of the individual values squared.
-    - The squaring removes the sign and gives an approximation of magnitude, while the square root tries to remove the slight magnitude distortion introduced by squaring it.
-    - RMS is used for fitting a curve to data
-    - It also estimates the amount of voltage required to drive a signal of a given magnitude.
+    - The squaring removes the sign and gives an approximation of magnitude, while the square root tries to remove the slight magnitude distortion introduced by squaring it.    
+    - RMS estimates the amount of voltage required to drive a signal of a given magnitude.
     - The peak amplitude of a typical sign wave is 1.  The average amplitude is 0.  The RMS amplitude is 0.71.
 - Some sources:
     - [link 1](https://en.wikipedia.org/wiki/Root_mean_square)
