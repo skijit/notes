@@ -22,12 +22,12 @@ Misc Signal Level & Type Info
 		- Main Signal
 		- Main Signal Inverted (180 deg)
 		- Ground
-	- **Purpose**: They're used when in scenarios where the Signal To Noise Ratio is high.  This can happen in two circumstances.
+	- **Purpose**: They're used when in scenarios where the Signal To Noise Ratio is low.  This can happen in two circumstances.
 		- **Input Signal Level is very weak**
 			- common in microphones 
 			- This is a problem bc even a small amount of noise picked up from via interference (<i class="icon-help"></i>), etc. will be amplified along with signal.
 		- **Line is very long** 
-			- > 20 feet allowing it to pick up a lot of interference.
+			- more than 20 feet allowing it to pick up a lot of interference.
 	- **Method:** When a balanced signal is output, the signal wires will have the same content except that one is inverted (ie. it's polarity is reversed).  Since each signal wire has the same electrical profile (circuit load is the same, etc.), they'll pick up the same noise.  When both signals are received, the ampilifier will again flip one of the signal wires, which means that the identical noise picked up on each is will now cancel each other out, leaving only the signal.
 	- **2 Connection Types**
 		- XLR (ie from mics)
