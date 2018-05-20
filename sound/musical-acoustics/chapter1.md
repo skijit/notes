@@ -76,7 +76,7 @@ Acoustics - Chapter 1
 - **The significance of 0 dB**
     - Many digital (and perhaps analog?) systems treat 0 dB as a clipping point
     - That makes sense insofar as they define ```- a_{ref}``` as the maximum volume that can be handled.
-        - That would make ```- \frac{a}{a_{ref}} = 1``` and we all know log 1 = 0.
+        - That would make ```- \frac{a}{a_{ref}}     = 1``` and we all know log 1 = 0.
 
 ## Word Size And Linear Quantization
 - Word Size AKA Bit-depth or bit-resolution

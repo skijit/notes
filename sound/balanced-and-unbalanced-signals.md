@@ -61,6 +61,110 @@ Misc Signal Level & Type Info
 - [Buying Guide - NEEDS REVIEW](http://thehub.musiciansfriend.com/live-sound-buying-guides/how-to-choose-the-right-direct-box)
 
 
+## Levels and Impedances
+- Some decent sources:
+    - [here](https://wolfcrow.com/blog/what-is-the-difference-between-line-level-and-mic-level/) 
+    - [here](http://hyperphysics.phy-astr.gsu.edu/hbase/Audio/imped.html)
+    - [here](https://www.sweetwater.com/sweetcare/articles/whats-the-difference-between-mic-instrument-line-and-speaker-level-signals/)
+    - [here](https://www.soundonsound.com/sound-advice/q-do-i-need-think-about-matching-mic-and-preamp-impedances)
+- Characterize audio signals:
+    - Voltage:
+        - The *information* is encoded in the voltage
+            - Voltage fluctuations / changes are analogous to the acoustic signal
+        - It's a complicated question to ask whether it is AC or DC:
+            - It is definitely **not** pure AC because the rate of voltage changes are not strictly periodic / predetermined (E.G. 60 Hz)
+            - It is definitely **not** pure DC because this *implies* a constant voltage - but clearly the voltage is time-varying.  
+            - For lack of a better term, I think of it as *pseudo-AC*.  
+            - **Side Note**: It is common to have AC (pure or *psuedo*) with a DC component - creates a bias to raise it into some range.
+                - Although sometimes this should be avoided at all costs
+                - Imagine what a pure DC signal would do to a speaker cone: push it out and keep it out, burning out the component most likely.
+    - Current:
+        - The voltage fluctuations are bipolar, therefore current is changing directions.
+- Measuring Average voltage:
+    - Can be measured by different scales:
+        - decibels
+            - dBV (gain in dB over the reference value of 1V)
+            - dBU (gain in dB over the reference value is 0.7746V)
+            - e.g. 20 log dbV / dBV_ref
+        - RMS
+            - This is the square root of average power
+                - Average power being the average of the amplitudes' squares
+- Standard Voltage levels:
+    - 2 types of information is encoded in the voltage:
+        - Values (i.e. individual or (avg) Level)
+        - Changes (e.g. periodicities, fluctuation amout/depth)
+    - Devices that take audio signals inputs have different requirements for the average levels of the signal's voltage
+        - E.G. : An amplifier expects a lower input voltage than a speaker system
+    - There are 4 different levels (discussed in more detail below):
+        - Line Level
+        - Microphone Level
+        - Instrument Level
+        - Speaker Level
+- Voltage levels can be altered with amplifiers.
+    - Pre amps:
+        - Raises a very low input voltage level to line level (see below)
+        - Cleans signal - since at a low level, it will have lowest SNR and be susceptible to interference
+            - See earlier discussion of DI boxes and Balanced Signals here
+        - Are very high-impedance inputs to minimize the current requirements of the input system (see signal levels below)
+            - Preamps typically have 10 times the impedance as the mics they connect to. 
+            - 1.5-2kOhm is a common range as most mics have an output impedance of 150-200 Ohms
+    - Power amps:
+        - Raises a line level signal to speaker level (see below)
+        - Less coloration than a preamp: increases the voltage level such that it can drive speaker(s)
+- Signal compatibility:
+    - Impedance (electrical resistance in the AC world) is the primary variable for getting a voltage level to meet device requirements.
+    - Impedances should be matched so that:
+        - voltage can be at the appropriate / expected level to drive the next device
+        - the current drawn by the downstream device is able to be be delivered by the current source.
+    - What happens when Impedances are mismatched?
+        - Excessive power use
+        - Distortion
+        - Noise problems
+- Some impedance categories:
+    - hi impedance: 50,000 Ohms (ish)       
+    - low impedance: 600-1000 Ohms (ish)
+    - **example** speakers are typically 8 Ohms (ish)
+- To match impedances, we can refer to Ohm's Law (which is for DC, but still instructive in the relationship between Voltage, Current, and Resistance):
+    - ```- V = I R ```
+    - If you have a target Voltage, and a fixed amount of Current available in your source, then everything depends on getting the correct R.
+        - ```- I ``` and ```- R ``` are going to be inversely related.
+        - Think of the water pipe analogy: ```- R ``` makes the pipes smaller so that less water current, ```- I ``` can pass.
+    - **Example**: If you were driving a zero impedance (no resistance) system (these don't exist but assume your computer or speakers were 0), then it will pull more amps than your source could possibly deliver 
+    - **Example**: Guitar cannot drive a speaker bc the pickup cannot drive an 8 ohm speaker at 1V as this would require 1/8 amp (V = IR).  It couldn't drive a 1000 ohm system either... but 50,000 ohm probably
+    - **Example**: Speakers being 8 Ohms is just an average.  Depending on the frequencies involved, they have more or less resistance.  Sometimes, really nice speakers which are flat (represent the spectrum extremely accurately) are 4 Ohms.  There is a fixed, expected speaker voltage level so that means for an amplifier to be able to drive this kind of speaker, it needs to be able to deliver more current.  Some lower end amplifiers will not be able to do this.
+- Standard Voltage Levels
+    - Microphone level:
+        - The lowest voltage level of the group
+            - Around -60 dBV, which equals 0.01 V or 10 mV
+                - ```- -60 = 20 log x ``` (where ```- x ``` is the voltage using reference V of 1V)
+                - ```- x = 10^{-3} = 0.01 V```
+            - Can only connect to a high-impedance input (i.e. preamps).
+                - The higher resistance (e.g. ~600 Ohms) lowers current to an amperage it can deliver.
+            - It's transducing atmospheric pressure changes into electrical signal fluctuations
+    - Instrument level:
+        - Higher than microphone level but lower than line level
+            - around 0.1v to 1.0v rms 
+        - Typically produced by guitars, etc.
+        - Like microphone level, requires a preamp to get to line level
+            - Can connect to a slightly lower impedance input than mic level.
+    - Line Level:
+        - This is the input voltage level required by most devices (excluding preamps (low) or speakers (high))
+        - 2 types of line level:
+            - Consumer Line level: -10 dBV (=0.316 V Rms)
+            - Pro Line Level: +4 dBU (=1.23 V RMS)
+        - Effects loops of amps are usually running at line level - this is what many stomp boxes expect.
+            - Some older stomp boxes required instrument level, and some guitarists like to put their boxes in front of their amps.  This could cause problems.
+    - Speaker level:
+        - Highest of the voltage levels        
+        - Required to drive a speaker
+            - Not safe for any other use
+            - This is a reason why speaker cables are often different from other types
+- Other fun facts:
+    - Systems also have output impedances.
+    - It's usually just 1/10th of their input impedances- so not a lot.
+    - But the purpose it to restrict the flow of current in the event of it being plugged into something that has a short circuit.  BC otherwise, as with all shorts, it will draw all of the current and be a fire / damage risk.
+
+
 ## How Guitar Pickups work
 - Magnetic pickups create an AC current
 - 

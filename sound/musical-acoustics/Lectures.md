@@ -177,91 +177,14 @@ Lecture Notes
         - some of the components are going to exceed the SR nyquist value
 
 ## Lecture 7
-- given a high impedance instrument (e.g. guitar, synth)
-    - 1/4 unbalanced to 1/8 unbalanced
-        - make sure it is not stereo or TRS
-    - when you plug something in to a computer, they usually supply 5V - but guitars don't need it (it doesn't matter to the guitar thogh ) - assuming that it's a mic that needs it
-- a guitar pickup creates a small voltage fluctuation which needs to be
-    - V = I R
-    - V is small
-    - If R is high, then current can be small.
-    - I and R are inversely related.
-    - R is the width of the pipe, V is the pressure, I is how much water is moving
-
-
-
-
-- 3 levels
-    - line level
-        - CD to Stereo
-        - high level so that noise is not a problem
-        - can be between 1-10 Volts
-    - microphone level
-        - same power as mic level (which is small)
-        - expecting to drive a ~600 ohn load
-    - instrument level
-        - same power as mic level (which is small)
-        - might be 10mV driving 50 kOhms
-        - at such a low amperage, you're susceptible to interference
-    - speaker level
-        - however much voltage you need to provide the speaker to get it to produce the wattage you need
-- Impedance mismatch
-    - You lose level
-    - if you lose a 10th of your level, that's a -20dB gain
-- Remember audio signals are AC: the voltage varies analogously to the acoustic signal
-    
-
-
-- Some decent sources:
-    - [here](https://wolfcrow.com/blog/what-is-the-difference-between-line-level-and-mic-level/) 
-- Audio signals are AC
-    - If it was in DC, it would be a consistent, non-varying voltage.
-    - The effect of DC on a speaker cone would be to push or pull it a certain amount (which would damage the cone).
-- The voltage can be at different levels.
-    - Depending on the stuff you plug them into, they need to be at certain levels.
-    - E.G. : An amplifier expects a lower input voltage than a speaker system
-- The voltage level can be measured by different scales:
-    - decibels
-        - dBV (gain in dB over the reference value of 1V)
-        - dBU (gain in dB over the reference value is 0.7746V)
-        - e.g. 20 log dbV / dBV_ref
-    - rms
-- The (input) impedances (electrical resistance in the AC world) have to be matched so that:
-    - voltage can be at the appropriate / expected level to drive the next device
-    - the current drawn by the downstream device is able to be be delivered by the current source.
-- Some impedance categories:
-    - hi impedance: 50,000 Ohms (ish)       
-    - low impedance: 600-1000 Ohms (ish)
-    - **example** speakers are typically 8 Ohms (ish)
-- To match impedances, we can refer to Ohm's Law (which is for DC, but still instructive in the relationship between Voltage, Current, and Resistance):
-    - ```- V = I R ```
-    - If you have a target Voltage, and a fixed amount of Current available in your source, then everything depends on getting the correct R.
-        - ```- I ``` and ```- R ``` are going to be inversely related.
-        - Think of the water pipe analogy: ```- R ``` makes the pipes smaller so that less water current, ```- I ``` can pass.
-    - **Example**: If you were driving a zero impedance (no resistance) system (these don't exist but assume your computer or speakers were 0), then it will pull more amps than your source could possibly deliver 
-    - **Example**: Guitar cannot drive a speaker bc the pickup cannot drive an 8 ohm speaker at 1V as this would require 1/8 amp (V = IR).  It couldn't drive a 1000 ohm system either... but 50,000 ohm probably
-    - **Example**: Speakers being 8 Ohms is just an average.  Depending on the frequencies involved, they have more or less resistance.  Sometimes, really nice speakers which are flat (represent the spectrum extremely accurately) are 4 Ohms.  There is a fixed, expected speaker voltage level so that means for an amplifier to be able to drive this kind of speaker, it needs to be able to deliver more current.  Some lower end amplifiers will not be able to do this.
-- What happens when Impedances are mismatched?
-- 
-- Standard Voltage Levels
-    - Line Level:
-        - This is the input voltage level required by most devices (excluding preamps (low) or speakers (high))
-        - Consumer Line level: -10 dBV (0.316 V Rms)
-        - Pro Line Level: +4 dBU (1.23 V RMS)
-    - Microphone level:
-        - Very low. 
-            - Around -60 dBV, which equals 0.01 V 
-                - ```- -60 = 20 log x ``` (where ```- x ``` is the voltage using reference V of 1V)
-                - ```- x = 10^{-3} = 0.01 ```
-            - It's transducing atmospheric pressure changes into electrical signal fluctuations
-        - This is one of the reasons you need a preamp
-    - Instrument level:
-    - Speaker level:
-- Other fun facts:
-    - Systems also have output impedances.
-    - It's usually just 1/10th of their input impedances- so not a lot.
-    - But the purpose it to restrict the flow of current in the event of it being plugged into something that has a short circuit.  BC otherwise, as with all shorts, it will draw all of the current and be a fire / damage risk.
-
-
 - at 16:30, changes subject to power spectrum
+
+
+
+
+
+
+
+
+
     - 
