@@ -178,6 +178,45 @@ Lecture Notes
 
 ## Lecture 7
 - at 16:30, changes subject to power spectrum
+- lo impedance out = most mics
+- hi imp out - guitar,  special mic
+- computer expexts hi impedance source
+- as a signal decays:
+    - amplitude decreases
+    - smooths (becomes more flat)
+- dB to RMS to power:
+    - RMS = Square root of power - so it varies linearly with amplitude
+- guitar signal: higher partials often decay earlier 
+    - natural sound sources are brighter when they're louder
+    - this is true of voice and trumpet and many other things
+- glottis makes a pulse train
+    - narrow pulses are brighter
+    - pulses get narrower the more pressure you put in 
+- if you want to make something "sound" louder: just make it brighter
+- interesting to simulate sympathetic resonance of an instrument : it makes the spectrum beat interestingly
+- "when you mix sounds together, no force on earth can pull them back apart"
+    - "like putting salt in your coffee"
+- in filters:
+    - peak / Q = bandwidth = "quality" (ie for a bandpass filter)
+    - bandwidth widens with a constant Q and increased peak
+- non-linear operation:
+    - makes frequencies which are not present in the original sound
+- linear operation
+    - doesn't add to the spectrum
+- ear as a filterbank
+    - one way to measure spectra: bandpass filter the incoming signal and then meter the output
+- cochlea: has a way of focusing different frequencies
+    - as filters, these are clumsy and crude.
+    - some people think pitch perception is coming from nerves in the ear which are firing in some synchrony
+    - do some separate research on this
+- critical band:
+    - band: range of frequencies
+    - critical bands are the bands that excite a physical location on the cochlea
+        - they are overlapping
+    - first 0-100Hz
+    - they're about 100 hz wide until 500Hz, at which point it becomes 20% of the center frequency (at 500, it is 100Hz wide, at 1000, is its 200 Hz wide, etc.)
+    - critical bands affect perception of loudness
+    - sounds within a critical band can mask each other
 
 
 
