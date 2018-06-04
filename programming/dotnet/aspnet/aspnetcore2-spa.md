@@ -158,7 +158,29 @@ Thumbs.db
     - Combine the existing code with the nav.component.ts file
 - now rebuild (aot) and test
 
+### Barrels Folder 
+- Optional
+- I like to create a folder 'barrels' under the `src/app` directory (optional)
+- You can add the following files (example)        
+    - common.ts
+    - constants.ts
+    - mocks.ts
+    - models.ts
+    - modules.ts
+    - services.ts
+- it's just a centralized registry of various es6 modules (broken out by type) which decouples your import statements from the actual project folder structure.
+    - occasionally, there are some black-magic bugs dealing with barrel's so be sure to test this carefuly.
+- Basic format should look like:
+
+```(typescript)
+export { MixDetailService } from './../features/mix-detail/mix-detail.service';
+export { UnlinkedMaterialsService } from './../features/shared/unlinked-materials.service';
+// ...
+```
+
 ### Common Module
+- **Note**: The following approach to managing common source code is based on copying the source from one project to the next.  
+    - For a more updated approach see [creating-reusable-angular-libraries](/programming/web/angular2/creating-reusable-angular-libraries)
 - Create the following folders under 'app'
     - common
         - add folders:
@@ -172,24 +194,6 @@ Thumbs.db
         - empty for now
     - features
         - empty for now
-    - barrels (optional)
-        - add files:
-            - common.ts
-            - constants.ts
-            - mocks.ts
-            - models.ts
-            - modules.ts
-            - services.ts
-        - it's just a centralized registry of various es6 modules (broken out by type) which decouples your import statements from the actual project folder structure.
-            - occasionally, there are some black-magic bugs dealing with barrel's so be sure to test this carefuly.
-        - Basic format should look like:
-
-        ```(typescript)
-        export { MixDetailService } from './../features/mix-detail/mix-detail.service';
-        export { UnlinkedMaterialsService } from './../features/shared/unlinked-materials.service';
-        // ...
-        ```
-
 - Copy the common files (to appropriate directories) from previous projects that you want
 - Add references to the barrels/common.ts as appropriate.  E.G.
 
@@ -203,7 +207,7 @@ export { NotAuthorizedComponent } from './../common/components/not-authorized.co
 ```(typescript)
 export { CommonModule } from "../common/common.module";
 ```
-
+ 
 - Create `app/common/common.module.ts` in the root directory:
 
     ```(typescript)
@@ -256,6 +260,7 @@ export { CommonModule } from "../common/common.module";
         AppRoutingModule //order matters: this should always be last
     ],
     ```
+
 
 ### Feature Modules and Components
     
