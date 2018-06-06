@@ -4,6 +4,7 @@ Reusable Angular Libraries
 - Rather than copying angular-related code from one project to another, this is a method where you can
     - share the same code among many projects
     - have multiple versions
+- Todo: An alternative worthy of greater research is the *monorepo*
 
 ## Overall approach: 
 - Put the code in npm projects  
@@ -84,8 +85,14 @@ Reusable Angular Libraries
 - [good source](https://medium.com/@arnaudrinquin/build-modular-application-with-npm-local-modules-dfc5ff047bcc)
 - cd to root directory of consumer app and run `npm install --save ./path_to_my/custom_module`
     - to refresh the build:
-        - `rm -rf node_module/custom_module && npm install`
-        - `npm install`
+        - on a mac:
+            - `rm -rf node_module/custom_module && npm install`
+        - on windows:
+            - you **cannot** do: `rm -rf node_module/custom_module` as it is a symlink (which it will follow) and will remove the local repo of the custom module
+            - simply recompile the custom module
+            - to get the VSCode-embedded instance of Typescript / intellisense to update after a build you can:
+                - open the command palette (`ctrl-shift-p`) and run: Restart Typescript Server
+                    - You can [easily](https://stackoverflow.com/questions/48387873/visual-studio-code-how-to-add-a-keybinding-for-a-command-palette-entry) set a keybinding in VSCode for this command
 - you should be able to import it like any other node package now.
 - Note: there are some webpack warnings- i think this might relate to the fact that a symbolic link is being used to link to the local module
     - might be worth testing
