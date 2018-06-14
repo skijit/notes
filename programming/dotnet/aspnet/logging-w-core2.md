@@ -16,6 +16,7 @@ Logging in ASP.NET Core 2.1
     - The specific file / destination for a log is called a *Target* (for NLog)
     - The provider lets you configure all of that, but most importantly, it provides an implementation of the Logging Abstractions
 ### Log Message Components
+- Each log message has the following 4* attributes:
   - Log Level
   - Category
   - Event ID (optional)
@@ -39,8 +40,8 @@ Logging in ASP.NET Core 2.1
   - Based on [Structured Logging](https://softwareengineering.stackexchange.com/questions/312197/benefits-of-structured-logging-vs-basic-logging) concept:
       - You don't typically pass in just a string, but rather a string template with placeholders and their replacements
       - Certain providers will allow you to query the data based on their placeholders
-- **Exception Logging**
-  - The ILogger logging calls have overloads which accept Exceptions as parameters and the providers usually have special logic for how to deal with these.
+  - **Exception Logging**
+    - The ILogger logging calls have overloads which accept Exceptions as parameters and the providers usually have special logic for how to deal with these.
 - **Logging Scopes**
   - The basic logging abstractions also define the concept of a *Scope*, which is a way of associating a variety of log entries with a message/ID.
   - All of the log calls within a Scope are organized within a *Using* block.    
@@ -210,7 +211,7 @@ public static void Main(string[] args)
   - `type`: see above
 - Each type of target has a variety of other type-specific attributes
 ### Rules
-- This is the routing table for how 
+- This is the routing table for how you associate log messages with particular targets
 - Example rules config section:
 
 ```(xml)
@@ -249,7 +250,9 @@ public static void Main(string[] args)
   <logger name="Name.Space.*" writeTo="f3,f4" />
   ```
 
-### Layouts and Layout Renderes
+- When setting up your rules, consider that the Aspnet Core framework uses the same logging abstractions, so you might end up catching framework debug/trace messages if you're not careful.
+
+### Layouts and Layout Renderers
 - Layouts: texts with embedded tags delimited by ${ and }. 
 - Layout Renderers: Said tags.  They can be used to insert pieces of contextual information into the text.
 - These are specified in the targets.
@@ -273,7 +276,4 @@ public static void Main(string[] args)
   - internalLogFile="/var/log/musicalweb/internal-nlog.txt"
   - internalLogToConsole="true"
   - internalLogIncludeTimestamp="true"
-  
 
-
-- The Aspnet Core framework uses the same logging API, so whatever providers you load, it may also use them
