@@ -6,13 +6,13 @@ Reusable Angular Libraries
     - have multiple versions
 - Todo: An alternative worthy of greater research is the *monorepo*
 
-## Overall approach: 
+## Approach 1: 
 - Put the code in npm projects  
     - Use local npm modules, versioned with git-flow
 - No need to create a separate angular module(which appears more complicated for obv reasons)
     - you'll import these dependencies in statically and associate them with a 'common' module in your angular project
             
-## Creating Package
+### Creating Package
 - [good source](https://www.twilio.com/blog/2017/06/writing-a-node-module-in-typescript.html)
 - `mkdir my-package`
 - `cd my-package`
@@ -81,7 +81,7 @@ Reusable Angular Libraries
 "types": "dist/index.d.ts",
 ```
 
-## Consuming the Package (Locally)
+### Consuming the Package (Locally)
 - [good source](https://medium.com/@arnaudrinquin/build-modular-application-with-npm-local-modules-dfc5ff047bcc)
 - cd to root directory of consumer app and run `npm install --save ./path_to_my/custom_module`
     - to refresh the build:
@@ -97,7 +97,7 @@ Reusable Angular Libraries
 - Note: there are some webpack warnings- i think this might relate to the fact that a symbolic link is being used to link to the local module
     - might be worth testing
 
-### Basic DI Setup
+#### Basic DI Setup
 - It's a 2 step process:
     1. Assign the node_module to the (common) angular module
     2. Inject the (common) angular module into the root module.
@@ -148,7 +148,7 @@ export class CommonModule {
 export class AppModule { }
 ```
 
-### Provider Based DI Setup
+#### Provider Based DI Setup
 - You define a provider when you want your service to be injected polymorphically or if it requires certain values injected to it's constructor.
 
 ```(typescript)    
@@ -169,3 +169,32 @@ export let LogginsServiceProvider = {
 ```
 
 - In the common.module.ts, change the provider reference 'LogginsService' to 'LogginsServiceProvider' 
+
+### Best Practices
+- Include the version in the path of you shared libraries, since you don't specify version in the package.json
+- Put the shared libraries on a network share, so that you can rebuild any client projects without having to change paths.
+    - Test this
+
+## Approach 2
+- Similar to approach 1, but use private modules published on npmjs
+- Why?
+     - Using Git + local modules as a package source is not great when you need to manage multiple versions.
+        - EG multiple versions based on dependencies
+
+### Variation: Publish to TFS
+- see steps [here](https://docs.microsoft.com/en-us/vsts/package/npm/npmrc?view=tfs-2018)
+
+### Creating the Package
+- You will use a private package, described [here](https://docs.npmjs.com/private-modules/intro)
+- Note that, for free, you can identify collaborators who will be able to see your package.
+
+### Consuming the Package
+- Follows the same procedure as Approach 1
+
+## Approach 3
+- All shared packages live in a monorepo.
+- You have a build process (drivers and tests) which dump the compiled output to a folder
+- You symlink to that folder from within your client project
+
+
+
