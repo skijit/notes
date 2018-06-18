@@ -17,6 +17,8 @@ JavaScript Gotchas and Misc Notes
 ### let vs var
 - ```let``` declared variables are not visible before the are declared in their block, wherease ```var``` declared
 - ```var``` declared variables are visible in their entire *enclosing function*
+    - sometimes called 'hoisting' or fwd referencing
+
 
     ```(javascript)
     function f1() {
@@ -40,8 +42,100 @@ JavaScript Gotchas and Misc Notes
     };
     ```
 
+## Useful Array Methods
+- `push()`
+- `pop()`
+- `splice()`
 
 ## This
+- *this* is the *function context*
+- meaning depends on how the function is called:
+    - `doFunction()`
+        - this => window
+    - `myObj.myMethod()`
+        - this => `myObj`
+    - `new callAsCtor()`
+        - this => a new empty object
+        - the ctor will, by default, return *this*
+        - one of the primary reasons to use *new* is to avoid attaching things to the window object
+    - `myFunc.apply(myNewContext, [myparm1, myparm2])`
+        - this => `myNewContext`
+    - `myFunc.call(myNewContext, myparm1, myparm2)`
+        - this => `myNewContext`
+
+### Fat Arrow and Lexical Scoping of this
+- Fat arrow functions use lexical scoping which looks at code blocks in determining this, rather than how the function is called.
+
+```(javascript)
+let myObj = function() {
+    this.nums = [0,1,2,3,5,6,7,8,9,10];
+    this.fives = [];
+        
+    //variation 1 using 'self' convention
+    this.popFivesVar1 =  function() {
+        var self = this;
+        self.fives = []
+        this.nums.forEach(function(v) {
+            //this will refer to window bc the anon function will be called 'bare'
+
+            if (v % 5 === 0) {
+                self.fives.push(v);
+            }
+        });
+    };
+
+    //variation 2 using bind()
+    this.popFivesVar2 = function() {
+        this.fives = [];
+        this.nums.forEach(function (v) {
+            //this will refer to myObj bc the anon function passed in has been called w bind()
+            
+            if (v % 5 === 0)
+                this.fives.push(v);
+        }.bind(this));
+    };
+        
+    //fat arrow uses the lexical this    
+    this.popFivesVar3 = function() {
+        this.fives = [];
+        this.nums.forEach(v => {
+            //this will refer to myObj bc the fat arrow uses lexical this
+
+            if (v % 5 === 0) 
+                this.fives.push(v);
+        })
+
+    }
+        
+};
+
+let m = new myObj();
+m.popFivesVar1();
+console.log(m.fives)
+m.popFivesVar2();
+console.log(m.fives)
+m.popFivesVar3();
+console.log(m.fives)
+```
+
+- Bind() will create a new function based on it's original, setting the function context as specified.
+
+```(javascript)
+var module = {
+  x: 42,
+  getX: function() {
+    return this.x;
+  }
+}
+
+var unboundGetX = module.getX;
+console.log(unboundGetX()); // The function gets invoked at the global scope
+// expected output: undefined
+
+var boundGetX = unboundGetX.bind(module);
+console.log(boundGetX());
+// expected output: 42
+```
 
 ## for..of vs for..in
 - for..of:
@@ -51,6 +145,7 @@ JavaScript Gotchas and Misc Notes
     - Lets you loop of the enumerable property names of an object
     - Will include properties inherited via the prototype chain.  
         - To filter them out, use hasOwnProperty()
+    
     ```(javascript)
     let triangle = {a:1, b:2, c:3};
 
@@ -69,9 +164,9 @@ JavaScript Gotchas and Misc Notes
     }
 
     // Output:
-    // "obj.color = red"```
-        
-        
+    // "obj.color = red"
+    ```
+                
 ## "use strict"
 - See [John Resig's post](http://ejohn.org/blog/ecmascript-5-strict-mode-json-and-more/)
 - Also [this](http://www.2ality.com/2011/10/strict-mode-hatred.html) post is useful
