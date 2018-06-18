@@ -42,6 +42,13 @@ JavaScript Gotchas and Misc Notes
     };
     ```
 
+### let vs const
+- const are also block scoped
+- primitives:
+    - const can only get its value from initialization
+- objects:
+    - you can change the value, but not the reference
+
 ## Useful Array Methods
 - `push()`
 - `pop()`
@@ -208,7 +215,7 @@ null = 'value' // ReferenceError
 undefined = 'value' // 'value'
 ```
 
-### Equality operators
+## Equality operators
 - The `===` operator behaves identically to the `==` operator, except that no type conversion is done.
     - The types must be the same to be considered equal.
 - The `==` uses type coersion to evaluate. 
@@ -254,18 +261,77 @@ e === f           // true
 
 - **Best Practice**: always use the `===` and `!==` operators
 
-### Apply, Call, Bind
-- Recall in javascript, all functions are objects
-- Apply, Call, and Bind are 3 methods which are available to all function objects
-- **Bind**
-    - Bind is used primarily to set the `this` value in a function
-    - Depending on how the function is called, the `this` value in the function might not be what you expect it.  That unexpectedness can cause problems.
-    - 
+## Prototype Inheritance
+- [interesting ref](https://steve-yegge.blogspot.com/2008/10/universal-design-pattern.html)
+
+## Closures
+- When you have a function defined in another function, then parent scope is retained by the inner function, as defacto private state.
+
+```(javascript)
+let obj = function() {
+    let i = 0; //this becomes defacto private
+
+    return {
+        //this syntax is ECMA Script 6
+        setI(k) {
+            i = k;
+        },
+        getI() {
+            return i;
+        }
+    };
+}
+
+let x = obj();
+x.setI(2);
+console.log(x.getI());
+```
+
+- Another use case is for function factories:
+
+```(javascript)
+function dwightJob(title) {
+    return function(prefix) {
+        return prefix + ' ' + title;
+    };
+}
+
+var sales = dwightJob('Salesman');
+var manager = dwightJob('Manager');
+
+alert(sales('Top'));  // Top Salesman
+alert(manager('Assistant to the Regional')); // Assistant to the Regional Manager
+alert(manager('Regional')); // Regional Manager
+```
+
+- Another user case is 'modules'.  
+
+```(javascript)
+var Calculator = function () {
+    //various innter state fields
+
+    function _add(x, y) {
+        return x + y;
+    }
+
+    function _subtract (x, y) {
+        return x - y;
+    }
+
+     return {
+        init: init,
+        add: _add,
+        subtract: _subtract
+    };
+}
+
+Calculator.init();
+```
+
+## SetTimeouts
+
+- TODO
 
 
----------------------------
-**TODO**  
-- [this](http://stackoverflow.com/questions/2485423/is-using-var-to-declare-variables-optional) javascript scoping page
-- more about closures and this ambiguities
 
 
