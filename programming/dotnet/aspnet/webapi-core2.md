@@ -2,6 +2,11 @@ Web API Notes
 =============
 
 - Misc AspNet Core 2 Notes on Web API
+- [2.1 Update Notes / Synopsis](https://docs.microsoft.com/en-us/aspnet/core/web-api/?view=aspnetcore-2.1)
+- [AspNetCore WebAPI video](https://www.youtube.com/watch?v=aIkpVzqLuhA)
+- [Another decent Tutorial](https://www.youtube.com/watch?v=e2qZvabmSvo)
+- [Http methods](https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html)
+- [PluralSight Class](https://app.pluralsight.com/library/courses/asp-dotnet-core-api-building-first/table-of-contents)
 
 ## HTTP Concepts
 - Application layer protocol
@@ -24,7 +29,7 @@ Web API Notes
       - non-unique values which could return the same content
       - `/api/homes/search/?q={searchTerm}`
     - Headers:
-      - There are tons- here are a few
+      - There are tons- here are a few:
       - `Accept`: Tells the server the prefered media type(s) of the response.
       - `Accept-Encoding`: TODO
       - `Connection`: TODO
@@ -38,9 +43,9 @@ Web API Notes
   - Headers:
     - name, value pairs
     - Describes the content of the body
-  - blank line
+  - Blank Line
   - Body
-    - Huge range of types available for the body:
+    - Can be anything.  Content types include:    
       - json
       - xml
       - images 
@@ -82,27 +87,31 @@ Web API Notes
   - sometimes, when you have a particular *type* of data modelled with the json responses, you might want to define a custom content type such as `application/myspecialtype+json`.
   - if you support multiple versions of your api, you can encode the version of the custom content type to inform clients
     - alternately, the clients could point at a particular version path. 
+
 ### Verbs
 - Background
   - There are a variety of HTTP Verbs (aka Methods), but these are the most common for a Web API scenario...
   - The particular way in which these verbs correspond to CRUD operations depends on how you set up your API.  (see details below)
   - The particular status codes you return in your responses also depend on how you set up your API.
-  - [src](https://stackoverflow.com/questions/6203231/which-http-methods-match-up-to-which-crud-methods)
-  - [src](http://restcookbook.com/HTTP%20Methods/put-vs-post/)
+  - [src1](https://stackoverflow.com/questions/6203231/which-http-methods-match-up-to-which-crud-methods)
+  - [src2](http://restcookbook.com/HTTP%20Methods/put-vs-post/)
 - **GET**
   - Use cases:
     - Access a URI without altering it
     - CRUD: Read
   - Appropriate response:
-    - TODO
+    - 200 : Ok
 - **POST**
   - Use cases:
     - Creating a record without knowing what the resulting URI will be
     - If you create a new record which is exposed by an ID determined by back-end logic (e.g. `/api/menuItems/{id}`)    
     - CRUD: Create
   - Appropriate response:
-    - TODO
-      - usually has Location header?
+    - If the resulting data is reachable via a URI:
+      - 201 : Created + set the Location Header
+    - If the resulting data is **NOT** reachable via a URI:
+      - 200 : Ok
+      - 204 : No Content
 - **PUT**
   - Use cases:
     - You're creating a record such that you know the URI it will be exposed by
@@ -110,19 +119,24 @@ Web API Notes
     - You're updating a record completely
     - CRUD: Create/* or Update/*   
   - Appropriate response:
-    - TODO
+    - 200 : Ok
+    - 204 : No Content
 - **DELETE**=remove a resource
   - Use cases:
     - You're deleting a record
     - CRUD: Delete
   - Appropriate response:
-    - TODO
+    - 200 : Ok
+    - 204 : No Content
+    - 202 : Accepted 
+      - use 202 if you're marking the resource for deletion but perhaps haven't acted on it yet
 - **PATCH**
   - Use cases:
     - You're partially updating a resouce (i.e. only some fields)
     - CRUD: Update
   - Appropriate response:
-    - TODO
+    - 200 : Ok
+    - 204 : No Content
 - Idempotent and Safe Methods
   - [src](https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html)
   - [src](https://codeahoy.com/2016/06/30/idempotent-and-safe-http-methods-why-do-they-matter/)
@@ -160,146 +174,96 @@ Web API Notes
     - [analysis](https://philsturgeon.uk/api/2016/05/03/put-vs-patch-vs-json-patch/)
   - beside resulting in lower payload (sometimes), this can avoid writing back data which has become stale on the client, but not explicitly changed
 
-
-
 ## Asp.Net Core Web API
-  - About
-    - Release info
-    - Deployments
-    - Changes in v2?    
-  - Design
-    - Main
-    - Middleware
-    - Misc
-  - Request
-    - Verb and Route Support    
-    - Model Binding    
-      - Input Formatting
-        - Consumes attributes 
-        - Parameter attributes (fromBody, etc)    
-  - Response
-    - IActionResults
-      - IActionResult - Verb mapping
-    - Output Formatting
-      - Content Type negotiation
-      - Produces attribute
-    - Validation    
-    - Patch
-  - Extensions
-    - Swagger / Swashbuckle
 
+### About
+- Release info
+- Deployments
+- Changes in v2?    
 
+### Static Design
+- Main
+- DI Setup `ConfigureServices()`
+  - Remember to : `AddMvc()`    
+- Middleware
+  - Remember to: `UseMvc()`
+- Controllers
+  - webapi controllers derive from `ControllerBase`
+  - for MVC, you derive from `Controller`, which has a bunch more stuff
+  - `ControllerBase` is more streamlined and ideal for webapi
+  - usual convention / pref is to put all your controllers in one folder
 
-https://www.youtube.com/watch?v=aIkpVzqLuhA
-
-HTTP Refresher
-
-
-- Handling HTTP requests
+### Runtime Design
   - kestrel listens for http requests
   - middleware pipeline is invoked for each request
   - mvc routes requests to a controller and action
   - responses flow back down the middleware pipeline
-- webapi controllers derive from ControllerBase
-  - for MVC, you derive from Controller, which has a bunch more stuff
-  - ControllerBase is more streamlined and ideal for webapi
-- if you start with an empty project, here's what you do:
-  - in ConfigureServices
-    - AddMvc()    
-  - in COnfigure
-    - UseMvc()
-  - put all your controllers in a folder (a preference)
-- action methods will be decorated with the verb and the action parameters will be decorated with where in the request that data comes from
-- TODO: how do verb semantics match with sql ideas
-- routing is done with attributes
-  - you can also specify multiple verbs to work with an action method - use AcceptverbsAttribute
+
+### Request
+
+#### Verb and Route Support
+- Usually based on attributes in the Action Method  
+- Routing
+  - Also possible to specify multiple verbs to work with an action method - use `AcceptverbsAttribute`
   - route attributes can go on the controller and the action methods
-    - the class will be prepended
+    - the route will be prepended 
   - route templates
-    - capture values: api/orders/{id}
-    - route tokens: api/[controller]
+    - capture values: `api/orders/{id}`
+    - route tokens: `api/[controller]`
       - you can use *controller*, *action*, *areaname*
-    - optional: {id?}
-    - default: {id=latest}
-    - constraints: {id:int}
-- model binding
-  - httpcontext gives you access to everything, but mvc gives you features that can make it strongly typed (ie model binding + validation)
-  - there are some precedence rules for model binding sources (ie route vs query string... usually route takes precedence)
-  - you can assign validation properties on model classes
-  - validation failures should return 4** error codes .  maybe bad request.
-- Action Results
-  - IActionResult or Task<IActionResult>
-    - always return these because you might return different helper methods eg BadReqest, OK, etc
-  - Ok() : 200
+    - optional: `{id?}`
+    - default: `{id=latest}`
+    - constraints: `{id:int}`
+
+#### Model Binding
+- General
+  - `HttpContext` gives you access to everything, but MVC gives you features that can make it strongly typed (ie model binding + validation)
+  - there are some precedence rules for model binding sources (ie route vs query string... usually route takes precedence)  
+- Input Formatting
+  - **Consumes** attributes 
+
+  ```(csharp)
+  [Consumes("application/json")]
+  ```
+    - the request only consumes requests where the content type is `application/json`
+  - Parameter attributes (fromBody, etc)
+- AddMvc(options => {...}) lets you specify input/output formatters, and there are also extension methods
+  - example: in ConfigureServices(), the following will keep the same casing rules for Json as the C# model classes (bc default is to camelCase them)
+
+  ```(csharp)
+  services.AddMvc().AddJsonOptions(o=> {
+    if (o.SerializerSettings.ContractResolver != null)
+    {
+      var castedResolver = o.SerializerSettings.ContractResolver as DefaultContractResolver;
+      castedResolver.NamingStrategy = null; 
+    }
+  })
+  ```
+
+### Response
+
+#### IActionResults
+- Action methods should just return IActionResult or Task<IActionResult>, bc then you can use all the other HTTP IActionResult helper methods.
+- IActionResults
+  - `Ok()` : 200
     - you can use Ok() to return Json      
-  - BadRequest(ModelState) : 4xx
-  - CreatedAtAction("Get", new {id = valud.Id}, value)
+  - `BadRequest(ModelState)` : 400
+  - `CreatedAtAction("Get", new {id = valud.Id}, value)` : 201
     - this return value is the action and values that would be used to create a new link to the resource
     - "get" is the name of the method, id is the route or other action parameter, and value is the full model (just for further info)
     - routing tables will pull this info and create the appropriate link
-  - Content("hello") : returns text
-  - Json(object) : return as Json    
-  - NoContent() : HTTP 204 - when there's no response but everything is ok.  not sure about the difference between Ok()
-    - see notes here:
-      https://stackoverflow.com/questions/2342579/http-status-code-for-update-and-delete
-
-  - Action methods should just return IActionResult
+  - `NoContent()` : 204 
+    - when there's no response but everything is ok.
+    - [discussion of when this is appropriate](https://stackoverflow.com/questions/2342579/http-status-code-for-update-and-delete)
+- Other return types:
+  - `ContentResult.Content("hello")`: returns text
+  - `JsonResult.Json("somejsonhere")`: returns json
+  - [notes](https://docs.microsoft.com/en-us/aspnet/core/web-api/advanced/formatting?view=aspnetcore-2.1)
   
-  - handling the json patch document on the BE
-
-  ```(csharp)
-  [HttpPatch("{cityId}/pointsofinterest/{id})]
-  public IActionResult PartiallyUpdatePointOfInterest(int cityId, int id,
-    [FromBody] JsonPatchDocument<PointOfInterestForUpdateDto> patchDoc)
-  { 
-    if (patchDoc == null)
-      return BadRequest();
-    
-    var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == cityId);
-    if (city == null)
-      return NotFound();
-
-    var poitnOfInterestFromStore = city.PointsOfInterest.FirstOrDefault(c => c.Id == id);
-    if (pointsOfInterestFromStore == null)
-      return NotFound();
-
-    //map dtos
-    var pointOfInterstToPatch =
-      new PointOfInterestForUpdateDto()
-      {
-        Name = pointOfInterestFromStore.Name,
-        Description = pointOfInterestFromStore.Description
-      };
-
-    //apply changes
-    patchDoc.ApplyTo(pointOfInterestToPatch, ModelState);
-
-    if (!ModelState.IsValid)
-      return BadRequest(ModelState);
-
-    pointOfInterestFromStore.Name = pointOfInterestToPatch.Name;
-    pointOfInterestFromStore.Description = pointOfInterestToPatch.Description;
-
-    return NoContent();
-
-  }
-  ```
-
-- Validation
-  - Check modelstate and return BadRequest(ModelState) if necessary
-    - this will return info about the validation issue
-  - also see TryValidateModel()
-
-- Formatting
-  - usually use json
-  - but there are tons of formats you can use - just specify in content-type header
-  - input formatters: handle request body formats
-    - you need to use [FromBody] is you want them to work
-  - output formatters: 
-    - uses content negotiation: the return content-type is actually requested by the client
-      - request format is specifed with the on accept header
-      - this is very useful for a public API
-    - you can constrain the formats using Produces and Consumes attributes
+#### Output Formatting
+- Content Type negotiation
+- **Produces** attribute
+  - you can constrain the formats using Produces attributes
 
       ```(csharp)
       [Produces("application/json, Type=typeof(MyModel))]      
@@ -307,12 +271,8 @@ HTTP Refresher
 
       - So this response will only by json
 
-      ```(csharp)
-      [Consumes("application/json")]
-      ```
-      - the request only consumes requests where the content type is `application/json`
-
-     - you can also do this in the ConfigureServices.  this will allow your API to also return Xml, if spec'ed by the client in the Accept header
+- Also possible in  `ConfigureServices()`.  
+  - This will allow your API to also return Xml, if spec'ed by the client in the Accept header
 
     ```(csharp)
     services.AddMvc()
@@ -320,23 +280,62 @@ HTTP Refresher
               new XmlDataContractSerializerOutputFormatter()
             ));
     ``` 
-    - one reason for using a special content type is versioning... see [here](https://stackoverflow.com/questions/13292313/is-using-custom-json-content-types-a-good-idea)
-  - media type and content type are basically the same, but the header is called content type
-  - AddMvc(options => {...}) lets you specify input/output formatters, and there are also extension methods
-    - example: in ConfigureServices(), the following will keep the same casing rules for Json as the C# model classes (bc default is to camelCase them)
-
-    ```(csharp)
-    services.AddMvc().AddJsonOptions(o=> {
-      if (o.SerializerSettings.ContractResolver != null)
-      {
-        var castedResolver = o.SerializerSettings.ContractResolver as DefaultContractResolver;
-        castedResolver.NamingStrategy = null; 
-      }
-    })
-    ```
 
 
-https://app.pluralsight.com/library/courses/asp-dotnet-core-api-building-first/table-of-contents
+#### Validation
+- you can assign validation properties on model classes
+- Check `ModelState` and `return BadRequest(ModelState)` if necessary
+  - this will return info about the validation issue
+  - also see `TryValidateModel()`
+
+#### Patch
+- Here's how to handle the a Json Patch document on the BE
+
+```(csharp)
+[HttpPatch("{cityId}/pointsofinterest/{id})]
+public IActionResult PartiallyUpdatePointOfInterest(int cityId, int id,
+  [FromBody] JsonPatchDocument<PointOfInterestForUpdateDto> patchDoc)
+{ 
+  if (patchDoc == null)
+    return BadRequest();
+  
+  var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == cityId);
+  if (city == null)
+    return NotFound();
+
+  var poitnOfInterestFromStore = city.PointsOfInterest.FirstOrDefault(c => c.Id == id);
+  if (pointsOfInterestFromStore == null)
+    return NotFound();
+
+  //map dtos
+  var pointOfInterstToPatch =
+    new PointOfInterestForUpdateDto()
+    {
+      Name = pointOfInterestFromStore.Name,
+      Description = pointOfInterestFromStore.Description
+    };
+
+  //apply changes
+  patchDoc.ApplyTo(pointOfInterestToPatch, ModelState);
+
+  if (!ModelState.IsValid)
+    return BadRequest(ModelState);
+
+  pointOfInterestFromStore.Name = pointOfInterestToPatch.Name;
+  pointOfInterestFromStore.Description = pointOfInterestToPatch.Description;
+
+  return NoContent();
+
+}
+```
+
+### Extensions
+- Swagger / Swashbuckle
+
+
+
+
+
 - no longer using System.Web
   - much more granular, based on NuGet packages
 - can run on full .NEt framework or .Net Core
@@ -395,7 +394,7 @@ https://app.pluralsight.com/library/courses/asp-dotnet-core-api-building-first/t
 - Extra validation: call ModelState.AddModelError("FieldName", "Your Custom Validation Msg") when you spot a validation fail
   - This lets you keep using ModelState for all validation concerns - not just what is conveniently attribute based
 
-https://www.youtube.com/watch?v=e2qZvabmSvo
+
 - swagger is the way to go for testing out your api - start at 21.23
   - swagger is just a metadata format for describing apis
   - swashbuckle is the nuget package with which you can add swagger and it adds a nice testable front-end
