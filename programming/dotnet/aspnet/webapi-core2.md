@@ -177,17 +177,51 @@ Web API Notes
 ## Asp.Net Core Web API
 
 ### About
-- Release info
-- Deployments
-- Changes in v2?    
+- no longer using System.Web
+  - much more granular, based on NuGet packages
+- can run on full .NET FX or .Net Core
+- .Net core
+  - modular version of .NETFX
+  - susbset of main FX
+  - portable
+  - uses .NET standard
+- Has LTS (Long term support) releases vs Current releases
+- Core 2 adds: 
+  - Metapackage:
+    - Microsoft.AspNetCore.All metapackage
+    - referenced by default for new AspNet Core 2.0 applications 
+    - includes all asp.net core, EF core, and some key 3rd party packages
+  - runtime Store
+    - runtime store is a location on disk containing these packages
+    - like the gac
+    - must be set up when you install .netcore 2
+    - depends on whether you want the self-contained or framework dependent deployments
 
 ### Static Design
-- Main
-- DI Setup `ConfigureServices()`
-  - Remember to : `AddMvc()`    
-- Middleware
+- **Main()**
+  - Main() creates the WebHostBuilder
+  - Sets `ContentRoot`:
+    - ContentRoot is base path to any content used by the application including views and web content
+    - by default: application base path for executable
+      - this might vary for different platform builds
+    - it is not the same as the webroot (wwwroot)
+  - Don't remove `BuildWebHost()` - can lead to errors when using EF Core Migrations
+- **ConfigureServices()**
+  - Sets up DI
+  - Remember to : `AddMvc()`   
+- **Configure()**
+  - set up you middleware
+  - Middleware order matters
+    - each step in middleware decides whether to pass request on for further middleware
+    - ex: authentication fail, will not pass it farther in the pipeline for processing
   - Remember to: `UseMvc()`
-- Controllers
+  - ever wonder why Startup doesn't implement an Interface?
+    - because ConfigureServices sets up DI and runs before Configure which sets up the middleware
+    - Configure should be DI'ed with the specified services, but there's no way to add all those arbitrary service parameters into a single signature  
+  - use `app.UseStatusCodePages()`
+    - shows you the status code in the response payload (not just in the header)    
+
+- **Controllers**
   - webapi controllers derive from `ControllerBase`
   - for MVC, you derive from `Controller`, which has a bunch more stuff
   - `ControllerBase` is more streamlined and ideal for webapi
@@ -202,7 +236,8 @@ Web API Notes
 ### Request
 
 #### Verb and Route Support
-- Usually based on attributes in the Action Method  
+- Usually based on attributes in the Action Method 
+  - With MVC, you might use convention-based routing (with routing table), but with WebAPI, the preferred method is attribute-based routing.
 - Routing
   - Also possible to specify multiple verbs to work with an action method - use `AcceptverbsAttribute`
   - route attributes can go on the controller and the action methods
@@ -284,9 +319,15 @@ Web API Notes
 
 #### Validation
 - you can assign validation properties on model classes
+- Domain Model or DTO objects can have fields which, for reasons of Normalization, etc aren't in the Data Model
+  - Calculated fields
+  - Concatenate fields
+  - etc.
 - Check `ModelState` and `return BadRequest(ModelState)` if necessary
   - this will return info about the validation issue
   - also see `TryValidateModel()`
+- Extra validation: call ModelState.AddModelError("FieldName", "Your Custom Validation Msg") when you spot a validation fail
+  - This lets you keep using ModelState for all validation concerns - not just what is conveniently attribute based
 
 #### Patch
 - Here's how to handle the a Json Patch document on the BE
@@ -330,79 +371,15 @@ public IActionResult PartiallyUpdatePointOfInterest(int cityId, int id,
 ```
 
 ### Extensions
-- Swagger / Swashbuckle
-
-
-
-
-
-- no longer using System.Web
-  - much more granular, based on NuGet packages
-- can run on full .NEt framework or .Net Core
-- .Net core
-  - modular version of .net frameowkr
-  - susbset of main frainwork
-  - portable
-  - uses .NET standard
- - LTS (Long term support) releases vs Current releases
-- Main() creates the WebHostBuilder
-- ContentRoot is base path to any content used by the application including views and web content
-  - by default: application base path for executable
-    - this might vary for different platform builds
-  - it is not the same as the webroot (wwwroot)
-- You don't remove BuildWebHost() - can lead to errors when using EF Core Migrations
-- Startup class
-  - called the Entry Point
-  - ConfigureServices
-    - used for DI
-  - Configure
-    - set up you middleware
-  - ever wonder why Startup doesn't implement an Interface?
-    - because ConfigureServices sets up DI and runs before Configure which sets up the middleware
-    - Configure should be DI'ed with the specified services, but there's no way to add all those arbitrary service parameters into a single signature
-- Middleware order matters
-  - each step in middleware decides whether to pass request on for further middleware
-  - authentication fail, will not pass it farther in the pipeline for processing
-- WebAPI uses the MVC middleware
-  - middleware: Use*()
-  - DI: Add*()
-- Core 2 adds: 
-  - Metapackage:
-    - Microsoft.AspNetCore.All metapackage
-    - referenced by default for new AspNet Core 2.0 applications 
-    - includes all asp.net core, EF core, and some key 3rd party packages
-  - runtime Store
-    - runtime store is a location on disk containing these packages
-    - like the gac
-    - must be set up when you install .netcore 2
-    - depends on whether you want the self-contained or framework dependent deployments
-- convention based vs attribute based routing
-  - convention-based refers to the routing table you build
-  - attribute routing is using attributes
-    - this is the recommended approach for web api's
-- Domain Model or DTO objects can have fields which, for reasons of Normalization, etc aren't in the Data Model
-  - Calculated fields
-  - Concatenate fields
-  - etc.
-- returning status codes
+- **Swagger / Swashbuckle**
+  - swagger is the way to go for testing out your api
+    - swagger is just a metadata format for describing apis
+    - swashbuckle is the nuget package with which you can add swagger and it adds a nice testable front-end
+  - in `ConfigureServices()`
+    - `services.AddSwaggerGen()`
+  - in `Configure()`
+    - `app.UseSwaggerGen()`
+    - `app.UseSwaggerUi()`
+  - wonder if you can make swagger hidden or change theming
+  - it also lets you explore the returned model classes
   
-  - app.UseStatusCodePages()
-    - shows you the status code in the response payload (not just in the header)    
-
-
-## Resource Manipulation 
-- Extra validation: call ModelState.AddModelError("FieldName", "Your Custom Validation Msg") when you spot a validation fail
-  - This lets you keep using ModelState for all validation concerns - not just what is conveniently attribute based
-
-
-- swagger is the way to go for testing out your api - start at 21.23
-  - swagger is just a metadata format for describing apis
-  - swashbuckle is the nuget package with which you can add swagger and it adds a nice testable front-end
-- in ConfigureServices()
-  - services.AddSwaggerGen()
-- in Configure()
-  - app.UseSwaggerGen()
-  - app.UseSwaggerUi()
-- wonder if you can make swagger hidden or change theming
-- it also lets you explore the returned model classes
-
