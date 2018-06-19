@@ -472,7 +472,7 @@ export class AppComponent {
     - Two Way Binding
         - `[(<DirectiveName>)]="<ComponentProperty>"`   
 - Template Expression vs Template Statements
-    - Short Version: Template Statements can change stuf (side-effects), Template Expressions can't
+    - Short Version: Template Statements can change stuff (side-effects), Template Expressions can't
     - Template Expressions: can't assign, new up, chain statements with `;`, increment, etc.
     - Template Statements: like template expressions but you can do assignment and chain statements with `;`
     - Execution context for both: the current component instance.  You cannot reference items in the global namespace.

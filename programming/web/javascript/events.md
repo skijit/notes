@@ -9,7 +9,7 @@ JavaScript Events
 
 ## Event System Components
 - The event system provides a mechanism for Web API objects (e.g. DOM) to generate messages to be handled (usually) asynchronously so that they don't block the UI thread
-    - Events can be caused by interacation or other browser, Web API events
+    - Events can be caused by interaction or other browser, Web API events
 - The JavaScript Event system involves 3 types of components
     1. **Event Target**        
         - The object that *receives* the event
