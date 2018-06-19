@@ -263,6 +263,39 @@ e === f           // true
 
 ## Prototype Inheritance
 - [interesting ref](https://steve-yegge.blogspot.com/2008/10/universal-design-pattern.html)
+- [basic notes](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Inheritance_and_the_prototype_chain)
+- each object has a private property referring to it's prototype object
+- getters and setters for prototypes:
+    - `Object.getPrototypeOf(myObj)`
+    - `Object.setPrototypeOf(myObj)`
+    - the old way involved referring to each object's `__proto__` property.
+- `y instanceof Array`: returns true if Array appears in y's prototype chain
+- if an object was created with a constructor, the prototype of an object constructed by it will refer to the 
+- to add a function to make it available to all instances of a type, you can add it to the prototype function as such:
+
+```(javascript)
+function Person(_name) {
+    this.name = _name;
+}
+Person.prototpe.sayHello = function() { return `Hi, my name is ${name}`; }
+```
+
+- to inherit, reference a the parent ctor in the child ctor, using `call`:
+```(javascript)
+function Player(_name, _position) {
+    Person.call(this, _name);
+    this.position = _position;
+}
+```
+
+    - however, to have access to the prototype's full set of properties and methods, you need to:
+
+    ```(javascript)
+    Player.prototype = Object.create(Person);
+    ```
+
+- when you have an object inheriting from another, they inherit the fields/methods, but not the actual state values.
+    - those become local.
 
 ## Closures
 - When you have a function defined in another function, then parent scope is retained by the inner function, as defacto private state.
