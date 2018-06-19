@@ -240,6 +240,7 @@ ES6 Features
     gen.next('world'); // Second yield```
     
     - Bidirectional Communication
+    
     ```(javascript)
     function* doSomething() {
         // This sends 'hello' to the caller and pauses execution
@@ -264,13 +265,15 @@ ES6 Features
 
     // This resumes execution after the second yield but there is 
     // nothing more to execute
-    gen2.next('The end.');```
+    gen2.next('The end.');
+    ```
     
     - Note that you never pass in parameters to the first next() because there is no yield to pull those values in.
         - (bc the first yield is only reached at the END of the first next() - not the beginning)
     
 4.  Use yield as a generator function, yield\*, to yield other iterables (including generators)
     - Yielding an array
+    
     ```(javascript)
     function* doSomething() {
         yield* ['hello', 'world'];
@@ -279,9 +282,11 @@ ES6 Features
     var gen = doSomething();
 
     console.log(gen.next().value); // Prints 'hello'
-    console.log(gen.next().value); // Prints 'world'```
+    console.log(gen.next().value); // Prints 'world'
+    ```
     
     - Yielding another generator
+    
     ```(javascript)
     function* generatorFoo() {
         yield 1;
@@ -300,10 +305,12 @@ ES6 Features
     // the values of another generator
     console.log(genObj2.next().value); // Prints 1
     console.log(genObj2.next().value); // Prints 2
-    console.log(genObj2.next().value); // Prints I am bar!```
+    console.log(genObj2.next().value); // Prints I am bar!
+    ```
 
 5. Since a generator is an iterable, you can use other methods to iterate over it.
     - For..in : 
+
     ```(javascript)
     function* generator () {
         yield 'p'
@@ -330,6 +337,7 @@ ES6 Features
     ```
     
     - Spread (...) :
+
     ```(javascript)
     function* generator () {
         yield 'p'
@@ -413,21 +421,25 @@ stitch together sequences (with branches) of sync and async actions using the ca
         - Could be an object returned by the handler
         - Could be another Promise object wrapping
     - Since ```then``` and ```catch``` are all returning Promises (wrapping different values), you can chain them into a sequence.  
+    
     ```(javascript)
     doTask  
         .then((rv) => { ... }, (errVal) => { ... })
         .then((rv) => { ... }, (errVal) => { ... })
         .catch((errVal) => { ... };
     ```
+
 - In the previous example any of the handler bodies could involve sync or async actions.
 - The reason that sync and async actions can be chained seamlessly like this is because Promise wraps a *value* that could be known (in which case the Promise settles quickly) or yet-to-be-determined (in which case the Promise will be initially *pending* ). 
 
 ### Detailed Design
 - Things that return Promises:
     - Promise constructor
+        
         ```(javascript)
         new Promise((resolve, reject) => { ... })
         ```
+
         - The only parameter passed to the constructor is a function. (called the 'executor')
         - It has a body and 2 parameters:  
             - Function `body ({ ... })`:
@@ -444,9 +456,11 @@ stitch together sequences (with branches) of sync and async actions using the ca
                     - invoked in the function body to settle the Promise as rejected.
                     - You can pass a value to reject like `reject(err.mesg)`
     - then()
+
         ```(javascript)
         then(function(value) { ... }, function(value) { ... })
         ```
+
         - 1st parm: fulfilled
             - type: function  or null
             - param: value associated with the promise (from calling resolve(value))
@@ -459,9 +473,11 @@ stitch together sequences (with branches) of sync and async actions using the ca
             - executed whenever it's associate Promise is rejected
             - return value is a new Promise - same scenario as with parm 1
     - catch()
+
         ```(javascript)
         catch(function(data) = { ... })
         ```
+
         - 1 parameter: rejected
             - type: function
             - param: err mesg associated with the promise when being rejected (from calling rejected(value))
@@ -489,6 +505,7 @@ stitch together sequences (with branches) of sync and async actions using the ca
         - if the value is a promise, then the returned value is that new Promise (presumably, unsettled)
 - You can resolve a promise with another promise.
     - Here p2 is only totally resolved once p1 is settled, but since p1 is a rejection, only the error handler will be called. (not the .then())
+    
     ```(javascript)
     var p = new Promise(function (resolve, reject) {
     setTimeout(() => reject(new Error('fail')), 3000)
@@ -498,7 +515,12 @@ stitch together sequences (with branches) of sync and async actions using the ca
     })
     p2.then(result => console.log(result))
     p2.catch(error => console.log(error))
-    // <- Error: fail``` 
+    // <- Error: fail
+    ``` 
+
+- Difference between catch and a then which has a onReject handler:
+    - If a then() throws an exception or rejects() the promise, then a subsequent catch() will handle it.
+    - A onRejection handler cannot handle a rejection from the same then()
 
 - Promise.All(iterable_of_promises)
     - basically for aggregating a bunch of promises together and having .then()/.catch() available when all are completed
