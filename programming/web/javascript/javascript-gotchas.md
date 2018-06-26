@@ -361,10 +361,34 @@ var Calculator = function () {
 Calculator.init();
 ```
 
-## SetTimeouts
+## Prototype-Based Inheritance
+- `prototype` is a property of `function` and when you assign properties/functions to a function's prototype AND call it as a constructor, then the newly created object will have those properties.
 
-- TODO
+```(javascript)
+function Ninja() {}
 
+Ninja.prototype.swingSword = function() { return true; }
 
+var n2 = new Ninja();
 
+//n2 has swingSword() defined on it
+```
 
+- when looking up properties, it will follow the prototype chain
+- you can add a property/method to the constructor function prototype after creation and it will still work
+
+```(javascript)
+function Ninja() {}
+
+var n2 = new Ninja();
+
+Ninja.prototype.swingSword = function() { return true; }
+
+//n2 has swingSword() defined on it
+```
+
+- **So**, object is associated with it's prototype based on the ctor function that is used
+    - object -> constructor property -> constructor function's prototype property -> prototype object
+
+- `typeof` returns string, usually of object
+- `instanceof` returns the constructor reference
