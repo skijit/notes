@@ -391,4 +391,8 @@ Ninja.prototype.swingSword = function() { return true; }
     - object -> constructor property -> constructor function's prototype property -> prototype object
 
 - `typeof` returns string, usually of object
-- `instanceof` returns the constructor reference
+- `instanceof` compares an object and a ctor:
+    - `ninja instanceof Ninja` returns a boolean
+    - so this works with inheritance up the prototype chain
+
+- inheritance: `subClassCtor.prototype = new superClass()`
