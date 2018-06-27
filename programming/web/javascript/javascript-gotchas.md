@@ -388,7 +388,9 @@ Ninja.prototype.swingSword = function() { return true; }
 ```
 
 - **So**, object is associated with it's prototype based on the ctor function that is used
-    - object -> constructor property -> constructor function's prototype property -> prototype object
+    - object instance (1) -> `constructor` property (2) -> constructor function's `prototype` property (3) -> prototype object (4)
+    - object instance (1) -> `__proto__` property (2) -> prototype object (**4**)
+    - the first route is not so useful when an object instance was not created by a ctor
 
 - `typeof` returns string, usually of object
 - `instanceof` compares an object and a ctor:
@@ -396,3 +398,7 @@ Ninja.prototype.swingSword = function() { return true; }
     - so this works with inheritance up the prototype chain
 
 - inheritance: `subClassCtor.prototype = new superClass()`
+- each object instance has a `__proto__` property which refers to the Object referred to by it's ctor's prototype property
+- you only inherit the members in the object class'es prototype
+- a lot of times, you'll see a ctor function only have the data members, and the methods will be declared on the the ctor prototype
+-
