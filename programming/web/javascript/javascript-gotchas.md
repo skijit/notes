@@ -401,4 +401,3 @@ Ninja.prototype.swingSword = function() { return true; }
 - each object instance has a `__proto__` property which refers to the Object referred to by it's ctor's prototype property
 - you only inherit the members in the object class'es prototype
 - a lot of times, you'll see a ctor function only have the data members, and the methods will be declared on the the ctor prototype
--
