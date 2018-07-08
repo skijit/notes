@@ -28,5 +28,6 @@ NPM Stuff I Often Forget
 - Update npm itself:
     - on windows, npm is installed with the node executable (but you can update manually too)
     - [instr (crossplatform)](https://docs.npmjs.com/troubleshooting/try-the-latest-stable-version-of-npm)
+    - this also works: `npm i -g npm`
 
 
