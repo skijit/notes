@@ -26,5 +26,11 @@ Essence of Linear Algebra
 - multiplying vector by a number = scaling
 - so a number is often thought of as a scalar
 
-
-  
+## Linear Combinations, Span, and Basis Vectors
+- Two ways to think about vectors:
+  - `- \begin{bmatrix}
+      3  \\
+      2
+    \end{bmatrix}
+    `
+  - `- 3 \cdot \hat{i} + 2 \cdot \hat{j}` where `- \hat{i} = \begin{bmatrix} 1 \\ 0 \end{bmatrix} ` and `- \hat{j} = \begin{bmatrix} 0 \\ 1 \end{bmatrix} `
