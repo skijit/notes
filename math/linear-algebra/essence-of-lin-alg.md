@@ -33,4 +33,4 @@ Essence of Linear Algebra
       2
     \end{bmatrix}
     `
-  - `- 3 \cdot \hat{i} + 2 \cdot \hat{j}` where `- \hat{i} = \begin{bmatrix} 1 \\ 0 \end{bmatrix} ` and `- \hat{j} = \begin{bmatrix} 0 \\ 1 \end{bmatrix} `
+  - `- \left( 3 \cdot \hat{i}  \right) + \left( 2 \cdot \hat{j} \right)` where `- \hat{i} = \begin{bmatrix} 1 \\ 0 \end{bmatrix} ` and `- \hat{j} = \begin{bmatrix} 0 \\ 1 \end{bmatrix} `
