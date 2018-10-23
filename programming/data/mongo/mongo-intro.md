@@ -1,6 +1,7 @@
 MongoDB Intro
 =================
 
+## basics
 - [src1](https://www.youtube.com/watch?v=pWbMrx5rVBE)
 - document database
 - big advantage over relational: easy to scale
@@ -54,7 +55,7 @@ db.createUser({
 })
 ```
 
-    - see the [docs.mongodb.com](https://docs.mongodb.com/manual/reference/method/db.createUser/index.html) for info on how to use this
+- see the [docs.mongodb.com](https://docs.mongodb.com/manual/reference/method/db.createUser/index.html) for info on how to use this
 
 - Add a collection (like a table)
     - `db.createCollection('customers');`
