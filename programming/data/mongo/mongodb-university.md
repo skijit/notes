@@ -307,13 +307,263 @@ M101N: MongoDB for .NET Developers
     - `let filteredProjection = filteredResults.map(x => x._id)`
     - `db.grades.deleteMany({ _id : { $in: filteredProjection }  })`
 - question 2.4
-    - db.movieDetails.find({year: 2013}).limit(1).pretty()
-    - db.movieDetails.find({year: 2013, rated: "PG-13"}).limit(1).pretty()
-    - db.movieDetails.find({year: 2013, rated: "PG-13", "awards.wins": { $gt: 0}}).limit(5).pretty()
-    - db.movieDetails.find({year: 2013, rated: "PG-13", "awards.wins": 0}, { title: 1}).limit(20).pretty()
+    - `db.movieDetails.find({year: 2013}).limit(1).pretty()`
+    - `db.movieDetails.find({year: 2013, rated: "PG-13"}).limit(1).pretty()`
+    - `db.movieDetails.find({year: 2013, rated: "PG-13", "awards.wins": { $gt: 0}}).limit(5).pretty()`
+    - `db.movieDetails.find({year: 2013, rated: "PG-13", "awards.wins": 0}, { title: 1}).limit(20).pretty()`
 - question 2.5:
-    - db.movieDetails.find({"countries.1" : "Sweden"}).count()
+    - `db.movieDetails.find({"countries.1" : "Sweden"}).count()`
 - `db.movieDetails.find({"actors.0": "Jeff Bridges"]}).count()`
+
+## Week 3 : Schema Design
+- Application driven schema instead of the fixed third normal form (3nf)
+- Supports 'rich documents'
+    - contain arrays, sub docs, etc.
+    - so instead of joins, you embed
+    - and if you have to join, do it in the application
+- No constraints
+- No transactions
+- No fixed schema
+- Goals of normalization
+    - Consistency on update (single location)
+        - We'll be careful to avoid creating the specific embedding situations that cause this
+    - Minimize redesign when extending
+        - Mongo gives you flexibility here
+    - Avoid bias on access patterns
+        - Mongo subverts this bc otherwise you're equally bad to everything
+- Atomic operations
+    - When you work on a single doc, that work will be completed before anyone sees those changes
+    - somewhat analogous to transactions which dont exist in mongodb
+        - transactions are often necessary since you're accessing multiple records / tables at the same time, so it's not so necessary
+    - Methods for living without transactions
+        - Operate on a single document
+        - Software locking (app level)
+        - Tolerate some inconsistency
+- 1:1 Relations
+    - Example: employee and resume
+    - Approaches: Link or embed
+    - Considerations
+        - Frequency of access:
+            - Maybe you always pull employee info, but barely ever the resume info
+            - If there's a mismatch there, and say one set (resume) is bigger, you might want to link
+        - Growth of items
+            - If one is growing all the time but the other isn't
+        - Size of items
+            - Remember 16MB is max size
+        - Atomicity of data
+            - If you need consistency, embed them
+- 1:Many Relations
+    - Example: City and person
+    - Linking is good here
+    - Remember you can put anything in the _id
+    - Variation: One to a few
+        - Example: Blog post and comments
+        - embedding is ok
+- Many to Many Relations
+    - Example: Books and Authors
+    - Distinction: is it Many to Many or Few to Few?
+    - Few to Few
+        - 2 collections, linked
+        - Authors collection will have an array of Book Ids
+        - You could also have it bidirectional if you want it (depends on access patterns)
+    - Many to Many
+        - Not addressed... I guess this is a case where even in large volume situations, Mongo isn't great
+- Multikey Indexes
+    - Recall a Student/Teacher Schema
+    - Students: { _id, name, teachers: []}
+    - Teachers: { _id, name}
+    - Create a multikey index: `db.students.ensureIndex({teachers:1})`
+    - Now do a query using this index: `db.students.find({'teachers': {$all: [0,1]}})`
+        - The returned students should have both 0 and 1 in their teachers array
+        - To see how the index was employed: `db.students.find({'teachers': {$all: [0,1]}}).explain()`
+            - This is the same query suffixed with `explain()` method
+            - The result will show us that isMultiKey: true and which cursor it was
+- Benefits of Embedding
+    - Performance
+        - Improved Read performance (contiguous disk location)
+        - One round trip to the DB
+- Trees
+    - Single collection
+    - Each record has
+        - Reference to immediate parent id
+        - Array with the sequence of ancestors
+- When to denormalize
+    - 1 to 1 : Embed
+    - 1 to Many : Embed from the many to the 1
+    - Many to Many : Link
+
+- HW 3.1
+    - `mongoimport --drop -d school -c students students.json`
+    - `db.students.find().limit(1).pretty()`
+    - `{ _id, name, scores: [{type, score}]}`
+    - create an object where each user's id is a property and the value is the lowest homework score.
+        - `let lowScores = {}`
+        - `let _students = db.students.find().toArray()`
+        - `_students.forEach((x) => { let _min = Math.min(...(x.scores.filter(a => a.type == 'homework').map(b => b.score))); lowScores[`${x._id}`] = _min; })`
+        - `printjson(lowScores)`
+    - Iterate throught students and remove corresponding element array:
+        - `Object.keys(lowScores).forEach(x => db.students.update({ _id: parseInt(x) }, {$pull: { scores: { score: lowScores[x] }}}, {multi: true}))`
+
+## Week 4 : Performance
+- 3 primary ways to impact performance:
+    1. Indexes
+    2. Sharding
+    3. Using Pluggable Storage Engines
+        - Software which determines physical storage on disk
+- Pluggable Storage Engine
+    - new in 3.0
+    - sits between mongodb software and the data on disk
+    - has control of memory (ie what is cached, etc.)
+    - pluggable such that you can use more than one storage engine
+    - MMap
+        - default
+    - WiredTiger
+        - new in 2014
+    - storage engine doesn't
+        - affect communication between clusters
+        - api presented to programmer
+- MMapV1 Storage Engine
+    - original storage engine
+    - based on mmap syscall (see man page)
+        - copies file into memory
+    - Storage method
+        - mongodb creates a large file on disk to store documents (e.g. 100 GB)
+        - this file will be copied to memory (although lots of it will be virtual memory)
+    - collection-level locking
+    - in-place updates
+        - will try to update a document without making a new copy of it
+        - to achieve this goal, it uses power-of-2 sized allocations (e.g. a 3 Byte document will be allocated 4 Bytes, 23 Bytes -> 32 Byte allocation, etc.)
+- Wired Tiger
+    - not turned on by default
+    - document-level concurrency
+        - compare to mmap collection-level concurrency
+        - lock free
+        - optimistic updates: you can update the same document, and if there's a collision, it will unwind and reapply (but usually this doesn't happen)
+    - compression
+        - of data and index
+        - unlike mmap, it controls what data sits in memory
+            - data in memory is expanded
+        - since there's lots of redundancy (possibly) - compression can be useful
+    - no in-place updates
+    - to use: `mongod -dbPath <someNewFolder> -storageEngine wiredTiger`
+        - you have to give it a different dbPath bc it can't open files from mmapv1
+- Indexes
+    - you can index on single fields or composite/multiple fields
+    - when you have a composite index, the order of the fields is important in determining whether the index can be used
+        - given an index on: (field1, field2, field3)
+        - a query which only uses field1 is ok, but if you're querying on field2 or (field2,field3), the index won't be used bc the btree structure doesn't help you there
+        - a query on field1, field3 would be somewhat useful
+    - cost of indexes
+        - will slow down writes, but reads will be much faster!
+    - one strategy for a big bulk insert is to do it with no indexes and then create the index
+    - explain method:
+        - e.g. `db.students.explain().find({studentId:5})`
+        - it will tell you what indexes you might use 
+            - see "winningPlan"
+                - "COLLSCAN" means a full collection scan
+    - creating an index:
+        - e.g. `db.students.createIndex({student_id:1})`
+        - composite example: `db.students.createIndex({student_id:1, class_id:-1})`
+            - the -1 means descending
+        - takes a little while
+    - discovering indexes
+        - `db.students.getIndexes()`
+        - there's always an index on _id
+        - to delete: `db.students.dropIndex({student_id:1, class_id:-1})` 
+            - so you use the same signature as when you created it
+- Multikey Indexes
+    - ie Indexes on Arrays!
+    - given a doc format:
+    ```{
+        name: 'Andrew',
+        tags: ['photography', 'hiking', 'golf'],
+        color: 'red'
+    }```
+    
+        - index on `tags`, would create an index entries for "photography", "hiking", and "golf"
+        - compound index on `tags, color` would create index points for "photography, red", "hiking, red", and "golf, red"
+        - restrictions: you can't have a compound index where > 1 field is an array
+            - but this is enforced on the document, not collection, level
+- Nested Multikey Indexes
+    - `db.students.createIndex({'scores.score':1})`
+        - where scores is an array which has a property score in it
+    - then you can do something like: `db.students.find({'scores.score': {'$gte': 99}})`
+- Unique Indexes
+    - you can enforce that a particular value or value combination is unique
+    - `db.stuff.createIndex({thing:1}, {unique: true})`
+- Sparse Indexes
+    - indexes that can be used when the index key is missing from some documents
+    - if a field is missing from documents, it is treated as null.  
+        - if you include a uniqueness constraint on the index, then you could have a failure due to multiple nulls (i.e. duplicate values)
+    - you specify the 'sparse' option which tells the db to have the index exclude any records where the field is missing/null
+    - `db.employees.createIndex({cell:1}, {unique:true, sparse:true})`
+    - Warning: but note that if you sort on a sparse index, the index won't be used
+    - advantages of sparse index:
+        - index is smaller
+        - flexibility
+- Creating index : foreground or background
+    - foreground:
+        - default
+        - blocks all writers and readers on the collection
+        - decently fast
+    - background
+        - slower
+        - don't block readers and writers
+        - good for production system
+            - an alternative is to use to create on an alternate cluster
+    - `db.employees.createIndex({cell:1}, {unique:true, background:true})`
+    - running in the background will still block your shell instance, but it won't block other accesses
+- Explain
+    - doesn't fully execute the query, just shows the plan
+    - you can't do an explain on an `insert()`
+    - explain() returns an `explainable`
+    - you can call `db.blah.explain().help()` to get a list of supported, explainable operations
+    - you can also call explain on a cursor
+    - explain() is more than just a query planner, showing you what indexes have been hit
+        - **execution stats**: results of using the indexes
+            - `explain("executionStats")`
+            - shows the number of docs returned, execution time, 
+        - **all plans execution**:
+            - `explain("allPlansExecution")`
+            - runs the query optimizer, which periodically runs to figure out which index to use
+        - these options just give you progressively more info
+- Covered Query
+    - a query which can be satisfied entirely from the index
+        - these are super efficient!
+    - even if you hit an index (keys examined), if your projection includes any values outside the index (e.g. _id), then the document has to be accessed, and it is not a covered query.
+        - if you project only by exclusion, then since schema is variable per doc, the doc has to be consulted and the query is not covered.
+- How is an index choosed?
+    - mongodb looks at the shape / profile of each query
+    - looks at candidate indexes
+    - create a query plan for each candidate index
+    - winning query plan is stored in a cache to be applied to similar queries or until it is refreshed
+    - how a query plan is removed from cache:
+        - lots of intervening writes
+        - rebuilding indexes
+        - dropping index
+        - restarting the mongodb process
+- Index Size
+    - Working set: portion in memory that our data that clients are frequently accessing
+        - esp includes indexes
+        - going to disk is expensive
+        - so indexes should fit in memory
+    - To get size of index:
+        - `db.students.stats()`
+        - `db.students.totalIndexSize()`
+    - wired tiger allows *prefix compression* which shrinks the size of the index
+- Index Cardinality
+    - How many index points relative to document count
+        - Regular Index -> 1:1
+        - Sparse Index -> 1:<=document-count
+        - Multikey -> 1:* (depends on number of values in array.  could be more than number of docs in collection, even)
+- Geospatial Indexes
+        
+    
+
+
+
+
+
 ## Other stuff
 - importing from raw json: `mongoimport --drop -d students -c grades grades.json`
 - mongoimport and mongoexport are for json!  mongorestore is for bson.
