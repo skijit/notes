@@ -654,7 +654,16 @@ M101N: MongoDB for .NET Developers
     - sampling interval is 1 sec standard
     - gives crud-oriented stats
 - Sharding
-    
+    - split up a large collection across multiple servers
+    - mongos is the router which talks to the various mongod's
+    - each shard is usually a couple clusters (replica set)       
+    - choose a shard key (e.g. student_id)
+        - mongos will send it to the right instance
+    - inserts must include the entire shard key
+    - update, removes, finds have to broadcast to each shard if the shard key isn't included
+        - so including the shard_key will make it faster
+    - choosing a shard key is a particular thing
+    - mongos usually runs on the same machine as the application
      
 
 
