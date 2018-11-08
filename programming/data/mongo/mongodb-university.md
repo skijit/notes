@@ -557,8 +557,105 @@ M101N: MongoDB for .NET Developers
         - Sparse Index -> 1:<=document-count
         - Multikey -> 1:* (depends on number of values in array.  could be more than number of docs in collection, even)
 - Geospatial Indexes
+    - Find things based on location
+    - 2D Scenario
+        - document needs to have cartesian coordinates in an array of values.  eg `location: [x, y]`
+        - create an index, telling mongo that the data is '2d' (a reserved type): `createIndex({"location": "2d"})`
+        - then you need an operator to find documents with locations near to you:
+            - eg using the $near operator: `find({location: { $near: [your_x, your_y] }}).limit(20)`
+            - db will return them in order of increasing distance
+    - Spherical Scenario
+        - lat/lng
+        - use index type: '2dsphere'
+        - it's easy to find lat/lng from google maps
+        - mongo actually takes longitude, latitude
+        - locations are specified using geojson
+            - there are lots of types of geometries, but points are probably the most useful
+            - looks like:
+
+            ```(json)
+            {
+                "_id": ObjectId("dlskfj"),
+                "name": "Apple Store",
+                "city": "Palo Alto",
+                "location": {   //this is geojson
+                    "type": "Point",
+                    "coordinates": [
+                        -122.90812, //long
+                        37.4434 //lat
+                    ]
+                },
+                "type": "retail"
+            }
+            ```
+
+        - `db.places.createIndex({'location':'2dsphere'})`
         
+        ```(javascript)
+        db.places.find({
+            location: {
+                $near: {
+                    $geometry: {
+                        type: "Point",
+                        coordinates: [-122.123, 37.42] //my location
+                     }, 
+                    $maxDistance: 2000 //meters
+                }                
+            }
+        }).pretty()
+        ```
+- Full Text Search Index
+    - You can do a $regex search on normal text fields and it doesn't require a full text index
+        - If there is an index on the field, the $regex search will use it if...
+            - it's a prefix search (starts with ^)
+            - it's case sensitive
+    - If you want to avoid the $regex search, you can specify a full text index which will perform search-engine like matching (terms are or-joined)        
+    - A full text index can be defined on a single or multiple (compound index) fields
+        - if you want a super compound index, this will add each string field to the index: `db.collection.createIndex( { "$**": "text" } )`
+    - each full text search will have a resulting score, and the rules can be somewhat influenced by how you set up the index
+        - if you have a compound text index, you can weight fields differently
+    - creating a text index: `db.sentences.createIndex({"myField":'text'})`
+    - to search against the text index: `db.sentences.find({$text: {$search: "dog"}})`
+        - `db.sentences.find({$text: {$search: "dog otherword blah blah"}})`
+        - full text search is not case sensitive
+        - you can also sort the results in terms of the search score:`
+            - `db.sentences.find({$text: {$search: "dog otherword blah blah"}}, {score:{$meta: 'textScore'}}).sort({score: {$meta: 'textScore'}})`
+- Efficiency of Index Use
+    - Goal: Efficient Read/Write operations
+    - With `hint()` you can specify the signature of an index and make the query use that index
+    - Best practice: when you're designing compound indexes, specify the fields you do equality searches on **before** fields that have range searches bc they're more selective
+    - If you're using a sort on a field, you may want to add it to the index
+    - With explain, `totalKeysExamined` refers to how many index keys were examined
+    - In a nutshell, order your indexes like so:
+        1. Equality fields
+        2. Sort fields
+        3. Range fields
+- Logging and Profiling 
+    - mongod automatically logs (outputs) slow queries (>100ms)
+    - Profiler will write slow queries to system.profile
+        - Level 0: off
+        - Level 1: log slow queries
+        - Level 2: log all queries  (good for debugging)
+    - set profile on: `mongod --dbPath <somePath> --profile 1 --slowms 2`
+        - you can also set it in the shell: `db.getProfilingStatus()`
+            - to set the status from the shell: `db.setProfileLevel(1,4)` (status level: 1, only look at stuff longer than 4 ms)
+        - time > slowms means it will be logged
+        - `db.system.profile.find().pretty()`
+            - you can search on these different profiled fields:
+                - namespace (ns)
+                - timestamp (ts)
+                - duration (millis)
+- MongoTop
+    - high level view of where mongo is spending its time
+    - shows you what collections are getting hit hardest, by reads, writes, and total
+    - `mongotop 3` : sets sampling interval to 3sec
+- MongoStat
+    - like the iostat
+    - sampling interval is 1 sec standard
+    - gives crud-oriented stats
+- Sharding
     
+     
 
 
 
@@ -568,6 +665,8 @@ M101N: MongoDB for .NET Developers
 - importing from raw json: `mongoimport --drop -d students -c grades grades.json`
 - mongoimport and mongoexport are for json!  mongorestore is for bson.
     - for mongorestore, just put it above the 'dump' directory and type `mongorestore` - no cmdline parms needed
+- to run a script in the shell, just type: mongo < myfile.js
+    - be sure to include a `use` statement at the top so it knows which db to use
 - my pwd: t**1
 
  
