@@ -666,10 +666,6 @@ M101N: MongoDB for .NET Developers
     - mongos usually runs on the same machine as the application
      
 
-
-
-
-
 ## Other stuff
 - importing from raw json: `mongoimport --drop -d students -c grades grades.json`
 - mongoimport and mongoexport are for json!  mongorestore is for bson.
@@ -677,6 +673,8 @@ M101N: MongoDB for .NET Developers
 - to run a script in the shell, just type: mongo < myfile.js
     - be sure to include a `use` statement at the top so it knows which db to use
 - my pwd: t**1
+- when you pass a parameter to mongo, it will use that db: `mongo <myDbName>`
+
 
  
 
