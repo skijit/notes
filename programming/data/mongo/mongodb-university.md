@@ -665,6 +665,191 @@ M101N: MongoDB for .NET Developers
     - choosing a shard key is a particular thing
     - mongos usually runs on the same machine as the application
      
+## Class 5: Aggregation Framework
+- rooted in the Group By from Sql
+- good for sums, counts, averages using groups
+- simple example
+    - given schema: `{ _id, productName, category, manufacturer, price}`
+    - how would we figure out how how many products exist per manufacturer?
+    ```(javascript)
+    db.products.aggregate([ //call aggregate function, notice the array for other operations
+        {
+            $group: {  //= group by, note it's in its own document
+                _id: "$manufacturer",   //what you are grouping by - notice the prefixed '$'.  like creating a new collection.
+                num_products: {$sum:1}  //your new key
+            }        
+        }
+    ])
+    ```
+    - results looks like this: `{_id: "Amazon", num_products: 4}`
+- aggregation is a pipeline
+    - documents are piped through these stages
+    - each item in the array for aggregate() is a stage, there can be repeats / different order
+- stages:
+    - $project: reshaping the document.  1:1
+    - $match: filter.  n:1
+    - $group: aggregates.  n:1
+        - you can use $sum, $count, etc expressions in here
+    - $sort: sort.  1:1
+    - $skip: n:1
+    - $limit
+    - $unwind. 1:n
+        - if you have an array, you need to flatten these items
+        - ex: tags: 1 doc wth array ['red','blue','green'] -> 3 docs { tags: 'red}, {tags: 'blue'}, {tags: 'green'}
+    - $out: outputs to a collection instead of a cursor
+    - $redact: security feature to limit what users can see
+    - $geonear
+- simple example in detail
+    - given schema: `{ _id, productName, category, manufacturer, price}`    
+    ```(javascript)
+    db.products.aggregate([
+        {
+            $group: {  
+                _id: "$manufacturer", 
+                num_products: {$sum:1}
+            }        
+        }
+    ])
+    ```
+    - processing stages:
+        - runs each document through all stages, and upserts to the result set before moving to next document
+- group by multiple keys
+    - something liek: select ... group by manufacturer, category
+    - called a compound group by id
+    ```
+    db.products.aggregate([
+        { $group: {
+            _id: { 
+                "manufacturer": "$manufacturer",  //the property names are like the 'as', the alias for the field being identified as the grouping key
+                "category": "$category"
+            },
+            num_products: {$sum:1}
+          }
+        }
+    ])
+    ```
+    - result set looks like this:
+    ```
+    {
+        _id: {
+            "manufacturer": "Amazon",
+            "category": "Tablets"
+        },
+        num_products: 2
+    }
+    ```
+    - you can use this aliasing technique for single groups as well
+    - a lot of people don't realize you can make the _id be a document, but that's ok in mongo!
+- Aggregation expressions:
+    - $sum
+        - if you want to sum a field 'price', you use: `sum_prices: {$sum: "$price"}`
+    - $avg
+    - $min
+    - $max    
+    - $addToSet: for building arrays
+    ```
+        db.products.aggregate([
+            { $group: {
+                _id: { 
+                    "maker": "$manufacturer",                    
+                },
+                categories: {$addToSet:"$category"} //add each unique tem to a new array called categories
+            }
+            }
+        ])
+    ```   
+    - $push : for building arrays
+        - same as $addToSet but is not guaranteeing a distinct list
+    - $first: first in a group, be sure to sort though
+    - $last: last in a group, be sure to sort though
+- Double grouping
+    - run an aggregation stage more than once
+        - This doesn't exist in SQL so easily
+    - use case:
+    ```
+    db.grades.aggregate([
+        { $group: { _id: {class_id: "$class_id", student_id: "$student_id"}, 'average': {$avg: "$score"}} },
+        { $group: { _id: "$_id.class_id", 'average': {$avg: "$average"}}}
+    ])
+    //get the per student per class and then average out by class
+    ```
+- $project
+    - remove key, add key, reshape key, etc.
+    - do some modifications: upcase, multiply, etc.
+    ```
+    db.products.aggregate([
+        { 
+            $project: {
+                _id: 0,  //means _id will not be included.  like the project object in find().  to keep a field without changes, use 1
+                'maker': {$toLower: "$manufacturer"},
+                'details': { 'category': "$category", 'price': {$multiply: [$price, 10]}},
+                'item': "$name"
+            }
+        
+        }
+    ])
+    ```
+- $match
+    - these can only use indexes at the beginning of the aggregation
+    ```
+    db.zips.aggregate([
+        { $match: { state: "CA"}},
+        { $group: { _id: "$city", population: {$sum: "$pop"}, zip_codes: {$addToSet: "$_id"}}},
+        { $project: { _id: 0, city: "$_id", population: 1, zip_codes: 1}}
+    ])
+    ```
+- $sort
+    - sorting by default happens in memory, unless it exceeds 100MB.
+    - there is an option to work on the disk instead (for large sets)
+    - you can sort before or after a group
+    - looks like this: `{ $sort: { population: -1 }}`
+        - note that it doesn't require the leading $ in the keyname
+- $limit and $skip
+    - first $sort, then $skip, then $limit
+    - looks like: `{skip: 10}, {limit: 5}`
+- $unwind
+    - its hard to group on stuff locked in an array, so $unwind will explode out the data
+    - `{$unwind: "$tags"}`
+    - you can use a double unwind if you have multiple arrays in the same document.  
+        - this creates a cartesian product
+- limits of aggregation
+    - 100 MB limit for pipeline stages (since they're in memory).  otherwise you have to use this option: allowDiskUse.
+    - If you return a single document, you still have the 16MB limit.    
+    - sharding:
+        - group and sort have to be sent to your single primary shard
+        - this might not scale as well with hadoop and map/reduce
+        - mongo has it's own map/reduce functionality, but it's deprecated
+        - you can always dump to hadoop and then use map/reduce
+- .NET Aggregation
+    - example using group and match operations
+    
+    ```(csharp)
+    var list = await col.Aggregate()  //aggregate async is very verbose
+        .Group(new BsonDocument("_id", "State").Add("totalPop", new BsonDocument("$sum", "$pop")))
+        .Match(new BsonDocument("totalPop", new BsonDocument("$gte", 10 * 1000 * 1000)))
+        .ToListAsync();
+
+    //if you did a ToString on Aggregate, it will print out the actual native query
+    ```
+
+    ```(csharp)
+    //strongly typed method.  this still compiles down to the same as the above example!
+    var list = await col.Aggregate() 
+        .Group(x => x.State, g => new {State = g.Key, TotalPop = g.Sum(x => x.Population) }))
+        .Match(x => x.TotalPop > 10 * 1000 * 1000)
+        .ToListAsync();
+    ```
+
+    - with linq you can still use `.AsQueryable()`
+    - for more async stuff: `using MongoDB.Driver.Linq`
+    - you can also use joins in linq and that will correspond with the new mongodb operator $lookup
+
+
+
+
+
+
+
 
 ## Other stuff
 - importing from raw json: `mongoimport --drop -d students -c grades grades.json`
