@@ -844,7 +844,79 @@ M101N: MongoDB for .NET Developers
     - for more async stuff: `using MongoDB.Driver.Linq`
     - you can also use joins in linq and that will correspond with the new mongodb operator $lookup
 
+- hw q1
+    - { _id, body, permalink, author, title, tags :string[], comments: { body, email, author }[], date}
+    - `db.posts.aggregate([
+        { $unwind: "$comments"},
+        { $group: { _id: "$comments.author", _count: {$sum:1} } },
+        { $project: { _id: 1, _count: 1}}, 
+        { $sort: { _count: 1 }},
+        { $limit: 5} 
+    ])`
+- hw q2
+    - { _id (zip), city, loc, pop, state}
+    - stages:
+        - filter to only include CA and NY
+        - roll up to city/state, get sum of pops
+        - filter on pops > 25,000
+        - average of all
+    - db.zips.aggregate([
+        { $match: { $or: [ {state: "CA"}, {state:"NY"}] } },
+        { $group: {
+                _id: { 
+                    state: "$state",
+                    city: "$city"
+                },
+                zips: { $addToSet:"$_id"}, 
+                pop: { $sum: "$pop" }
+            }
+        },
+        { $match: { pop: { $gt: 25000 } } },
+        { $group: {
+              _id: "TOTAL",
+              avg: {$avg: "$pop"}  
+            }        
+        }
+    ])
+- hw q3
+    - stages:
+        - unwind scores
+        - filter out scores.type=quiz
+        - group: avg per { student, class }
+        - group: avg per class
+        - sort by avg
+    - db.grades.aggregate([
+        { $unwind: "$scores"},
+        { $match: { "scores.type": { $ne: "quiz" }} },
+        { $group: {
+            _id: {
+                student_id: "$student_id",
+                class_id: "$class_id"
+            },
+            avg: { $avg: "$scores.score" }
+        }},
+        { $group: {
+            _id: "$_id.class_id",
+            avg: { $avg: "$avg"}
+          }
+        },
+        { $sort: { avg: -1 }}
+    ])
+- hw q4
+    - db.zips.aggregate([
+        { $project: {
+            first_char: {$substr : ["$city",0,1]},
+            pop: 1
+          }
+        },
+        { $match: { $or: [{first_char: 'B'},{first_char: 'D'},{first_char: 'O'},{first_char: 'G'},{first_char: 'N'},{first_char: 'B'},{first_char: 'M'}]} },
+        {
+            $group: { _id: 1, TOTAL: {$sum:"$pop"}}
+        }
+    ])
 
+
+    
 
 
 
