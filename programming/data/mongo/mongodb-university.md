@@ -916,8 +916,183 @@ M101N: MongoDB for .NET Developers
     ])
 
 
-    
+## Class 6: Application Engineering
+- 3 main topics:
+    1. Durability of Writes: How the data is persisted on disk
+    2. Replication: Fault tolerance and availability
+    3. Sharding
+- Write Durability Overview
+    - By default, a lot of MongoDb is an in-memory database.
+        - Collections are written to and updated in-memory.
+        - For each transaction, this is recorded in an in-memory journal.
+        - Both of these things are (at some point) persisted back to disk.
+            - The journal is like the log: you can use it to replay transactions (assuming you have access to it (ie that it has been persisted to disk)).
+    - Write Concern
+        - Encompasses 2 values (w, j) which determine behaviors which are important to the the application
+        - Default values:
+            - `w=1`: wait for the db to acknowledge a write (to memory only)
+            - `j=0`: do not wait for the db to persist the journal (which has the transaction) to disk
+            - **Problem**: this means if the server crashes, your transaction might not be persisted, even though you have acknowledgment that it successfully completed.
+        - You can set `w=1,j=1`: 
+            - will be smuch lower
+            - but if server crashes, it will check the journal (from disk) and recreate the appropriate transactions
+        - Other values of `w` can have significance in a replicated environment
+- Write Concern in the .NET Driver
+    - default value (as above) is acknowledgement of write (in memory) - but no journal persistence
+    - You can set parameters globally in the connection string:
+        - e.g. `mongodb://localhost:3000?replicaSet=local&w=2`
+        - replicaSet=local
+        - w=2 : write has to have been received on 2 nodes' memory
+        - j=true
+        - fsync
+    - C# options are more granular:
 
+        ```(csharp)
+        //this settings value can be passed into client.GetDatabase() or db.GetCollection()        
+        var settings = new MongoClientSettings
+        {
+            WriteConcern = WriteConcern.W2;  //all sorts of values here
+        }
+
+        //apply write concern per-write
+        await col.WithWriteConcern(WriteConcern.W2).InsertOneAsync(new BsonDocument("x", x++);)        
+        ```
+- Network Errors
+    - given `j=1,w=1`
+    - But what happens if you get no response:
+        - Probably didn't happen
+        - But if there were nw issues, it may have still happened!
+    - You can guard against this with inserts:
+        - if driver sets the _id:
+            - you can insert multiple times with no collision
+        - if you set the _id manually:
+            - you might get the duplicate key error
+    - Updates: are more problematic, especially for non-idempotent actions like incrementing ($inc)
+- Replication (via replica sets) provides availability and Fault Tolerance
+- Replica sets: 
+    - nodes that act together and mirror the data
+    - there's a primary node and it replicates async to the other db's
+    - you need a minimum of 3 nodes in a replica set
+- If a primary node goes down, and *election* occus to make one of the secondary nodes the new primary
+    - The db driver will automatically reconnect to the new primary node
+    - When the old primary node comes up, it will probably be the secondary
+- Replica Set Election
+    - Type of replica set nodes:
+        1. Regular: Primary or a secondary
+        2. Arbiter: data isn't replicated to it
+            - Only there for voting in an election
+            - One application: to meet the 3 node requirement, just make one of the nodes this arbiter.  It doesn't have to live on it's own machine.
+        3. Delayed/Regular
+            - Disaster recovery node
+            - Can't become a priority node
+        4. Hidden
+            - can't be primary
+            - often used for analytics
+- Writes always go to the primary node in the replica set but reads go be directed a secondary node
+- Strong Consistency
+    - Use the same node for reads and writes
+    - no chance of reading stale data
+- Creating a Replica Set
+    - normally, put a mongod on a separate machine and put them on the std port
+    - for this example, we're putting them on the same machine but on diff ports
+    - `mongod --replSet rs1 --logpath "somelogfilename.log" --dbpath "somepathtothisshellsdatadir" --port 27017 --fork`
+        - then repeat this with different logpath and dbpath (and perhaps port) for each node in the replica set
+        - at this point, they're just independent, now you need to tie them together: `rs.initiate(someConfigSettings)`
+    - in the shell, running `rs.slaveOk()` will let you read directly from the secondary node
+- Replica Set Internals
+    - Each node in an rs has an *OpLog*
+    - Mongo keeps the OpLogs in sync
+    - Sequence
+        - App writes to Primary
+        - Primary writes to OpLog
+        - Secondarys keep querying OpLog of secondarys
+    - to get replica set status: `rs.status()`
+    - To see the oplog:
+        - `use local`
+        - `show collections`
+        - you'll see oplog.rs
+            - `db.oplog.rs.find().pretty()`
+    - `rs.status()` will include timestamp which indicate last time it synced collections with the log
+    - you can upgrade the nodes seperately or have different storage engines across them
+- Failover and Rollback scenario
+    - Suppose your primary node goes down before certain transactions from the oplog have synced to secondary nodes
+        - The new primary will not have that data
+        - When the old primary comes up and realizes it has transactions that don't exist in the current primary's oplog, it will roll them back (and store them in a rollback file)
+    - You can prevent against this situation by setting your `w` parameter to `majority` which means you only get acknowledgement once the majority of rs nodes have synced the transaction.
+- Connecting to a Replica Set from a .NET Driver
+    - to connect to a specific replica set node, you need to specify in your connection string the parm: `connect=direct`
+        - otherwise you'll be connected to the primary in the rs
+        - you probably don't ever want to do this
+    - normally, you'll want to use `connect=replicaSet` parm in connection string
+    - you could also specify the members of the replica set in the connection string and provide the name for it: `mongodb://localhost:3000,localhost:3001,localhost:3002?replicaSet=local`
+        - if you get the name or nodes wrong, it won't work
+        - you might not need all nodes
+        - to build this stuff up programmitically, use the `MongoClientSettings`  and set the `Servers` property
+- More Failover
+    - Failovers take time
+    - Exceptions will be thrown
+    - Use Defensive Programming Technique
+- Revisiting Write Concern
+    - `w`: how many replica set node you wait for before moving on
+    - `wtimeout`: how long you're willing to wait for the w replication to occur
+    - `w:majority` should usually prevent the rollback scenario
+    - `j` only regards the primary node
+- Read Preferences
+    - by default, reads and writes both go to the primary node on the rs
+    - `primary`: default
+        - "Strongly Consistent Read"
+    - `primary preferred`: default, but if not available, take secondary
+    - `secondary`: only read from secondary
+        - "Eventually Consistent Read"
+    - `secondary Preferred:` prefer secondary, but if needs to, go to primary
+    - `nearest`: read from node that is nearest (in ping time)
+- Read Preference in .NET Driver
+    - connection string parameter `readPreference`
+    - you can also use the `MongoClientSettings` class
+    - you can also use on a per read level (`WithReadPreference`), just like `WithWriteConcern`
+- Implications of Replica Sets for Application Design
+    - Most of the replication details are abstracted away, but some exist
+    - Seed Lists: make sure you connect to at least 1 node direclty in the rs 
+    - Write Concern: your `w` and `j` values
+    - Read Preference
+    - Errors can Happen
+- Sharding Overview
+    - Each Shard is it's own replica set (ie it explodes into >= 3 mongod nodes)
+    - `mongos` is the router 
+    - requires a shard key
+    - you can choose which collections are sharded
+- Building a Sharding Environment
+    - download corresponding scripts
+    - shards hold chunks of data
+    - config servers help map which shards hold the appropriate chunk based on the shard key
+        - You always want 3 config servers for a prod system (each of which runs on mongod)
+    - 2 ways to shard
+        - range based: efficient, obvious
+        - hash based: runs a hashing alg over the shard key, less efficient
+    - `sh.status()`: status of sharded system
+- Sharding Implications on the App
+    - every document needs the shard key
+    - shard key is immutable
+    - each index has to start with the shard key
+    - specify the shard key for each insert or update
+    - no shard key means you get a scatter-gather function (goes to all nodes), which could be expensive
+    - no unique index unless it starts with the shard key
+    - mongos (a few) usually runs on the application server
+- Choosing a Shard Key
+    - sufficient cardinality (variety)
+    - avoid hotspotting/writes
+        - avoid stuff which is monotonically increasing
+        - otherwise, you will often taret 1 shard disproportionately
+    - example 1
+        - given { order_id, order_date, vendor }
+        - (order_id): increases monotonically, so don't shart on that
+        - (vendor): might be ok if there's sufficient cardinality
+        - (order_date): not good, monotonically increase
+        - (vendor, order_date): this would be good!  
+    - you can't use multikey shard keys
+        - multikey means referencing an array
+        - different from compound key    
+        
 
 
 
@@ -931,7 +1106,7 @@ M101N: MongoDB for .NET Developers
     - be sure to include a `use` statement at the top so it knows which db to use
 - my pwd: t**1
 - when you pass a parameter to mongo, it will use that db: `mongo <myDbName>`
-
+- run mongod with `--fork` so you don't have to keep it open on the same shell
 
  
 
