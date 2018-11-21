@@ -12,7 +12,6 @@ AWS S3 Notes
     - SDK for Javascript Code Examples shows how to upload photos to S3
   - [AWS S3 Javascript Api](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html)
   
-
 ## Background
   - [src 1](https://www.youtube.com/watch?v=LfBn5Y1X0vE)
   - buckets are folders
@@ -47,6 +46,7 @@ AWS S3 Notes
     - you can host static websites in s3 buckets
       - configure your bucket for static website hosting and upload your code into your bucket
       - files will be available from: `<bucket-name>.s3-website.<aws-region>.amazonaws.com`
+        - This is the *Virtual Hosting Format* url, which is less preferable.  See notes below.
     - hosting static content (e.g. images)
       - you can provide url access to the objects in your bucket
       - one method: just enable the website hosting, like in the case above
@@ -94,8 +94,10 @@ AWS S3 Notes
 - Some examples of modifying my S3 bucket:
   - Note the `cmd` extension was only necessary to get it to work in git-bash
     - `aws.cmd s3 help`
-    - `aws.cmd s3 ls s3://musical.image-depot-1`
-    - `aws.cmd s3 ls s3://musical.image-depot-1 --recursive`
-    - `aws.cmd s3 ls s3://musical.image-depot-1 --recursive | awk '{print $4}'`    
-    - `aws.cmd s3 mv s3://musical.image-depot-1/CDN.EVBUC.COM/EVENTLOGOS/159967043/0DD9698FF6DE4C83BD8079A811BB1A2C.JPG s3://musical.image-depot-1/cdn.evbuc.com/EVENTLOGOS/159967043/0DD9698FF6DE4C83BD8079A811BB1A2C.JPG --acl public-read`
+    - `aws.cmd s3 ls s3://bucketname`
+    - `aws.cmd s3 ls s3://bucketname --recursive`
+    - `aws.cmd s3 ls s3://bucketname --recursive | awk '{print $4}'`    
+    - `aws.cmd s3 mv s3://bucketname/filename.ext s3://bucketname/filename2.ext --acl public-read`
+
+
 
