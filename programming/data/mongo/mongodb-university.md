@@ -1094,6 +1094,49 @@ M101N: MongoDB for .NET Developers
         - different from compound key    
         
 
+## Exam
+- Q1
+    - count where headers.From = "andrew.fastow@enron.com" and headers.To includes "jeff.skilling@enron.com"
+    - db.messages.find({ 'headers.From': "andrew.fastow@enron.com", 'headers.To': "jeff.skilling@enron.com" }).count()
+- Q2
+    - unwind headers.To array for each message
+    - eliminate duplicates in case that somebody appears twice in the To list
+    - processing: project into deduped headers.To (to) and from, unwind to, group by from & to, 
+    - OR:
+    - db.messages.find({ 'headers.From': "susan.mara@enron.com", 'headers.To': "jeff.dasovich@enron.com" }).count() --750
+    - db.messages.find({ 'headers.From': "susan.mara@enron.com", 'headers.To': "richard.shapiro@enron.com" }).count() --616
+    - db.messages.find({ 'headers.From': "soblander@carrfut.com", 'headers.To': "soblander@carrfut.com" }).count() --679
+    - db.messages.find({ 'headers.From': "susan.mara@enron.com", 'headers.To': "james.steffes@enron.com" }).count() --646
+    - db.messages.find({ 'headers.From': "evelyn.metoyer@enron.com", 'headers.To': "kate.symes@enron.com" }).count() --567
+    - db.messages.find({ 'headers.From': "susan.mara@enron.com", 'headers.To': "alan.comnes@enron.com" }).count() --550
+- Q3
+    - db.messages.find({ 'headers.Message-ID': '<8147308.1075851042335.JavaMail.evans@thyme>'}).count()
+    - db.messages.updateOne({ 'headers.Message-ID': '<8147308.1075851042335.JavaMail.evans@thyme>'}, {$push: { 'headers.To': "mrpotatohead@mongodb.com" }})
+- Q4
+    - SKIP FOR NOW
+- Q5
+    - In a nutshell, order your indexes like so:
+        1. Equality fields
+        2. Sort fields
+        3. Range fields
+    - this query: a: range, b: range, a equality, c: equality, sort c
+- Q7
+    - `mongoimport --drop -d q7 -c albums albums.json`
+    - `mongoimport --drop -d q7 -c images images.json`
+    - `db.images.find().count()`
+    - `db.albums.find().count()`
+    - `db.albums.createIndex({imges:1})`    
+    - `db.images.find({ tags : { $ne: 'sunrises' }  }).count()`
+    - `db.images.deleteMany({ tags : { $ne: 'sunrises' } })`
+    - `let imgs = db.images.find({}, {_id:1}).toArray()`
+    - 
+        ```
+            imgs.map(x => x._id).forEach(x => { 
+                if (db.albums.find({images: x}).count() == 0) db.images.deleteOne({ _id: x})
+            })
+        ```
+    - `db.images.find().count()`
+    - WAITING!!! 44787
 
 
 
@@ -1107,6 +1150,7 @@ M101N: MongoDB for .NET Developers
 - my pwd: t**1
 - when you pass a parameter to mongo, it will use that db: `mongo <myDbName>`
 - run mongod with `--fork` so you don't have to keep it open on the same shell
+- Really useful link- the [Certification Study Guide](https://university.mongodb.com/exam/guide)
 
  
 
