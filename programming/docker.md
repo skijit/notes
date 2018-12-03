@@ -105,6 +105,7 @@ Docker - basics
 - Azure has 2 container orchestrators
   - Azure Container Service (AKS)
   - Azure Service Fabric
+- TODO: Continue notes [here](https://docs.microsoft.com/en-us/virtualization/windowscontainers/about/) 
 
 - TODO:
   - Revisit the topic of Docker-based development environments
@@ -113,11 +114,6 @@ Docker - basics
   
 ## More about Containers
 - [src](https://azure.microsoft.com/en-us/blog/containers-docker-windows-and-trends/)
-- 
 
-## questions
-- is it a cross-platform solution?
-- looks like kubernetes depends on windows
-
-
+ 
 
