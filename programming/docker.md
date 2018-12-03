@@ -103,8 +103,9 @@ Docker - basics
   - Service Discovery: enable containers to locate each other automatically, even as the move between host machines and change IP addresses
   - Coordinated application upgrades
 - Azure has 2 container orchestrators
-  - Azure Container Service
+  - Azure Container Service (AKS)
   - Azure Service Fabric
+
 - TODO:
   - Revisit the topic of Docker-based development environments
 
@@ -116,5 +117,7 @@ Docker - basics
 
 ## questions
 - is it a cross-platform solution?
+- looks like kubernetes depends on windows
+
 
 

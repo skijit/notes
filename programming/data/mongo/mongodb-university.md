@@ -1,9 +1,9 @@
 M101N: MongoDB for .NET Developers
 ==================
 
-- [link](https://university.mongodb.com/dashboard)
+- The [Certification Study Guide](https://university.mongodb.com/exam/guide)
 
-## Class 1
+## Basic Concepts
 - Since we're not joining data across multiple db tables, sharding is much easier
     - in contrast, in a rdbms, you need to scale up with more expensive hardware
     - scaling out (as supported by mongodb), lets you put more instances on cheaper/commodity hardware
@@ -32,170 +32,187 @@ M101N: MongoDB for .NET Developers
     - otherwise reference
     - a single document cant be more than 16MB
     
-## Class 2 : CRUD
+## CRUD
 
-- Create
-    - you can manually specify the _id value, if you want
-    - insertOne({})
-    - insertMany([])
-        - contents of array parameter are documents: {...}, {...}, ...
-        - if there are errors here, you have options (spec'ed in 2nd parameter):
-            - ordered inserts: 
-                - by default, insertMany is ordered insert
-                - as soon as it encounters and error, it will stop processing
-            - unordered inserts:
-                - insertMany([], { "ordered": false})
-                - keep trying if you encounter an error
-    - you can also create records with the update methods
-        - aka upserts
-        - occurs when no records are matching the selectors/filters
+### Create
+- you can manually specify the _id value, if you want
+- `insertOne({})`
+- `insertMany([])`
+    - contents of array parameter are documents: {...}, {...}, ...
+    - if there are errors here, you have options (spec'ed in 2nd parameter):
+        - ordered inserts: 
+            - by default, insertMany is ordered insert
+            - as soon as it encounters and error, it will stop processing
+        - unordered inserts:
+            - `insertMany([], { "ordered": false})`
+            - keep trying if you encounter an error
+- you can also create records with the update methods
+    - aka upserts
+    - occurs when no records are matching the selectors/filters
 - all collections have a unique pk index on _id
-    - secondary indexes are possible
     - must be unique to the collection
     - 12 byte hex strings
-- Read
-    - equality search: `db.movieDetails.find({rated: "PG-13"}).count()`
-    - first parameter to find is called the *query document*
-    - as we add new items to the query document, they're implicitly 'anded':
-        - `db.movieDetails.find({rated: "PG-13", year: 2009 }).count()`
-    - note that you're typically inserting JSON, but searching with regular javascript objects!
-    - matching against embedded documents:
-        - `db.movieDetails.find({"tomato.meter": 100}).count()`
-        - using 'dot notation'
-        - note that's gone back to json (quotes around properties)!  dot notation requires quotes!
-    - equality matches on arrays:
-        - on the entire array:
-            - `db.movieDetails.find({"writers": ["Ethan Coen", "Joel Coen"]}).count()`
-                - requires the array to have same entries in same order!                
-        - based on any element
-            - `db.movieDetails.find({"actors": "Jeff Bridges"]}).count()`
-                - actors is an array, and so it will return any documents where any element matches this value
-        - based on a specific element
-            - `db.movieDetails.find({"actors.0": "Jeff Bridges"]}).count()`
-                - the first element of the array has to match this value
-    - cursors
-        - find() returns a cursor which you need to iterate through
-        - in the shell, this usually specifies a batch size of 20 records at a time
-        - in a programmatic interface, the batch size will not exceed the maximum bson document size (per the BSON spec)
-        - to iterate in the shell, type `it`
-        - another way to walk through the results:
-            - `var c = db.movieDetails.find({rated: "PG" });`
-            - `var doc = function() { return c.hasNext() ? c.next() : null; }`
-            - call `doc()` (repeatedly)
-            - call `c.obsLeftInBatch()`
-    - projections
-        - the second argument to the find command
-        - `_id` is by default included
-        - `db.movieDetails.find({rated: "PG" }, { title: 1}).pretty()`;  //include title
-        - `db.movieDetails.find({rated: "PG" }, { title: 1, _id: 0 }).pretty()`;  //include title, exclude _id
-        - `db.movieDetails.find({rated: "PG" }, { writers: 0, actors: 0 }).pretty()`;  //exclude writers and actors
-- Comparison Operators
-    - $eq, $ne, $gt, $lte, ...
-    - `db.movieDetails.find({lengthInMin: {$gt: 90 } });` //all movies longer than 90 min
-    - `db.movieDetails.find({lengthInMin: {$gt: 90, $lte: 120 } });` //all movies longer than 90 min and less than 120 min
-    - `db.movieDetails.find({ "tomato.meter": { $gte: 95}, lengthInMin: {$gt: 90 } }, { title: 1, lengthInMin: 1, _id: 0});` //all movies longer than 90 min with a good rating
-    - $ne will also match documents that don't have that field either
-    - $in : `db.movieDetails.find({rated: {$in: ["G", "PG"] } }).pretty();`
-    - $nin : not in!
-- Element Operators
-    - $exists : match a document for where a field either exists or not
-        - `db.movieDetails.find({ "tomato.meter": { $exists: true}`});`
-        - you can also set $exists to false to query non-existence
-    - $type : match a document where the field has a specified type
-        - `db.movieDetails.find({ "_id": { $type: "string"}`});`
-- Logical Operators
-    - $or, $and, $not, $nor
-    - `db.movieDetails.find({ $or: [{ "tomato.meter": { $gte: 95}}, { "metacritic": { $gt: 88}} ]}).pretty();`
-    - $or takes an array
-    - even though filter properties are implicitly anded together, sometimes you need multiple criteria on the same field (e.g the same field should not be null and it should exist)
-- Regex Operators
-    - For matching strings
-    - `db.movieDetails.find({"awards.text": { $regex: /^Won.*/}})` //text is a field inside awards that has some text
-- Array Operators
-    - $all
-        - `db.movieDetails.find({ genres: { $all: ["Comedy", "Crime", "Drama"]}}).pretty()` //only return if all of these elements match
-    - $elemMatch
-        - imagine the following field in collection movieDetails: boxOffice: [ { "country":"USA", "revenue":41.3}, { "country":"Canada", "revenue":20.1}]
-        - `db.movieDetails.find({boxOffice: { $elemMatch {country: "USA", revenue" { $lt: 10}}}})` //get movies where it grossed more than 10 mil in the USA
-            - this wouldn't work: `db.movieDetails.find({ boxOffice: {country: "USA", revenue" { $lt: 10}}})` because it doesn't need to apply the condition to a  single element
-    - $size
-        - `db.movieDetails.find({ countries: { $size: 1}}).pretty()` //only return documents where the county array is of size 1
-- Updating Documents
-    - 3 updates commands:
-        - UpdateOne
-        - UpdateMany
-        - ReplaceOne
-    - You can update a field which doesn't exist on a document
-    - `db.movieDetails.updateOne({title: 'The Martian'}, { $set: { poster: "someurl"}})`
-        - first parameter is the document filter/selector.  _id is often used.
-        - updateOne will only update the first match
-        - $set is the 'update operator', see below for more
-        - adds the field if it doesn't exist
-    - Update Operators (these are just some...)
-        - $set - complete replacement
-        - $unset - remove the fields specified
-        - $min - update the field if it is less than a value
-        - $inc
-        - $mul
-        - $rename
-        - $currentDate - sets a field value to the current Date
-    - `db.movieDetails.updateOne({title: 'The Martian'}, { $inc: { "tomato.reviews": 3, "tomato.userReviews": 25}})`
-        - increment these fields by 3 and 25
-    - Updating Array fields
-        - $addToSet - add if they don't already exist in array
-        - $pop
-        - $pullAll
-        - $pull
-        - $pushAll
-        - $push
-        - `db.movieDetails.updateOne({title: 'The Martian'}, { $push: { reviews: { rating: 4.5, date: ISODate("datestring"), text: "my review of this movie"}}})`
-            - this created the reviews property and we pushed this record into it
-        - `db.movieDetails.updateOne({title: 'The Martian'}, { $push: { reviews:  { $each: [{a-review-doc}, {another-review-doc}, ...]}}})`
-            - we use the $each here because we want to add each doc to the array, rather than a single element to the array which happens to itself be an array
-        - other modifiers for $push:
-            - $position: where you're going to put it in the array
-            - $slice: how many records to keep
+- secondary indexes are possible
+
+### Read
+- equality search: `db.movieDetails.find({rated: "PG-13"}).count()`
+- first parameter to find() is called the *query document*
+- as we add new items to the query document, they're implicitly 'anded':
+    - `db.movieDetails.find({rated: "PG-13", year: 2009 }).count()`
+- note that you're typically inserting JSON, but searching with regular javascript objects!
+- matching against embedded documents:
+    - `db.movieDetails.find({"tomato.meter": 100}).count()`
+    - using 'dot notation'
+    - note that's gone back to json (quotes around properties)!  dot notation requires quotes!
+- equality matches on arrays:
+    - on the entire array:
+        - `db.movieDetails.find({"writers": ["Ethan Coen", "Joel Coen"]}).count()`
+            - requires the array to have same entries in same order!                
+    - based on any element
+        - `db.movieDetails.find({"actors": "Jeff Bridges"]}).count()`
+            - actors is an array, and so it will return any documents where any element matches this value
+    - based on a specific element
+        - `db.movieDetails.find({"actors.0": "Jeff Bridges"]}).count()`
+            - the first element of the array has to match this value
+### Cursors
+- `find()` returns a cursor which you need to iterate through
+- in the shell, this usually specifies a batch size of 20 records at a time
+- in a programmatic interface, the batch size will not exceed the maximum bson document size (per the BSON spec)
+- to iterate in the shell, type `it`
+- another way to walk through the results:
+
+```
+//execute this as shell commands (one by one)
+var c = db.movieDetails.find({rated: "PG" });`
+var doc = function() { return c.hasNext() ? c.next() : null; }`
+doc() //call this repeatedly
+c.obsLeftInBatch()
+
+//another option which I personally favor
+var myTotallyNormalJsArrayInMemory = db.movieDetails.find({rated: "PG" }).toArray();
+//... do stuff with myTotallyNormalJsArrayInMemory
+```
+
+### Projections
+- the second argument to the find command
+- `_id` is by default included
+- `db.movieDetails.find({rated: "PG" }, { title: 1}).pretty()`;  //include title
+- `db.movieDetails.find({rated: "PG" }, { title: 1, _id: 0 }).pretty()`;  //include title, exclude _id
+- `db.movieDetails.find({rated: "PG" }, { writers: 0, actors: 0 }).pretty()`;  //exclude writers and actors
+
+### Comparison Operators
+- $eq, $ne, $gt, $lte, ...
+- `db.movieDetails.find({lengthInMin: {$gt: 90 } });` //all movies longer than 90 min
+- `db.movieDetails.find({lengthInMin: {$gt: 90, $lte: 120 } });` //all movies longer than 90 min and less than 120 min
+- `db.movieDetails.find({ "tomato.meter": { $gte: 95}, lengthInMin: {$gt: 90 } }, { title: 1, lengthInMin: 1, _id: 0});` //all movies longer than 90 min with a good rating
+- $ne will also match documents that don't have that field either
+- $in : `db.movieDetails.find({rated: {$in: ["G", "PG"] } }).pretty();`
+- $nin : not in!
+
+### Element Operators
+- $exists : match a document for where a field either exists or not
+    - `db.movieDetails.find({ "tomato.meter": { $exists: true}`});`
+    - you can also set $exists to false to query non-existence
+- $type : match a document where the field has a specified type
+    - `db.movieDetails.find({ "_id": { $type: "string"}`});`
+
+### Logical Operators
+- $or, $and, $not, $nor
+- `db.movieDetails.find({ $or: [{ "tomato.meter": { $gte: 95}}, { "metacritic": { $gt: 88}} ]}).pretty();`
+- $or takes an array
+- even though filter properties are implicitly anded together, sometimes you need multiple criteria on the same field (e.g the same field should not be null and it should exist)
+
+### Regex Operators
+- For matching strings
+- `db.movieDetails.find({"awards.text": { $regex: /^Won.*/}})` //text is a field inside awards that has some text
+
+### Array Operators
+- $all
+    - `db.movieDetails.find({ genres: { $all: ["Comedy", "Crime", "Drama"]}}).pretty()` //only return if all of these elements match
+- $elemMatch
+    - imagine the following field in collection movieDetails: boxOffice: [ { "country":"USA", "revenue":41.3}, { "country":"Canada", "revenue":20.1}]
+    - `db.movieDetails.find({boxOffice: { $elemMatch {country: "USA", revenue" { $lt: 10}}}})` //get movies where it grossed more than 10 mil in the USA
+        - this wouldn't work: `db.movieDetails.find({ boxOffice: {country: "USA", revenue" { $lt: 10}}})` because it doesn't need to apply the condition to a  single element
+- $size
+    - `db.movieDetails.find({ countries: { $size: 1}}).pretty()` //only return documents where the county array is of size 1
+
+### Updating 
+- 3 updates commands:
+    - UpdateOne
     - UpdateMany
-        - Same as updateOne, but you can update more than one document
-        - `db.movieDetails.updateMany({rated: null}, { $unset: {rated: ""}})`
-            - Update a collection, set null values to missing that field for all
-    - Upserts
-        - If no document is found matching the filter, we insert:
-            - it's the third parameter document
-            - `db.movieDetails.updateOne({"imdb.id": detail.imdb.id}, {$set: detail}, {upsert: true})`
-                - detail is a document in the same code
     - ReplaceOne
-        - replaces the complete document rather than changing individual fields
-- .NET Driver
-    - pass a `MongoClientSettings` or a connection string to a `MongoClient` ctor
-    - dont worry about closing connections or using blocks
-    - dynamic or BsonDocument are both ok
-    - todo: read more about C# dynamic
-    ```(csharp)
-    //various ways to use this dynamic-like type
-    var doc = new BsonDocument {
-        {"name", "Jones"}
-    };
+- You can update a field which doesn't exist on a document
+- `db.movieDetails.updateOne({title: 'The Martian'}, { $set: { poster: "someurl"}})`
+    - first parameter is the document filter/selector.  _id is often used.
+    - updateOne will only update the first match
+    - $set is the 'update operator', see below for more
+    - adds the field if it doesn't exist
+- Update Operators (these are just some...)
+    - $set - complete replacement
+    - $unset - remove the fields specified
+    - $min - update the field if it is less than a value
+    - $inc
+    - $mul
+    - $rename
+    - $currentDate - sets a field value to the current Date
+- `db.movieDetails.updateOne({title: 'The Martian'}, { $inc: { "tomato.reviews": 3, "tomato.userReviews": 25}})`
+    - increment these fields by 3 and 25
+- Updating Array fields
+    - $addToSet - add if they don't already exist in array
+    - $pop
+    - $pullAll
+    - $pull
+    - $pushAll
+    - $push
+    - `db.movieDetails.updateOne({title: 'The Martian'}, { $push: { reviews: { rating: 4.5, date: ISODate("datestring"), text: "my review of this movie"}}})`
+        - this created the reviews property and we pushed this record into it
+    - `db.movieDetails.updateOne({title: 'The Martian'}, { $push: { reviews:  { $each: [{a-review-doc}, {another-review-doc}, ...]}}})`
+        - we use the $each here because we want to add each doc to the array, rather than a single element to the array which happens to itself be an array
+    - other modifiers for $push:
+        - $position: where you're going to put it in the array
+        - $slice: how many records to keep
+- UpdateMany
+    - Same as updateOne, but you can update more than one document
+    - `db.movieDetails.updateMany({rated: null}, { $unset: {rated: ""}})`
+        - Update a collection, set null values to missing that field for all
+- Upserts
+    - If no document is found matching the filter, we insert:
+        - it's the third parameter document
+        - `db.movieDetails.updateOne({"imdb.id": detail.imdb.id}, {$set: detail}, {upsert: true})`
+            - detail is a document in the same code
+- ReplaceOne
+    - replaces the complete document rather than changing individual fields
 
-    doc.Add("age", 30);
+### .NET Driver
+- pass a `MongoClientSettings` or a connection string to a `MongoClient` ctor
+- dont worry about closing connections or using blocks
+- dynamic or BsonDocument are both ok
+- todo: read more about C# dynamic
 
-    doc["profession"] = "developer";
+```(csharp)
+//various ways to use this dynamic-like type
+var doc = new BsonDocument {
+    {"name", "Jones"}
+};
 
-    var nestedArray = new BsonArray();
-    nestedArray.Add(new BsonDocument("color", "red"));
-    doc.Add("array", nestedArray);
+doc.Add("age", 30);
 
-    //other stuff: doc.TryGetElement(), doc.Contains()
-    ```
+doc["profession"] = "developer";
 
-    - Using attributes to change mapped-pocos:
-    - 3 ways to control mapping
-        - Attributes: BsonElement("name") - changes the field property name to "name" in lowercase
-        - Mapping: Alternately, you can use `BsonClassMap.RegisterClass( cm => cm.Automap();  cm.MapMember...)`
-            - run this first
-        - Conventions: You can also create a `ConventionPack` and register that.
+var nestedArray = new BsonArray();
+nestedArray.Add(new BsonDocument("color", "red"));
+doc.Add("array", nestedArray);
+
+//other stuff: doc.TryGetElement(), doc.Contains()
+```
+
+- Using attributes to change mapped-pocos:
+- 3 ways to control mapping
+    - Attributes: BsonElement("name") - changes the field property name to "name" in lowercase
+    - Mapping: Alternately, you can use `BsonClassMap.RegisterClass( cm => cm.Automap();  cm.MapMember...)`
+        - run this first
+    - Conventions: You can also create a `ConventionPack` and register that.
     
-        
     ```(csharp)
     //enumerating through data
 
@@ -216,7 +233,6 @@ M101N: MongoDB for .NET Developers
 
     //another method
     await collec.find(new BsonDocument()).ForEachAsync(doc => Console.WriteLine(doc));
-
     ```
 
     ```(csharp)
@@ -235,87 +251,70 @@ M101N: MongoDB for .NET Developers
     //alot of times, you can insert your filters as lambdas directly into the find
     ```
 
-    - Limit(n) is like Take(n)
-        - use Sort() alongside to avoid arbitrary results
-    - Skip() 
-    - Sort() 
-        - `var list3 = await collec.find(newFilter).Sort("{Age: 1}").ToListAsync();`
-        - `var list3 = await collec.find(newFilter).Sort(new BsonDocument("Age", 1)).ToListAsync();`
-        - `var list3 = await collec.find(newFilter).Sort(Builder<BsonDocument>.Sort.Ascending("Age").Descending("Name")).ToListAsync();`
-        - When you're strongly typed: `var list3 = await collec.find(newFilter).Sort(Builder<Person>.Sort.Ascending(x => x.Age).ToListAsync();`
-        - You can use SortBy too - even easier: `var list3 = await collec.find(newFilter).SortBy(x => x.Age).ThenByDescending(x => x.Name).ToListAsync();`
-    - The order you apply these Skip, Sort, Limits doesn't matter
+- Limit(n) is like Take(n)
+    - use Sort() alongside to avoid arbitrary results
+- Skip() 
+- Sort() 
+    - `var list3 = await collec.find(newFilter).Sort("{Age: 1}").ToListAsync();`
+    - `var list3 = await collec.find(newFilter).Sort(new BsonDocument("Age", 1)).ToListAsync();`
+    - `var list3 = await collec.find(newFilter).Sort(Builder<BsonDocument>.Sort.Ascending("Age").Descending("Name")).ToListAsync();`
+    - When you're strongly typed: `var list3 = await collec.find(newFilter).Sort(Builder<Person>.Sort.Ascending(x => x.Age).ToListAsync();`
+    - You can use SortBy too - even easier: `var list3 = await collec.find(newFilter).SortBy(x => x.Age).ThenByDescending(x => x.Name).ToListAsync();`
+- The order you apply these Skip, Sort, Limits doesn't matter
 
-    - Projections
-        - `var list = await collec.find(new BsonDocument()).Project("{ Name: 1, _id: 0}").ToListAsync();`
-        - `var list = await collec.find(new BsonDocument()).Project(Builders<BsonDocument>.Projection.Include("Name").Exclude("_id")).ToListAsync();`
-        - projections are usually going to BsonDocuments not the original class, because everything would be null
-        - strongly typed: `var list = await collec.find(new BsonDocument()).Project(x => x.Name).ToListAsync();`
-        - Anonymous types: `var list = await collec.find(new BsonDocument()).Project(x => new { x.Name, CalcAge=x.Age+20}).ToListAsync();`
-            - this isn't supported by the server, so it will happen client-side
+- Projections
+    - `var list = await collec.find(new BsonDocument()).Project("{ Name: 1, _id: 0}").ToListAsync();`
+    - `var list = await collec.find(new BsonDocument()).Project(Builders<BsonDocument>.Projection.Include("Name").Exclude("_id")).ToListAsync();`
+    - projections are usually going to BsonDocuments not the original class, because everything would be null
+    - strongly typed: `var list = await collec.find(new BsonDocument()).Project(x => x.Name).ToListAsync();`
+    - Anonymous types: `var list = await collec.find(new BsonDocument()).Project(x => new { x.Name, CalcAge=x.Age+20}).ToListAsync();`
+        - this isn't supported by the server, so it will happen client-side
+
+- Updating
+    - ReplaceOneAsync() will replace the whole document
+        - Parameter 1: filter (you can BsonDocument, string, or the filter Builder class)
+        - Parameter 2: new document
+        - Parameter 3 (optional): options (class UpdateOptions)
+        - ex: `var result = await col.ReplaceOneAsync(new BsonDocument("_id", 5), new BsonDocument("_id", 5).Add("x", 30));`
+            - will set it the new document's x property to 30
+            - **IMPORTANT**: you can't change the _id when you're replacing
+        - ex with upsert option:  `var result = await col.ReplaceOneAsync(new BsonDocument("_id", 5), new BsonDocument("_id", 5).Add("x", 30), new UpdateOptions { IsUpsert = true});`
+    - UpdateOneAsync() will replace a piece of the document
+        - ex (native syntax): `var result = await col.UpdateOneAsync(Builders<BsonDocument>.Filter.Eq("x",5), new BsonDocument("$inc", new BsonDocument("x", 10));`
+            - increment the X value (where = 5), by 10
+        - ex (builder syntax): `var result = await col.UpdateOneAsync(Builders<BsonDocument>.Filter.Eq("x",5), Builder<BsonDocument>.Update.Inc("x", 10));`
+
+- Deleting
+    - DeleteOneAsync()
+    - DeleteManyAsync()
+
+- Find And Modify : Atomic Operations
+    - FindOneAndUpdate()
+        - You can specify options parameter which allow:
+            - Upsert
+            - Projection
+            - ReturnDocument.After (whether you get the DB object after the update - I think this is default)
+            - Sort (which may be critical to your filter (1st parameter))
+    - FindOneAndReplace()
+    - FindOneAndDelete()
+
+- Bulk Write
+    - Stuff like InsertManyAsync is implicitly using a Bulk Write
+    - Good for multiple, quick operations
     
-    - Updating
-        - ReplaceOneAsync() will replace the whole document
-            - Parameter 1: filter (you can BsonDocument, string, or the filter Builder class)
-            - Parameter 2: new document
-            - Parameter 3 (optional): options (class UpdateOptions)
-            - ex: `var result = await col.ReplaceOneAsync(new BsonDocument("_id", 5), new BsonDocument("_id", 5).Add("x", 30));`
-                - will set it the new document's x property to 30
-                - **IMPORTANT**: you can't change the _id when you're replacing
-            - ex with upsert option:  `var result = await col.ReplaceOneAsync(new BsonDocument("_id", 5), new BsonDocument("_id", 5).Add("x", 30), new UpdateOptions { IsUpsert = true});`
-        - UpdateOneAsync() will replace a piece of the document
-            - ex (native syntax): `var result = await col.UpdateOneAsync(Builders<BsonDocument>.Filter.Eq("x",5), new BsonDocument("$inc", new BsonDocument("x", 10));`
-                - increment the X value (where = 5), by 10
-            - ex (builder syntax): `var result = await col.UpdateOneAsync(Builders<BsonDocument>.Filter.Eq("x",5), Builder<BsonDocument>.Update.Inc("x", 10));`
-    
-    - Deleting
-        - DeleteOneAsync()
-        - DeleteManyAsync()
+    ```(csharp)
+    //these get executed on the server at the same time
+    var result = col.BulkWriteAsync(new WriteModel<BsonDocument>[]
+        {
+            new DeleteOneModel<BsonDocument>("{x:5}"),
+            new DeleteOneModel<BsonDocument>("{x:7}"),
+            new UpdateManyModel<BsonDocument>("{x: {$lt: 7}}", "{$inc: {x:1}}")
+        },
+        new BulkWriteOptions { IsOrdered = false }
+    );
+    ```
 
-    - Find And Modify : Atomic Operations
-        - FindOneAndUpdate()
-            - You can specify options parameter which allow:
-                - Upsert
-                - Projection
-                - ReturnDocument.After (whether you get the DB object after the update - I think this is default)
-                - Sort (which may be critical to your filter (1st parameter))
-        - FindOneAndReplace()
-        - FindOneAndDelete()
-
-    - Bulk Write
-        - Stuff like InsertManyAsync is implicitly using a Bulk Write
-        - Good for multiple, quick operations
-        
-        ```(csharp)
-        //these get executed on the server at the same time
-        var result = col.BulkWriteAsync(new WriteModel<BsonDocument>[]
-            {
-                new DeleteOneModel<BsonDocument>("{x:5}"),
-                new DeleteOneModel<BsonDocument>("{x:7}"),
-                new UpdateManyModel<BsonDocument>("{x: {$lt: 7}}", "{$inc: {x:1}}")
-            },
-            new BulkWriteOptions { IsOrdered = false }
-        );
-        ```
-- HW question notes:
-- manipulating stuff in the mongo shell (question2):
-    - `db.grades.find().sort({student_id:1}).sort({score:1}).limit(10).pretty() `           
-    - `db.grades.find().sort({student_id:1, score:1}, { }).limit(10).pretty()  `
-    - `var allResults = db.grades.find({type:"homework"}).sort({student_id:1, score:1}).toArray()`
-    - `let curId = -1`
-    - `let filteredResults = allResults.filter(x => { let keep = curId != x.student_id; curId = x.student_id; return keep})`
-    - `let filteredProjection = filteredResults.map(x => x._id)`
-    - `db.grades.deleteMany({ _id : { $in: filteredProjection }  })`
-- question 2.4
-    - `db.movieDetails.find({year: 2013}).limit(1).pretty()`
-    - `db.movieDetails.find({year: 2013, rated: "PG-13"}).limit(1).pretty()`
-    - `db.movieDetails.find({year: 2013, rated: "PG-13", "awards.wins": { $gt: 0}}).limit(5).pretty()`
-    - `db.movieDetails.find({year: 2013, rated: "PG-13", "awards.wins": 0}, { title: 1}).limit(20).pretty()`
-- question 2.5:
-    - `db.movieDetails.find({"countries.1" : "Sweden"}).count()`
-- `db.movieDetails.find({"actors.0": "Jeff Bridges"]}).count()`
-
-## Week 3 : Schema Design
+## Schema Design
 - Application driven schema instead of the fixed third normal form (3nf)
 - Supports 'rich documents'
     - contain arrays, sub docs, etc.
@@ -392,19 +391,7 @@ M101N: MongoDB for .NET Developers
     - 1 to Many : Embed from the many to the 1
     - Many to Many : Link
 
-- HW 3.1
-    - `mongoimport --drop -d school -c students students.json`
-    - `db.students.find().limit(1).pretty()`
-    - `{ _id, name, scores: [{type, score}]}`
-    - create an object where each user's id is a property and the value is the lowest homework score.
-        - `let lowScores = {}`
-        - `let _students = db.students.find().toArray()`
-        - `_students.forEach((x) => { let _min = Math.min(...(x.scores.filter(a => a.type == 'homework').map(b => b.score))); lowScores[`${x._id}`] = _min; })`
-        - `printjson(lowScores)`
-    - Iterate throught students and remove corresponding element array:
-        - `Object.keys(lowScores).forEach(x => db.students.update({ _id: parseInt(x) }, {$pull: { scores: { score: lowScores[x] }}}, {multi: true}))`
-
-## Week 4 : Performance
+## Performance
 - 3 primary ways to impact performance:
     1. Indexes
     2. Sharding
@@ -474,16 +461,19 @@ M101N: MongoDB for .NET Developers
 - Multikey Indexes
     - ie Indexes on Arrays!
     - given a doc format:
-    ```{
+    
+    ```
+    {
         name: 'Andrew',
         tags: ['photography', 'hiking', 'golf'],
         color: 'red'
-    }```
+    }
+    ```
     
-        - index on `tags`, would create an index entries for "photography", "hiking", and "golf"
-        - compound index on `tags, color` would create index points for "photography, red", "hiking, red", and "golf, red"
-        - restrictions: you can't have a compound index where > 1 field is an array
-            - but this is enforced on the document, not collection, level
+    - index on `tags`, would create an index entries for "photography", "hiking", and "golf"
+    - compound index on `tags, color` would create index points for "photography, red", "hiking, red", and "golf, red"
+    - restrictions: you can't have a compound index where > 1 field is an array
+        - but this is enforced on the document, not collection, level
 - Nested Multikey Indexes
     - `db.students.createIndex({'scores.score':1})`
         - where scores is an array which has a property score in it
@@ -532,7 +522,7 @@ M101N: MongoDB for .NET Developers
         - these are super efficient!
     - even if you hit an index (keys examined), if your projection includes any values outside the index (e.g. _id), then the document has to be accessed, and it is not a covered query.
         - if you project only by exclusion, then since schema is variable per doc, the doc has to be consulted and the query is not covered.
-- How is an index choosed?
+- How is an index selected?
     - mongodb looks at the shape / profile of each query
     - looks at candidate indexes
     - create a query plan for each candidate index
@@ -556,70 +546,6 @@ M101N: MongoDB for .NET Developers
         - Regular Index -> 1:1
         - Sparse Index -> 1:<=document-count
         - Multikey -> 1:* (depends on number of values in array.  could be more than number of docs in collection, even)
-- Geospatial Indexes
-    - Find things based on location
-    - 2D Scenario
-        - document needs to have cartesian coordinates in an array of values.  eg `location: [x, y]`
-        - create an index, telling mongo that the data is '2d' (a reserved type): `createIndex({"location": "2d"})`
-        - then you need an operator to find documents with locations near to you:
-            - eg using the $near operator: `find({location: { $near: [your_x, your_y] }}).limit(20)`
-            - db will return them in order of increasing distance
-    - Spherical Scenario
-        - lat/lng
-        - use index type: '2dsphere'
-        - it's easy to find lat/lng from google maps
-        - mongo actually takes longitude, latitude
-        - locations are specified using geojson
-            - there are lots of types of geometries, but points are probably the most useful
-            - looks like:
-
-            ```(json)
-            {
-                "_id": ObjectId("dlskfj"),
-                "name": "Apple Store",
-                "city": "Palo Alto",
-                "location": {   //this is geojson
-                    "type": "Point",
-                    "coordinates": [
-                        -122.90812, //long
-                        37.4434 //lat
-                    ]
-                },
-                "type": "retail"
-            }
-            ```
-
-        - `db.places.createIndex({'location':'2dsphere'})`
-        
-        ```(javascript)
-        db.places.find({
-            location: {
-                $near: {
-                    $geometry: {
-                        type: "Point",
-                        coordinates: [-122.123, 37.42] //my location
-                     }, 
-                    $maxDistance: 2000 //meters
-                }                
-            }
-        }).pretty()
-        ```
-- Full Text Search Index
-    - You can do a $regex search on normal text fields and it doesn't require a full text index
-        - If there is an index on the field, the $regex search will use it if...
-            - it's a prefix search (starts with ^)
-            - it's case sensitive
-    - If you want to avoid the $regex search, you can specify a full text index which will perform search-engine like matching (terms are or-joined)        
-    - A full text index can be defined on a single or multiple (compound index) fields
-        - if you want a super compound index, this will add each string field to the index: `db.collection.createIndex( { "$**": "text" } )`
-    - each full text search will have a resulting score, and the rules can be somewhat influenced by how you set up the index
-        - if you have a compound text index, you can weight fields differently
-    - creating a text index: `db.sentences.createIndex({"myField":'text'})`
-    - to search against the text index: `db.sentences.find({$text: {$search: "dog"}})`
-        - `db.sentences.find({$text: {$search: "dog otherword blah blah"}})`
-        - full text search is not case sensitive
-        - you can also sort the results in terms of the search score:`
-            - `db.sentences.find({$text: {$search: "dog otherword blah blah"}}, {score:{$meta: 'textScore'}}).sort({score: {$meta: 'textScore'}})`
 - Efficiency of Index Use
     - Goal: Efficient Read/Write operations
     - With `hint()` you can specify the signature of an index and make the query use that index
@@ -664,13 +590,79 @@ M101N: MongoDB for .NET Developers
         - so including the shard_key will make it faster
     - choosing a shard key is a particular thing
     - mongos usually runs on the same machine as the application
+
+### Geospatial Indexes
+- Find things based on location
+- 2D Scenario
+    - document needs to have cartesian coordinates in an array of values.  eg `location: [x, y]`
+    - create an index, telling mongo that the data is '2d' (a reserved type): `createIndex({"location": "2d"})`
+    - then you need an operator to find documents with locations near to you:
+        - eg using the $near operator: `find({location: { $near: [your_x, your_y] }}).limit(20)`
+        - db will return them in order of increasing distance
+- Spherical Scenario
+    - lat/lng
+    - use index type: '2dsphere'
+    - it's easy to find lat/lng from google maps
+    - mongo actually takes longitude, latitude
+    - locations are specified using geojson
+        - there are lots of types of geometries, but points are probably the most useful
+        - looks like:
+
+        ```(json)
+        {
+            "_id": ObjectId("dlskfj"),
+            "name": "Apple Store",
+            "city": "Palo Alto",
+            "location": {   //this is geojson
+                "type": "Point",
+                "coordinates": [
+                    -122.90812, //long
+                    37.4434 //lat
+                ]
+            },
+            "type": "retail"
+        }
+        ```
+
+    - `db.places.createIndex({'location':'2dsphere'})`
+    
+    ```(javascript)
+    db.places.find({
+        location: {
+            $near: {
+                $geometry: {
+                    type: "Point",
+                    coordinates: [-122.123, 37.42] //my location
+                    }, 
+                $maxDistance: 2000 //meters
+            }                
+        }
+    }).pretty()
+    ```
+### Full Text Search Index
+- You can do a $regex search on normal text fields and it doesn't require a full text index
+    - If there is an index on the field, the $regex search will use it if...
+        - it's a prefix search (starts with ^)
+        - it's case sensitive
+- If you want to avoid the $regex search, you can specify a full text index which will perform search-engine like matching (terms are or-joined)        
+- A full text index can be defined on a single or multiple (compound index) fields
+    - if you want a super compound index, this will add each string field to the index: `db.collection.createIndex( { "$**": "text" } )`
+- each full text search will have a resulting score, and the rules can be somewhat influenced by how you set up the index
+    - if you have a compound text index, you can weight fields differently
+- creating a text index: `db.sentences.createIndex({"myField":'text'})`
+- to search against the text index: `db.sentences.find({$text: {$search: "dog"}})`
+    - `db.sentences.find({$text: {$search: "dog otherword blah blah"}})`
+    - full text search is not case sensitive
+    - you can also sort the results in terms of the search score:`
+        - `db.sentences.find({$text: {$search: "dog otherword blah blah"}}, {score:{$meta: 'textScore'}}).sort({score: {$meta: 'textScore'}})`
      
-## Class 5: Aggregation Framework
+## Aggregation Framework
 - rooted in the Group By from Sql
 - good for sums, counts, averages using groups
 - simple example
     - given schema: `{ _id, productName, category, manufacturer, price}`
     - how would we figure out how how many products exist per manufacturer?
+   
     ```(javascript)
     db.products.aggregate([ //call aggregate function, notice the array for other operations
         {
@@ -716,7 +708,8 @@ M101N: MongoDB for .NET Developers
 - group by multiple keys
     - something liek: select ... group by manufacturer, category
     - called a compound group by id
-    ```
+    
+    ```(javascript)
     db.products.aggregate([
         { $group: {
             _id: { 
@@ -728,8 +721,9 @@ M101N: MongoDB for .NET Developers
         }
     ])
     ```
+
     - result set looks like this:
-    ```
+    ```(javascript)
     {
         _id: {
             "manufacturer": "Amazon",
@@ -738,6 +732,7 @@ M101N: MongoDB for .NET Developers
         num_products: 2
     }
     ```
+
     - you can use this aliasing technique for single groups as well
     - a lot of people don't realize you can make the _id be a document, but that's ok in mongo!
 - Aggregation expressions:
@@ -747,7 +742,8 @@ M101N: MongoDB for .NET Developers
     - $min
     - $max    
     - $addToSet: for building arrays
-    ```
+    
+    ```(javascript)
         db.products.aggregate([
             { $group: {
                 _id: { 
@@ -758,6 +754,7 @@ M101N: MongoDB for .NET Developers
             }
         ])
     ```   
+
     - $push : for building arrays
         - same as $addToSet but is not guaranteeing a distinct list
     - $first: first in a group, be sure to sort though
@@ -766,17 +763,20 @@ M101N: MongoDB for .NET Developers
     - run an aggregation stage more than once
         - This doesn't exist in SQL so easily
     - use case:
-    ```
+    
+    ```(javascript)
     db.grades.aggregate([
         { $group: { _id: {class_id: "$class_id", student_id: "$student_id"}, 'average': {$avg: "$score"}} },
         { $group: { _id: "$_id.class_id", 'average': {$avg: "$average"}}}
     ])
     //get the per student per class and then average out by class
     ```
+
 - $project
     - remove key, add key, reshape key, etc.
     - do some modifications: upcase, multiply, etc.
-    ```
+    
+    ```(javascript)
     db.products.aggregate([
         { 
             $project: {
@@ -789,15 +789,18 @@ M101N: MongoDB for .NET Developers
         }
     ])
     ```
+
 - $match
     - these can only use indexes at the beginning of the aggregation
-    ```
+    
+    ```(javascript)
     db.zips.aggregate([
         { $match: { state: "CA"}},
         { $group: { _id: "$city", population: {$sum: "$pop"}, zip_codes: {$addToSet: "$_id"}}},
         { $project: { _id: 0, city: "$_id", population: 1, zip_codes: 1}}
     ])
     ```
+
 - $sort
     - sorting by default happens in memory, unless it exceeds 100MB.
     - there is an option to work on the disk instead (for large sets)
@@ -844,79 +847,8 @@ M101N: MongoDB for .NET Developers
     - for more async stuff: `using MongoDB.Driver.Linq`
     - you can also use joins in linq and that will correspond with the new mongodb operator $lookup
 
-- hw q1
-    - { _id, body, permalink, author, title, tags :string[], comments: { body, email, author }[], date}
-    - `db.posts.aggregate([
-        { $unwind: "$comments"},
-        { $group: { _id: "$comments.author", _count: {$sum:1} } },
-        { $project: { _id: 1, _count: 1}}, 
-        { $sort: { _count: 1 }},
-        { $limit: 5} 
-    ])`
-- hw q2
-    - { _id (zip), city, loc, pop, state}
-    - stages:
-        - filter to only include CA and NY
-        - roll up to city/state, get sum of pops
-        - filter on pops > 25,000
-        - average of all
-    - db.zips.aggregate([
-        { $match: { $or: [ {state: "CA"}, {state:"NY"}] } },
-        { $group: {
-                _id: { 
-                    state: "$state",
-                    city: "$city"
-                },
-                zips: { $addToSet:"$_id"}, 
-                pop: { $sum: "$pop" }
-            }
-        },
-        { $match: { pop: { $gt: 25000 } } },
-        { $group: {
-              _id: "TOTAL",
-              avg: {$avg: "$pop"}  
-            }        
-        }
-    ])
-- hw q3
-    - stages:
-        - unwind scores
-        - filter out scores.type=quiz
-        - group: avg per { student, class }
-        - group: avg per class
-        - sort by avg
-    - db.grades.aggregate([
-        { $unwind: "$scores"},
-        { $match: { "scores.type": { $ne: "quiz" }} },
-        { $group: {
-            _id: {
-                student_id: "$student_id",
-                class_id: "$class_id"
-            },
-            avg: { $avg: "$scores.score" }
-        }},
-        { $group: {
-            _id: "$_id.class_id",
-            avg: { $avg: "$avg"}
-          }
-        },
-        { $sort: { avg: -1 }}
-    ])
-- hw q4
-    - db.zips.aggregate([
-        { $project: {
-            first_char: {$substr : ["$city",0,1]},
-            pop: 1
-          }
-        },
-        { $match: { $or: [{first_char: 'B'},{first_char: 'D'},{first_char: 'O'},{first_char: 'G'},{first_char: 'N'},{first_char: 'B'},{first_char: 'M'}]} },
-        {
-            $group: { _id: 1, TOTAL: {$sum:"$pop"}}
-        }
-    ])
 
-
-## Class 6: Application Engineering
+## Application Engineering
 - 3 main topics:
     1. Durability of Writes: How the data is persisted on disk
     2. Replication: Fault tolerance and availability
@@ -957,6 +889,7 @@ M101N: MongoDB for .NET Developers
         //apply write concern per-write
         await col.WithWriteConcern(WriteConcern.W2).InsertOneAsync(new BsonDocument("x", x++);)        
         ```
+
 - Network Errors
     - given `j=1,w=1`
     - But what happens if you get no response:
@@ -1094,11 +1027,123 @@ M101N: MongoDB for .NET Developers
         - different from compound key    
         
 
-## Exam
-- Q1
+## Misc HW question and exam Notes
+- manipulating stuff in the mongo shell (question2):
+    - `db.grades.find().sort({student_id:1}).sort({score:1}).limit(10).pretty() `           
+    - `db.grades.find().sort({student_id:1, score:1}, { }).limit(10).pretty()  `
+    - `var allResults = db.grades.find({type:"homework"}).sort({student_id:1, score:1}).toArray()`
+    - `let curId = -1`
+    - `let filteredResults = allResults.filter(x => { let keep = curId != x.student_id; curId = x.student_id; return keep})`
+    - `let filteredProjection = filteredResults.map(x => x._id)`
+    - `db.grades.deleteMany({ _id : { $in: filteredProjection }  })`
+- 2.4
+    - `db.movieDetails.find({year: 2013}).limit(1).pretty()`
+    - `db.movieDetails.find({year: 2013, rated: "PG-13"}).limit(1).pretty()`
+    - `db.movieDetails.find({year: 2013, rated: "PG-13", "awards.wins": { $gt: 0}}).limit(5).pretty()`
+    - `db.movieDetails.find({year: 2013, rated: "PG-13", "awards.wins": 0}, { title: 1}).limit(20).pretty()`
+- 2.5:
+    - `db.movieDetails.find({"countries.1" : "Sweden"}).count()`
+    - `db.movieDetails.find({"actors.0": "Jeff Bridges"]}).count()`
+- 3.1
+    - `mongoimport --drop -d school -c students students.json`
+    - `db.students.find().limit(1).pretty()`
+    - `{ _id, name, scores: [{type, score}]}`
+    - create an object where each user's id is a property and the value is the lowest homework score.
+        - `let lowScores = {}`
+        - `let _students = db.students.find().toArray()`
+        - `_students.forEach((x) => { let _min = Math.min(...(x.scores.filter(a => a.type == 'homework').map(b => b.score))); lowScores[`${x._id}`] = _min; })`
+        - `printjson(lowScores)`
+    - Iterate throught students and remove corresponding element array:
+        - `Object.keys(lowScores).forEach(x => db.students.update({ _id: parseInt(x) }, {$pull: { scores: { score: lowScores[x] }}}, {multi: true}))`
+
+- 5.1
+    - `{ _id, body, permalink, author, title, tags :string[], comments: { body, email, author }[], date}`
+    
+    ```(javascript)
+    db.posts.aggregate([
+        { $unwind: "$comments"},
+        { $group: { _id: "$comments.author", _count: {$sum:1} } },
+        { $project: { _id: 1, _count: 1}}, 
+        { $sort: { _count: 1 }},
+        { $limit: 5} 
+    ])```
+
+- 5.2
+    - `{ _id (zip), city, loc, pop, state}`
+    - stages:
+        - filter to only include CA and NY
+        - roll up to city/state, get sum of pops
+        - filter on pops > 25,000
+        - average of all
+    
+    ```(javascript)
+    db.zips.aggregate([
+        { $match: { $or: [ {state: "CA"}, {state:"NY"}] } },
+        { $group: {
+                _id: { 
+                    state: "$state",
+                    city: "$city"
+                },
+                zips: { $addToSet:"$_id"}, 
+                pop: { $sum: "$pop" }
+            }
+        },
+        { $match: { pop: { $gt: 25000 } } },
+        { $group: {
+              _id: "TOTAL",
+              avg: {$avg: "$pop"}  
+            }        
+        }
+    ])```
+
+- 5.3
+    - stages:
+        - unwind scores
+        - filter out scores.type=quiz
+        - group: avg per { student, class }
+        - group: avg per class
+        - sort by avg
+    
+    ```(javascript)
+    db.grades.aggregate([
+        { $unwind: "$scores"},
+        { $match: { "scores.type": { $ne: "quiz" }} },
+        { $group: {
+            _id: {
+                student_id: "$student_id",
+                class_id: "$class_id"
+            },
+            avg: { $avg: "$scores.score" }
+        }},
+        { $group: {
+            _id: "$_id.class_id",
+            avg: { $avg: "$avg"}
+          }
+        },
+        { $sort: { avg: -1 }}
+    ])
+    ```
+
+- 5.4
+
+```(javascript)
+db.zips.aggregate([
+    { $project: {
+        first_char: {$substr : ["$city",0,1]},
+        pop: 1
+        }
+    },
+    { $match: { $or: [{first_char: 'B'},{first_char: 'D'},{first_char: 'O'},{first_char: 'G'},{first_char: 'N'},{first_char: 'B'},{first_char: 'M'}]} },
+    {
+        $group: { _id: 1, TOTAL: {$sum:"$pop"}}
+    }
+])
+```
+
+- Exam Q1
     - count where headers.From = "andrew.fastow@enron.com" and headers.To includes "jeff.skilling@enron.com"
     - db.messages.find({ 'headers.From': "andrew.fastow@enron.com", 'headers.To': "jeff.skilling@enron.com" }).count()
-- Q2
+- Exam Q2
     - unwind headers.To array for each message
     - eliminate duplicates in case that somebody appears twice in the To list
     - processing: project into deduped headers.To (to) and from, unwind to, group by from & to, 
@@ -1109,18 +1154,16 @@ M101N: MongoDB for .NET Developers
     - db.messages.find({ 'headers.From': "susan.mara@enron.com", 'headers.To': "james.steffes@enron.com" }).count() --646
     - db.messages.find({ 'headers.From': "evelyn.metoyer@enron.com", 'headers.To': "kate.symes@enron.com" }).count() --567
     - db.messages.find({ 'headers.From': "susan.mara@enron.com", 'headers.To': "alan.comnes@enron.com" }).count() --550
-- Q3
+- Exam Q3
     - db.messages.find({ 'headers.Message-ID': '<8147308.1075851042335.JavaMail.evans@thyme>'}).count()
     - db.messages.updateOne({ 'headers.Message-ID': '<8147308.1075851042335.JavaMail.evans@thyme>'}, {$push: { 'headers.To': "mrpotatohead@mongodb.com" }})
-- Q4
-    - SKIP FOR NOW
-- Q5
+- Exam Q5
     - In a nutshell, order your indexes like so:
         1. Equality fields
         2. Sort fields
         3. Range fields
     - this query: a: range, b: range, a equality, c: equality, sort c
-- Q7
+- Exam Q7
     - `mongoimport --drop -d q7 -c albums albums.json`
     - `mongoimport --drop -d q7 -c images images.json`
     - `db.images.find().count()`
@@ -1129,28 +1172,26 @@ M101N: MongoDB for .NET Developers
     - `db.images.find({ tags : { $ne: 'sunrises' }  }).count()`
     - `db.images.deleteMany({ tags : { $ne: 'sunrises' } })`
     - `let imgs = db.images.find({}, {_id:1}).toArray()`
-    - 
-        ```
-            imgs.map(x => x._id).forEach(x => { 
-                if (db.albums.find({images: x}).count() == 0) db.images.deleteOne({ _id: x})
-            })
-        ```
+
+    ```(javascript)
+        imgs.map(x => x._id).forEach(x => { 
+            if (db.albums.find({images: x}).count() == 0) db.images.deleteOne({ _id: x})
+        })
+    ```
+
     - `db.images.find().count()`
     - WAITING!!! 44787
 
 
-
-
-## Other stuff
+## Other Useful Info
 - importing from raw json: `mongoimport --drop -d students -c grades grades.json`
 - mongoimport and mongoexport are for json!  mongorestore is for bson.
     - for mongorestore, just put it above the 'dump' directory and type `mongorestore` - no cmdline parms needed
 - to run a script in the shell, just type: mongo < myfile.js
     - be sure to include a `use` statement at the top so it knows which db to use
-- my pwd: t**1
 - when you pass a parameter to mongo, it will use that db: `mongo <myDbName>`
-- run mongod with `--fork` so you don't have to keep it open on the same shell
-- Really useful link- the [Certification Study Guide](https://university.mongodb.com/exam/guide)
+- run mongod with --fork so you don't have to keep it open on the same shell
+
 
  
 
