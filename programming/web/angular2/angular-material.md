@@ -177,3 +177,15 @@ export class UnicornCandyAppModule {
 
 - Theming Custom Components
     - This is covered really well [here](https://medium.com/@tomastrajan/the-complete-guide-to-angular-material-themes-4d165a9d24d1)
+
+## Oher usage
+- odd syntax
+
+    ```(html)
+    <mat-menu #appMenu="matMenu">
+        <button mat-menu-item>Settings</button>
+        <button mat-menu-item>Help</button>
+    </mat-menu>
+    ```
+    
+    - [explained](https://stackoverflow.com/questions/46581046/angular4-template-reference-variable-assignment)
