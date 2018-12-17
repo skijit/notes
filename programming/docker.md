@@ -114,6 +114,7 @@ Docker - basics
   
 ## More about Containers
 - [src](https://azure.microsoft.com/en-us/blog/containers-docker-windows-and-trends/)
-
+- [docker workshop labs](https://github.com/DanielEgan/ContainerTraining)
  
-
+## Docker Workshop Notes
+- [repo that walks through .net and docker together](https://github.com/DanielEgan/ContainerTraining)

@@ -181,6 +181,4 @@ Azure and MicroServices Workshop
   - when we compose, maybe we have some std way of handling this?
 - Dev experience vs Test/Prod experience
 
-## TODO
-- writeup on the benefits of cqrs
-  - compare / contrast to mongo clusters/sync
+
