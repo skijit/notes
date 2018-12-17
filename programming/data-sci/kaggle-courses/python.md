@@ -21,8 +21,8 @@ if blah > 0:
 - example of python operator overloading
 
 ```(python)
-# will print "this is my string this is my string this is my string "
-# + is string concatenation
+ # will print "this is my string this is my string this is my string "
+ # + is string concatenation
 print("this is my string " * 3)
 
 # print with segments
