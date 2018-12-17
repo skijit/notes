@@ -5,6 +5,8 @@ Intro to Python (for Data Science)
 - [main ref](https://www.kaggle.com/learn/python)
 - [wtop](https://www.kaggle.com/sohier/whirlwind-tour-of-python-index/)
 
+## Python Basics
+
 - variable type declaration not needed before using
 - no trailing semicolons
 - conditional expression ends with a colon
@@ -14,7 +16,7 @@ if blah > 0:
   print("this is printed")
 ```
 - colon indicates a new code block
-  - subsequent lines which are indendented are part of that code block
+  - **indentation matters bigtime**: subsequent lines which are indendented are part of that code block
 - strings can be marked by single or double quotes
 - example of python operator overloading
 
