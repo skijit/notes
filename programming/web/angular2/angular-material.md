@@ -34,6 +34,7 @@ Angular Material
         - direct: import whatever components you want into a specific module
         - bundle: import all the components you plan on using into one module, and import that module as needed in your app
     - **Warning**: Import the angular material modules AFTER angular's `BrowserModule` : remember order matters!
+        - This can be helpful for treeshaking
 - Adding a theme
     - add a prebuilt theme to your styles.css: `@import "~@angular/material/prebuilt-themes/indigo-pink.css";`
         - or for custom theming, look [below](#Theming)
@@ -179,13 +180,19 @@ export class UnicornCandyAppModule {
     - This is covered really well [here](https://medium.com/@tomastrajan/the-complete-guide-to-angular-material-themes-4d165a9d24d1)
 
 ## Oher usage
-- odd syntax
+- odd syntax with template reference variables
 
     ```(html)
     <mat-menu #appMenu="matMenu">
         <button mat-menu-item>Settings</button>
         <button mat-menu-item>Help</button>
     </mat-menu>
+
+    <button mat-icon-button [matMenuTriggerFor]="appMenu">
+        <mat-icon>more_vert</mat-icon>
+    </button>
     ```
     
     - [explained](https://stackoverflow.com/questions/46581046/angular4-template-reference-variable-assignment)
+    - basically, it's just a normal template reference variable, but it's value is a reference the `mat-menu` component
+        - then that template ref variable is used when coordinating behaviors with associated elements (e.g. the button)
