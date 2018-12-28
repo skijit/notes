@@ -4,6 +4,7 @@ Intro to Python (for Data Science)
 - [how to use kaggle kernels](https://www.kaggle.com/docs/kernels)
 - [main ref](https://www.kaggle.com/learn/python)
 - [wtop](https://www.kaggle.com/sohier/whirlwind-tour-of-python-index/)
+- [official python style guide](https://www.python.org/dev/peps/pep-0008/)
 
 ## Python Basics
 
