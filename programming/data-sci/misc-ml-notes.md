@@ -14,14 +14,3 @@
     - Neural Nets are black box
     - [gaming the system](https://blog.openai.com/adversarial-example-research/)
 
-- AI KeyNote from DevIntersection Conf Dec 2018 / Steve Guggenheim
-  - AI Drivers
-    - cloud
-    - data
-    - algorithms
-  - solution patterns
-    - bots
-    - knowledge mining
-    - automous system
-    - object detection
-    - ai assisted professional
