@@ -105,9 +105,45 @@ Docker - basics
 - Azure has 2 container orchestrators
   - Azure Container Service (AKS)
   - Azure Service Fabric
-- running as a service: there's a command line parameter which you pass to `docker run`
-- TODO: Continue notes [here](https://docs.microsoft.com/en-us/virtualization/windowscontainers/about/) and [here](https://azure.microsoft.com/en-us/blog/containers-docker-windows-and-trends/)
-   
+- running as a service: there's a command line parameter which you pass to `docker run` 
+- [src](https://azure.microsoft.com/en-us/blog/containers-docker-windows-and-trends/)
+- Virtualization
+    - enabled by surplus hw capacity
+    - types
+        - Virtual memory
+        - Hardware Virtualization
+        - OS Virtualization : "Containers"
+- Isolation
+    - There is one host operating system running, shared by the containers
+    - Those shared resources are projected into the isolated space the containers run inside (namespace)
+        - only when a change is made, does the container get a distinct copy
+- Resource Control
+    - Host controls how much of it's resources can be used by a container
+- Containers share the host OS
+- Windows and Linux Containers
+    - same experience
+- Windows Server Containers vs HyperV Containers
+    - Isolation
+        - Brick-wall (full isoloation) in HyperV containers
+        - Windows servers appear isolated, but boundardies could be crossed
+    - Security
+        - Better security with HyperV, but use Windows SErver containers when you trust all the apps
+        - HyperV might be better for running other vendor's containers
+    - Total Size
+        - HyperV's are closer to the traditional VM model
+- Linux Containers on Windows
+    - Containers share a kernel with the container host, so running Linux containers directly on Windows is not possible.
+    - Virtualization is required.
+    - There are 2 ways to do this:
+        1. Linux Containers run in a single full VM
+        2. Run with HyperV Isolation
+    - Linux Containers in a full (Moby) VM
+        - Moby Linux VM runs on Hypervisor alongside windows desktop
+        - Both OS'es run the Docker daemon which responds to calls from the Docker client
+        - Docker client runs on windows desktop, but can dispatch calls to the VM or it's native OS
+    - HyperV LCOW (Linux Containers on WIndows)
+        - Each Linux container runs on it's own optimized linux VM (contrast to Moby approach where they all share the VM)
+
 ## Docker Workshop Notes
 - [repo that walks through .net and docker together](https://github.com/DanielEgan/ContainerTraining)
 - **Note**: My google drive has corresponding slide deck
@@ -133,11 +169,38 @@ Docker - basics
         - azure container registry works too
     - push / pull
     - specify tags
-
-
-## Getting Started With Docker Lab Notes
-- [src](https://github.com/docker/labs/blob/master/windows/windows-containers/README.md)
 - multistage builds let you build an image, which you compile with, then create a new image which you deploy a slimmed-down runtime
+- just because a container is not running, doesn't mean it dosen't exist
+
+## Gettings Started MS Guides
+
+### Windows 10
+- Running a Windows container on Windows 10
+    - `docker pull mcr.microsoft.com/windows/nanoserver:sac2016`
+    - `docker images` - shows you the locally installed images available
+    - `winpty docker run -it mcr.microsoft.com/windows/nanoserver:sac2016 cmd.exe`
+        - prefix with winpty since you've got -it
+        - lets you run cmd on the image
+    - `docker ps` shows you running docker images
+    - `docker ps -a` shows you any images which have been run (at all)
+    - `docker commit 3b759322ae28 helloworld` - lets you create an image based on your modified image
+        - the id above was taken from the output of `docker ps -a`
+    - now you can run a container based on this new image (with `docker run` (again))
+        - `docker run --rm helloworld cmd.exe /s /c type Hello.txt`
+            - runs a new container based on the helloworld image
+            - executes cmd.exe inside of it (I think this is the entry point)
+            - then removes it after running
+    - BEST PRACTICE:
+        - Don't use git-bash to run docker.  use cmd.
+- Running a Linux Container on Windows 10
+    - 
+
+- Review how we do or do not specify Base OS for a windows .net core instance
+https://github.com/dotnet/dotnet-docker/tree/master/samples/aspnetapp
+- good ref: http://www.floydhilton.com/docker/2017/03/31/Docker-ContainerHost-vs-ContainerOS-Linux-Windows.html
+
+### Windows Server
+- TODO: Continue notes [here](https://docs.microsoft.com/en-us/virtualization/windowscontainers/about/) 
 
 ## Best Practices with Docker Files
 - [src](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/)
