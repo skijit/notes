@@ -1,0 +1,121 @@
+Apache Spark
+================
+
+## Misc info
+
+- [src](https://www.youtube.com/watch?v=9mELEARcxJo)
+- Big Data
+  - Volume
+  - Velocity
+    - Data generated every minute
+  - Variety 
+    - Unstructured Data
+      - Incl. Blobs / Media
+    - Missing values
+- Why RDBMS'es don't handle big data
+  - Primarily: Variety
+  - Secondarily: Volume
+    - Joins get slow
+    - You can start to use the RDMS'es as K/V stores and they scale better, but this nullifies some of the advantages of the system in the first place.
+- Big Data Analytics
+  - Analtyics: Getting information from data
+  - Big Data Analyitcs Types
+    - Batch Analytics: data is collected over a period of time, then analyzed
+    - Realtime Analytics: immediately use
+      - Govt
+      - Banking
+      - Healthcare
+      - Stocks
+      - Telecom
+- Spark vs Hadoop
+  - Analytic Support    
+    - Hadoop: only supports batch analytics
+    - Spark: supports realtime and batch analytics
+  - Easy to use
+    - Spark: Yes
+      - and easy to reason about
+    - Hadoop: No
+      - Map/Reduce is complicated
+  - Performance
+    - Spark: Better
+    - Hadoop: Worse
+- Performance comparison
+  - Map/Reduce (used by Hadoop)
+    - Breaks things into segments
+    - Each segment has it's own I/O, which gets overwhelming
+
+- [Another Source](https://www.youtube.com/watch?v=QaoJNXW6SQo)
+- History
+  - 2009: Developed at Berkley
+  - 2013: Donated to Apache, becomes a Top-Level Project
+  - 2014: Databricks (a company founded by Spark's inventors) set world sorting record
+- Databricks Company
+  - Commercial support
+  - Validation
+- Problem it solves
+  - Hadoop/Map-Reduce not suitable for 
+    - real-time processing
+    - simpler operations very complex
+    - bottlenecked by network i/o when reshuffling from map steps running on data nodes
+    - OLTP
+    - Not good for Graphs
+    - Not good for iterative execution
+      - e.g. kmeans
+  - Spark
+    - Cluster-based
+    - Improves all the limiations above
+    - More suitable for machine-learning algorithms
+- Spark Components
+  - Spark Core and Resilient Distributed Datasets (RDD's)
+    - Foundation: basic I/O, task scheduling
+    - RDD's: 
+      - basic programming abstraction        
+      - collection of data which may be partitioned across nodes
+      - created by
+        - applying operations to existing rdd's
+          - reduce
+          - join
+          - filter
+          - map
+        - referencing external datasets
+      - states
+        - in-process
+        - local collectiosn
+      - apis for
+        - python
+        - java
+        - scala
+  - Spark SQL
+    - Schema RDD
+      - Supports semi structued or structured data
+      - Connects to SQL (ODBC)
+  - Spark Streaming
+    - Ingests data in small batches and performs inline RDD transformations on them
+  - MLlib
+    - Memory-based implementation of ML algorithms.
+  - GraphX
+    - Distributed graph processing framework
+    - Supports Pregel Abstraction, which is a graph conceptual framework
+- Column-Centric In-Memory Databases
+  - Column Centric
+  - Data is compressed
+- language support
+  - mentioned above
+  - eventually r too
+  - languages support lambdas and closures
+- Base file system
+  - Can use HDFS and related file types
+  - Natively, can use CSV, JSON, Parquet (preferred)
+  - XML
+  - AVRO
+  - Other storage systems...
+    - Mesos
+    - NoSql
+
+## Next Steps
+- Learning
+  - Interesting info [here](https://www.quora.com/How-do-I-learn-Apache-Spark)
+
+
+  
+  
