@@ -18,7 +18,23 @@ ML Resources
 ## Thought Leaders / Blogs
 - [Chris Olah](http://colah.github.io/)
 
-
 ## Assorted
 - [Kaggle](https://www.kaggle.com)
 - [Distill.pub](https://distill.pub/)
+
+## Learning Strategies
+- Big Data / Analytics Fundamentals
+  - Focus on Spark
+- Languages
+  - Focus on Python
+- Machine Learning
+  - Books, various notes, etc.
+- Frameworks
+  - Review Kaggle tutorials
+- Apply
+  - Kaggle
+- Foundations
+  - Statistics
+  - Linear Algebra
+
+
