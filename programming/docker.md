@@ -1,6 +1,7 @@
 Docker - basics
 =================
 
+## Scattered Notes
 - [youtube tutorial](https://www.youtube.com/watch?v=Vyp5_F42NGs)
 - Provides the following environments
   - dedicated: one environment for each stack
@@ -75,13 +76,12 @@ Docker - basics
 - simplicity of container-based deployments paves the way for the cloud (bc less server variation)
 - container's host provisions a set of resources for the container, and the constainer can only use those resrouces
 - **Container Host**: physical or virtual server configured with the windows container feature.
-- **Sandbox**: Once a container has been started, all write actions such as file system modifications, registry modifications or software installations are captured in this ‘sandbox’ layer.
-  - TODO: Need more about this.  I thought you mount the filesystems separately.
+- **Sandbox**: Once a container has been started, all write actions such as file system modifications, registry modifications or software installations are captured in this *sandbox* layer.  
 - **Container OS Image**: 
   - Containers are instances of images.  
   - Images are layered.
   - First layer of image is the OS (which is immutable)
-- **Container Repository**:  a public or privarte registry for container images
+- **Container Repository**:  a public or private registry for container images
 - **Container Types**: 
   - 2 types of windows containers.  
   - Choosing which to run is a runtime decision.
@@ -105,16 +105,39 @@ Docker - basics
 - Azure has 2 container orchestrators
   - Azure Container Service (AKS)
   - Azure Service Fabric
-- TODO: Continue notes [here](https://docs.microsoft.com/en-us/virtualization/windowscontainers/about/) 
-
-- TODO:
-  - Revisit the topic of Docker-based development environments
-
 - running as a service: there's a command line parameter which you pass to `docker run`
-  
-## More about Containers
-- [src](https://azure.microsoft.com/en-us/blog/containers-docker-windows-and-trends/)
-- [docker workshop labs](https://github.com/DanielEgan/ContainerTraining)
- 
+- TODO: Continue notes [here](https://docs.microsoft.com/en-us/virtualization/windowscontainers/about/) and [here](https://azure.microsoft.com/en-us/blog/containers-docker-windows-and-trends/)
+   
 ## Docker Workshop Notes
 - [repo that walks through .net and docker together](https://github.com/DanielEgan/ContainerTraining)
+- **Note**: My google drive has corresponding slide deck
+- Running classic ASPNet applications in Azure -> Service Fabric
+- Running ASPNet core applications in Azure -> Containers / Kubernetes
+- Containerizing an ASPNet Core app:
+    - Modify a line in `CreateWebHostBuilder` to make it listen to requests outside the container: `.UseUrls("http://0.0.0.0:5000")`
+    - Using 2 different base images
+        - One for Building
+        - One for running (much smaller)
+    - Dockerfile
+    - .dockerignore
+    - build: `docker build -t todov1 .`
+    - run: `docker run -it --rm -p 5000:5000 -e "ASPNETCORE_URLS=http://+:5000" --name To_Do_App todov1`
+        - if running from git-bash, prefix with `winpty `
+- When your image is sucessfully running, you want to add it to a repository
+- Repository notes
+    - public image repository: dockerhub
+        - you can also have private images hosted here
+    - private image repository: 
+        - free: docker registry
+        - paid: docker trusted registry
+        - azure container registry works too
+    - push / pull
+    - specify tags
+
+
+## Getting Started With Docker Lab Notes
+- [src](https://github.com/docker/labs/blob/master/windows/windows-containers/README.md)
+- multistage builds let you build an image, which you compile with, then create a new image which you deploy a slimmed-down runtime
+
+## Best Practices with Docker Files
+- [src](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/)
