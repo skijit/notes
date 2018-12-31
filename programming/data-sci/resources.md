@@ -37,4 +37,10 @@ ML Resources
   - Statistics
   - Linear Algebra
 
+## Identify Statistical Foundations
+
+## Things I need to know about
+- ROC
+- see ppt/notes from ML lab in dec
+
 
