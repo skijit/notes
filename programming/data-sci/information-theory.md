@@ -14,7 +14,9 @@ Information Theory and Information Entropy
 - that information can be characterized by entropy and then compared across sets with varying amounts of data (bits)
 - information theory discusses these things and whether information has a maximum rate or 'speed limit'
 
-## Invention of the Alphabet
+## Video Notes
+
+### Invention of the Alphabet
 - In any language, messages can be formed by arranging symbols in some specific patterns
 - Key insight is the development of symbol sets which are:
   - Smaller in size
@@ -59,7 +61,7 @@ Information Theory and Information Entropy
       - this alphabet was adapted to other languages across the world!
     - source for greek and roman alphabets we know today
 
-## Signal-Based Communication
+### Signal-Based Communication
 - Signals
   - A signal is a message over some medium
   - Some communication media require more complex signalling methods than other
@@ -150,7 +152,7 @@ Information Theory and Information Entropy
   - The message space are all the leaves
   - message space = s^n
 
-## Quantifying Information
+### Quantifying Information
 - How much should you charge for sending a message?
   - You should charge for however long it takes you to send it.
   - But there can totally differnt types of messages - you'd need a common unit for measuring the message size.
@@ -171,7 +173,7 @@ Information Theory and Information Entropy
   - essentially, this is the log of the number of possible symbol sequences (ie log of the message space)
 - new problem: if we can devise encodings (ie thru compression) that provide the same message space but with less total questions, does this not change the definition of H?
 
-## Probabilities and Markov Chains
+### Probabilities and Markov Chains
 
 - Weak Law of Large Numbers
   - If you randomly sample from some distribution, over time you'll converge upon the actual distribution
@@ -261,10 +263,74 @@ Information Theory and Information Entropy
     - H = sum(p_i*log2(1/P_i))
     - H = - sum(p_i*log2(P_i))
 
-    
+- Todo: Finish video series notes
+
+## Revised Outline
+- Properties of binary and other trees (d)
+  - Number of leaves
+  - Depth
+- Network capacity (symbol rate & baud)
+- Hartley's Definition of Information
+  - How that relates to network capacity / signals
+  - Naive probabalistic approach
+- Law of Large Numbers
+- Central Limit Theorem
+  - Markov Chain demonstrating that dependences and indenpendence doesn't matter
+  - Leads to Entropy definition bc think of classifying information based on the complexity of the machine that could generate it
+- Entropy
+  - Combination of 
+    - Probabilities
+    - Y/N Questions (binary tree)    
+- Huffman Codes
+- Entropy applied to various lanuages?
+
+## Revised Summary
+
+### Trees
+- **Root**: topmost node of the tree
+- **Edge**: link between two nodes
+- **Child**: node that has a parent node
+- **Parent**: node that has an edge to a child node
+- **Leaf**: node that doesn't have a child node
+- **Height**: length of the longest path to a leaf
+- **Depth**: property of a node, length of the path from the node to the root
+- **Binary Tree**
+  - Each node has 2 or 0 edges leading out
+  - There are lots of types of binary trees out there, but we're most interested in the **Perfect Binary Tree**
+  - ```- n ```= number of nodes
+  - ```- h ``` = height
+  - assuming we start with ```- h = 0```,
+    - ```- n = 2^{h+1} -1 ```
+    - ```- h = \log2(n + 1) -1 ```
+- **K-Ary Tree**
+  - A Rooted Tree where each node has no more than ```- k ``` edges
+  - Binary Tree is just a special case of a k-ary tree where ```- k = 2```
+  - Again, there are lots of types, but we're most interested in a **Perfect K-Ary Tree**
+  - ```- n = \frac{k^{h+1}-1}{k-1} ```
+  - ```- h = \log_k(nk - n + 1) - 1 ``` (that's kinda ugly... probably can be simplified)
+
+### Central Limit Theorem
+- [Kahn Academy](https://www.khanacademy.org/math/statistics-probability) has great Probability and Statistics material.
+- Law of Large Numbers  
+  - Sample mean approaches the population mean as your sample size approaches infinity
+  - Population mean is also called the 'Expected Value'
+- Probability Density Function for a process is often unknown
+  - Put differently, we don't know the distribution
+  - Sometimes it's normal, often it's not
+- Central Limit Theorem is about a meta-distribution
+  - It's about the "Sampling Distribution of the mean"
+    - Or other descriptive statistics
+  - As you increase your trials and sample size of the random variable, the distribution of the mean for each trial will...
+    - converge on the true mean
+    - follow a normal distribution
+  - You can also relate the standard deviation of the standard distribution of the mean (aka standard error) to the standard deviation of the original probability density function ()
+  - Now since the Sampling distribution of the mean follows a known distribution (normal), and you know the true mean, and standard error, you can use the Z-score to figure out the area under the curve (it's just a shortcut for doing the integration), which is the probability of something happening
+- So you get to do inferential statistics even though the underlying probability density function is who-the-heck-knows.
 
 ## Further Study
+- An in depth study of the binary decision tree would be useful
 - Markov Chains vs Decision Trees
+- [huffman coding separator info](https://cs.stackexchange.com/questions/56615/huffman-encoding-why-is-there-no-need-for-a-separator)
 
 
 
