@@ -249,7 +249,7 @@ Information Theory and Information Entropy
     - Unit of uncertainty is the bit
     - H = Sum(p_i * num_questions_i)
     - num_questions_i = log2(number_outcomes_i)
-    - number_outcomes_i = 1/P_of_that_outcome
+    - number_outcomes_i = 1/P_of_that_outcome //chill on this line, i explain better below
     - number_questions_i = log2(1/P) <=== this is most interesting part
       - for a single random variable, the reciprocal of a probability is the 1-in-n scale of probabilities
         - e.g. if P = 0.01, then 1/P = 100, and the event has a 1 in 100 chance of happening
@@ -262,6 +262,7 @@ Information Theory and Information Entropy
       - so we're figuring out how many questions (bits) are required to cover the number of test cases in which we expect to see i    
     - H = sum(p_i*log2(1/P_i))
     - H = - sum(p_i*log2(P_i))
+-[Another interesting entropy article](https://towardsdatascience.com/demystifying-entropy-f2c3221e2550)
 
 - Todo: Finish video series notes
 
