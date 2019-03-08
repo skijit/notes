@@ -114,15 +114,46 @@ roc_viz.score(X_test, y_test)
 roc_viz.poof()
 ```
 
+## Reading SQL Server into a Pandas Dataframe
+- [good sqlalchemy reference](https://docs.sqlalchemy.org/en/latest/dialects/mssql.html#module-sqlalchemy.dialects.mssql.pyodbc)
+- use pandas `read_sql` either way
+- sql alchemy has an ORM, which can make queries easier
 
 
 ```(python)
+import urllib
+import pandas as pd
+from sqlalchemy import create_engine
 
+#Specify everything
+raw_connection_string = r'Driver={SQL Server Native Client 11.0};Server=RICSQLSVR002DEV;Database=PhysicalSciences;Trusted_Connection=yes'
+formatted_connection_string = urllib.parse.quote_plus(raw_connection_string)
+engine = create_engine(r"mssql+pyodbc:///?odbc_connect={}".format(formatted_connection_string))
+
+# OR Use a DSN
+raw_connection_string = r'DSN=PhysicalSciencesDSN'
+formatted_connection_string = urllib.parse.quote_plus(raw_connection_string)
+engine = create_engine(r"mssql+pyodbc:///?odbc_connect={}".format(formatted_connection_string))
+
+#Use engine to generate DataFrame in memory
+df = pd.read_sql("SELECT * FROM tribology.TestRun", engine)
 ```
+
 
 ```(python)
+# using pyodbc directly
 
+conn = pyodbc.connect("Driver={SQL Server Native Client 11.0});",
+  "Server=RICDATAWHS01DEV;",
+  "Database=DataWarehouse;"
+  "Trusted_Connection=yes;")
+
+query = str('Select * FROM',
+            ' BlahBlahTable');
+
+df = pd.read_sql(query, conn)
 ```
+
 
 ```(python)
 

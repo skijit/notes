@@ -37,4 +37,46 @@ ML Resources
   - Statistics
   - Linear Algebra
 
+## Identify Non-NN Statistical / ML Foundations (IE Pre-Deep Learning)
+- From an Applied ML Class'es Syllabus
+  - Supervised Learning
+    - Regression
+      - Maximum Liklihood
+      - Least Squares
+      - Regularization
+    - Bayesian Methods
+      - Bayes Rule
+      - MAP Inference
+      - Active Learning
+    - 1st Gen Classification Algorithms
+      - Nearest Neighbor
+      - Perceptron
+      - Logistic Regression
+    - Classification Refinements
+      - Kernel Methods
+      - Gaussian Process
+    - Intermediate Classification
+      - SVM
+      - Trees, Forests
+      - Boosting
+  - Unsupervised Learning
+    - Clustering
+      - K-Means Clustering
+      - E-M
+      - Gaussian Mixtures
+    - Recommendation Systems
+      - Collaborative Filtering
+      - Topic Modelling
+      - PCA
+    - Sequential Data Models
+      - Markov and Hidden Markov
+      - Kalman Filters
+    - Association Analysis
+
+
+
+## Things I need to know about
+- ROC
+- see ppt/notes from ML lab in dec
+
 

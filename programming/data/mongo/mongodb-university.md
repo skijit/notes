@@ -2,6 +2,7 @@ M101N: MongoDB for .NET Developers
 ==================
 
 - The [Certification Study Guide](https://university.mongodb.com/exam/guide)
+- Good .NET Driver Debugging tip: ToString() a query to see the corresponding query
 
 ## Basic Concepts
 - Since we're not joining data across multiple db tables, sharding is much easier
