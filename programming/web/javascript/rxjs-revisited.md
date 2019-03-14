@@ -63,7 +63,7 @@ const source = Observable.create(observer => {
   - takes 3 methods: val, error, complete
 
 ## Buffering
-- Take output from source observable and emit them in batches based on conditions
+- Use case: Take output from source observable and emit them in batches based on conditions
 - Includes Buffer Operators and Window Operators
   - Buffers: emit an *array* of values
   - Windowing: emit an *observable* of values
@@ -76,6 +76,9 @@ const source = Observable.create(observer => {
 - `bufferWhen`: accumulates values, but you pass in function which wil generate the observable (possibly using some conditional logic) 
 
 ## Error (Exception) Handling
+- use cases: 
+  1. Bury: Catch or handle errors
+  2. Rethrow: Generate errors based on other errors
 - remember these are operators, but the subscribe() has it's own error callback
 - some of these operators catch errors, some of them generate errors
 - `catchError`:
@@ -104,6 +107,7 @@ const source = Observable.create(observer => {
   - if the timeout occurs, instead of sending an error, switch over to a different observable
 
 ## Filtering Items
+- use case: filtering
 - `skipX` operators are very similar to the `takeX` operators
 - `skip`
   - you provide the number of initial values to ignore, and they're dropped
@@ -132,7 +136,7 @@ const source = Observable.create(observer => {
 - `throttle`: similar to audit, but emit the *next* when signalled
 
 ## Filtering to only 1
-- these will only emit 1 value and then they're done!
+- use case: you want to filter down the values to only emitting 1 value (and then maybe unsubscribe or not)!
 - `first`: emit first and then unsubscribes!
   - note there is no observable completion... it just unsubscribes.
   - also takes an optional predicate parameter
@@ -154,4 +158,39 @@ const source = Observable.create(observer => {
       - so it's not unsubscribing like `first`
 
 ## Grouping Observables
+- use case: you want to merge a couple different observables into a single stream
+- `combineAll`: takes an observable of observables and emits the latest from each of those whenever a new value appears
+  - emit whenever a new value arrives in one slot only if all slots are filled
 
+```(javascript)
+console.log('# latest values from all sources');
+const source1 = of(1, 2, 3);
+const source2 = interval(2000).pipe(take(3));
+const source3 = of(4, 5, 6).pipe(delay(5000));
+const source4 = of('a', 'b', 'c');
+
+of(source1, source2, source3, source4)
+    .pipe(combineAll())
+    .subscribe(([val1, val2, val3, val4]) => {
+        console.log(val1 + ' - ' + val2 + ' - ' + val3 + ' - ' + val4);
+    });
+// Output:
+// 3 - 1 - 4 - c
+// 3 - 1 - 5 - c
+// 3 - 1 - 6 - c
+// 3 - 2 - 6 - c
+```
+
+- `concatAll`: emit all the values from the first observable until it completes, meanwhile buffering values received from other observables, and when that first observable completes, start emitting values (buffered perhaps) from the second observable, until it completes, and then move to the next source observable. 
+  - serially walk through each observables values until they complete
+- `exhaust`: like a locking rule
+  - the first source observable has access to the output stream: any other observables emitting until this first one completes will be dropped entirely.
+  - any observables which begin emitting after the first source observable completes then get access to the output stream.
+- `mergeAll`: emit all values from each observable
+  - 'flatten'
+  - you can specify the 'concurrency' in a parameter
+    - if you specify it as 1, then it has the same behavior as concatAll
+    - if you leave it blank, it matches however many inner observables you've subscribed to
+- `withLatestFrom`: emit the latest from each internal source observable when signaled by another observable
+
+## Grouping Values
