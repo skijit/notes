@@ -395,23 +395,67 @@ CMD python /app/app.py
             - you can view with `docker stack ps <name-of-the-stack>`
     - docker-compose.yml defines:
         - a version
-        - service name
+        - service(s) name
         - how many instances to run
         - various resource limits
         - restart policy
         - port mapping
         - networking info
 - Swarms
-
+    - a service is a container with multiple instances, running on one node
+    - a swarm is when you scale this out to a cluster, running on multiple machines
+    - machines in a swarm (cluster) are called nodes
+    - you interact with a swarm just like an individual container app
+    - there is a 'swarm manager' that is responsible for executing the commands issued (presumably by you) across the cluster
+    - the yml file tells the swarm manager a number of important things, including the strategies for allocating containers to machines in the cluster (e.g. it could fill as many copies as possible on one machine or distribute them evenly, etc.)
+    - `docker-machine` lets you create Hyper-V VM's and interact with them for things like:
+        - init'ing swarm
+        - joining swarm
+        - leaving swarm
+    - 2 ways to send commands to the swarm manager:
+        - `docker-machine ssh <docker-commands-wrapped-in-quotes>`
+        - `docker-machine env <vm-name>`
+            - in powershell, this will provide you with a command to execute to talk directly to the swarm mgr through your shell (which is more convenient)
+            - interestingly, while this will connect your shell to the vm, you still have access to your local files and thus deployment of the swarm is just like a normal stack deployment using your yml file, which refer to your image in the registry.
+    - load-balancing
+        - when you've deployed a swarm, you can hit any of the swarm vm's IP addresses and it will still be load-balanced
+- Stack
+    - A stack is a group of interrelated services that share dependencies, and can be orchestrated and scaled together     
+    - each service is listed in the docker-compose.yml
+    - about persisting data:
+        - you'll probably one "one source of truth" for persisted data in a swarm
+        - a common approach for these types of services is to:
+            - no replicas
+            - run them on the swarm manager
+            - use volume mounting, referring to a directory on the swarm manager (usually in a docker-controlled area)
+- Deployment
+    - Docker Enterprise helps you deploy services in the same fashion across production servers
+    - It also has integration with LDAP and other enterprise services
 
 ## Networking in Docker
 - [ref](https://docs.docker.com/network/)
+    - from this ref there are links to deep dives on each topic - probably worth exploring
+- Network types:
+    - user-defined bridge network
+        - default
+        - used when you have multiple standalone containers (i.e. not defined in a swarm) on the same host which need to communicate
+    - host network
+        - if there's only one container on a server, you can just use the host's network
+    - overlay networks
+        - connect multiple docker daemons, in a swarm scenario
+        - you can also use overlay network for communication of 2 standalone containers on different docker daemons
+    - macvlan
+        - you can assign a mac address to each container
+        - this is good for dealing with legacy applications (or migrating over from a vm deployment) which expect to be directly connected to a physical network (instead of being routed through docker's n/w stack)        
+    - 3rd party nw plugins
+        - allow you to use specialized n/w stacks
 
-## Kubernetes
-- [ref](https://docs.docker.com/docker-for-windows/kubernetes/)    
+## Hyper-V on Windows 10
+- Hyper-V replaces MS Virtual PC
+- You can export your Hyper-V system into Azure
+- Hyper-V on Windows Server has extra features for migrating from one server to the next
+    - They're similar but different
+    - Server version makes assumptions that you're not running anything else on the host but hyper-V VM's, but this would be invalid for a windows 10 scenario
 
 
-## Docker as a Service
-- [ref](https://docs.docker.com/engine/swarm/how-swarm-mode-works/services/)
-
-
+   
