@@ -386,6 +386,116 @@ describe('when the first answer is selected', () => {
   });
 ```
 
+- Forms
+  - React supports form elements which are similar to those found in HTML
+    - Text input: `<input type="text" value="your value" />`
+    - Text Area: `<textarea value="your value here" />`
+      - differs slightly from the normal html version
+    - Select: `<select value="the selected option"> <option value="saturday"> saturday </option> </select>`
+      - slightly different from the normal html version (no 'selected' attribute on the option)
+  - React's fundamental idea is that the html is model-driven (i.e. by the state, attributes, etc.)
+    - Forms present a problem b/c users need to input data, but the value of the form elements are based on state.
+    - React solves this problem in 3 steps:
+      1. Add Local State to the form component
+      2. Bind the form elements to the component sate
+      3. Use onChange handler to update state
+    
+    ```(jsx)
+    class Identity extends React.Component {
+      constructor() {
+        super();
+        this.state = {
+          firstName: "",
+          lastName: ""
+        };
+      }
+      
+      onFieldChange = (event) => {
+        this.setState({[event.target.name]: event.target.value});
+      }
+
+      render() {
+        return (
+          <form>
+            <input type="text" name="firstName" value={this.state.firstName} onChange={this.onFieldChange} />
+
+            <input type="text" name="lastName" value={this.state.lastName} onChange={this.onFieldChange} />
+
+          </form>
+        );
+      }
+    }
+    ```
+  
+  - There are a variety of form libraries out there for react which help increase productivity
+    - one decent option: react-json-schema-form
+      - good starting point for form rendering and validation
+      - you specify the entire form with 
+        1. json schema: describes model
+        2. ui schema: describes the various widgets/elements to use
+        3. formData: initial data
+
+  - Form validation
+    - easy way to to do it is with a form library such as above OR you could implement on your own
+    - other decisions:
+      - validate on change, submission, blur, etc.
+      - display errors inline or summarized
+- React Router
+  - uses HTML5 pushState
+  - supports routing rules and parameters
+  - supports navigation (i.e. updating the url value and triggering a view change)
+
+  ```(jsx)
+  <Route exact path="/" component={Welcome} />
+
+  <Route exact path="/about" component={About} />
+
+  <Route path="/single/:id" component={Single} />
+
+  // if 'exact' is not specified, the default behavior is "begins-with"
+  ```
+
+  ```(jsx)
+  // route parameter comes over in a 'match' param
+  // match has a params object which contain any
+  // route parameters therein
+  function Single({match}) {
+    return <div>{match.params.id}</div>
+  }
+  ```
+
+  - more realistic routing example
+
+  ```(jsx)
+  ReactDOM.render(
+    <BrowserRouter>
+      { /* Routes need to be enclosed in BrowserRouter */}
+      <section id="navigation">
+        <Route path="/" component={Menu} />
+        { /* This is going to match everything... we could just put in Menu */}
+      </section>
+      <section id="detail">
+        <Route exact path="/" component={Welcome} />
+        <Route path="/list" component={List} />
+        <Route path="/single/:id" component={Single} />
+      </section>
+    </BrowserRouter>,
+    document.getElementById('app')
+  );
+  ```
+
+  - To navigate, use Link
+
+  ```(jsx)
+  <Link to={path}> Text that you want displayed </Link>
+  ```
+
+  - instead of pointing at a component, a Route can also take an attribute `render`
+
+- at: Adding Routes to the Author Quiz
+
+
+      
 
 
 
