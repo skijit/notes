@@ -440,6 +440,10 @@ describe('when the first answer is selected', () => {
     - other decisions:
       - validate on change, submission, blur, etc.
       - display errors inline or summarized
+
+  - Forms are the odd-man out in the React world
+    - Even though we try to avoid local state, it's unavoidable for forms
+    - Direct DOM access is sometimes required
 - React Router
   - uses HTML5 pushState
   - supports routing rules and parameters
@@ -467,6 +471,10 @@ describe('when the first answer is selected', () => {
   - more realistic routing example
 
   ```(jsx)
+  import { BrowserRouter, Route } from "react-router-dom"
+
+  // ...
+
   ReactDOM.render(
     <BrowserRouter>
       { /* Routes need to be enclosed in BrowserRouter */}
@@ -491,8 +499,56 @@ describe('when the first answer is selected', () => {
   ```
 
   - instead of pointing at a component, a Route can also take an attribute `render`
+  -  `npm i "react-router-dom"`
+  - any routed component will receive as a `match` parameter which specified route information.
 
-- at: Adding Routes to the Author Quiz
+- Refs
+  - A way of accessing DOM elements that are wrapped by React elements so that you can imperatively modify them.
+  - They're a tool of last resort - they break React's approach.
+  - There are a variety of API's for this, but you should use `React.createRef()`
+  - typically create refs in the ctor
+  - cast of characters:
+    - createRef: initialize the field which holds the ref
+    - ref: jsx property to associate current element with the field
+
+  ```(jsx)
+  class MyComp extends React.Component {
+    constructor() {
+      super();
+      this.myDiv = React.createRef();
+    }
+
+    render() {
+      return <div ref={this.myDiv}>
+        {"Set in render: Any Html here is Escaped!"}
+      </div>
+    }
+    
+    componentDidMount() {
+      this.myDiv.current.innerHTML += "<br/> Set on the wrapped DOM element. Not Escaped!";
+    }
+  }
+  ```
+
+  - To programmatically navigate with the client side router: `withRouter()`
+    - we pull out the history parameters and use that API to change the route (w / `push()`)
+
+  ```(jsx)
+  const AuthorWrapper = withRouter(({history}) => {
+    <AddAuthorForm onAddAuthor={(author) => {
+      authors.push(author);
+      history.push('/'); //NAVIGATE TO ROOT!
+    }} />
+  });
+  ```
+
+- Next: State
+
+
+
+
+
+
 
 
       
