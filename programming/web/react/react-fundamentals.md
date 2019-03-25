@@ -681,77 +681,77 @@ const AuthorWrapper = withRouter(({history}) => {
   - stopwatch example revisited
       
     ```(jsx)
-  const model = { 
-    running: false,
-    time: 0
-  };
-
-  function mapStateToProps(state) {
-    return state;  // no transformation necessary
-  }
-
-  function mapDispatchToProps(dispatch) {
-    return {
-      onStart: () => { dispatch({type: 'START'}); }
-      onStop: () => { dispatch({type: 'STOP'}); }
+  `  const model = { 
+      running: false,
+      time: 0
     };
-  }
 
-  //connect() takes these two arguments and returns a third function which accpets the 
-  //view function as a parameter (i.e. it wraps it)
-  //replaced the injected state with 'props' which includes state properties as well as events
-  const Stopwatch = ReactRedux.connect(mapStateToprops, mapDispatchToProps) ( 
-    (props) => {      
-      const  minutes = Math.floor(props.time/60);
-      const seconds = props.time - (minutes*60);
-      
-      return (
-        <div>
-          {minutes}:{seconds}
-          <button onClick={props.running ? props.onStop : props.onStart}>{props.running ? 'STOP' :'START'}</button>
-        </div>;
-      );
+    function mapStateToProps(state) {
+      return state;  // no transformation necessary
     }
-  );
 
-  let container = Redux.createStore(update);
-  
-  //React-Redux will handle the re-rendering of components for us
-  ReactDOM.render(
-      <ReactRedux.Provider store={container}>
-        <Stopwatch />
-      </ReactRedux.Provider>
-    ),
-    document.getElementById('root')
-  );
-  
-  container.subscribe(render);
+    function mapDispatchToProps(dispatch) {
+      return {
+        onStart: () => { dispatch({type: 'START'}); }
+        onStop: () => { dispatch({type: 'STOP'}); }
+      };
+    }
 
-  let actions = {
-    TICK: 'TICK',
-    START: 'START',
-    STOP: 'STOP',
-    RESET: 'RESET'
-  };
+    //connect() takes these two arguments and returns a third function which accpets the 
+    //view function as a parameter (i.e. it wraps it)
+    //replaced the injected state with 'props' which includes state properties as well as events
+    const Stopwatch = ReactRedux.connect(mapStateToprops, mapDispatchToProps) ( 
+      (props) => {      
+        const  minutes = Math.floor(props.time/60);
+        const seconds = props.time - (minutes*60);
+        
+        return (
+          <div>
+            {minutes}:{seconds}
+            <button onClick={props.running ? props.onStop : props.onStart}>{props.running ? 'STOP' :'START'}</button>
+          </div>;
+        );
+      }
+    );
 
-  //this is the reducer function
-  //change: react redux will only re-render if the state has changed
-  //so we need to make state immutable (i.e. return a new object)
-  const update = (model, action) => {
-    const updates = {
-      'START: (model) => Object.assign({}, model, {running: true}),
-      'STOP: (model) => Object.assign({}, model, {running: false}),
-      'TICK': (model) => Object.assign({}, model, {time: model.time + (model.running ? 1 : 0)});
+    let container = Redux.createStore(update);
+    
+    //React-Redux will handle the re-rendering of components for us
+    ReactDOM.render(
+        <ReactRedux.Provider store={container}>
+          <Stopwatch />
+        </ReactRedux.Provider>
+      ),
+      document.getElementById('root')
+    );
+    
+    container.subscribe(render);
+
+    let actions = {
+      TICK: 'TICK',
+      START: 'START',
+      STOP: 'STOP',
+      RESET: 'RESET'
     };
 
-    return updates[action.type](model);
-  }
+    //this is the reducer function
+    //change: react redux will only re-render if the state has changed
+    //so we need to make state immutable (i.e. return a new object)
+    const update = (model, action) => {
+      const updates = {
+        'START: (model) => Object.assign({}, model, {running: true}),
+        'STOP: (model) => Object.assign({}, model, {running: false}),
+        'TICK': (model) => Object.assign({}, model, {time: model.time + (model.running ? 1 : 0)});
+      };
 
-  setInterval(() => {
-    container.dispatch({type:'TICK'});
-    render();
-  }, 1000);
-  ```
+      return updates[action.type](model);
+    }
+
+    setInterval(() => {
+      container.dispatch({type:'TICK'});
+      render();
+    }, 1000);`
+    ```
 
   - consider the provider:
     - it's nice to be able to provide the state container at any level in some tree, but that also tightly couples them to your application
