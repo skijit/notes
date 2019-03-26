@@ -7,20 +7,7 @@ Kubernetes
 - [comparison to swarm/compose](https://stackoverflow.com/questions/37845715/can-kubernetes-be-used-like-docker-compose)
 - [12-factor apps](https://12factor.net/) - TODO - Separate notes on this
 
- - Kubernetes cluster includes 2 things:
-  - Master: manages the cluster...
-    - scaling
-    - scheduling
-    - allocating processes to nodes
-    - updating
-  - Nodes: workers
-    - Runs containers (aka node processes)
-    - Each has a Kubelet, which is an agent for managing the node and communicating back to the cluster master.
-- Cluster should have a minimum of 3 nodes
-- Kubernetes API:
-  - hosted on master
-  - node - master communication
-  - end user (kubectl) - cluster communication
+ 
 ## Running Kubernetes locally
   - There are two options:
     1. Docker for Desktop now includes Kubernetes bundled
@@ -43,6 +30,22 @@ Kubernetes
   - The kubernetes master then realizes this configuration
 
 ## Core Concepts
+
+### Cluster Basics
+- Kubernetes cluster includes 2 things:
+  - Master: manages the cluster...
+    - scaling
+    - scheduling
+    - allocating processes to nodes
+    - updating
+  - Nodes: workers
+    - Runs containers (aka node processes)
+    - Each has a Kubelet, which is an agent for managing the node and communicating back to the cluster master.
+- Cluster should have a minimum of 3 nodes
+- Kubernetes API:
+  - hosted on master
+  - node - master communication
+  - end user (kubectl) - cluster communication
 
 ### Kubernetes Control Plane
 - Refers to all the kubernetes-related processes running in your cluster (i.e. hosting-oriented processes, not your application)
