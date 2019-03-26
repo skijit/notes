@@ -224,6 +224,66 @@ Kubernetes
   - This should be the starting point.
 
 ### Nodes
-- [continue here](https://kubernetes.io/docs/concepts/architecture/nodes/) 
+- node = worker machine
+- node can be a vm or a physical machine
+- each node is capable of running pods and is managed by the master
+- Unlike other objects (e.g. pods, services), using the kubectl to create a node will not actually create the node...
+  - it only creates the underlying representation
+  - then it will report on the status of the node
+
+### Containers
+- Create your docker image and push to a registry before referring it to a K8s pod
+- Kubernetes has native support for the Google Container Registry (GCR), when running on Google Compute Engine (GCE). If you are running your cluster on GCE or Google Kubernetes Engine, simply use the full image name (e.g. gcr.io/my_project/image:tag).
+- Configuring access to a private registry may require a variety of setup steps
+- K8s container environment provides:
+  - Filesystem based on an image and one or more volumes
+  - Info about the container
+  - Info about other objects in cluster
+
+### Pods
+- Pod is the smallest deployable object in K8s
+- Pod represents a running process on the cluster
+- Pod encapsulates 1 or multiple application containers
+  - Usually just 1
+  - Sometimes > 1 when they're tightly coupled (e.g. need to access the same volume)
+- Pods provide the following resources to their containers:
+  - networking
+    - each pod gets a unique IP address
+    - Every container in a pod can communicate using localhost
+    - cross-pod communication (within a cluster) has to be managed via ports
+  - storage
+    - shared volumes are available within a Pod
+- Pods are created by...
+  - You  <- rather rare
+  - A controller <- much more common
+    - examples of controllers include: Deployment, StatefulSet, DaemonSet
+    - create Pods using a Pod Template that you provide
+- Pods are lightweight and ephemeral (rather than durable)
+- They run on a node until (OR's):
+  - process is terminated
+  - pod is deleted
+  - pod is evicted (for lack of resources)
+  - node fails
+- Pod Templates
+  - These are specifications which are included in other objects like Replication Controllers, Jobs, and DaemonSets
+  - Unlike other object specifications, these templates don't refer to the current desired state.  It only guides newer replicated instances.
+- Containers on the same pod can communicate via IPC
+- In terms of Docker constructs, a pod is modelled as a group of Docker containers with shared namespaces and shared volumes.
+- Each pod has a unique id (UID)
+- Use cases
+  - local cache managers
+  - compression, snapshotting, rotation
+  - moditors
+- Pods are generally not replicated
+- [continue here](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/)
 
 
+ 
+
+
+
+## Other
+- see [here](https://coding4dummies.net/load-balanced-asp-net-core-application-with-docker-mongodb-and-redis-pt-4-825cb5f37241)
+- [another](https://github.com/jplane/dotnet-core-and-mongo-containers)
+- [another](https://codelabs.developers.google.com/codelabs/cloud-kubernetes-aspnetcore/index.html?index=..%2F..index#0)
+- [see the kubernetes code labs here](https://codelabs.developers.google.com/)
