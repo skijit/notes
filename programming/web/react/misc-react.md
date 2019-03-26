@@ -110,3 +110,6 @@ export default class Calculator extends React.Component{
 }
 ```
 
+## Questions
+- Routing and passing handlers into a component
+- Use smart and dumb components with redux and routing

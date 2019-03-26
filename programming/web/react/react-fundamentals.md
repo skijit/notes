@@ -40,20 +40,20 @@ ReactDOM.render(<Hello now={new Date().toISOString()} />, document.getElementByI
   - not a static type check
   - use `npm install prop-types`
 
-  - a typescript-based method looks like:
+  - a typescript-based method looks like
 
-   ```(jsx)
-  interface SumProps {
-    a: number;
-    b: number;
-  }
+    ```(jsx)
+    interface SumProps {
+      a: number;
+      b: number;
+    }
 
-  function Sum(props) {
-    return <h1>{props.a} + {props.b} = { props.a + props.b}</h1>;
-  }
+    function Sum(props) {
+      return <h1>{props.a} + {props.b} = { props.a + props.b}</h1>;
+    }
 
-  ReactDOM.render(<Sum a={"a"}, b={2} />, document.getElementById('root'));
-  ```
+    ReactDOM.render(<Sum a={"a"}, b={2} />, document.getElementById('root'));
+    ```
 
 - Testing
   - React isn't a super high-value testing target since we want to test application logic primarily, and that should not go in a react component (which focuses on UI)
@@ -399,6 +399,19 @@ ReactDOM.render(
 -  `npm i "react-router-dom"`
 - any routed component will receive as a `match` parameter which specified route information.
 
+- To programmatically navigate with the client side router: `withRouter()`
+  - we pull out the history parameters and use that API to change the route (w / `push()`)
+
+```(jsx)
+const AuthorWrapper = withRouter(({history}) => {
+  <AddAuthorForm onAddAuthor={(author) => {
+    authors.push(author);
+    history.push('/'); //NAVIGATE TO ROOT!
+  }} />
+});
+```
+
+
 ## DOM Refs
 - A way of accessing DOM elements that are wrapped by React elements so that you can imperatively modify them.
 - They're a tool of last resort - they break React's approach.
@@ -427,17 +440,6 @@ class MyComp extends React.Component {
 }
 ```
 
-- To programmatically navigate with the client side router: `withRouter()`
-  - we pull out the history parameters and use that API to change the route (w / `push()`)
-
-```(jsx)
-const AuthorWrapper = withRouter(({history}) => {
-  <AddAuthorForm onAddAuthor={(author) => {
-    authors.push(author);
-    history.push('/'); //NAVIGATE TO ROOT!
-  }} />
-});
-```
 
 ## State
 - key ideas:
@@ -681,7 +683,7 @@ const AuthorWrapper = withRouter(({history}) => {
   - stopwatch example revisited
       
     ```(jsx)
-  `  const model = { 
+    const model = { 
       running: false,
       time: 0
     };
