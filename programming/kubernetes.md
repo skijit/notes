@@ -275,7 +275,159 @@ Kubernetes
   - compression, snapshotting, rotation
   - moditors
 - Pods are generally not replicated
-- [continue here](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/)
+- Pods can also have **Init Containers** which run before the app Container(s) are started
+  - They run sequentially if you have multiple
+  - Use cases:
+    - Clone a git repo into a volume
+    - Place values in a config file and run a template tool
+  - Example of a Pod which uses 2 init containers: 1 which waits for myservice and the other which waits for mydb.  Once completed, the Pod begins.
+
+  ```(yaml)
+  apiVersion: v1
+  kind: Pod
+  metadata:
+    name: myapp-pod
+    labels:
+      app: myapp
+  spec:
+    containers:
+    - name: myapp-container
+      image: busybox:1.28
+      command: ['sh', '-c', 'echo The app is running! && sleep 3600']
+    initContainers:
+    - name: init-myservice
+      image: busybox:1.28
+      command: ['sh', '-c', 'until nslookup myservice; do echo waiting for myservice; sleep 2; done;']
+    - name: init-mydb
+      image: busybox:1.28
+      command: ['sh', '-c', 'until nslookup mydb; do echo waiting for mydb; sleep 2; done;']
+  ```
+
+- **Pod Presets** are an API for injecting additional runtime requirements into a Pod when it's created.
+  - You use label selectors to specify the Pods which are injected with the preset.
+  - Use cases:
+    - secrets
+    - volumes
+    - environment variables
+
+### ReplicaSet
+- This is a kind of controller
+- Note also that you'll usually use **Deployments** instead of **ReplicaSets** because **Deployments** are a higher-level controller abstraction that manage **ReplicaSets**
+- Basic idea for ReplicaSet is:
+  - maintain a stable set of replicate pods running at any given time
+  - The replicaset yaml will (often?) include the pod template
+  - They'll use label selectors to identify the pods they want to control
+- Example replica set configuration:
+
+```(yaml)
+controllers/frontend.yaml 
+
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: frontend
+  labels:
+    app: guestbook
+    tier: frontend
+spec:
+  # modify replicas according to your case
+  replicas: 3
+  selector:
+    matchLabels:
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        tier: frontend
+    spec:
+      containers:
+      - name: php-redis
+        image: gcr.io/google_samples/gb-frontend:v3
+```
+
+### Replication Controller
+- This is a kind of controller
+- Also an older, less recommended way of setting up replication
+- Current recommendation is to use a deployment that configures a ReplicaSet, so we'll just focus on that instead
+
+### Deployment
+- This is a kind of controller
+- Deployments let you sepcify a desired state
+- Deployments can:
+  - Create new replica sets
+  - Remove existing Deployments
+- Use cases
+  - Rolling out a ReplicaSet
+  - Updating pod state (by updating the PodTemplateSpec)
+  - Rollback to an earlier Deployment revision
+  - Scale up deployment to cailitate more load
+  - Clean up old ReplicaSets you don't need any more
+- Example
+
+```(yaml)
+# controllers/nginx-deployment.yaml 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.7.9
+        ports:
+        - containerPort: 80
+```
+
+  - Notes:
+    - Deployment is named 'nginx-deployment'
+    - Creates 3 replicated pods
+    - Selector identifies the pod with `app: nginx`, whose pod template is conveniently in the same configuration file (but it doesn't have to be)
+
+### StatefulSets
+- This is a kind of controller
+- The main use case for this is databases, I think
+- [Example of running mongodb with StatefulSets](https://kubernetes.io/blog/2017/01/running-mongodb-on-kubernetes-with-statefulsets/)
+
+### DaemonSet
+- This is a kind of controller
+- A DaemonSet makes sure that all nodes in a cluser run a copy of a pod
+- common use cases include:
+  - log collection daemon
+  - cluster storage daemon
+  - node monitoring tool
+
+### Jobs
+- This is a kind of controller
+- Job creates one ormore pods and ensures that a specified number of them succesfful terminates, at which point the Job is complete
+
+### CronJob 
+- This is a kind of controller
+- A Cron Job creates Jobs (above) on a time-based schedule
+- One CronJob object is like one line of  crontab file.
+
+### Services
+- [resume here](https://kubernetes.io/docs/concepts/services-networking/service/)
+
+
+## Other info
+- The Kubernetes tutorials seem way more useful - https://kubernetes.io/docs/tutorials/
+
+
+
+
+
+
 
 
  
