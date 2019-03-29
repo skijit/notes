@@ -397,6 +397,7 @@ spec:
 ### StatefulSets
 - This is a kind of controller
 - The main use case for this is databases, I think
+- Also possibly having a static IP?
 - [Example of running mongodb with StatefulSets](https://kubernetes.io/blog/2017/01/running-mongodb-on-kubernetes-with-statefulsets/)
 
 ### DaemonSet
@@ -417,12 +418,28 @@ spec:
 - One CronJob object is like one line of  crontab file.
 
 ### Services
+- Use case:
+  - How do some front-end pods know about and connect to some other back-end pods, since those Pods might always be available?
+  - K8s offers a virtual-IP-based nw bridge to services which helps the front-end pods connect to backends
+- **Service** is an abstraction which defines a local set of Pods and how they can interconnect
+- As usual, Services will select their pods with a label selector
+- Pods can also find their corresponding services (endpoints, etc) by checking the environment variables populated 
+  - another option is cluster DNS
+- a headless service is one which doesn't have a single IP or some load balancer infront of it
+- There are a few different service *types*
+  - ClusterIp: visible only within the cluster (default)
+  - NodePort: the service is exposed and visible to the outside world on a node-specific IP
+  - LoadBalancer: expose a single IP to outside world
+  - ExternalName: uses a DNS lookup with a custom-specified name
+
 - [resume here](https://kubernetes.io/docs/concepts/services-networking/service/)
+
+### Volumes
 
 
 ## Other info
 - The Kubernetes tutorials seem way more useful - https://kubernetes.io/docs/tutorials/
-
+- [interesting](https://www.doxsey.net/blog/kubernetes--the-surprisingly-affordable-platform-for-personal-projects)
 
 
 
