@@ -31,6 +31,9 @@
       - mouse
       - keyboard
       - system events
+  - Important:
+    - But you need subscribers for the stream to flow (i.e. through pipe())
+    - It's like 'completing the circuit'
 - Operators connect input and output
   - With the exception of tap(), they're all pure functions
 
@@ -194,3 +197,11 @@ of(source1, source2, source3, source4)
 - `withLatestFrom`: emit the latest from each internal source observable when signaled by another observable
 
 ## Grouping Values
+- Use case: TODO
+- `groupBy`: you pass in a group-key and as soon as it sees a new key value in the input stream, it emits a new GroupedObservable. 
+  - GroupedObservable is the same as an Observable, but with a key value.
+  - so you're fanning out into separate observables
+you pass in a predicate and it forks the stream into two streams:
+  - one with values which make the predicate true
+  - one with values which make the predicate false
+  - often used with `reduce()` to calculate subtotals
