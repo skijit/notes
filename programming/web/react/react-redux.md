@@ -487,8 +487,9 @@ export function deleteAuthor(authorId) {
       .catch(handleError);
   };
 }
-
 ```
+
+- Redux thunk injects dispatch so we don't have to worry about it.
 
 
 
