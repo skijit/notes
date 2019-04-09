@@ -456,6 +456,40 @@ export default connect(mapStateToProps, mapDispatchToProps)(CoursesPage);
   )
   ```
 
+## Async in Redux
+- `run-p` is another node library for of starting parallel scripts
+- they're using the `fetch` api for the http client
+  - you can specify different verbs
+  - it is promise-based
+- 4 libraries for handling Async in Redux:
+  - (these are all executed as middleware, to minimize coupling, improve testability)
+  - redux-thunk
+    - popular, dev by Abramov
+    - Return functions from action creators
+  - redux-promise
+    - uses promises for async
+  - redux-observable
+    - use RxJS observables
+  - redux-saga
+    - uses ES6 generators
+    - complicated
+- Thunk: a function that wraps an expression to delay it's evaluation
+
+```(javascript)
+export function deleteAuthor(authorId) {
+  return (dispatch, getState) => {
+    
+    //deleteAuthor is an action creator
+    return AuthorApi.deleteAuthor(authorId)
+      .then(() => {
+        dispatch(deletedAuthor(authorId));
+      })
+      .catch(handleError);
+  };
+}
+```
+
+- Redux thunk injects dispatch so we don't have to worry about it.
 
 
 
