@@ -294,9 +294,136 @@ mutation myMutationName {
 - some versions of GraphQL (e.g. Prisma) let you do an import based on other graphql schema files, but this isn't in the spec, so it actually occurs in the comments
 
 ## Client Side GraphQL
-- HERE
+- Best practice: name your queries with the same name as the const (also uppercase, btw) that holds the templated gql:
+
+```(javascript)
+const ALL_ITEMS_QUERY = gql`
+  query ALL_ITEMS_QUERY {
+    items {
+      id
+      title
+      price
+      description
+    }
+  }
+`;
+
+class Items extends Component {
+  render() {
+    return (
+      <div>
+        <p>Items</p>
+        { /* only child of a query component MUST be a function */ }
+        <Query query={ALL_ITEMS_QUERY} >
+        { ({data, error, loading}) => {
+          if (loading) return <p>Loading!</p>;
+          if (error) return <p>Error: {error.message}</p>;
+
+          return <p>Hi!</p>
+        }}
+        </Query>
+      </div>
+    );
+  }
+}
+
+```
+- higher-order components vs render props
+  - higher-order components is when you wrap your component with another component, typically looks like `export default withBlah(myComponent);`
+    - this is popular in the redux world
+  - more popular now is just using render props
+    - especially in Apollo, this is the preferred mechanism
+- only child of a query component must be a function
+- when your render prop function to a Query component only has one top-level payload object, you'll see:
+  - methods for refetching the query and polling
+  - Apollo client
+  - data (return values from query)
+  - error
+  - loading: boolean
+- that's why usually you'll destructure the payload
+- there's a rainbow curly bracket vscode plugin to help matching curly brackets
+- `{item.image && <img src={item.image} />}`
+- Note that when you default export an item, it can be renamed anything you want when you import it without additional specification:
+  - `export default Item;` in styles/ItemStyles.js can then be imported somewhere else as `import ItemStyles from './styles/ItemStyles.js'`
+
+- nice way to handle form changes...
+
+```(jsx)
+const CREATE_ITEM_MUTATION = gql`
+  mutation CREATE_ITEM_MUTATION(
+    $title: String!
+    $description: String!
+    $price: Int!
+    $image: String
+    $largeImage: String
+  ) {
+    createItem(
+      title: $title
+      description: $description
+      price: $price
+      image: $image
+      largeImage: $largeImage
+    ) {
+      id
+    }
+  }
+`;
+
+class CreateItem extends Component {
+  state = {
+    // ...
+  };
+
+  handleChange = (e) => {
+    const {name, type, value} = e.target;
+    const val = type === 'number' ? parseFloat(value) : value;
+    this.setState({ [name]: val});
+  }
+  render() {
+    return (
+      {/* variables are the input parameters to the query mutation*/}
+      <Mutation mutation={CREATE_ITEM_MUTATION} variables={this.state}>
+        { (createItem, {loading, error, called, data}) => (
+          <Form 
+            onSubmit={async e => {
+              e.preventDefault();
+              const res = await createItem();
+              Router.push({
+                pathname: '/item',
+                query: { id: res.data.createItem.id}
+              })
+            }}
+          >
+              <Error error={error} />
+              <fieldset disabled={loading} aria-busy={loading}>
+                <label htmlFor="title">Title</label>
+                <input 
+                  type="Text"
+                  id="title"
+                  name="Title"
+                  placeholder="Title"
+                  required
+                  value={this.state.title}
+                  onChange={handleChange} />
+              </fieldset>
+              <!-- /* more form controls */ -->
+              <button type="submit">Submit</button>
+            </Form>          
+        )}
+      </Mutation>
+    );
+  }
+}
+
+export default CreateItem;
+export { CREATE_ITEM_MUTATION }
+```
+
+
+
 
 ## Todo
 - css display grid
 - express
-
+- optimistic paging in react
+  - how do you cache stuff that isn't immediately displayed?

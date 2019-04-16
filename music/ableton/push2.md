@@ -18,10 +18,41 @@ Push 2 Notes
     - White when selected
     - Green when playing
   - If not selected and not playing - whatever you're set up as
-  - To change a pad color:
-    - `Select` button
+  - To change a (drum) pad color:    
     - Press `Shift`+`Pad`, holding down shift and select a color in the perimeter color wheel
 
+## Manual Notes
+- 3 ways to browse sounds:
+  1. Encoders (knobs)
+  2. Arrow buttons
+  3. Move through the hierarchy with the right-uppermost buttons
+- What gets populated in the device browser is based on the last selected device / track
+- 8x8 Drum pad setup
+  - Note Mode needs to be enabled 
+  - Requires a drum rack instrument on the track
+  - Layout button lets you cycle between different variations on Note Mode
+  - If you have more than 16 pads, you can move around using:
+    - 16 Pads at a time: Octave Up/Down
+    - 1 Line at at time: `Shift` + Touch Strip
+    - Layouts:
+      - Loop Selector (default)
+      - 16 Velocities
+      - 64 Pads
+    - `Layout` button lets you scroll across different layouts
+    - Display Scrolling:
+      - Momentary (hold) `Layout` when you're in 
+        - Loop Selector Layout -> 16 Velocity Layout
+        - 16 Velocity Layout -> Loop Selector Layout
+    - Diplay Locking:
+      - 'Locked' mode = retained when you shift tracks.
+      - To Access Locked mode for these displays use `Shift` + `Layout`
+- 16 Velocity mode
+  - Affects sequenced velocities, not what you drum directly in pads
+
+  - Momentary access: Hold down Display button
+  - Full access: `Shift` + `Layout`
+  - Get back to previous view: `Layout`
+- When you start the clip transport with the loop selector mode, that determines the clip length
 
 
 ## Step Sequencing
@@ -71,10 +102,13 @@ Push 2 Notes
 - `Repeat` button (when flashing), lets you keep pressing stuff down (note: still velocity sensitive)
   - You can affect the swing on the repeat using the encoder right above the metronome
 - `Accent` lets you record a pad at a fixed high velocity
+  - If you press it once on and off quickly, it stays engaged for everything
+  - If you hold it longer, it will only aplly for those individual notes
 - To play drums with 16 fixed velocities:
-  - Press the `Layout` button.  Now the loop selector section will be a grid of 16 velocities for the selected pad.
+  - Press the `Layout` button.  Now the loop selector section will be a grid of 16 velocities for the selected pad.  
+    - Use this to enter specific velocities into the step sequencer
   - This works with repeat mode too
-  - You can also use this to enter specific velocities into the step sequencer
+  
 
 ## Navigating in the Menu
 - When you click a pad, the buttons below the 8 encoders give you access to the various stages of the rack, where you can change settings.  For example, you can select:
