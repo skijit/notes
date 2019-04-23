@@ -419,7 +419,7 @@ export default CreateItem;
 export { CREATE_ITEM_MUTATION }
 ```
 
-
+- next: vid 20
 
 
 ## Todo
