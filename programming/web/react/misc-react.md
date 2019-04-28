@@ -113,3 +113,57 @@ export default class Calculator extends React.Component{
 ## Questions
 - Routing and passing handlers into a component
 - Use smart and dumb components with redux and routing
+
+## Thunk
+- react has a slot built in for applying middleware for each `dispatch()` call
+- it typicall gets set up when you configure your store:
+
+```(javascript)
+import { createStore, applyMiddleware, compose } from 'redux';
+import routeReducer from './reducers';
+import reduxImmutableStateInvariant from "redux-immutable-state-invariant";  //warn us if we accidentally mutate state
+
+export default function configureStore(initialState) {
+  const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose; //add support for Redux dev tools
+
+  return createStore(rootReducer, 
+    initialState, 
+    composeEnhancers(applyMiddleware(reduxImmutableStateInvariant()));
+}
+```
+
+- tradional role for action creators: 
+  - `dispatch(myActionCreator())` 
+  - generates an action object, which the reducer(s) can switch on.
+- action creator functions are good for two reasons:
+  - convenient if you ever have to call the same action in 2 different places 
+  - enables middleware like thunk
+    - the problem this solves is...
+- reducer functions need to be pure
+  - you can't perform side effects, api calls, etc.
+  - so one strategy is to modify your action creators' responsibilities to:
+    1. perform side effects
+    2. dispatch actions themselves (if necessary)
+- react-thunk is middleware that recieves all actions which are passed to `dispatch()`
+- react-thunk will test whether that action is a function.  
+  - if so it will:
+    1. execute the function
+    2. pass the return value to the reducers
+  - if not, it will:
+    1. just pass the object to the reducers like normal
+- when an action creator returns a function (thunk), it has standard parameters which are passed to it 
+  - probably these are set up via specific store-configuration function
+  - usually includes (but not limited to): 
+    1. dispatch
+    2. getState
+- So in this scenario, our action creators are really evolving into 2 separate concerns:
+  - perform side effects
+    - often these are async / promises, creating a separate execution branch, which is why they'll generate further dispatch calls (and increasing complexity)
+      - **Question**:  can we improve this situation by using async action creators?
+      - **TODO**
+  - generate dispatchable objects (i.e. non-functions)  
+- a big use case here is for action creators which perform async side-effects, and thus will return promises.
+  - **TODO**: how does thunk handle action creators which return promises?
+  - probably ignores them?
+
+
