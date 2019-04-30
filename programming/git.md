@@ -623,10 +623,19 @@ from [this](http://www.developerhandbook.com/git/git-for-net-developers/) blog p
 		- There's more utilities for tracking, etc.  See the source listed above for more info.
 
 
-
-
--------------------------------
-**NEXT STEPS**
-- **TODO: document Merging / Merge tools**
-- **TODO: more documentation of Branching with git-flow**
-        
+## Git Stash
+- [good ref](https://www.atlassian.com/git/tutorials/saving-changes/git-stash)
+- stash with a name: `git stash save 'your name here'`
+- view stash: `git stash list`
+	- the first column for each line will looks like `stash@{1}` - this is important for the next part
+- apply stash: `git stash pop stash@{1}` (notice-  this is the reference from the list command avbove)
+	- if you're popping the most recent (stash@{0}), you can leave this part out
+- summarize content of stash (via diff): `git stash show`
+- pick and choose stash contents: `git stash -p`
+	- will interactively let you choose which files you want to include
+- create a branch from your stash: `git stash branch branch-name stash@{1}` (the last part depends on which stash entry you want to apply)
+	- this is useful when you can conflicts applying the stash to a new branch
+	- then you can use normal git merging procedures to resolve	
+- **warning**: untracked and new files are ignored
+	- to include them, use `git stash -a`
+	
