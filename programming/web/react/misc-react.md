@@ -1,43 +1,17 @@
 Misc React
 ================================
 
+## Change Detection
 
-- Start with react as a DOM-manipulation engine (http://nicholasjohnson.com/blog/react-for-angular-developers/)
-- Explain `render()` output and virtual DOM
-  - Compare with Angular, Shadow DOM, etc
-- `render`
-https://medium.com/@amcdnl/react-for-the-angular-developer-pt-2-965f967a8876
-- state tree vs rxjs
-- Higher order components (HOC)
-- react has no AOT
-- state
-  - redux
-  - context api : like declarative services
-- Error Boundaries which are “React components that can catch JavaScript errors anywhere in their child component tree, log those errors, and display a fallback UI.
-- content projection
-
-
-```(jsx)
-let model = { clicks: 5};
-
-function render() {
-  ReactDOM.render(<App
-                    clicks={model.clicks}
-                    onClick={() => model.clicks += 1; render(); }>, document.getElementById("root"))                    
-}
-render();
-```
-
-- AOT isn't necessary since you can do server-side rendering
-- render() updates the virtual dom (faster than dom)
-- then react compares real and virtual dom to figure out necessary changes
-- `setState()`  will mark the component as dirty and call `render()` (recursively) which will output Virtual DOM and trigger a change detection cycle.
+- Update Cycle
+  - `setState()`  will mark the component as dirty and call `render()` (recursively) which will output Virtual DOM and trigger a change detection cycle.
+    - render() updates the virtual dom (faster than dom)
+  - then react compares real and virtual dom to figure out necessary changes
   - DOM only gets updated for changes between Virtual Dom and actual Dom
   - there's a lifecycle hook called `shouldComponentUpdate()` which defaults to true, meaning that for any changes to state, `render()` should be invoked.
     - there might be cases where you don't want it to be true - presumably as an optimization.
   - [info](https://stackoverflow.com/questions/24718709/reactjs-does-render-get-called-any-time-setstate-is-called)
-  - 
-
+  
 - [Shadow Dom vs Virtual Dom](https://vuejsfeed.com/blog/learn-the-differences-between-shadow-dom-and-virtual-dom)  
     - Virtual DOM is used by React and Vue.js
     - Virtual DOM is **Any** representation of the DOM, whereas Shadow DOM is the same DOM object model, available in the document but not in the main DOM tree
@@ -47,7 +21,8 @@ render();
     - Shadow Dom is implemented by a browser (it's a spec), Virtual Dom is implmented by a javascript library/framework
       - Shadow Dom developed as a simple way for browser developers to use the same html constructs to implement new html elements, but without giving us an API to alter those "implementation details" [src](https://glazkov.com/2011/01/14/what-the-heck-is-shadow-dom/)
 
-- change detection info- see [here](https://medium.com/@gethylgeorge/how-virtual-dom-and-diffing-works-in-react-6fc805f9f84e)  
+- more change detection info:
+  - see [here](https://medium.com/@gethylgeorge/how-virtual-dom-and-diffing-works-in-react-6fc805f9f84e)  
   - also see [here](https://reactjs.org/docs/reconciliation.html)
   1. `this.setState()` marks the component as dirty
   2. call `render()` recursively to update the virtual DOM
@@ -58,8 +33,9 @@ render();
     - if the "type" of a node changes, then it (and the whole subtree) have changed
     - if the `key` attribute changes, then it's different
 
-- example of accessing DOM Nodes
-  - using `this.refs`: see `ReactDOM.findDOMNode(this.refs.input1)` and `<input ref="input1"></input>`
+## Accessing DOM Nodes directly
+
+- using `this.refs`: see `ReactDOM.findDOMNode(this.refs.input1)` and `<input ref="input1"></input>`
 
 ```(jsx)
 import React from "react"
@@ -109,10 +85,6 @@ export default class Calculator extends React.Component{
   }
 }
 ```
-
-## Questions
-- Routing and passing handlers into a component
-- Use smart and dumb components with redux and routing
 
 ## Thunk
 - react has a slot built in for applying middleware for each `dispatch()` call

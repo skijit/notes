@@ -293,8 +293,9 @@ describe('when the first answer is selected', () => {
   - Forms present a problem b/c users need to input data, but the value of the form elements are based on state.
   - React solves this problem in 3 steps:
     1. Add Local State to the form component
-    2. Bind the form elements to the component sate
+    2. Bind the form elements to the component state
     3. Use onChange handler to update state
+      - onChange fires after the element loses focus
   
   ```(jsx)
   class Identity extends React.Component {

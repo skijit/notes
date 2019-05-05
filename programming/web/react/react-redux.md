@@ -1,7 +1,7 @@
 React - Redux Notes
 =========================
 
-## 4 Ways to Craete React Component 
+## 4 Ways to Create React Component 
 
 ### createClass
 - original way, used less frequently these days
