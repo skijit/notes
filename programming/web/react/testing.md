@@ -1,6 +1,29 @@
 React Testing
 ================
 
+## Work Notes
+- main test runner is mocha
+- babelrc adds the rewire plugin
+- npm script: `"test": "cross-env BABEL_ENV=mocha && node --max_old_space_size=4096 ./node_modules/mocha/bin/_mocha ./test"`
+- mocha defines:
+  - `describe`
+  - `beforeEach()`
+  - `afterEach()`
+  - `it`
+- node types:
+  - `assert`
+- chai defines:
+  - `expect`
+- sinon
+  - `sinon.spy()`
+- enzyme
+  - `shallow`
+  - `mount`
+- jsdom
+  - JSDOM is a JavaScript based headless browser that can be used to create a realistic testing environment.
+  - Since enzyme's mount API requires a DOM, JSDOM is required in order to use mount if you are not already in a browser environment (ie, a Node environment).
+
+
 ## Basic Testing Stack
 - Enzyme
   - UI Simulation
@@ -8,6 +31,7 @@ React Testing
   - Shines in unit testing react components, harder with integration tests
 - Sinon 
   - Stub & Mocking
+
 - Babel-rewire
   - Dependency Isolation
 - Jest:
@@ -16,16 +40,28 @@ React Testing
   - Mock clickable events
   - Not specific to react
   - Duplicates the API on Jasmine (also is newer)
+  - Very similar to the Mocha API
   - Runs on node
 - Mocha
   - Test Runner
   - Runs on Node
+- Chai
+  - assertion library
 
 ## Test Types
 - Unit tests: within a component
 - Integration tests: interactions between multiple components (eventing, state changes, etc.)
 - End-to-end testing: TODO
-  
+
+## Mocha 
+- TODO: continue here
+
+## Node Assert
+
+## Sinon
+
+## Chai
+
 ## Enzyme
 
 ## Jest

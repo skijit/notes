@@ -638,4 +638,6 @@ from [this](http://www.developerhandbook.com/git/git-for-net-developers/) blog p
 	- then you can use normal git merging procedures to resolve	
 - **warning**: untracked and new files are ignored
 	- to include them, use `git stash -a`
-	
+
+## Misc
+- How to discard changes on a single file: `git checkout -- <file>`  
