@@ -641,3 +641,4 @@ from [this](http://www.developerhandbook.com/git/git-for-net-developers/) blog p
 
 ## Misc
 - How to discard changes on a single file: `git checkout -- <file>`  
+- Discard **All** changes in working area `git clean -nfd`  (this is the dry-run... to finalize, remove the `-n` parameter)
