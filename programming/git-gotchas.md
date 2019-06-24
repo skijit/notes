@@ -210,4 +210,22 @@
 - The commit sha-1 checksum is over the filesystem diff: basically a patch (I think)
 - `git rm` will make the file no longer tracked AND remove it from the filesystem
   - if you want to keep it on the filesystem, try `git rm --cached`
-- on 2.3
+- We only abbreviate from the beginning of the SHA hash, not the end
+  - How many characters you want to use is up to you
+  - Big projects need to use more or they'll get collisions
+  - Git can generally interpolate for you
+- (Object) Composition of a commit:
+  - commit object
+    - parent
+    - tree
+    - author
+    - commiter
+    - comments
+    - Has it's own SHA ID
+  - tree object
+    - points to each blob object in the directory (represents file (or subdir?))
+    - Has it's own SHA ID
+  - Blob object
+    - has its own SHA ID
+    - seems to actually store the file contents, not just the deltas
+- HEAD knows what branch it's currently pointing at: `git log --oneline --decorate`
