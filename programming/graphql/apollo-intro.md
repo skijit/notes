@@ -603,7 +603,7 @@ export default function Login() {
 }
 ```
 
-- and in the login component, it looks like this:
+- and in the loginform component, it looks like this:
 
 ```(javascript)
 // ...
