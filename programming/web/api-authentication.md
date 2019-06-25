@@ -7,6 +7,7 @@ Securing an API
   - (d) [log rocket blog 2](https://logrocket.com/blog/jwt-authentication-best-practices/)
   - [storing jwts in cookies vs web storage](https://stormpath.com/blog/where-to-store-your-jwts-cookies-vs-html5-web-storage)
   - [jwt design points](https://stormpath.com/blog/jwt-the-right-way/)
+  - [why and when to choose api keys](https://cloud.google.com/endpoints/docs/openapi/when-why-api-key)
   - [jwt.io](https://jwt.io/)
 
 - todo
@@ -196,3 +197,22 @@ let token = `${encodedHeader}.${encodedPayload}.${signature}`;
 ## Misc Thoughts
 - Does it make most sense to store user data in the JWT on the client (such as their role) or put in in an HTTP-cookie and just use API methods to deduce this information separately.
   - I'm thinking the latter.
+- [google sign-in](https://github.com/GoogleChromeLabs/google-sign-in)
+- [app sign-in: something completely different](https://developers.google.com/identity/sign-in/web/sign-in)
+
+- general flow:
+  - create a shared IsAuth() method which looks at the session cookie and:
+    - verify untampered
+    - unencrypt, if necessary
+    - verify unexpired      
+    - lookup user information to for authorization
+  - index page server-side code looks for a session cookie
+    - if session cookie exists:
+      - if IsAuth() return normal page, else redirect to login      
+    - if no session cookie exists
+      - redirect to /login
+  - /login page is static, has javascript
+    - on successful login, assign credentials to a safe cookie (untamperable) and re-request index page
+  - return api/graphql methods from same domain
+    - use isAuth() (possibly in pipeline)
+    
