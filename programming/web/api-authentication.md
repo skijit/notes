@@ -9,6 +9,7 @@ Securing an API
   - [jwt design points](https://stormpath.com/blog/jwt-the-right-way/)
   - [why and when to choose api keys](https://cloud.google.com/endpoints/docs/openapi/when-why-api-key)
   - [jwt.io](https://jwt.io/)
+  - [this is interesting too- about oauth](https://medium.com/@ashokyogi5/a-beginners-guide-to-google-oauth-and-google-apis-450f36389184)
 
 - todo
   - Methods of authentication in graphql
@@ -216,3 +217,4 @@ let token = `${encodedHeader}.${encodedPayload}.${signature}`;
   - return api/graphql methods from same domain
     - use isAuth() (possibly in pipeline)
     
+  
