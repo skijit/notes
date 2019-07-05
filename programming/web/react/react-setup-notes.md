@@ -51,7 +51,116 @@ React App Setup Notes
 ## Tailwind.css
 - https://tailwindcss.com/
 
+## Getting Started Guide
 
-## Next.js
-- is it worth it?
-- Custom App container
+### Plan
+- Create React App
+  - Checkpoint 1
+    - Use typescript
+    - Serve via Express (simple)  
+    - Add a couple client side routes / placeholder components
+    - Build Process
+    - Authentication integration (no api connection)
+    - Deployment to Server
+  
+  - Checkpoint 2
+    - Add material UI
+
+  - Checkpoint 3
+    - GraphQL authentication
+    - Apollo Client
+    - Mutations and authorization middleware
+
+  - Checkpoint 4
+    - CSV transformer
+
+### Execution
+- Create React App with Typescript:
+  - `npx create-react-app admin-client --typescript`
+- Serve Via Webpack: `yarn start`
+  - doesn't (re)write the served output to `build` folder
+- Build: `yarn build`
+  - outputs to contents suitable for hosting in `build` folder
+- Add a sibling TypeScript-Express server
+  - follow this [tutorial](https://developer.okta.com/blog/2018/11/15/node-express-typescript)
+- Connect client and server build processes
+  - Serve static files in Express:
+
+  ```(typescript)
+  // src/index.ts
+  import express from "express";
+  import path from "path";
+  const app = express();
+  const port = 8080; // default port to listen
+
+  app.use(express.static(path.join(__dirname, "public")));
+  
+  app.get("/hello", (req, res) => {
+    res.send("Hello world!");
+  });
+
+  // start the Express server
+  app.listen(port, () => {
+    // tslint:disable-next-line:no-console
+    console.log(`server started at http://localhost:${port}`);
+  });
+
+  ```
+  
+  - Copy static files from client to server static files root
+    - add to package.json: `"postbuild": "mkdirp ../admin-server/dist/public & rimraf ../admin-server/dist/public/* & cp -r build/* ../admin-server/dist/public/",`
+
+- Debug Express in VSCode: add the following `.vscode/launch.json`
+
+```(json)
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch Program",
+      "program": "${workspaceFolder}\\dist\\index.js",
+      "outFiles": ["${workspaceFolder}/**/*.js"]
+    }
+  ]
+}
+```
+
+  - you can set breakpoints successfully now since the tsconfig is outputting sourcemaps
+  
+- Debug React in VSCode
+  - instructions [here](https://facebook.github.io/create-react-app/docs/setting-up-your-editor#visual-studio-code)
+  - Short version:
+    - install chrome debugging extension for vscode
+    - get the standard launch.json
+    - `yarn start` the app
+    - then launch chrome debug process      
+
+- Add a templated page (and tooling) to Express:
+  - Follow [these](https://developer.okta.com/blog/2018/11/15/node-express-typescript#build-a-better-user-interface-with-materialize-and-ejs) instructions
+  - key commands:
+    - `yarn build & yarn start`
+    - `yarn dev`
+    
+- Add an API route to Express:
+  - TODO
+
+  
+- Add some client side routes in React
+  - TODO
+- Add basic authentication via Google
+  - TODO
+- Deployment to Server
+  - TODO
+
+
+
+
+
+  
+  
+
