@@ -82,7 +82,7 @@ React App Setup Notes
 - Build: `yarn build`
   - outputs to contents suitable for hosting in `build` folder
 - Add a sibling TypeScript-Express server
-  - follow this [tutorial](https://developer.okta.com/blog/2018/11/15/node-express-typescript)
+  - follow this [tutorial](https://developer.okta.com/blog/2018/11/15/node-express-typescript#hello-world)
 - Connect client and server build processes
   - Serve static files in Express:
 
@@ -142,13 +142,13 @@ React App Setup Notes
 
 - Add a templated page (and tooling) to Express:
   - Follow [these](https://developer.okta.com/blog/2018/11/15/node-express-typescript#build-a-better-user-interface-with-materialize-and-ejs) instructions
+  - [Info on ejs](https://ionicabizau.github.io/ejs-playground/)
   - key commands:
     - `yarn build & yarn start`
     - `yarn dev`
-    
-- Add an API route to Express:
-  - TODO
 
+- Add an API route to Express:  
+  - [good source](https://codebrains.io/setting-up-express-with-typescript/)
   
 - Add some client side routes in React
   - TODO
