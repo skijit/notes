@@ -9,4 +9,4 @@ Misc React and TypeScript
   - [use typescript to develop react applications](https://egghead.io/courses/use-typescript-to-develop-react-applications)
   - [Ultimate React Component Patterns with Typescript 2.8](https://levelup.gitconnected.com/ultimate-react-component-patterns-with-typescript-2-8-82990c516935)
   - [TypeScript Intersection and Union Types](https://codepunk.io/typescript-intersection-and-union-types/)
-  
+  - todo: hooks and state context
