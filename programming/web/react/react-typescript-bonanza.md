@@ -304,6 +304,8 @@ function area(s: Shape) {
 - **Conditional Types**
   - TODO
 
+- **Declare**
+
 ### Utility Types
 
 ### Some Useful Patterns
