@@ -13,6 +13,9 @@ Misc React and TypeScript
   - [Typescript conditional types](https://artsy.github.io/blog/2018/11/21/conditional-types-in-typescript/)
   - todo: hooks and state context
 
+## Best Practices for Typescript and React
+- TODO
+
 ## TypeScript Advanced Types
 - **Intersection** (&): Combines all the fields of multiple types
 
