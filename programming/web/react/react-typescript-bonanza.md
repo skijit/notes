@@ -10,6 +10,7 @@ Misc React and TypeScript
   - [Ultimate React Component Patterns with Typescript 2.8](https://levelup.gitconnected.com/ultimate-react-component-patterns-with-typescript-2-8-82990c516935)
   - [TypeScript Intersection and Union Types](https://codepunk.io/typescript-intersection-and-union-types/)
   - [Advanced TypeScript Types](https://www.typescriptlang.org/docs/handbook/advanced-types.html)
+  - [Typescript conditional types](https://artsy.github.io/blog/2018/11/21/conditional-types-in-typescript/)
   - todo: hooks and state context
 
 ## TypeScript Advanced Types
@@ -302,9 +303,72 @@ function area(s: Shape) {
   ```
 
 - **Conditional Types**
-  - TODO
+  
+  ```(typescript)
+  function process<T extends string | null>(
+    text: T
+  ): T extends string ? string : null {
+    return text && text.replace(/f/g, "p");
+  }
+  ```
+
+  - `A extends B` means *A is assignable to B*
+    - A doesn't literally have to extend B to be assignable to it, but B needs to be a property superset
+  
+    ```(typescript)
+    class A {}
+    class B {}
+
+    const b: B = new A() // ✔ all good
+    const a: A = new B() // ✔ all good
+
+    new A() instanceof B // => false bc at runtime, it's differnt
+
+    interface Shape {
+      color: string
+    }
+
+    class Circle {
+      color: string
+      radius: number
+    }
+
+    // ✔ All good! Circles have a color
+    const shape: Shape = new Circle()
+    // ✘ Type error! Not all shapes have a radius!
+    const circle: Circle = shape
+    ```
+
+  - `infer` keyword is used on the right side of conditional types.  Basically, it will substitute in whatever works.
+
+  ```(typescript)
+  type Foo<T> = T extends { a: infer U, b: infer U } ? U : never;
+  type T10 = Foo<{ a: string, b: string }>;  // string
+  type T11 = Foo<{ a: string, b: number }>;  // string | number
+  ```
 
 - **Declare**
+  - used for *ambient* declarations
+  - basically, you've got some variable in scope (perhaps a global or from some other module), defined in some other file, but which isn't covered by a type(script) definition file.
+  - 
+
+- **Function overloads**:
+  - Just write a couple different signatures to clarify the impact on output
+
+  ```(typescript)
+  function reverse(string: string): string;
+  function reverse<T>(array: T[]): T[];
+  function reverse<T>(
+    stringOrArray: string | T[]
+  ): string | T[] {
+    return typeof stringOrArray === "string"
+      ? stringOrArray
+          .split("")
+          .reverse()
+          .join("")
+      : stringOrArray.slice().reverse();
+  }
+  ```
 
 ### Utility Types
 
