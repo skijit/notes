@@ -238,48 +238,46 @@ function area(s: Shape) {
     - Make every property partial
   - These are in the standard TS library
 
-  ```(typescript)
-  type Readonly<T> = {
-    readonly [P in keyof T]: T[P];
-  }
-  type Partial<T> = {
-      [P in keyof T]?: T[P];
-  }
-  type Nullable<T> = { 
-    [P in keyof T]: T[P] | null 
-  }
-  type Pick<T, K extends keyof T> = {
-    [P in K]: T[P];
-  }
-  type Record<K extends keyof any, T> = {
-      [P in K]: T;
-  }
-  ```
-
-  - **Pick**
-    - If you look at the definition of Pick, the important thing is that it takes two template parameter types
-    - So basically, you can use this for a legit property intersection (since our current intersection `&` is closer to a union)
-    - [Pick example](https://www.typescriptlang.org/docs/handbook/utility-types.html#picktk)
-      - but note that you could also use a non-inline type as the second parameter too
-
-  - **Record**
-    - keep the properties of the first type parameter, but the corresponding values will be of the second type parameter
-
     ```(typescript)
-    interface PageInfo {
-      title: string;
+    type Readonly<T> = {
+      readonly [P in keyof T]: T[P];
     }
-
-    type Page = 'home' | 'about' | 'contact';
-
-    const x: Record<Page, PageInfo> = {
-        about: { title: 'about' },
-        contact: { title: 'contact' },
-        home: { title: 'home' },
-    };
+    type Partial<T> = {
+        [P in keyof T]?: T[P];
+    }
+    type Nullable<T> = { 
+      [P in keyof T]: T[P] | null 
+    }
+    type Pick<T, K extends keyof T> = {
+      [P in K]: T[P];
+    }
+    type Record<K extends keyof any, T> = {
+        [P in K]: T;
+    }
     ```
 
+- **Pick**
+  - If you look at the definition of Pick, the important thing is that it takes two template parameter types
+  - So basically, you can use this for a legit property intersection (since our current intersection `&` is closer to a union)
+  - [Pick example](https://www.typescriptlang.org/docs/handbook/utility-types.html#picktk)
+    - but note that you could also use a non-inline type as the second parameter too
 
+- **Record**
+  - keep the properties of the first type parameter, but the corresponding values will be of the second type parameter
+
+  ```(typescript)
+  interface PageInfo {
+    title: string;
+  }
+
+  type Page = 'home' | 'about' | 'contact';
+
+  const x: Record<Page, PageInfo> = {
+      about: { title: 'about' },
+      contact: { title: 'contact' },
+      home: { title: 'home' },
+  };
+  ```
 
 - **Index-based Type Tips**
   - Mixing indexer with other properties doesn't work
@@ -371,6 +369,27 @@ function area(s: Shape) {
   ```
 
 ### Utility Types
+- [src](https://www.typescriptlang.org/docs/handbook/utility-types.html)
+- Mapped Type Support
+  - `Partial<T>`: makes all properties optional
+  - `Required<T>`: makes all properties required (non-optional)
+  - `Readonly<T>`: makes all properties readonly
+  - `Record<K, T>`: makes all property's values of K conform to type T
+- Type Subsetting by Selection
+  - `Pick<T, K>`: pick the properties `K` from type `T`
+    - `type PersonName = Pick<Person, 'firstName' | 'lastName'>;`
+  - `Omit<T, K>`: remove the properites `K` from type `T`
+    - `type PersonName = Omit<Person, 'age' | 'profession' | 'gender'>`
+- Type Subsetting by Assignability
+  - `Extract<T, U>`: Keep only the types in `T` which are assignable to `U`
+    - `type T0 = Extract<"a" | "b" | "c", "a" | "f">;  // "a"`
+  - `Exclude<T, U>`: Exclude all types in `T` which are assignable to `U`
+    - `type T1 = Exclude<"a" | "b" | "c", "a" | "b">;  // "c"`
+- 
+  - `NonNullable<T>`: Remove `null` and `undefined` as types from `T`
+  - `ReturnType<T>`: Return type of the function `T`
+  - `InstanceType<T>`: The type corresponding to the ctor of `T`
+  
 
 ### Some Useful Patterns
 - TypeSmoosher: Take objects of two types and combine them into a single typed object.
