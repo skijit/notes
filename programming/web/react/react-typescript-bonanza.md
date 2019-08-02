@@ -65,7 +65,8 @@ const App = ({ message }: AppProps) : ReactElement => <div>{message}</div>;
 ```
 
 ### Hooks
-- [Continue here](https://github.com/typescript-cheatsheets/react-typescript-cheatsheet)
+- [Continue here](https://levelup.gitconnected.com/usetypescript-a-complete-guide-to-react-hooks-and-typescript-db1858d1fb9c)
+- [then here](https://github.com/typescript-cheatsheets/react-typescript-cheatsheet)
 
 ## JavaScript to TypeScript Conversion
 - 2 high level steps:
