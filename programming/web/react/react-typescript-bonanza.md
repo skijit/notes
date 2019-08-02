@@ -2,7 +2,6 @@ Misc React and TypeScript
 ===================
 
 - sources
-  - [Best Practices for Using TypeScript with React](https://www.freecodecamp.org/news/effective-use-of-typescript-with-react-3a1389b6072a/)
   - [Miscrosoft TypeScript React Conversion Guide](https://github.com/microsoft/TypeScript-React-Conversion-Guide)
   - [lyft/react-javascript-to-typescript-transform](https://github.com/lyft/react-javascript-to-typescript-transform)
   - [react-typescript-cheatsheet](https://github.com/typescript-cheatsheets/react-typescript-cheatsheet)
@@ -11,10 +10,97 @@ Misc React and TypeScript
   - [TypeScript Intersection and Union Types](https://codepunk.io/typescript-intersection-and-union-types/)
   - [Advanced TypeScript Types](https://www.typescriptlang.org/docs/handbook/advanced-types.html)
   - [Typescript conditional types](https://artsy.github.io/blog/2018/11/21/conditional-types-in-typescript/)
-  - todo: hooks and state context
+  - [Typescript and Hooks](https://levelup.gitconnected.com/usetypescript-a-complete-guide-to-react-hooks-and-typescript-db1858d1fb9c)
 
 ## Best Practices for Typescript and React
-- TODO
+- See the [React Type Definition](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/react/index.d.ts)
+
+### Function Components
+
+- React Function Components are defined as such:
+
+```(typescript)
+// The top-level object type is a JavaScript Function
+// Not a class or object literal, which seem more common
+// But this is React - it's pretty function-oriented
+interface FunctionComponent<P = {}> {
+    (props: PropsWithChildren<P>, context?: any): ReactElement | null;
+    propTypes?: WeakValidationMap<P>;
+    contextTypes?: ValidationMap<any>;
+    defaultProps?: Partial<P>;
+    displayName?: string;
+}
+```
+
+- So even though you can define a functional component like so, you won't get the benefit of any of it's properties.
+
+```(typescript)
+const App: React.FunctionComponent<{ message: string }> = ({ message }) => (
+  <div>{message}</div>
+);
+```
+
+- A reminder of dealing with function interfaces of this type:
+
+```(typescript)
+interface SearchFunc {
+    (source: string, subString: string): boolean,
+    someOtherProp?: string
+};
+let mySearch: SearchFunc = (source: string, subString: string): boolean => {
+    let result = source.search(subString);
+    return result > -1;
+}
+mySearch.someOtherProp = "boogey";
+mySearch.notPartOfMyProp = false;  //type ERROR
+```
+
+- Another way to assign to a functional interface like this is with a [HOC](https://levelup.gitconnected.com/ultimate-react-component-patterns-with-typescript-2-8-82990c516935).
+
+- We can also define a plain ol function as a functional component, but then we don't get those additional properties:
+
+```(typescript)
+type AppProps = { message: string }; /* could also use interface */
+const App = ({ message }: AppProps) : ReactElement => <div>{message}</div>;
+```
+
+### Hooks
+- [Continue here](https://github.com/typescript-cheatsheets/react-typescript-cheatsheet)
+
+## JavaScript to TypeScript Conversion
+- 2 high level steps:
+  1. Adding Tsc to build process
+    - In webpack, switch `babel-loader` to one of the typescript loaders (`awesome-typescript-loader` or `ts-loader`)
+      - You could also keep babel, and just run the typescript loader first
+    - add `source-map-loader` to webpack too
+    - add the various react type files
+
+  2. Converting JS to TS
+    - Have React Components inherit from appropriate classes
+    - Normally you import like this in typescript
+
+      ```(typescript)
+      import * as React from "react";
+      import * as ReactDOM from "react-dom";
+      ```
+
+      - But in jsx, you would import like this
+
+      ```(typescript)
+      import React from "react";
+      import ReactDOM from "react-dom";    
+      ```
+
+      - You can keep on doing this if you check: `--allowSyntheticDefaultImports`
+
+- Functional components can be written as a plain ol function
+        
+
+- The [Lyt React Converter](https://github.com/lyft/react-javascript-to-typescript-transform) will
+  - Convert PropTypes to a property type passed into Components
+  - Provide state typing based on initial and setState
+  - Pull out big interfaces into designated files
+  - Convert functional components with proptypes
 
 ## TypeScript Advanced Types
 - **Intersection** (&): Combines all the fields of multiple types
@@ -340,6 +426,32 @@ function area(s: Shape) {
     const circle: Circle = shape
     ```
 
+  - **Important**: this kind of flexible typing is possible with classes and interfaces, but not object literals
+    - You can derive a type from an object literal, but as soon as you specify an object literal on the right side, it needs to be exact!
+
+  ```(typescript)
+  const initialState = { clicksCount: 0 };
+  type FooLiteral = typeof initialState;
+  const foo1: FooLiteral = {clicksCount:1, otherProp: false};  
+  //gives you an error only on property otherProp bc 
+  //'object literal may only specify known properties'
+
+  interface iFoo { clicksCount: number }
+  const foo2: iFoo = { clicksCount: 0, otherProp: false};
+  //gives you an error only on property otherProp bc 
+  //'object literal may only specify known properties'
+
+  class Foo { constructor(public clicksCount: number) {} }
+  class FooPlus { constructor(public clicksCount: number, public otherProp: boolean) {} }
+  const foo3 : Foo = new FooPlus(0, false);
+  //totally fine!
+
+  const foo4: iFoo = new FooPlus(0, false);
+  //totally fine!
+
+  const foo5: FooLiteral = new FooPlus(0, false);
+  //totally fine!
+  ```
   - `infer` keyword is used on the right side of conditional types.  Basically, it will substitute in whatever works.
 
   ```(typescript)
