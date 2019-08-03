@@ -64,9 +64,270 @@ type AppProps = { message: string }; /* could also use interface */
 const App = ({ message }: AppProps) : ReactElement => <div>{message}</div>;
 ```
 
+- You can assign default parameters through the `defaultProps` property of `FunctionalComponent` (in a variety of ways), but another approach is to just set a default value to the parameter.
+
 ### Hooks
-- [Continue here](https://levelup.gitconnected.com/usetypescript-a-complete-guide-to-react-hooks-and-typescript-db1858d1fb9c)
-- [then here](https://github.com/typescript-cheatsheets/react-typescript-cheatsheet)
+
+- Some sources...
+  - [Continue here](https://levelup.gitconnected.com/usetypescript-a-complete-guide-to-react-hooks-and-typescript-db1858d1fb9c)
+  - [then here](https://github.com/typescript-cheatsheets/react-typescript-cheatsheet)
+
+- Hooks let you share logic, state, access context, and lifecycle events
+- React team imagines that they might replace class components entirely
+- Previous methods were Higher Order Components and Render Props
+- We no longer calls Function Components 'Stateless' since they might have state via hooks
+- Hooks can only be used in Function Components
+- lets you separate logic out of your components even easier - good for testing / development
+- Don't ever put a hook call inside conditional logic.  If you need to, you can put the conditional logic inside the hook instead.
+
+- **useState**
+  - use case: local state in a function component - can be passed down to subcomponents via props
+  - when state is updated, the fucntion will re-render, but state is retained locally
+
+  ```(typescript)
+  import * as React from 'react';
+
+  interface IUser {
+    username: string;
+    email:  string;
+    password: string;
+  }
+
+  const ComplexState = ({ initialUserData }) => {
+    const [user, setUser] = React.useState<IUser | null>(initialUserData);
+    
+    if (!user) {
+      // do something else when our user is null
+    }
+
+    return (
+      <form>
+        <input value={user.username} onChange={e => setUser({...user, username: e.target.value})} />
+        <input value={user.email} onChange={e => setUser({...user, email: e.target.value})} />
+        <input value={user.password} onChange={e => setUser({...user, password: e.target.value})} />
+      </form>  
+    );
+  }
+  ```
+
+- **useEffect**
+  - typically you want to perform side effects after the rendering is done.  
+  - in class-based components, you do this with lifecycle methods.
+  - now after a component renders, your side effect callbacks get executed!
+
+
+  ```(typescript)
+  function useEffect(effect: EffectCallback, deps?: DependencyList): void;
+  
+  // The first argument, `effect`
+  // If it returns a function, this is a cleanup function that will be called on componentWillUnmount
+  type EffectCallback = () => (void | (() => void | undefined));
+
+  // The second argument, `deps?`
+  // if === null||undefined, effect callback is called on componentDidMount, componentDidUpdate, componentWillUnmount
+  // if === [], effect callback is called on componentDidMount
+  // if === [...someValues], effect callback is called when one of the values changes
+  
+  type DependencyList = ReadonlyArray<any>;
+  ```
+
+- **useContext**
+  - `createContext<T>(init: T)` will create a Context object defined as:
+
+  ```(typescript)
+  interface Context<T> {
+    Provider: Provider<T>;
+    Consumer: Consumer<T>;
+    displayName?: string;
+  }
+  ```
+
+  - `useContext()` gets this `Context` object passed in and returns the corresponding values.
+    - When the context value updates, the component is re-rendered
+
+  - another example:
+    - init context in shared file:
+
+    ```(typescript)
+    import React from 'react'
+
+    export const CurrentRoute = React.createContext({ path: '/welcome' })
+    export const CurrentUser = React.createContext(undefined)
+    export const IsStatic = React.createContext(false)
+
+    //you can also initialize the Context in jsx:
+    //<CurrentRoute.Provider value={{path: '/welcome'}}>
+    //then the consumer will use the most recent value
+    ```
+
+    - consume context in component
+
+    ```(typescript)
+    import React, { useContext } from 'react'
+    import * as ctx from '.sharedCtx'
+
+    export default function App() {
+      let currentRoute = useContext(CurrentRoute)
+      let currentUser = useContext(CurrentUser)
+      let isStatic = useContext(IsStatic)
+
+      return (
+        !isStatic &&
+        currentRoute.path === '/welcome' &&
+        (currentUser
+          ? `Welcome back, ${currentUser.name}!`
+          : 'Welcome!'
+        )
+      )
+    }
+    ```
+
+    - The way to change the state in context is to pass down change actions via context, which are stateMutations provided by useState [example](https://stackoverflow.com/questions/54738681/how-to-change-context-value-while-using-react-hook-of-usecontext)
+
+  - Shared State Pattern to test - can be used global or redefined:
+    - context hook provides state and setter pairs
+      - want to distribute via context instead of a customHook so that it's not local
+    - the setter function can:
+      - use local state setters provided by useReducer or useState
+      - use effect hook for any async calls
+        - maybe use a setTimeout console.log or something
+        - can be triggered by a change to dependency array
+
+
+    - custom hook for each slice of state dependency
+    - each custom hook has it's own side effects
+    - each custom hook interacts with it's slice of data via a reducer
+    - each slice of state has it's own reducer
+
+
+- 1 Shared State Pattern that works:
+  - Context Provider uses a state or reducer hook for persistence
+  - Custom Hook calls useContext hook to get context value
+    - Can return flat state or a combination of state and logic
+    - Probably this is where side-effects would occur as well
+  - Individual components call the useCustomHook to get those values
+
+- one this I like about this useHook pattern is that the actual value returned is immutable and if you want to change it, you need to run through a setter.  So you have encapsulation.
+  - is there any private state available?  I don't think so - I think this is a feature of OO that functional programming advocates object to.
+
+- useState vs useReducer
+  - [per kentcdodds](https://kentcdodds.com/blog/should-i-usestate-or-usereducer):
+    - useState is good for prototyping as you're trying to figure out how your app works.  Once you know, reducer is probably a better solution.
+    - if you have async, useReducer helps insure you're not working with stale values.
+
+- [Another good article on state mgmt from kcd](https://kentcdodds.com/blog/application-state-management-with-react)
+
+- Questions:
+  - how does useMemo?  TODO
+  - can I avoid using context providers as a hierarchy
+    - Not exactly...  
+    - You want to keep state and maybe some logic in context.    
+    - If you don't have a provider, then the useContext hook will return the default value provided by the createContext() argument.
+    - But that value is static - basically a constant, so it makes more sense to use data like that as a constant.
+    - it makes more sense to use a hierarchy of contexts as is appropriate the tree structure of your application
+      - remember that subcomponents will have to re-render on any context changes
+      - TODO: this might be where useMemo is a good idea...    
+  - Do I need to use a hook (useState or useReducer) to persist state delivered by context?
+    - Yes
+    - Context has 2 parts:
+      - Publisher:  (Provider)
+      - Subscriber: (useContext() hook)
+      - **But** neither of these will persist 
+
+- What are some good candidates for global state:
+  - Errors
+  - In progress async calls
+  - Todo - add more
+    
+
+- **useRef**
+  
+  ```(typescript)
+  function TextInputWithFocusButton() {
+    // The type of our ref is an input element
+    const inputEl = useRef<HTMLInputElement>(null);
+    const onButtonClick = () => {
+      // `current` points to the mounted text input element
+      inputEl.current.focus();
+    };
+
+    return (
+      <>
+        <input ref={inputEl} type="text" />
+        <button onClick={onButtonClick}>Focus the input</button>
+      </>
+    );
+  }
+  ```
+
+- **Custom Hooks**
+  - Alternative to HOC's and Render Props
+  
+  - Hook definition:
+    - Encapsulates state with useState
+    - Encapsulates stateful logic, and returns a single value
+    - Scoping:
+      - Statically imported into consumer 
+      - Every time you use a custom hook, all state and effects inside it are fully isolated
+        - It's actually isolated for each call (which is why you can have multiple useState() calls inside a component, for instance)
+    
+    ```(typescript)
+    import React, { useState, useEffect } from 'react';
+
+    type Hook = (friendID: number) => boolean
+
+    interface IStatus {
+      id: number;
+      isOnline: boolean;
+    }
+
+    const useFriendStatus: Hook = (friendID) => {
+      // The type of the value and function are inferred
+      const [isOnline, setIsOnline] = useState<boolean | null>(null);
+
+      function handleStatusChange(status: IStatus) {
+        setIsOnline(status.isOnline);
+      }
+
+      useEffect(() => {
+        // assume a legit subscription: callback is called whenever Friend Status changes
+        ChatAPI.subscribeToFriendStatus(friendID, handleStatusChange);
+        return () => {
+          ChatAPI.unsubscribeFromFriendStatus(friendID, handleStatusChange);
+        };
+      });
+
+      return isOnline;
+    }
+    ```
+
+  - Hook usage:
+
+    ```(typescript)
+    import * as React from 'react';
+    import useFriendStatus from './useFriendStatus';
+
+    interface IUser {
+      id: number;
+      username: string;
+    }
+
+    const FriendsListItem ({ user }) => {
+      // We know this value is a boolean since we defined our hook
+      const isOnline = userFriendStatus(user.id);
+      return (
+        <li>
+          <span style={{ backgroundColor: isOnline ? 'green' : 'red }} />
+          <span>
+            {user.username}
+          </span>
+        <li>
+      );
+    };
+    ```
+
+
+- TODO: what is context in Function Components?
 
 ## JavaScript to TypeScript Conversion
 - 2 high level steps:
