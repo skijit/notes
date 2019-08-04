@@ -32,7 +32,7 @@ interface FunctionComponent<P = {}> {
 }
 ```
 
-- So even though you can define a functional component like so, you won't get the benefit of any of it's properties.
+- So even though you can define a functional component like so, you won't get the benefit of any of it's other properties.
 
 ```(typescript)
 const App: React.FunctionComponent<{ message: string }> = ({ message }) => (
@@ -55,7 +55,8 @@ mySearch.someOtherProp = "boogey";
 mySearch.notPartOfMyProp = false;  //type ERROR
 ```
 
-- Another way to assign to a functional interface like this is with a [HOC](https://levelup.gitconnected.com/ultimate-react-component-patterns-with-typescript-2-8-82990c516935).
+- Another way to assign the other properties (e.g. default parameters) in a functional interface is with a [HOC](https://levelup.gitconnected.com/ultimate-react-component-patterns-with-typescript-2-8-82990c516935).
+  - BUT: in the case of defaultProps, just use default parameters in TypeScript.  That's easy and preferable.
 
 - We can also define a plain ol function as a functional component, but then we don't get those additional properties:
 
@@ -64,9 +65,7 @@ type AppProps = { message: string }; /* could also use interface */
 const App = ({ message }: AppProps) : ReactElement => <div>{message}</div>;
 ```
 
-- You can assign default parameters through the `defaultProps` property of `FunctionalComponent` (in a variety of ways), but another approach is to just set a default value to the parameter.
-
-### Hooks
+## Hooks
 
 - Some sources...
   - [Continue here](https://levelup.gitconnected.com/usetypescript-a-complete-guide-to-react-hooks-and-typescript-db1858d1fb9c)
@@ -75,14 +74,14 @@ const App = ({ message }: AppProps) : ReactElement => <div>{message}</div>;
 - Hooks let you share logic, state, access context, and lifecycle events
 - React team imagines that they might replace class components entirely
 - Previous methods were Higher Order Components and Render Props
-- We no longer calls Function Components 'Stateless' since they might have state via hooks
+- We no longer call Function Components 'Stateless' since they might have state via hooks
 - Hooks can only be used in Function Components
-- lets you separate logic out of your components even easier - good for testing / development
+- Lets you separate logic out of your components even easier - good for testing / development
 - Don't ever put a hook call inside conditional logic.  If you need to, you can put the conditional logic inside the hook instead.
 
 - **useState**
   - use case: local state in a function component - can be passed down to subcomponents via props
-  - when state is updated, the fucntion will re-render, but state is retained locally
+  - when state is updated, the function will re-render, but state is retained locally
 
   ```(typescript)
   import * as React from 'react';
@@ -110,11 +109,21 @@ const App = ({ message }: AppProps) : ReactElement => <div>{message}</div>;
   }
   ```
 
+  - Interesting bits:
+    - Compare to a class-based approach:
+      - A class-based approach might involve a private value or property and some setter
+      - Here we get the value and a set method : so pretty similar
+    - Parameter to setState (e.g. `setUser()`):
+      - Normally: just one parameter - the new state
+      - However: if your function depends on the old state value, pass in a callback to compute: `setCount(prevCount => prevCount + 1)`
+    - Merging state objects:
+      - This works: `setState(prevState => ({ ...prevState, ...updatedValues }))`
+      - If you get in this situation, it's probably better just to `useReducer`
+      
 - **useEffect**
   - typically you want to perform side effects after the rendering is done.  
-  - in class-based components, you do this with lifecycle methods.
-  - now after a component renders, your side effect callbacks get executed!
-
+  - in class-based components, you do this with lifecycle methods, but in function components, you do it with `useEffect`
+  - after a component renders, your side effect callbacks get executed!
 
   ```(typescript)
   function useEffect(effect: EffectCallback, deps?: DependencyList): void;
@@ -131,22 +140,62 @@ const App = ({ message }: AppProps) : ReactElement => <div>{message}</div>;
   type DependencyList = ReadonlyArray<any>;
   ```
 
+  - Component mounting: whenever the clock is rendered to the DOM for the first time
+  - ![react-lifecycle](/resources/images/programming/react-lifecycle.jpg)
+
 - **useContext**
-  - `createContext<T>(init: T)` will create a Context object defined as:
+  - Context was an experimental API that, due only recently became an official part of React
+    - The fact that is was experimental probably explains the prominence of global state solutions (e.g. redux) since without either you have proliferation of prop-drilling.
+  - Class components were the first to be able to consume these, but the `useContext` hook brings the same functionality to function components.
+  - You can use context to deliver:
+    - state
+    - logic (functions)
+    - any combination of the 2
+  - When the context value updates, the component is re-rendered
+  - If there's any part of React that has Dependency Injection: its Context
+  - Any Context usage has 4 different parts:
+    1. Context Creation
+    2. Context Provider (i.e. Publishes a value)
+      - Can be hierarchical versions of the same data, or they can be provided as singleton
+    3. Context Subscriber 
+      - for function components: its connected to `useContext()`
+      - for class components: its connected to a static member
+    4. State Persistence
+      - None of the built-in Context functionality covers persistence, so you'll need something like:
+        - `useState`
+        - `useReducer`
+  - Context Creation:
+    - `createContext<T>(init: T)` will create a Context object defined as:
 
-  ```(typescript)
-  interface Context<T> {
-    Provider: Provider<T>;
-    Consumer: Consumer<T>;
-    displayName?: string;
-  }
-  ```
+    ```(typescript)
+    interface Context<T> {
+      Provider: Provider<T>;
+      Consumer: Consumer<T>;
+      displayName?: string;
+    }
+    ```
 
-  - `useContext()` gets this `Context` object passed in and returns the corresponding values.
-    - When the context value updates, the component is re-rendered
+    - the optional argument is the default value, which should be overwritten by the provider
+      - if you don't overwrite it by the provider, you have static data which you might as well keep as a constant
 
-  - another example:
-    - init context in shared file:
+  - Context Publisher
+    - Typical method is in Jsx, as such:
+
+    ```(jsx)
+    <CurrentRoute.Provider value={{path: '/welcome'}}>
+    ```
+
+      - Instead of this pure JSX approach, you could use a HOC to wrap any number of components    
+      - By making the HOC contain some logic about what types of values to inject, you could have a sort of polymorphic DI-approach
+      - See the other example where a custom component returns a Theme Provider... that's rather nice.
+
+  - Context Subscriber
+
+    ```(jsx)
+    let currentRoute = useContext(CurrentRoute)
+    ```
+
+  - Simple Example:
 
     ```(typescript)
     import React from 'react'
@@ -182,63 +231,222 @@ const App = ({ message }: AppProps) : ReactElement => <div>{message}</div>;
     }
     ```
 
-    - The way to change the state in context is to pass down change actions via context, which are stateMutations provided by useState [example](https://stackoverflow.com/questions/54738681/how-to-change-context-value-while-using-react-hook-of-usecontext)
+  - **Question**: How do you change the value in the context?
+    - **Answer**: [src](https://stackoverflow.com/questions/54738681/how-to-change-context-value-while-using-react-hook-of-usecontext)
+    - TL/DR: The values should be backed by a stateful (`useState` or `useReducer`) hook and you publish the value and the corresponding setter
 
-  - Shared State Pattern to test - can be used global or redefined:
-    - context hook provides state and setter pairs
-      - want to distribute via context instead of a customHook so that it's not local
-    - the setter function can:
-      - use local state setters provided by useReducer or useState
-      - use effect hook for any async calls
-        - maybe use a setTimeout console.log or something
-        - can be triggered by a change to dependency array
+    ```(typescript)
+    const { createContext, useContext, useState } = React;
+
+    const ThemeContext = createContext(null);
+
+    function Content() {
+      const { style, visible, toggleStyle, toggleVisible } = useContext(
+        ThemeContext
+      );
+
+      return (
+        <div>
+          <p>
+            The theme is <em>{style}</em> and state of visibility is
+            <em> {visible.toString()}</em>
+          </p>
+          <button onClick={toggleStyle}>Change Theme</button>
+          <button onClick={toggleVisible}>Change Visibility</button>
+        </div>
+      );
+    }
+
+    function App() {
+      const [style, setStyle] = useState("light");
+      const [visible, setVisible] = useState(true);
+
+      function toggleStyle() {
+        setStyle(style => (style === "light" ? "dark" : "light"));
+      }
+      function toggleVisible() {
+        setVisible(visible => !visible);
+      }
+
+      return (
+        <ThemeContext.Provider
+          value={{ style, visible, toggleStyle, toggleVisible }}
+        >
+          <Content />
+        </ThemeContext.Provider>
+      );
+    }
+
+    ReactDOM.render(<App />, document.getElementById("root"));
+    ```
+
+  - Best Practices:
+    - You'll want to have a persistence (useState or useReducer) or custom hook behind the context implementation
+    - If you use a custom hook, then you can use that to wrap a persistence and side-effect hook into the same API
+    - The other approach is to wrap the Subsciber into a custom hook (example below)    
+    - Good good candidates for global state:
+      - Errors
+      - In progress async calls
+      - Todo - add more
+
+  - Another example ([src](https://kentcdodds.com/blog/application-state-management-with-react)) with wrapping everything in a custom hook:
+
+  ```(jsx)
+  // src/count/count-context.js
+  import React from 'react'
+  const CountContext = React.createContext()
+  function useCount() {
+    const context = React.useContext(CountContext)
+    if (!context) {
+      throw new Error(`useCount must be used within a CountProvider`)
+    }
+    return context
+  }
+  function CountProvider(props) {
+    const [count, setCount] = React.useState(0)
+    const value = React.useMemo(() => [count, setCount], [count])
+    return <CountContext.Provider value={value} {...props} />
+  }
+  export {CountProvider, useCount}
+  // src/count/page.js
+  import React from 'react'
+  import {CountProvider, useCount} from './count-context'
+  function Counter() {
+    const [count, setCount] = useCount()
+    const increment = () => setCount(c => c + 1)
+    return <button onClick={increment}>{count}</button>
+  }
+  function CountDisplay() {
+    const [count] = useCount()
+    return <div>The current counter count is {count}</div>
+  }
+  function CountPage() {
+    return (
+      <div>
+        <CountProvider>
+          <CountDisplay />
+          <Counter />
+        </CountProvider>
+      </div>
+    )
+  }
+  ```
+
+  - Recall/Compare Redux Problems:
+    - Redux has you pass down global state (or slices thereof) and corresponding actions from a container component down to sub-components.  This causes problems:
+    - **Implicit Prop-drilling**:
+      - You also expand the surface of dependencies available to a sub-component without necessarily tight control over the typing (TMI for components can lead to conflicts/collisions)
+    - **Increased Re-rendering**
+      - You end up passing a bunch of data and actions into sub-components that aren't necessary which means you have to re-render whenever some (possibly unrelated) props change  
+    - **Artificially Lifting state increases complexity**
+      - If you don't strictly control the interactions between components' actions and data (e.g. a limited interface), then you create a tangled web of dependencies 
+      - There's no restrictions on adding these dependencies since everything is global and visible in redux (in some implmentations)
+      - Makes it harder to know where to put functionality, which results in less DRY, more inconsistent code
+      - Basically, it scales poorly
 
 
-    - custom hook for each slice of state dependency
-    - each custom hook has it's own side effects
-    - each custom hook interacts with it's slice of data via a reducer
-    - each slice of state has it's own reducer
+  - Reminder of how to use async:
+    - Pass an async method into useEffect()
+    - After awaiting, use the persistence hooks setter
+    - Remember that the effect only gets called **after a re-render** (or maybe even only at mount depending on how you set it up)
 
+    ```(jsx)
+    function Reddit() {
+      // Initialize state to hold the posts
+      const [posts, setPosts] = useState([]);
 
-- 1 Shared State Pattern that works:
-  - Context Provider uses a state or reducer hook for persistence
-  - Custom Hook calls useContext hook to get context value
-    - Can return flat state or a combination of state and logic
-    - Probably this is where side-effects would occur as well
-  - Individual components call the useCustomHook to get those values
+      // Use an async function so that we can await the fetch
+      useEffect(async () => {
+        // Call fetch as usual
+        const res = await fetch(
+          "https://www.reddit.com/r/reactjs.json"
+        );
 
-- one this I like about this useHook pattern is that the actual value returned is immutable and if you want to change it, you need to run through a setter.  So you have encapsulation.
-  - is there any private state available?  I don't think so - I think this is a feature of OO that functional programming advocates object to.
+        // Pull out the data as usual
+        const json = await res.json();
 
-- useState vs useReducer
-  - [per kentcdodds](https://kentcdodds.com/blog/should-i-usestate-or-usereducer):
-    - useState is good for prototyping as you're trying to figure out how your app works.  Once you know, reducer is probably a better solution.
-    - if you have async, useReducer helps insure you're not working with stale values.
+        // Save the posts into state
+        // (look at the Network tab to see why the path is like this)
+        setPosts(json.data.children.map(c => c.data));
+      }); // <-- we didn't pass a value. what do you think will happen?
 
-- [Another good article on state mgmt from kcd](https://kentcdodds.com/blog/application-state-management-with-react)
-
-- Questions:
-  - how does useMemo?  TODO
-  - can I avoid using context providers as a hierarchy
-    - Not exactly...  
-    - You want to keep state and maybe some logic in context.    
-    - If you don't have a provider, then the useContext hook will return the default value provided by the createContext() argument.
-    - But that value is static - basically a constant, so it makes more sense to use data like that as a constant.
-    - it makes more sense to use a hierarchy of contexts as is appropriate the tree structure of your application
-      - remember that subcomponents will have to re-render on any context changes
-      - TODO: this might be where useMemo is a good idea...    
-  - Do I need to use a hook (useState or useReducer) to persist state delivered by context?
-    - Yes
-    - Context has 2 parts:
-      - Publisher:  (Provider)
-      - Subscriber: (useContext() hook)
-      - **But** neither of these will persist 
-
-- What are some good candidates for global state:
-  - Errors
-  - In progress async calls
-  - Todo - add more
+      // Render as usual
+      return (
+        <ul>
+          {posts.map(post => (
+            <li key={post.id}>{post.title}</li>
+          ))}
+        </ul>
+      );
+    }
+    ```
     
+  - **Persistence hook options**: useState vs useReducer
+    - [per kentcdodds](https://kentcdodds.com/blog/should-i-usestate-or-usereducer):
+      - useState is good for prototyping as you're trying to figure out how your app works.  Once you know, reducer is probably a better solution.
+      - if you have async, useReducer helps insure you're not working with stale values.
+      
+
+- **useCallback**
+  - Allows you to memo'ize (cache) a function definition
+  - Sometimes when you have functions defined within a function component, they'll be redefined as part of the render cycle 
+    - That's lame
+  - Difference between useCallback and useMemo is basically that useMemo will cache the return values
+  - see [this blog](https://nikgrozev.com/2019/04/07/reacts-usecallback-and-usememo-hooks-by-example/) for more context, but here's a quick example:
+
+  ```(jsx)
+  //BEFORE
+  const App = () => {
+    const [delta, setDelta] = useState(1);
+    const [c, setC] = useState(0);
+
+    // Oh no! This gets redefined each re-render!
+    const incrementDelta = () => setDelta(delta => delta + 1);
+    const increment = () => setC(c => c + delta);
+    
+    return (<div>
+      <div> Delta is {delta} </div>
+      <div> Counter is {c} </div>
+      <br/>
+      <div>
+        <Button onClick={incrementDelta}>Increment Delta</Button>
+        <Button onClick={increment}>Increment Counter</Button>
+      </div>
+      <br/>
+      <div> Newly Created Functions: {functions.size - 2} </div>
+    </div>)
+  }
+
+  //AFTER
+  const App = () => {
+    const [delta, setDelta] = useState(1);
+    const [c, setC] = useState(0);
+
+    // Sets dependency on increment to delta
+    const incrementDelta = useCallback(() => setDelta(delta => delta + 1), []);
+    const increment = useCallback(() => setC(c => c + delta), [delta]);
+    
+    return (<div>
+      <div> Delta is {delta} </div>
+      <div> Counter is {c} </div>
+      <br/>
+      <div>
+        <Button onClick={incrementDelta}>Increment Delta</Button>
+        <Button onClick={increment}>Increment Counter</Button>
+      </div>
+      <br/>
+      <div> Newly Created Functions: {functions.size - 2} </div>
+    </div>)
+  }
+  ```
+
+- **useMemo**
+  - Same signature as `useCallback`
+  - Stores the results based on the dependency list, so it's best to use for an expensive calculation
+
+  - TODO:
+    - I think you can pass an array into `useMemo` and it will cache both
+    - Also should be ok to cache properties
 
 - **useRef**
   
