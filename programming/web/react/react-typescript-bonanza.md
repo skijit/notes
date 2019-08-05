@@ -1,11 +1,8 @@
 Misc React and TypeScript
 ===================
 
-- sources
-  - [Miscrosoft TypeScript React Conversion Guide](https://github.com/microsoft/TypeScript-React-Conversion-Guide)
-  - [lyft/react-javascript-to-typescript-transform](https://github.com/lyft/react-javascript-to-typescript-transform)
-  - [react-typescript-cheatsheet](https://github.com/typescript-cheatsheets/react-typescript-cheatsheet)
-  - [use typescript to develop react applications](https://egghead.io/courses/use-typescript-to-develop-react-applications)
+- sources  
+  - [react-typescript-cheatsheet](https://github.com/typescript-cheatsheets/react-typescript-cheatsheet)  
   - [Ultimate React Component Patterns with Typescript 2.8](https://levelup.gitconnected.com/ultimate-react-component-patterns-with-typescript-2-8-82990c516935)
   - [TypeScript Intersection and Union Types](https://codepunk.io/typescript-intersection-and-union-types/)
   - [Advanced TypeScript Types](https://www.typescriptlang.org/docs/handbook/advanced-types.html)
@@ -30,6 +27,8 @@ interface FunctionComponent<P = {}> {
     defaultProps?: Partial<P>;
     displayName?: string;
 }
+
+type PropsWithChildren<P> = P & { children?: ReactNode };
 ```
 
 - So even though you can define a functional component like so, you won't get the benefit of any of it's other properties.
@@ -58,12 +57,98 @@ mySearch.notPartOfMyProp = false;  //type ERROR
 - Another way to assign the other properties (e.g. default parameters) in a functional interface is with a [HOC](https://levelup.gitconnected.com/ultimate-react-component-patterns-with-typescript-2-8-82990c516935).
   - BUT: in the case of defaultProps, just use default parameters in TypeScript.  That's easy and preferable.
 
-- We can also define a plain ol function as a functional component, but then we don't get those additional properties:
+- We can also define a plain ol function as a functional component, but then we don't get those additional properties.
+
+- Btw, the second parameter to function, `context` is part of the **old Context API**, so just ignore it.  It'll be removed in react 17.*
+  - Same with the `contextTypes` property in `FunctionComponent`
 
 ```(typescript)
 type AppProps = { message: string }; /* could also use interface */
 const App = ({ message }: AppProps) : ReactElement => <div>{message}</div>;
 ```
+
+### Component Children and Render Prop API
+- For portability, we want to support **both** two methods for injecting one react-node into another:
+  1. render prop 
+  2. children api
+  - Although our components will implment both patterns, the logic will be exlusive (see below)
+- To start, we define a prop pattern which adds two additional (optional) params:
+
+```(typecript)
+type Props = Partial<{
+  children: RenderCallback
+  render: RenderCallback
+}>
+type RenderCallback = (args: ToggleableComponentProps) => JSX.Element
+type ToggleableComponentProps = { 
+  show: State['show']
+  toggle: Toggleable['toggle'] 
+}
+```
+
+- Then the component definition looks like so (notice the exclusive logic):
+
+```(tsx)
+export class Toggleable extends Component<Props, State> {
+  // ...
+  render() {
+    const { children, render } = this.props
+    const renderProps = { show: this.state.show, toggle: this.toggle }
+    if (render) {
+      return render(renderProps)  //renderProps are the parameters we inject into the child function, but which live in the parent
+    }
+    return isFunction(children) ? children(renderProps) : null
+  }
+  // ...
+}
+```
+
+- Now we have two options for calling:
+
+```(tsx)
+<Toggleable>
+  {({ show, toggle }) => (
+    <>
+      <div onClick={toggle}>
+        <h1>Some title</h1>
+      </div>
+      { show ? <p>some content</p> : null}
+    </>
+  )}
+</Toggleable>
+
+<Toggleable render={({ show, toggle }) => (
+    <>
+      <div onClick={toggle}>
+        <h1>Some title</h1>
+      </div>
+      { show ? <p>some content</p> : null}
+    </>
+  )
+} />
+```
+
+### Component Injection
+- Another pattern for passing one component to another is like what you see with React Router (a `component` property):
+
+```(jsx)
+<Route path="/foo" component={MyView} />
+```
+
+- This is useful if you want to completely change the component being injected, rather than just have some conditional logic
+  - When you do this, make sure you implement it as a generic component so you can retain type safety
+- Google for details for this pattern - not really worth repeating herre - it's rather low frequency
+
+- For additional component patterns, like: HOC, Controlled Components, Generic Components, etc.  [See this](https://levelup.gitconnected.com/ultimate-react-component-patterns-with-typescript-2-8-82990c516935)
+
+### Other stuff
+- If you dont have the PropType exported, you can programmatically retrieve it:
+
+```(typescript)
+import { Button } from "library"; // but doesn't export ButtonProps! oh no!
+type ButtonProps = React.ComponentProps<typeof Button>; // no problem! grab your own!
+```
+
 
 ## Hooks
 
@@ -119,7 +204,12 @@ const App = ({ message }: AppProps) : ReactElement => <div>{message}</div>;
     - Merging state objects:
       - This works: `setState(prevState => ({ ...prevState, ...updatedValues }))`
       - If you get in this situation, it's probably better just to `useReducer`
-      
+    - Initialize as such with typescript:
+    
+    ```(typescript)
+    const [user, setUser] = React.useState<IUser | null>(null);
+    ```
+
 - **useEffect**
   - typically you want to perform side effects after the rendering is done.  
   - in class-based components, you do this with lifecycle methods, but in function components, you do it with `useEffect`
@@ -142,6 +232,9 @@ const App = ({ message }: AppProps) : ReactElement => <div>{message}</div>;
 
   - Component mounting: whenever the clock is rendered to the DOM for the first time
   - ![react-lifecycle](/resources/images/programming/react-lifecycle.jpg)
+
+  - Other `useEffect` tips:
+    - **do not** return anything other than a function or undefined
 
 - **useContext**
   - Context was an experimental API that, due only recently became an official part of React
@@ -392,6 +485,7 @@ const App = ({ message }: AppProps) : ReactElement => <div>{message}</div>;
   - Sometimes when you have functions defined within a function component, they'll be redefined as part of the render cycle 
     - That's lame
   - Difference between useCallback and useMemo is basically that useMemo will cache the return values
+  - Don't use side-effect hooks in callbacks or memos
   - see [this blog](https://nikgrozev.com/2019/04/07/reacts-usecallback-and-usememo-hooks-by-example/) for more context, but here's a quick example:
 
   ```(jsx)
@@ -444,10 +538,7 @@ const App = ({ message }: AppProps) : ReactElement => <div>{message}</div>;
   - Same signature as `useCallback`
   - Stores the results based on the dependency list, so it's best to use for an expensive calculation
 
-  - TODO:
-    - I think you can pass an array into `useMemo` and it will cache both
-    - Also should be ok to cache properties
-
+  
 - **useRef**
   
   ```(typescript)
@@ -534,8 +625,13 @@ const App = ({ message }: AppProps) : ReactElement => <div>{message}</div>;
     };
     ```
 
+    - tip:
+      - if your custom hook returns an array of values, return those in a top-level object (otherwise destructuring might go amiss)
 
-- TODO: what is context in Function Components?
+  - **useReducer**
+    - tips:
+      - use discriminated unions for action types
+      - define the return type of action reducers or ts will infer it
 
 ## JavaScript to TypeScript Conversion
 - 2 high level steps:
