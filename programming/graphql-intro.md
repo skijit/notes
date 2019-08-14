@@ -89,7 +89,250 @@ Users {
   - create resolvers
   - insantiate and lauch the server
 
+## Syntax Details
 
+- Common Syntax:  `<optional>`  `[required]`
+```(gql)
+  <query|mutation|subscription> <OperationName<($parm1Name: parm1Type = parm1DefaultVal, ...)>> {
+    <queryAlias:> [query]<(parm1Name: parm1Val)> {
+      <fields>
+    }    
+  }
+```
+
+  - When you have a query operation with only 1 top-level query, you can omit this top-line 
+
+- Root-level tokens are the names of queries.  Stuff below that are the fields you choose to return.
+
+```(gql)
+{
+  hero {
+    name
+    friends {
+      name
+    }
+  }
+}
+```
+
+- The return values will have the same shape as the query
+
+```(json)
+{
+  "data": {
+    "hero": {
+      "name": "R2-D2",
+      "friends": [
+        {
+          "name": "Luke Skywalker"
+        },
+        {
+          "name": "Han Solo"
+        },
+        {
+          "name": "Leia Organa"
+        }
+      ]
+    }
+  }
+}
+```
+
+- Queries AND Fields can have arguments
+
+```(gql)
+{
+  human(id: "1000") {
+    name
+    height(unit: FOOT)
+  }
+}
+```
+
+- When you have multiple fields with the same name, use an alias to separate them in the return results
+
+```(gql)
+{
+  empireHero: hero(episode: EMPIRE) {
+    name
+  }
+  jediHero: hero(episode: JEDI) {
+    name
+  }
+}
+```
+
+- Return results look like this:
+
+```(json)
+{
+  "data": {
+    "empireHero": {
+      "name": "Luke Skywalker"
+    },
+    "jediHero": {
+      "name": "R2-D2"
+    }
+  }
+}
+```
+
+- Fragments let you define reusable projections
+
+```(gql)
+{
+  leftComparison: hero(episode: EMPIRE) {
+    ...comparisonFields
+  }
+  rightComparison: hero(episode: JEDI) {
+    ...comparisonFields
+  }
+}
+
+fragment comparisonFields on Character {
+  name
+  appearsIn
+  friends {
+    name
+  }
+}
+```
+
+- You can use variables inside fragments
+
+```(gql)
+query HeroComparison($first: Int = 3) {
+  leftComparison: hero(episode: EMPIRE) {
+    ...comparisonFields
+  }
+  rightComparison: hero(episode: JEDI) {
+    ...comparisonFields
+  }
+}
+
+fragment comparisonFields on Character {
+  name
+  friendsConnection(first: $first) {
+    totalCount
+    edges {
+      node {
+        name
+      }
+    }
+  }
+}
+```
+
+- Variables
+  - Must be prefixed with a `$`
+  - Must be scalars, enums, or input object types
+
+-  Directives
+  - There are currently 2 directives in the GraphQL spec:
+    - `@include(if: Boolean)`
+    - `@skip(if: Boolean)`
+  - You pass in a variable as the `if` parameter and it will optionally skip or include the corresponding fields
+
+  ```(graphql)
+  query Hero($episode: Episode, $withFriends: Boolean!) {
+    hero(episode: $episode) {
+      name
+      friends @include(if: $withFriends) {
+        name
+      }
+    }
+  }
+  ```
+
+- Mutations will return data just like queries.  Their syntax is basically the same, except the operation type keyword.
+
+```(gql)
+// query
+mutation CreateReviewForEpisode($ep: Episode!, $review: ReviewInput!) {
+  createReview(episode: $ep, review: $review) {
+    stars
+    commentary
+  }
+}
+
+// variables
+{
+  "ep": "JEDI",
+  "review": {
+    "stars": 5,
+    "commentary": "This is a great movie!"
+  }
+}
+```
+
+- Note that in this example, we're passing a complicated input object (the data we're creating) and then asking for similar fields back
+
+- You can execute multiple mutation operations in a single request
+  - Query fields are executed in parallel while mutations are executed serially
+
+- Handling Union Types
+  - When you have a return type that could be a union (one of multiple types) type from an operation, you can specify a `...` called an *inline fragment* to dynamically apply the appropriate fields to the return type
+
+  ```(gql)
+  query HeroForEpisode($ep: Episode!) {
+    hero(episode: $ep) {
+      name
+      ... on Droid {
+        primaryFunction
+      }
+      ... on Human {
+        height
+      }
+    }
+  }
+  ```
+
+    - Named fragments can also be used in this way
+
+- Meta Fields
+  - You can use the built-in `type_name` keyword to have the schema type returned in the corresponding results
+
+  ```(gql)
+  {
+    search(text: "an") {
+      __typename
+      ... on Human {
+        name
+      }
+      ... on Droid {
+        name
+      }
+      ... on Starship {
+        name
+      }
+    }
+  }
+  ```
+
+  - where the results would look like this:
+
+  ```(json)
+  {
+    "data": {
+      "search": [
+        {
+          "__typename": "Human",
+          "name": "Han Solo"
+        },
+        {
+          "__typename": "Human",
+          "name": "Leia Organa"
+        },
+        {
+          "__typename": "Starship",
+          "name": "TIE Advanced x1"
+        }
+      ]
+    }
+  }
+  ```
+
+  
 ## Other
 - fragments: reusable, parameterized queries
   - slims things down
