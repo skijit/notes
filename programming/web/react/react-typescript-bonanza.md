@@ -1091,3 +1091,9 @@ function extend<First, Second>(first: First, second: Second): First & Second {
     return result as First & Second;
 }
 ```
+
+- TypeScript Declaration Merging
+  - When you need to extend a type which is defined elsewhere (typically a library)
+  - *Declaration Merging* describes how the TS compiler will merge (usually take a union) declarations (including type alias and interfaces) 
+  - [Practical example of extending a library definition](https://stackoverflow.com/questions/53568981/typescript-declaration-merging-library-types)
+  - [Detailed explanation](https://www.typescriptlang.org/docs/handbook/declaration-merging.html)

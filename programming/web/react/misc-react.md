@@ -104,7 +104,7 @@ export default function configureStore(initialState) {
 }
 ```
 
-- tradional role for action creators: 
+- traditional role for action creators: 
   - `dispatch(myActionCreator())` 
   - generates an action object, which the reducer(s) can switch on.
 - action creator functions are good for two reasons:
@@ -139,3 +139,50 @@ export default function configureStore(initialState) {
   - probably ignores them?
 
 
+## Error Boundaries
+- Problem: JavaScript errors used to corrupt React's internal state and cause weird errors on next `render()`
+- Error boundaries are React components that:
+  1. catch JavaScript errors anywhere in their child component tree
+  2. log those errors
+  3. Display a fallback UI instead of the component tree that crashed
+- **The Catch**: Error boundaries don't catch issues for:
+  - Event Handlers (see below)
+  - Async Code
+  - SSR
+  - Errors in the boundary
+- Class Components can be error boundaries if they implement these lifecycle methods:
+  - `getDerivedStateFromError()`: Sets state value so that on render the error UI is shown
+  - `componentDidCatch()`: Logs your error
+
+  ```(jsx)
+  class ErrorBoundary extends React.Component {
+    constructor(props) {
+      super(props);
+      this.state = { hasError: false };
+    }
+
+    static getDerivedStateFromError(error) {
+      // Update state so the next render will show the fallback UI.
+      return { hasError: true };
+    }
+
+    componentDidCatch(error, errorInfo) {
+      // You can also log the error to an error reporting service
+      logErrorToMyService(error, errorInfo);
+    }
+
+    render() {
+      if (this.state.hasError) {
+        // You can render any custom fallback UI
+        return <h1>Something went wrong.</h1>;
+      }
+
+      return this.props.children; 
+    }
+  }
+  ```
+
+- You can't have an error boundary based on a functional component
+- Error boundaries apply to declarative elements, but for imperative Error's (ie in code), we still have `try/catch`
+  - Error boundaries deal with errors that cause `render()` or other react methods to fail, but our component event callbacks run before `render()` so the Error boundaries don't apply
+  - Just use `try/catch` for handlers and other methods
