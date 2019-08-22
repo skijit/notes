@@ -92,7 +92,7 @@ Users {
 ## Syntax Details
 
 - Common Syntax:  `<optional>`  `[required]`
-```
+```(gql)
   <query|mutation|subscription> <OperationName<($parm1Name: parm1Type = parm1DefaultVal, ...)>> {
     <queryAlias:> [query]<(parm1Name: parm1Val)> {
       <fields>
