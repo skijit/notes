@@ -1,34 +1,37 @@
 GraphQL Intro
 =============
 
+## Summary
 - "one endpoint for everything"
-  - this could be really great for an out of control set of services
-  - but you still need to set up your normal services
-  - i think thats a big point:
-    - companies have exploding number of endpoints
-    - this is just a way to centralize all of them
+- basically middleware for aggregating, combining, caching service results
+- strongly typed
+- extremely convenient for the client
+- adds lot of overhead for the back end
+- facebook (which developed) was a good use-case because they've got a huge API service and they want to make consumption as simple as possible for their (public) users.
 - content negotiation is a key idea
-- summary
-  - basically middleware for aggregating, combining, caching service results
-  - convenient for the client
-  - adds lot of overhead for the back end
-  - facebook (which developed) was a good use-case because they've got a huge API service and they want to make consumption as simple as possible for their (public) users.
-  - for internal applications, I don't see a huge benefit.
-
-## Purpose
-- avoid multiple roundtrip to fetch hierarchical or related data
-- performance increase - no need to wait for new endpoint to be stood up
-- can be used to ask for data from different endpoints
+- key use cases:
+  - New API design
+  - Existing API orchestration / gateway
+  - API layer of abstraction 
+- Benefits
+  - avoid multiple roundtrip to fetch hierarchical or related data
+  - performance increase - no need to wait for new endpoint to be stood up
+  - can be used to ask for data from different endpoints
 
 ## Core Concepts
-- queries: questions
-- schema: what the data looks like
+- data operations
+  - queries
+  - mutations
+- schema definition: what the data looks like
 - resolvers: function that that respond to queries
-- mutations: change data
+
+## Tooling
+- GraphiQL: it's a GraphQL API Explorer
+  - https://www.graphqlhub.com
+- GraphQL Playground (included in a lot of distributions)
+- Postman 
 
 ## Queries
-- to experiment, check out GraphiQL: it's a GraphQL API Explorer
-- https://www.graphqlhub.com
 - question format specifies what the response wshuld look like
   - you can specify the object graph and it's deeply nested structure
 - example schema:
@@ -93,11 +96,11 @@ Users {
 
 - Common Syntax:  `<optional>`  `[required]`
 ```(gql)
-  <query|mutation|subscription> <OperationName<($parm1Name: parm1Type = parm1DefaultVal, ...)>> {
-    <queryAlias:> [query]<(parm1Name: parm1Val)> {
-      <fields>
-    }    
-  }
+/<query/|mutation/|subscription/> /<OperationName/<(/$parm1Name: parm1Type = parm1DefaultVal, ...)/>/> {
+  <queryAlias:> [query]<(parm1Name: parm1Val)> {
+    <fields>
+  }    
+}
 ```
 
   - When you have a query operation with only 1 top-level query, you can omit this top-line 
