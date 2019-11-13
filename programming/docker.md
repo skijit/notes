@@ -259,7 +259,7 @@ https://github.com/dotnet/dotnet-docker/tree/master/samples/aspnetapp
 ## Volumes
 - [ref](https://docs.docker.com/storage/volumes/)
 - avoid bind mounting, use volumes.
-    - volumes are links to folders/files on the host file system in an area controlled by Docker
+    - volumes are links to folders/files on the host file system in an area controlled by Docker (the *context* - see notes on Dockerfile)
     - bind mounts are links to folders/files on the host file system anywhere
 - volumes are used for:
     - data used by containers
