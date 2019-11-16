@@ -89,6 +89,59 @@ secrets:
     - form 1: `command: bundle exec thin -p 3000`
     - form 2: `command: ["bundle", "exec", "thin", "-p", "3000"]`
 
+  - `container_name`: specifies the custom container name, but remember this has to be unique
+
+  - `depends_on`: expresses dependencies between services which has these effects:
+    - `docker compose up` will start them in order of dependencies
+    - `docker compose up SERVICE` will start the service and it's dependencies
+    - `docker compose stop` stops them in dependency order
+
+  ```(yaml)
+  version: "3.7"
+  services:
+    web:
+      build: .
+      depends_on:
+        - db
+        - redis
+    redis:
+      image: redis
+    db:
+      image: postgres
+  ```
+
+  - `entrypoint`: overrides the default entrypoint
+
+  - `env_file`: list of files that contain environment variables in the form
+
+  ```
+  VAR1=VAL1
+  VAR2=VAL2
+  ```
+
+  - `environment`: list of environment variables to set
+
+  - `expose`: list of ports to expose without publishing to the host machine.  they will however be accessible to linked services.
+
+  - `external_links`: links to containers specified outside the `docker-compose.yaml`
+
+  - `extra_hosts`: publishes entries into the container's `/etc/hosts` file
+
+  - `healthcheck`: policies for checking the health of the container (same as in Dockerfile)
+
+  - `image`: the image from which to base the container on.  it can be the container or tag name.
+
+  - `network_mode`: same as in Dockerfile
+
+  - `networks`: nws to join, which references entries under the top-level `networks` key
+
+  - `restart`: sets restart policy for the container
+
+  - `sysctls`: kernel parameters to set
+
+  - `volumes`
+    - this can be defined at top level if you want to share it across multiple services, or you could put in under services
+    - 
 
 
 
