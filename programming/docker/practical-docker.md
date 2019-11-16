@@ -1,6 +1,7 @@
 Practical Docker
 =====================
 
+
 ## Docker CLI Commands/ Quick Ref
 - `docker ps -a`: show running processes
 - `docker container ls --all` (similar)
@@ -18,6 +19,9 @@ Practical Docker
 - `docker exec -ti MyHumanReadableContainerName ./bin/sh`: execute a command inside a container 
   - starts a shell
   - you can make changes here, but when you stop the container, the changes are gone
+  - remember the container is capable of running other processes, so when you exec, you run a different process in there
+  - other examples:
+    - `docker exec -it -e VAR=1 ubuntu_bash bash`: set an environment variable and run bash on container `ubuntu_bash`
 - `docker run --name MyHumanReadableContainerName -v /some/host-based-nginx.conf:/etc/nginx/nginx.conf:ro -p 80:80 nginx:1.10.2-alpine`
   - volume mounting
     - You can do this with individual files (above) or map directories:
@@ -90,6 +94,7 @@ temp?  # matches tempa and tempb
 ```
 
 - `FROM <image>[:<tag>] [AS <name>]`
+  - definitely use `AS` in multistage builds
 - `RUN`
   - Use this to run some commands (e.g. `apt-get` or a shell) in the next layer
 - `CMD`
@@ -110,6 +115,21 @@ temp?  # matches tempa and tempb
   - Generally, better to use `COPY`
 - `ENTRYPOINT`
   - Lets you configure a container that will run as an executable
+
+- **SHell and Exec Forms Aside**
+  - `RUN`, `CMD`, and `ENTRYPOINT` can all be run in one of 2 forms:
+    1. Shell Form
+    2. Exec Form
+  - **Shell Form**
+    - Syntax: `INSTRUCTION COMMAND`
+    - Example: `RUN ap-get install python3`
+    - It just looks normal - no array syntax like Exec form
+    - It's all going to run on a shell (`/bin/sh -c <COMMAND>` to be specific)
+  - **Exec Form**
+    - Preferred form for `CMD` and `ENTRYPOINT`
+    - Syntax: `INSTRUCTION ["executable", "param1", "param2"]
+
+
 - `USER`
   - Sets the user name (or UID) and optionally the user group (or GID) to use when running the image and for any RUN, CMD and ENTRYPOINT instructions that follow it in the Dockerfile.
 - `WORKDIR /path/to/workdir`
@@ -219,6 +239,12 @@ temp?  # matches tempa and tempb
 - Volume (shared  filesystems)
   - See [this ref](docker run -it --entrypoint /usr/bin/redis-cli example/redis --help)
 
-## Docker Compose Format (TODO)
-- `docker-compose.yml`: used for deployment
-- `docker-compose.override.yml`: used for development
+## Docker Volumes
+- [src](https://docs.docker.com/storage/volumes/)
+- In the old days, there used to be a recommendation for data-only containers.  But now we have the volume api which lets you create persistent volumes like so: 
+
+```
+docker volume create --name helloworld
+docker run -d -v helloworld:/container/path/for/mapped/volume image-name command-to-execute
+```
+

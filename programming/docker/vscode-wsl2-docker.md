@@ -194,7 +194,67 @@ Getting Containery with WSL2 and VSCode
       ]
     }
     ```
+
+- Question: can we pause execution in startup phase until a debugger is attached?
+
+## VSCode Run/Debug AspNet Core WSL2 Docker Container
+- some sources
+  - [recent, good writeup, more automated attachment w debugger](https://espressocoder.com/2019/04/03/debugging-an-asp-net-core-docker-container-in-windows-and-linux/)
+  - [recent example, decent writeup, more manual attachment w debugger](https://www.aaron-powell.com/posts/2019-04-04-debugging-dotnet-in-docker-with-vscode/)
   
+  - [older- good background](https://garfbradaz.github.io/blog/2018/12/13/debug-dotnet-core-in-docker.html)
+  - [also older - goodbackground](https://www.richard-banks.org/2018/07/debugging-core-in-docker.html)
+  - also see my slides on gdrive from a conf presentation
+- What about connecting to DB and containerizing that?
+  - that's a Docker Compose topic
+  - also remember that the disk for db is largely going to be provided by volume
+  - [A simple example](https://medium.com/@kristaps.strals/docker-mongodb-net-core-a-good-time-e21f1acb4b7b)
+ 
+- basic steps
+  - [install dotnet sdk on linux machine](https://dotnet.microsoft.com/learn/dotnet/hello-world-tutorial/intro)
+  - `dotnet new` on an aspnet core project
+    - run in linux: `dotnet new mvc -n HelloWsl2Docker.Web -o HelloWsl2Docker.Web`
+      - be sure to run this in your WSL2 filesystem, not the windows mount (e.g. `/mnt/c/Users/skijit/Documents/repos/HelloWsl2Docker.Web`) as there's a [WSL2/build issue at the time of this writing](https://github.com/dotnet/core/issues/3444) 
+    - `cd HelloWsl2Docker`
+    - `code .`
+    - note the following scaffolding:
+      - tasks: `build`, `publish`, and `watch`
+      - launch profiles: `coreclr/launch` and `coreclr/attach`
+      - you should be able to build/run/debug (w/o Docker) at this point
+        - or for an alternate CLI: `dotnet build "HelloWsl2Docker.Web.csproj" -c Release -o app`
+  - create a Dockerfile
+    - open the VSCode command pallete and begin typing 'Add Docker Files to Workspace' and it will walk you through a quick wizard and generate your Dockerfile.
+  - setting up integrated build / launch / debugging of container through vscode
+    - click on the `Add Configuration...` on the Debug Launch Profile drop down
+    - select `Docker: Launch .NET Core (preview)`
+    - You can launch this debug profile and you'll see:
+      - Image being created
+      - Container Starting
+      - Acquiring the .NET Core Debugger
+        - This might fail if you haven't installed `unzip` on your machine
+      - Building the code
+        - If it fails, try again
+      - Once it succeeds, you might have to look at the output window of `Docker:Launch .NET Core (preview)` to find the external port that is exposed.  However, another way is to use `docker ps -a`
+- you'll need to rebuild for any code changes you make
+
+- debugger
+  - `vsdbg` is the main .net core debugger ([history](https://blog.lextudio.com/the-rough-history-of-net-core-debuggers-b9fb206dc4aa)), just like with node, we're using the vscode node debugging client [although there are other choices in the node ecosystem](https://nodejs.org/de/docs/guides/debugging-getting-started/#inspector-clients)
+    - node-inspect is another one
+    - they'll all use the same node-specific debugging protocol
+  - the vsdbg debugger seems to use IPC rather than TCP to communicate between the main application, which means the debugger 
+  - see https://github.com/Microsoft/MIEngine/wiki/Offroad-Debugging-of-.NET-Core-on-Linux---OSX-from-Visual-Studio
+
+- observations/questions
+  - multistage build files are the norm
+  - image has to be rebuilt with code changes
+  - do we need a different version of the build for debug/release?
+    - you can set that as a build flag `--build-arg`
+    - [this post addresses the issue](https://garfbradaz.github.io/blog/2018/12/13/debug-dotnet-core-in-docker.html) (although there's a refactoring note)
+  
+## VSCode Run/Debug Go WSL2 Docker Container
+
+
+
 
 
 
