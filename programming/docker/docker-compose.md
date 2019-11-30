@@ -141,10 +141,108 @@ secrets:
 
   - `volumes`
     - this can be defined at top level if you want to share it across multiple services, or you could put in under services
-    - 
+    - you can only create named services at the top-level
+    
+    ```
+    version: "3.7"
+    services:
+      web:
+        image: nginx:alpine
+        volumes:
+          - type: volume
+            source: mydata
+            target: /data
+            volume:
+              nocopy: true
+          - type: bind
+            source: ./static
+            target: /opt/app/static
 
+      db:
+        image: postgres:latest
+        volumes:
+          - "/var/run/postgres/postgres.sock:/var/run/postgres/postgres.sock"
+          - "dbdata:/var/lib/postgresql/data"
 
+    volumes:
+      mydata:
+      dbdata:
+    ```
 
+    - Short Syntax
+    
+    ```
+    volumes:
+      # Just specify a path and let the Engine create a volume
+      - /var/lib/mysql
+
+      # Specify an absolute path mapping
+      - /opt/data:/var/lib/mysql
+
+      # Path on the host, relative to the Compose file
+      - ./cache:/tmp/cache
+
+      # User-relative path
+      - ~/configs:/etc/configs/:ro
+
+      # Named volume
+      - datavolume:/var/lib/mysql
+    ```
+
+    - Long Syntax (ie properties you can specify (still only within `services` node))
+      - `type`: `volume`, `bind`, `tmpfs`, or `npipe`
+      - `source`: for bind mounts, this is the path on the host and for volumes this is the name of top-level volume
+      - `target`: path in the container where mounted
+      - `read-only`
+      - there are other options...
+
+    - When you deploy your container in a swarm, you should use named volumes bc you don't know which node is going to be used
+
+- Top-level `Volume` CFG
+  - a variety of driver opts
+  - `external` indicates the volume was created outside of compose
+
+- Network CFG
+- Config CFG
+
+## CLI Info
 - [CLI Reference](https://docs.docker.com/compose/reference/)
-
+- Syntax:
+  - `docker-compose [-f <arg>...] [options] [COMMAND] [ARGS...]`
+  - options
+    - `-f FILE`: specifies an alternate docker-compose file
+      - you can specify multiple files and they will be added in that order
+    - `-p  NAME`: specifies a different project name (default = current directory)
+      - each configuration has a project name
+      - exposed as `COMPOSE_PROJECT_NAME` env variable
+    - + a variety of networking/security stuff
+- `build`
+  - `build [options] [--build-arg key=val...] [SERVICE...]`
+  - services are built and then tagged with `project_service`
+  - run this when you change the Dockerfile or the content of the build directory
+  - OPTIONS
+    - `--force-rm`:  Always remove intermediate containers.
+    - `--no-cache`
+    - `--mem`
+    - `--parallel`: build containers in parallel
+    - `--build-arg <ARGS>`
+    
+- `create`: deprecated - use `up` instead
+- `down`: stops and removes containers, networks, volumes, and images created by `up`
+- `exec`: just like `docker exec`
+  - `exec [options] [-e KEY=VAL...] SERVICE COMMAND [ARGS...]`
+  - `--detach`:  run command in background
+  - `--env KEY=VAL`: set env vars
+  - `--workdir DIR`: path to workdir for command
+  - for example, to get a shell: `docker-compose exec web sh`
+- `ps`: list containers
+- `pull`: pulls images for services
+- `push`: pushes images for services
+- `restart`: restarts all stopped and running services.  or you can specify multiple svcs.
+- `rm`: removes stopped service containers
+  - `-v` will remove any anonymous volumes
+- `run`: creates a new container for a specified service and runs a 1-time operation in there
+- `start`: start a servoce
+- `stop`: stop a service
+- `top`: displays the running processes
 

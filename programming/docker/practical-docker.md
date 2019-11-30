@@ -63,6 +63,9 @@ COPY ./nging.conf /etc/nginx/nginx.conf #copies from local to the guest, becomes
   - Also, youll want to use dockerignore files
 - `docker build -f /path/to/a/Dockerfile .`
   - Point to a dockerfile located elsewhere, but use current directory as your context
+- `docker build - < Dockerfile`
+  - this is how you send no context
+- **Context note**: it's a build context.  Just bc you have some files listed here, doesn't mean they'll land in the image.  By virtue of being in your build context, they can be referred to with `COPY` (etc) commands in the Dockerfile.
 - Use the `-t` to apply tag(s) to your built image:
   - `docker build -t shykes/myapp:1.0.2 -t shykes/myapp:latest .`
 - Directives
@@ -98,9 +101,10 @@ temp?  # matches tempa and tempb
 - `RUN`
   - Use this to run some commands (e.g. `apt-get` or a shell) in the next layer
 - `CMD`
-  - This will specify the executable that gets run as part of the running container
-  - It also provides default parameters to that executable
-  - If you don't specify the executable name in the `CMD` form (there are a couple syntactical variations), then you usually need to specify it with `ENTRYPOINT`
+  - This will specify the default executable or arguments that gets run as part of the running container
+  - unlike `ENTRYPOINT`, the `CMD` is overrideable
+  - when you have `ENTRYPOINT` and `CMD` together, `CMD` is often providing default parmeters
+  - [interesting post explaining it all](https://dev.to/lasatadevi/docker-cmd-vs-entrypoint-34e0)  
 - `LABEL`
   - Lets you assign k/v pairs for metadata on the image
 - `EXPOSE`
@@ -115,6 +119,7 @@ temp?  # matches tempa and tempb
   - Generally, better to use `COPY`
 - `ENTRYPOINT`
   - Lets you configure a container that will run as an executable
+  - If this is specified in a base container, it can be overriden in the successive layer OR you can leave it blank, and it will still be executed. 
 
 - **SHell and Exec Forms Aside**
   - `RUN`, `CMD`, and `ENTRYPOINT` can all be run in one of 2 forms:
@@ -248,3 +253,6 @@ docker volume create --name helloworld
 docker run -d -v helloworld:/container/path/for/mapped/volume image-name command-to-execute
 ```
 
+## Weird Stuff
+- Some docker services (or their images) require other services to have a particular name
+  - ex: I found that with the mongo-express image, if I changed the name of the service from `mongo` to `db`, it totally failed
