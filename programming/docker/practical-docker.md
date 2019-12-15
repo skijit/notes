@@ -4,6 +4,7 @@ Practical Docker
 
 ## Docker CLI Commands/ Quick Ref
 - `docker ps -a`: show running processes
+- `docker top <container>`: see processes running inside a container
 - `docker container ls --all` (similar)
 - `docker images` shows you what images you have installed
 - `docker --version`
@@ -120,7 +121,8 @@ temp?  # matches tempa and tempb
 - `ENTRYPOINT`
   - Lets you configure a container that will run as an executable
   - If this is specified in a base container, it can be overriden in the successive layer OR you can leave it blank, and it will still be executed. 
-
+  - Should be obvious, but if an `ENTRYPOINT` occurs in a later layer and you only target on the earlier layers to build the image, then the `ENTRYPOINT` will not be executed.
+   
 - **SHell and Exec Forms Aside**
   - `RUN`, `CMD`, and `ENTRYPOINT` can all be run in one of 2 forms:
     1. Shell Form

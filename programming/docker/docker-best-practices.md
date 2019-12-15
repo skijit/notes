@@ -117,6 +117,8 @@ exec "$@"
 
 
 
+- [todo- this is also good](https://www.digitalocean.com/community/tutorials/naming-docker-containers-3-tips-for-beginners)
+
 
 
 
