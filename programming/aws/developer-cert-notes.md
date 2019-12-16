@@ -2,6 +2,8 @@ AWS Certifcation Notes
 ==============
 
 - [source](https://learning.oreilly.com/videos/aws-certified-developer)
+
+## Basics
 - Cloud9 is a browser-based development environment for AWS
   - You have to provision an environment for it to run on remotely - usually just specifying a new EC2 instance
 - Compute Fundamentals
@@ -60,6 +62,159 @@ AWS Certifcation Notes
 - Resource Limits
   - Each account has limits such as the number of API keys or resources
   - You can request increases
+
+### Lab Notes
+- Creating a Cloud 9 instance to interact with your account
+  - Services -> Cloud 9
+  - It's important to remember which region you've selected for your Cloud9 instance
+  - Notice the Cloud 9 URL: `https://us-east-1.console.aws.amazon.com/cloud9/ide/ce2cfd92a8904276803985fa507a2f77`
+    - has region
+    - has ID that is in the name of the associated instance
+- Cloud9 Check Availability Zones
+  - `aws ec2 describe-availability-zones`
+
+## EC2
+- Some basic EC2:
+  - In the EC2 Dashboard, you can select 'Running Instances' and see a lot of interesting data on instances:
+    - Instance State
+    - Instance Type (EC2 type, e.g. micro, etc)
+    - Elastic IP: public, static IP address which you can assign
+    - Availability Zone
+    - Security Groups: lets you view each FW group
+    - AMI Id: Machine image ID used to provision instance
+    - Public DNS
+    - Private DNS
+    - VPC
+    - Subnet
+    - Block Device: you see the EBS device attached to the instance
+  - within Images tab...
+    - You can define your own
+      - Elastic Block Store -> Snapshots -> Actions -> Create Image
+      - You can also create snapshots of your volumes which is very useful
+    - You can also view the available AMI's by clicking "Launch Instance"
+  - Network & Security tab...
+    - Elastic IP: You can create your own to assign to an EC2 instance
+    - You only pay for the IP when you associate it to an EC2 instance
+  - Instances have tags
+    - You can associate any tags you want
+  - VPC
+    - It's like setting up a traditional network, but with the benefits of using the scalable infrastructure
+  - Configuring an EC2 Instance
+    - CloudWatch is a health monitoring service
+    - Tenancy
+    - Selecting Security Group
+      - You select a connection type - e.g. SSH for linux, RDP for windows
+      - You also select the source IP - i.e. where you're logging in from (so you can select your own IP address)
+    - Finally, you create a keypair, and this only is downloadable once!
+      - Once vm is provisioned, select it in dashboard and select 'connect'
+      - Follow the instructions to ssh in
+- Storage
+  - Volume Types
+    - EBS
+      - General Purpose (gp2)
+        - SSD
+        - base performance of 3 IOPS per GB
+        - burst to 3000 iops for extended periods
+        - use cases: Boot volumes, small/med databases, dev/test environments
+      - Provisioned IOPS SSD (io1)
+        - You specify the IOPS you need, up to 32,000 IOPS
+        - 500 MBs of throughput
+      - Throughput Optimized HDD (st1)
+        - Magnetic
+        - Throughput: 500 Mb/sec
+        - Low cost, sequential workloads
+        - Use cases: EMR (map reduce), ETL, DW, log processing
+      - Cold HDD (sc1)
+        - Magnetic
+        - Low cost, 250 MB/sec
+        - Infrequent
+    - EC2 Instance Store
+      - Attached to the host computer
+      - Emphemeral -lost when you stop the instance
+      - buffers, temporary, etc.
+    - EFS
+      - Storage capacity is elastic
+      - You can create this filesystem then the console will give you instructions how to mount the filesystem to your EC2 instance
+        - be sure to match the security groups between EFS and EC2
+- 'Bursting' vs 'Provisioned'
+  - Bursting usually has a lower baseline with the ability to scale
+  - Provisioned has a higher baseline but no additional headroom
+- [Autoscaling and Load Balancing](https://aws.amazon.com/ec2/autoscaling/)  
+  - **Summary of this section**:
+    1. Create a 'Launch Configuration' which is just configuration which tells us how to spin up EC2 Instances
+    2. Create an 'Auto Scaling Group' which defines the policies (we define) for scaling out (more instances) or scaling in (less instances), and associate it with our Launch Configuration
+    3. Create a 'Target Group' for the Load Balancer to send traffic to
+    4. Create a 'Load Balancer' which listens for requests (internal nw or public) and routes the traffic to a target group.
+    5. Register targets (instances created by our Auto Scaling Group) with the target group
+  - Pretty much everything in here is provisioned with a wizard
+  - In EC2 dashboard, go to "Auto Scaling"
+    - `Launch Configuration`: Templates that an autoscaling group uses to launch EC2 instances
+      - Create Launch Configuration -> Looks just like EC2 Creation Process except that you're not creating EC2 instances, but the configuration required to spin up new instances for the purpose of autoscaling
+      - The next step is to assign a launch configuration to an  autoscaling group
+
+    - `Auto Scaling Groups`: contains a collection of EC2 instances that share similar characteristics and are treated as a logical grouping for instance scaling and management 
+      - You can associate an autoscaling group with a launch configuration (just mentioned) or a launch template (similar but adds versioning)
+      - An autoscaling group includes:
+        - Name
+        - Instance Size
+        - Network
+        - Subnet
+          - Note you can choose to scale into multiple subnets
+        - Do load balancing
+        - Other stuff too
+      - Scaling Policies
+        - 2 options:
+          - Keep the group at it's initial size
+          - Use scaling policies to define how to scale up  
+        - You can set separate policies to scale out or in based on any number of server metrics
+        - You can set alarms on scale actions by posting to (user-defined) topics in ANS (Amazon Notification Service - covered later)
+  - `Target Groups`
+    - Middle man between the Auto-scaling group and the Load Balancer
+    - Each target group can only be associated with one Load Balancer
+    - We also have to register targets with the target group
+      - Go to the 'Targets' tab and select the instances associated with the autoscaling group
+  - `Load Balancer`
+    - Load Balancing -> Load Balancers
+    - 3 Load Balancer Types
+      1. Http(s)
+        - Good for most application types: very flexible
+        - Operate at request level
+        - Good for microservices and containers too
+      2. TCP
+        - Ultrahigh performance
+        - Applications require a static IP
+        - Can handle millions of requests per second
+      3. Classic Load Balancer: Old Version for backwards compatibility
+    - Can be public or internal
+    - Route Configuration step (in wizard)
+      - Specify a target group, etc
+    - When you've created a load balancer, you can view the details in the Listener tab
+- EC2 Lab Objectives
+  - Create an EC2 Instance of any type
+  - Associate it with a new security group that only allows SSH traffic from your IP address
+  - Create a snapshot of the EBS attached to the instance
+    - Log in an touch a file
+      - select instance
+      - click `connect`
+      - follow ssh instructions
+      - touch a file in /home/ubuntu
+    - 'Create Snapshot' in Elastic Block Store -> Snapshots -> Volume  (this takes a bit)
+  - Create an AMI using the snapshot
+    - From EBS Snapshot, choose 'Create Image'
+    - Then go to Images -> AMI
+  - Create a new instance using the AMI
+  - Notes from the Walkthrough:
+    - Image vs Instance
+      - The image appears more oriented around the volume
+      - You can still specify a variety of instance types for your image    
+- Load Balancing Lab Objectives
+  - TBD
+
+
+### Lab Notes
+
+
+
 
 
 
