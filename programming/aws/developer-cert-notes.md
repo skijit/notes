@@ -136,6 +136,7 @@ AWS Certifcation Notes
       - Storage capacity is elastic
       - You can create this filesystem then the console will give you instructions how to mount the filesystem to your EC2 instance
         - be sure to match the security groups between EFS and EC2
+      - Very good shareability across EC2 instances
 - 'Bursting' vs 'Provisioned'
   - Bursting usually has a lower baseline with the ability to scale
   - Provisioned has a higher baseline but no additional headroom
@@ -208,10 +209,20 @@ AWS Certifcation Notes
       - The image appears more oriented around the volume
       - You can still specify a variety of instance types for your image    
 - Load Balancing Lab Objectives
-  - TBD
+  - Create a luanch configuration using a LAMP stack ami
+  - Create an auoscaling group with the launch configuration
+  - Create a load balancer and target group
+  - Have the load balancer servce traffic to the instances in the autoscaling group
+  - Verify you see a webapp when you navigate to the load balancers http endpoint
+
+- Pricing models
+  - On-Demand: You pay the minimal start up cost, but it gets more expensive as you have to increase capacity
+  - Reserved Instances: You pay up front for a fixed capacity, cheaper if you know what you want
+  - Dedicated Hosts: Most expensive up front
+
+## S3
 
 
-### Lab Notes
 
 
 
