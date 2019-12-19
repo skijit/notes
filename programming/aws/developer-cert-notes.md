@@ -221,10 +221,75 @@ AWS Certifcation Notes
   - Dedicated Hosts: Most expensive up front
 
 ## S3
-
-
-
-
+- Simple Storage Service
+- Concepts
+  - Buckets
+    - Fundamental organization unit
+    - Limitless size
+    - Upload/download and permission
+    - Every object is stored in a bucket
+    - Provide namespacing
+    - Identify account responsible / access control
+    - Unit of aggregation for usage reports
+  - Objects
+    - Entities stored in buckets
+    - 2 parts of data
+      - Object data
+      - metadata
+        - name /value pairs
+        - also includes:
+          - date last modified
+          - content type
+          - custom pairs
+    - identified by key and version id    
+    - Can be up to 5TB  
+  - Keys
+    - Uniquely identify object in a bucket
+    - Combo of bucket-key-version-id    
+  - Regions
+    - Choose the region the bucket lives in
+    - Do this to:
+      - Optimize latency
+      - Conform to Regulatory requirements
+      - Optimize costs
+  - Data Consistency Model
+    - Read-after-write
+      - Inserting new objects (PUT)
+    - Eventual
+      - For Delete/Update
+      - BC S3 data is replicated across multiple data centers
+- Storage Classes
+  - Frquently Accessed:
+    - Standard
+      - Default
+    - Reduced_Redundancy (RRS)
+      - Noncritical, reproducible data stored with less redundancy than standard storage class
+      - Not generally recommended
+  - Infrequently Accessed:
+    - Standard_IA    
+      - Stored across multiple availablility zones
+    - OneZone_IA
+      - Less expensive bc less redundant
+    - **for both**: available quickly (ms) but there's an extra fee
+    - good for older data that is accessed infrequently
+  - Glacier
+    - Archiving data
+    - Not available for realtime
+    - Needs to be restored before accessed
+    - You transition normal S3 to Glacier using *Lifecycle Management* (covered later)
+- Permissions
+  - All S3 resources are by default private 
+    - Only resource owner can access initially
+    - Resource owner can write an access policy to let others access
+  - Access Policy Options
+    - Resource Based: Policies you attach to your bucket, object, etc. (includes access control lists)
+    - User Policies: Attaching policies to users in your account
+    - *You typically use a combination* of each type
+  - Access Control Lists (ACL's)
+    - Specify r/w permissions to other **accounts**
+    - Only accounts - not users in your account
+    - No conditional permissions or deny-permissions
+    
 
 
 
