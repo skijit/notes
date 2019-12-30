@@ -82,6 +82,7 @@ AWS Certifcation Notes
     - Availability Zone
     - Security Groups: lets you view each FW group
     - AMI Id: Machine image ID used to provision instance
+      - Note that AMI's are region-specific
     - Public DNS
     - Private DNS
     - VPC
@@ -141,12 +142,12 @@ AWS Certifcation Notes
   - Bursting usually has a lower baseline with the ability to scale
   - Provisioned has a higher baseline but no additional headroom
 - [Autoscaling and Load Balancing](https://aws.amazon.com/ec2/autoscaling/)  
-  - **Summary of this section**:
+  - **Summary of this section**:  LB -> TG -> ASG -> LC
     1. Create a 'Launch Configuration' which is just configuration which tells us how to spin up EC2 Instances
     2. Create an 'Auto Scaling Group' which defines the policies (we define) for scaling out (more instances) or scaling in (less instances), and associate it with our Launch Configuration
     3. Create a 'Target Group' for the Load Balancer to send traffic to
     4. Create a 'Load Balancer' which listens for requests (internal nw or public) and routes the traffic to a target group.
-    5. Register targets (instances created by our Auto Scaling Group) with the target group
+    5. Register targets (instances created by our Auto Scaling Group) with the target group  
   - Pretty much everything in here is provisioned with a wizard
   - In EC2 dashboard, go to "Auto Scaling"
     - `Launch Configuration`: Templates that an autoscaling group uses to launch EC2 instances
@@ -289,7 +290,137 @@ AWS Certifcation Notes
     - Specify r/w permissions to other **accounts**
     - Only accounts - not users in your account
     - No conditional permissions or deny-permissions
+- Permissions
+  - By default, all objects and buckets are private
+    - only resource owner and the account that created it can access
+    - but the resource owner can write an access policy
+  - Access-Based Policy Types/Options
+    - Resource-Based: any policies you attach your resource (object, bucket, etc.)
+    - User-Based: policies attached to users in your account
+  - ACL's (Access Control Lists)
+    - Resource-based
+    - Grant r/w permissions
+    - Limits: 
+      - permissions granted only to other AWS accounts, not users in your account
+      - No conditional permissions
+      - No explicit denials of permissions
+    - Use cases:
+      - Letting another account upload to a bucket
+    - Bucket Permissions Section let you configure:
+      - Your account
+      - Other accounts
+      - Public Access
+      - S3 Log Delivery Group
+      - Also have the ability to set a **Bucket Policy**
+        - More detail later
+        - JSON schema - Collection of "statements", each of which has
+          - Resources: Buckets and Objects
+            - use the `arn` (amazon resource name) format to identify the resource (e.g. bucket)
+          - Actions
+            - The permissions you allow or deny using action keywords
+          - Effect
+            - Either "Allow" or "Deny"
+          - Principal
+            - The account, user, service, etc that the policy applies to
+
+## Cloud Formation
+- Service that helps you set up your resources so you can spend less time on config, more on application
+- Create a template with all the resources you want (e.g. EC2 instances, databases) and it helps you provision them, w appropriate config
+  - Gives you a 'stack'
+  - 'Infrastructure as Code'
+- Manage a collection of resources as a single unit
+- You can reuse the same template to provision into multiple regions
+- You can track revisions to your template
+- Templates
+  - There are different formats
+  - Resources appear as name-value pairs or objects
+
+```(json)
+"Resources": {
+  "EC2Instance": {                //name of resource
+    "Type": "AWS::EC2Instance",   //required field
+    "Properties": {
+      //...
+    }, 
+  },
+
+  "InstanceSecurityGroup": {
+    "Type": "AWS::EC2::SecurityGroup",
+    "Properties": {
+      //...
+    }
+  }
+}
+
+```
+
+  - You can also use a YML syntax
+
+- `Parameters` section let you define the input values (which will show up in the config UI)
+  - You can associate descriptions and default values
+- `Mappings` let you map from one exposed parameter value to a different value (analogous to name/value in an HTML `<select>`)
+- Pseduo-Parameters are auto-resolved by AWS (basically keywords)
+  - Ex: `AWS::Region` -> will resolve to whatever the region was active when the stack was created
+- There are a variety of functions available in the template, including:
+  - `Fn::GetAtt`
+  - `Fn::FindInMap`
+- Outputs: ways to export different values when you instantiate using the template
+  - use cases:
+    - Good for organization
+    - You can use the output from one to instantiate another stack
+  - You can use `Fn:GetAtt` to pull out properties from particular resources
+- Stacks and Stacksets
+  - 2 ways to create a stack in the cloud formation services dashboard
+    - Design Surface
+    - Template (text sourced from...)
+      - Local Computer
+      - S3 location
+      - Sample template
+  - Dashboard Stack Creation
+    - Name of stack
+    - Parameters
+      - Corresponds w parameters section of template
+      - `AllowValues` -> dropdown selections
+      - `KeyName` -> selects keypairs defined in that region
+    - Add Tags
+    - Create under a given IAM role
+      - If you don't specify something, cloud formation will use the role defined in your specific account
+    - Rollback Trigger
+      - CF monitors the app while deploying and if it reaches a particular rollback threshold (e.g. monitoring time), it triggers a rollback
+    - 'Termination Protection' is a configuration option which means you can't manually terminate the application from the dashboard
+  - You can update a stack from the 'Update' menu
+- Stacksets are a way for AWS to deploy a stack across multiple AWS accounts and Regions
+  - You can identify account(s) (or upload a list of accounts with CSV's)
+  - Alternately, you can deploy to Organizational Units (OU's) which are ways to organize multiple accounts within an AWS organization
+    - Ex: you might have an OU for Production Application Accounts
+  - 2 roles you need to specify:
+    - IAM Admin Role: Role in the account you deploy FROM
+      - has to have permissions to deploy into the child account
+    - IAM Execution Role: Role in the account you deploy TO
+      - has to have a role that allows external access from parent account
+- AWS Systems Manager Parameter Store
+  - basic idea
+    - Secure, hierarchical storage for configuration and secrets management
+    - good for passwords, secrets (tokens, keys, etc.), connection strings as parameter values
+    - encoded as plain text or encrypted
+    - you can refer to these parameters with the names assigned in the store
+    - you can tag the parameters
+    - you can also restrict access to these parameters by 
+  - Navigate to 'Systems Manager' -> 'Parameter Store'
+  - If you update a value in the Systems Manager Parameter Store, this will take effect when you click 'Update' on the consuming Cloud Formation Stack
+- Wordpress Demo Notes (going through an existing template)
+  - Refs can be pointing to Parameters or other resources
+- Cloud Formation Lab Objectives
+  - Deploy an EC2 Instance into a security group
+  - The security group should allow SSH access from your machine
+  - use Cloud 9
+  - Find out where the schemas for various groups are
+  - Parameters: keyname & ssh location
+  - resources: EC2 and a new security group
+
+        
     
+
 
 
 
