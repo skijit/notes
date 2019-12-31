@@ -406,6 +406,7 @@ AWS Certifcation Notes
     - you can refer to these parameters with the names assigned in the store
     - you can tag the parameters
     - you can also restrict access to these parameters by 
+    - to consume a parameter for parameter store in your template, you define the type of the parameter to a reserved string (eg. AWS::SSM::Parameter::Name)
   - Navigate to 'Systems Manager' -> 'Parameter Store'
   - If you update a value in the Systems Manager Parameter Store, this will take effect when you click 'Update' on the consuming Cloud Formation Stack
 - Wordpress Demo Notes (going through an existing template)
@@ -427,6 +428,94 @@ AWS Certifcation Notes
       - Security Group
 
 ## DynamoDB
+- Features 
+  - Seamless Scalability
+  - Schemaless
+  - No Admin Overhead (e.g. replication, clustering, hardware)
+  - Encrypted
+  - Easy monitoring and metrics dashboard
+  - Easy/scheduled backups and point-in-time recovery (within last 35 days)
+  - Built-in durability and high-availability
+  - You can use global tables to keep regions in sync
+- Basics
+  - Collections are called 'Tables'
+  - Records are called 'Items'
+  - Fields are called 'Attributes'
+    - nested attributes are ok up to 32 levels
+- Keys
+  - Each item has to be uniquely identified by a primary key
+  - atrributes in primary key must exist in all items in a given table
+  - 2 types of primary keys
+    1. `Partition Key`
+      - aka 'Hash Attribute'
+      - Single attribute 
+      - Plugs this value into a hash function which is used for partitioning/sharding
+      - In a table with a Partition key, the values have to be unique
+
+    2. `Composite Primary Key`
+      - 2 attributes: Combination of a `Partition Key` and a `Sort Key`
+      - Sort key is aka 'Range Attribute' 
+      - Partition key still used for sharding, but it doesn't have to be unique
+      - Values with same partition key are stored together but sorted by their sort key (which must be different)
+  - Key-based queries, regardless of type, are supported
+  - Each primary key attribute must be a scalar: string, number, or binary
+  - Non-key attributes can be anything
+- Secondary Index
+  - You can create as many of these as you want
+  - Lets you query against those additional attributes (named in the key)
+  - 2 types of secondary indexes
+    - Global: partition and sort key which can be different from the primary key
+    - Local: same partition key as the primary key on the table but a different sort key
+- Storage of Indexes
+  - Each index gets stored (duplicated) in a separate table, but it is related to it's 'Base Table' (ie the original table)
+  - Dynamo manages updating the index table as changes get made
+  - When you create an index, you specify which other attributes should get projected from the base table
+    - at a min, you get the table primary key attribute(s)
+- Read/Write throughput capacity
+  - When you specify an index, you have to set throughput capacity which affects the cost
+  - This is so AWS can reserve the appropriate resources to meet the capacity, of course
+  - Read Capacity Unit (item <= 4KB size) represents either:
+    - One strongly consistent read per second per Item
+    - Two eventually consistent reads per second per Item
+  - Write capacity unit represents:
+    - One write per second for an item up to 1KB 
+  - Size is cumulative: so 4 read capacity units lets you read strongly consistent item of 16KB/sec
+  - If you exceed throughput, you'll be throttled by failing with a 400 code
+  - Management Mechanisms
+    - Auto Scaling
+      - you define min/max and specify a target utilization rate
+      - if you create through the dashboard, this is enabled by default
+    - Provisioned Throughput
+      - You just set the max throughput - no autoscaling
+      - If you exceed, you get throttled
+    - Reserved Capacity
+      - you can purchase reserved capacity in advance and commit to a minimum
+      - it's cheaper than autoscaling
+  - Throughput calculations (for provisioned throughput) Examples:
+    - Objective: strongly consistent read 80 items, each 3KB, per second from a table
+      - Each read gets 1 read capacity unit bc 3KB/4KB rounds up to 1
+      - 1 rad capacity unit per item * 80 reads per second = 80 read capacity units
+    - Objective: write 100 items (512 B) per second for a table
+      - 512B / 1B rounds up to 1 capacity unit per item
+      - 1 * 100 writes per second = 100 capacity units
+- Point in Time Recovery
+  - You can restore to any time in the last 35 days
+  - Enable using the management console, dynamo API, or AWS API
+  - Management console -> Table -> Backups -> Enable point in time recovery
+  - If you enable it, that's when you start the clock for restore time
+  - If you toggle it off/on, then you reset the clock
+  - When you restore - it restores to a new table along with
+    - Encryption settings
+    - Any (global or local) associated secondary index tables
+    - Read/write capacity settings
+    - but:
+      - you need to reset autoscaling
+      - any other services, such as monitoring
+
+## VPC
+
+
+
 
 
         
