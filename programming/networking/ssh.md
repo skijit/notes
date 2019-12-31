@@ -100,10 +100,13 @@ SSH Notes
     - you can also set up key forwarding which lets servers you are logged into access your local ssh-agent
     - `ssh-add` command lets you add a key for ssh agent
     - NOTE: when using git-bash, you need to start ssh-agent manually. See [here](https://help.github.com/articles/working-with-ssh-key-passphrases/#auto-launching-ssh-agent-on-msysgit)
+        - example:
+            - `eval `ssh-agent -s``
+            - `ssh-add ~/this-is-my-keypair-file.pem`
     - there's an ssh hosts config to map domains to keys
         - see [here](https://superuser.com/questions/287651/can-i-have-multiple-ssh-keys-in-my-ssh-folder)
     - [general info](https://developer.github.com/v3/guides/using-ssh-agent-forwarding/)
-
+    
 ## Useful Links
 - https://help.github.com/articles/generating-ssh-keys#platform-windows
 - https://docs.microsoft.com/en-us/azure/virtual-machines/linux/ssh-from-windows

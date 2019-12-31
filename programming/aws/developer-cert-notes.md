@@ -417,6 +417,17 @@ AWS Certifcation Notes
   - Find out where the schemas for various groups are
   - Parameters: keyname & ssh location
   - resources: EC2 and a new security group
+  - Steps
+    - Startup the Cloud9 EC2 Instance - not sure this is necessary
+    - Log in to Cloud9 in that Environment
+    - Select the sample LAMP stack template and download it, open in vscode
+    - Create a second file, set language mode to json, type 'sta' and you'll get a cloud formation template skeleton
+    - Go to the AWS Section on resource types to get the schema of the various types.
+      - EC2
+      - Security Group
+
+## DynamoDB
+
 
         
     
