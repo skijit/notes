@@ -278,7 +278,7 @@ AWS Certifcation Notes
     - Not available for realtime
     - Needs to be restored before accessed
     - You transition normal S3 to Glacier using *Lifecycle Management* (covered later)
-- Permissions
+- Permissions Overview
   - All S3 resources are by default private 
     - Only resource owner can access initially
     - Resource owner can write an access policy to let others access
@@ -513,6 +513,135 @@ AWS Certifcation Notes
       - any other services, such as monitoring
 
 ## VPC
+- You create a virtual network that resembles a physical network, but with the scalable infrastructure
+- VPC is a Virtual Private Cloud
+- It may share the same physical network as others but it is logically isolated
+- You can
+  - Specify an IP addres range
+  - Add subnets
+  - Associate security groups
+  - Configure route tables
+- Subnets
+  - A range of IP addresses inside your VPC
+  - Use a **public subnet** for stuff which must be connected to the internet
+  - Use a **private subnet** for stuff which shouldn't be publicly available
+  - 2 methods for security
+    - Security Groups
+    - Network ACL's
+- Every AWS account has a default VPC installed in each region
+- Every VPC has a default subnet in each AZ in that region
+- If you ignore the VPC's, then everything gets installed into your default VPC
+  - However, you can create any number of non-default VPC's
+- Non-default Subnets include:
+  - additional subnets you create in your default VPC
+  - any subnets you create in your non-default VPC
+- You can control how resources in a VPC can access resources outside that VPC:
+- Your default VPC contains an Internet Gateway
+  - Internet Gateway lets instances communicate with internet through the Amazon EC2 Network Edge
+- Each default subnet is a public subnet
+  - Each instance you launch in in it:
+    - has 2 IP addresses:
+      - Private IPv4 address
+      - Public IPv4 address
+    - Can communicate with internet through the internet gateway
+- Route table
+  - Contains a set of rules used to determine where network is routed
+  - Each subnet in your VPC has it's own route table which controls routing for the subnet
+  - You can associate multiple subnets with 1 route table, but each subnet needs at least 1 route table
+  - When you create a VPC, it automatically has a route table
+    - In route tables page in AWS VPC dashboard, you can view the VPC-specific route table by looking for "Yes" in the main column
+    - The main route table is the default route table for any subnets which don't have their own route table
+- Internet Gateways
+  - Make it possible for subnets and EC2 instances to be publicly routable
+  - It's a horizontally scaled, redundant, HA VPC component that allows communication between EC2 instances and the internet
+  - 2 purposes
+    - To provide a target for your route table for internet traffic
+    - To perform NAT for EC2 instances with a public IP address
+  - So it's like a superset of the NAT Gateway (below)
+  - They can support IPv4 and v6 traffic
+- NAT Gateways
+  - Let instances connect to the internet, but prevent the internet from initiating those connections
+  - Instances in a private subnet can connect to the internet (e.g. for patches) but they need to access this through a NAT gateway 
+    - That NAT Gateway needs to be hosted in a public subnet
+- Aside on the 0.0.0.0 address:
+  - Called the 'wildcard address' or 'unspecified address'
+  - If we're on a server, it means:
+    - all IPv4 addresses on the given machine
+  - If we're in a route table, it means:
+    - The default route (i.e. it doesn't match one of the explicit entries)
+- Security
+  - Security Groups
+    - Like a virtual fw to control inbound/outbound traffic for your instances
+      - Each instance can have <= 5 SG's
+    - Instance Level
+      - If you don't specify an instance SG, it gets the VPC's default SG
+    - "Allow" rules only
+  - Network ACL's
+    - Optional
+    - Subnet level
+    - "Allow" and "Deny" rules
+- Lab
+  - Objectives
+    - Create a new VPC in any region
+    - Create 2 subnets
+    - Using a NAT Gateway, an internet gateway, and route tables, make 1 subnet public and the other private
+    - Create an EC2 instance using a LAMP AMI and deploy it into the new public subnet
+    - TODO: Continue here
+
+## IAM
+
+
+## Lambda
+- Serverless runtime
+  - Different runtimes
+  - scales automatically
+  - no charge when not running
+  - no provisioning
+  - zero administration
+  - you're only responsible for your code
+- Lambda Function
+  - Custom code and any libraries
+- Event Source
+  - AWS service like SNS that triggers your function
+  - Could be API Gateway or things like DynamoDB even
+- Downstream Resources 
+  - Additional AWS services like S3 that your Lambda calls
+- Log Stream
+  - Lets you annotate your code to view logs that are generated
+- Lambda Dashboard
+  - Throttling
+    - After a certain number of invocations, it'll be throttled (no other invocations will be allowed)
+  - Available Actions
+    - Publish a new version
+    - Create an alias of the same lambda
+  - Qualifiers
+    - Let you refer to versions and aliases (see above)
+    - The point is to have version control and test different versions of your lambda
+  - Add Triggers
+    - API Gateway
+    - CloudFront
+    - CloudWatch Events
+    - CloudWatch Logs
+- First time you try to test the Lambda, it asks you to set up Test Events
+- Authoring methods
+  - Adding code inline (web editor)
+  - Uploading a zip file
+  - Upload a file from S3
+- 'Handler' is the lambda entry-point (which has to be registered/identified somehow)
+- Environment Variables can be set/visible to your Lambda
+  - Good for config settings
+- Basic settings
+  - you can specify the memory allocated to your lambda
+  - timeouts setting
+- You can specify which VPC/Subnet/SG your lambda belongs to
+- Adding Packages / Libraries
+  - Create a lambda package by uploading a zip or specifying an S3 target
+  - Basically, you just zip up your entire project (including, for example, your expanded node_modules dir)
+- Lab 1 Objectives:
+  - Todo: Continue here
+
+
+
 
 
 

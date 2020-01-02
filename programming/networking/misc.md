@@ -56,6 +56,12 @@ Misc Networking
   - Each program binds to a port for it's communication 
     - i.e. when host A and B communicate, the ports don't have to match
   - IP address identifies the host, whereas port number identifies the process
+- The 0.0.0.0 address:
+  - Called the 'wildcard address' or 'unspecified address'
+  - If we're on a server, it means:
+    - all IPv4 addresses on the given machine
+  - If we're in a route table, it means:
+    - The default route (i.e. it doesn't match one of the explicit entries)
   
 
  
