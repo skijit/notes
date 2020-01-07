@@ -662,7 +662,7 @@ AWS Certifcation Notes
   - Go to AWS->IAM->Roles
     - You'll have pre-existing roles for things like services like autoscaling, cloud9, etc.
     - They each have "Trusted Entities": those are the associated service names
-
+    - When you create a role for the EC2 trusted entity, it will automatically create an `instance profile`, which you can associate with the instance when you launch the instance
 
 
 ## Lambda
@@ -711,8 +711,8 @@ AWS Certifcation Notes
 - Adding Packages / Libraries
   - Create a lambda package by uploading a zip or specifying an S3 target
   - Basically, you just zip up your entire project (including, for example, your expanded node_modules dir)
-- Lab 1 Objectives:
-  - Todo: Continue here
+- Lab Notes:
+  
 
 
 
