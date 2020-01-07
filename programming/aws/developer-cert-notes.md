@@ -589,7 +589,53 @@ AWS Certifcation Notes
     - TODO: Continue here
 
 ## IAM
-
+- Identity and Access Management
+- Root user
+  - Has all permissions
+  - You sign in with the account's email address
+  - Don't use this for everyday tasks
+  - AWS Guidance: Only use it to assign IAM users to do stuff
+- Features
+  - Shared Access: You can grant other people access to your resources
+    - Granular Permissions
+  - Secure Access to AWS resources: secure credentials
+  - MFA
+  - Identity Federation
+  - Identity Infor for assurance
+  - PCI DSS Compliance: credit card processing stuff
+  - Eventually consistent because it's replicated for HA
+  - Free
+- Concepts
+  - **Principle**: Entity that can make a request for an action/operation on an AWS resource
+    - Ex: Root user, Users, roles, federated users, applications
+  - **Request**: Combination of info including...
+    - Actions or Operations:  CLI, API, or Console-based action
+    - Resources: The thing that is being accessed
+    - Principle: Including the policy
+    - Environment Data: User agent, SSL, time of day, etc.
+    - Resource Data: Could be a tag on the Resource, such as a Name metadata tag
+  - **Authentication**
+    - You need to be signed in to make a request (excluding some S3)
+    - For the CLI, you need to specify your **Access Key** and your **Secret Key**
+  - **Authorization**
+    - Uses values from the request context to check for policies that apply to the request
+    - Typically stored in Json docs
+    - Several types of policies
+      - Permissions Policies
+        - Define permission for object to which they're attached
+        - incld Identity Policies, Resource Policies, ACL's
+      - Permissions Boundaries
+        - Advanced feature
+        - Limits the max permission a principle can have
+  - **Actions or Operations**
+  - **Resources**
+- Flow:
+  - Get Authenticated
+  - Principal Makes Request
+  - Authorization Phase
+    - Evaluate Identity Based Policies and Resource Based Policies
+  - Action Phase
+    - Do the thing
 
 ## Lambda
 - Serverless runtime
