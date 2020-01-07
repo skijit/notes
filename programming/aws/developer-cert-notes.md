@@ -575,7 +575,8 @@ AWS Certifcation Notes
       - Each instance can have <= 5 SG's
     - Instance Level
       - If you don't specify an instance SG, it gets the VPC's default SG
-    - "Allow" rules only
+      - They are associated with VPC's even though they're applied to the instance-level
+    - "Allow" rules only    
   - Network ACL's
     - Optional
     - Subnet level
@@ -586,9 +587,82 @@ AWS Certifcation Notes
     - Create 2 subnets
     - Using a NAT Gateway, an internet gateway, and route tables, make 1 subnet public and the other private
     - Create an EC2 instance using a LAMP AMI and deploy it into the new public subnet
-    - TODO: Continue here
+  - Walkthrough notes
 
 ## IAM
+- Identity and Access Management (IAM)
+- Web services that helps you control access to resources
+- Root access
+
+
+- Users API Keys
+  - Users are attached to permissions via Groups
+  - Best Practice:  Use Groups to assign permissions to users
+    - But you also have options to copy permissions from another user or assign directly
+  - Managed Policies exist for standard permissions
+    - Each of the standard permissions can be displayed with Json
+
+    ```
+    {
+      "Version": "2010-10-17",
+      "Statement": {
+        "Effect": "allow",
+        "Action": "*",
+        "Resource": "*"
+      }
+    }
+    ```
+
+  - When you create a user, you select:
+    - Programmatic Access
+    - Console Access
+  - New users also get their own sign-in link
+  - You can create an IAM role with Admin permissions, but by default they can't access your billing dashboard
+- Policies
+  - There are 4 types
+    - Identity-Based
+      - Json docs which have permissions and you attach to a user (perhaps via a group)
+      - It tells you who can do what on what resource
+      - 2 types
+        - AWS Managed (e.g. Administrator, Lambda Administrator)
+        - User Managed (i.e. we create)
+    - Resource-Based
+      - These are attached to the resource instead of the user (example: S3)
+      - No managed policies for these
+      - **Important**
+        - It's not enough to only assign permissions to a principal in a resource-based policy
+        - You also have to use an identity-based policy to grant the principal access to the resource
+    - Organization SCP
+      - Applies to Organizational Units
+    - Access Control Lists
+      - Control what principals can access a resource
+      - Doesn't use JSON
+      - Used by S3, VPN, and some others
+- Roles
+  - Roles are sets of permissions
+  - The permissions are attached to the role, not to the IAM user or group
+  - Can be used by:
+    - Iam user in the same (or different) account as the role
+    - Web services like EC2
+    - External user from a external identity provider
+  - Types of Roles
+    - Service Role
+      - that's a role a service assumes in your account to perform actions on your behalf
+      - most AWS services require you to assign a role which covers all the permissions it will need
+      - cant be used to grant access to services in other accounts
+      - you can create, modify, delete service roles from iam console
+    - EC2 Service Role
+      - For launching an EC2 instance that runs your application
+      - Role is assigned to the EC2 instance when it's launched
+      - AWS provides temporary security credentials for the role and the EC2 instance to run its applications
+    - Service-Linked Role
+      - Predefined by the service, along with with how you create, modify, and delete the role
+      - Include all the permissions required to call other services on your behalf
+      - Takeaway: these kinds of roles simplify setting up a service bc you don't have to manually add the necessary permissions
+  - Go to AWS->IAM->Roles
+    - You'll have pre-existing roles for things like services like autoscaling, cloud9, etc.
+    - They each have "Trusted Entities": those are the associated service names
+
 
 
 ## Lambda

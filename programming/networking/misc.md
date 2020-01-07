@@ -62,7 +62,9 @@ Misc Networking
     - all IPv4 addresses on the given machine
   - If we're in a route table, it means:
     - The default route (i.e. it doesn't match one of the explicit entries)
-  
+- VIP:
+  - Virtual IP
+  - Usually referred to when dealing with the (shared) IP exposed by a NAT since the actual IP is not publicly exposed  
 
  
 
