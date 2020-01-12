@@ -663,7 +663,9 @@ AWS Certifcation Notes
     - You'll have pre-existing roles for things like services like autoscaling, cloud9, etc.
     - They each have "Trusted Entities": those are the associated service names
     - When you create a role for the EC2 trusted entity, it will automatically create an `instance profile`, which you can associate with the instance when you launch the instance
-
+- Groups vs Roles
+  - Groups: For Users
+  - Roles: Attach to entities, like an EC2 instance
 
 ## Lambda
 - Serverless runtime
@@ -711,8 +713,203 @@ AWS Certifcation Notes
 - Adding Packages / Libraries
   - Create a lambda package by uploading a zip or specifying an S3 target
   - Basically, you just zip up your entire project (including, for example, your expanded node_modules dir)
-- Lab Notes:
-  
+- Some SDK Notes
+  - [boto docs](https://boto3.amazonaws.com/v1/documentation/api/latest/index.html) 
+    - Boto is the Amazon Web Services (AWS) SDK for Python. It enables Python developers to create, configure, and manage AWS services, such as EC2 and S3. Boto provides an easy to use, object-oriented API, as well as low-level access to AWS services.Boto is the Amazon Web Services (AWS) SDK for Python. It enables Python developers to create, configure, and manage AWS services, such as EC2 and S3. Boto provides an easy to use, object-oriented API, as well as low-level access to AWS services.
+- [AWS SDK for Node](https://aws.amazon.com/sdk-for-node-js/)
+  - New version is 3.x (currently developer preview) which includes typescript and has modules
+  - [api documentation](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/index.html)
+  - usable for client apps as well as running on lambda
+
+## Other Databses
+- **RDS**: Relational Data Service
+  - Set up, operate and scale a relational db in the cloud
+  - Cost efficient, resizable capacity
+  - Manages common administration tasks
+  - You can independently scale these operations:
+    - CPU
+    - Memory
+    - Storage
+    - IOPS
+  - Bc it's highly managed, you don't get any shell access to the service
+  - Automated/manual backups/restore available
+  - HA with failovers 
+  - Use PostGres, MySql, Maria DB read-replicas
+  - DB Instances
+    - Can have multiple DB's in them
+  - Create and modify a DB Instance
+    - AWS Commandline
+    - AWS RDS API
+    - Management console
+  - Engine Options
+    - Amazon Aurora: PostgreSQL & MySQL compatible / 5x Throughput of MySql and 3x that of PostgreSQL
+    - MySql
+    - MariaDB
+    - PostgreSQL
+    - Oracle
+    - Sql Server
+  - Provisioning Options (Aurora)
+    - Capacity
+      - Provisioned: you manage the server instance sizes
+      - Provisioned with Aurora Parallel Query Enabled: You provision but delegate analytic query optimizations to Aurora (ie managed)
+      - Serverless: spec the max / min number of resources for a cluster
+    - Cluster Name
+    - Cluster Identifier
+    - Master User Name
+    - VPC
+    - Subnet Group
+    - Public accessibility
+    - Availability Zone
+    - VPC Security Group
+    - Ports
+    - Parameter Groups ( config you apply to multiple instances )
+    - Encryption
+    - Failover
+    - Backup retention period
+    - Types of Logs to deploy to CloudWatch
+    - Maintenance windows
+    - Upgrade policies
+    - Deletion Protection
+  - You can create any number of alarm types as well
+
+## KMS
+- Key mgmnt store
+- Control who can access your master keys and thus gain access to your encrypted data
+- Integrated with most other AWS services
+  - Including CloudTrail to track who is using the various keys
+- Actions include:     
+  - Creating, Describing, Listing, Enabling, Disabling Master Keys
+  - Creating, Viewing Grants and Access Control Policies for Master Keys
+  - Encryption, Decryption Data
+- Walkthrough: Create a KMS Key and using to encrypt a S3 Bucket
+  - Goto IAM -> Encryption Keys -> Create Key
+    - You can import a key or tell KMS to generate (preferred)
+    - Choose Key Administrators (IAM users / roles who can administer the key through KMS)
+    - CHoose Users/Roles that can use the key for encryption/decryption
+  - Goto S3 -> Create Bucket 
+    - Enable Default Encryption and choose the KMS key      
+- **RedShift**: Datawarehouse & Data Lake
+  - Fully managed
+  - Petabyte scale
+  - Has Nodes in a cluster
+  - Each cluster runs a RedShift engine and has one or more databases
+  - **Value proposition**: 10x faster than other DB tech
+  - Can cost 1/10 the cost of on-prem datawarehouses
+- **Elasticache**
+  - In-memory clone of memcached or redis
+  - Fully-managed & scaleable
+
+## SWF
+- Simple Workflow Service
+- Build applications that coordinate work across distributed components
+- Task: Logical unit of work performed by a component of your application
+- You specify workers
+  - You implement them
+  - Can run on EC2 instances or on-prem
+- Tasks can be long running, or time-out, or require restarts, have a provisioned profile, etc.
+- SWF service will allocate tasks to workers and tracks them, including their state
+- To coordinate tasks, you write a program to get the latest state of each task from SWF, and use that to initiate new tasks
+- Maintains an applications execution state so it's resilient to failures in individual components
+- Use cases (some)
+  - Media processing
+  - Web application backends
+  - Business Process Workflows
+  - Analytics Pipelines
+- Walkthrough steps
+  1. Create a domain
+    - Basically just a name for the WF
+  2. Register workflow and activity types
+    - Activities are individual components of a simple WF    
+  3. Deploy
+    - Specify keypairs and the EC2 instance type to use
+  4. Run
+  5. View in Console
+
+## SQS
+- Simple Queue Service
+- Secure, durable, HA, hosted queue for decoupling distributed component
+- Security
+  - You control who sends, receives message
+  - Server-side encryption
+- At-least-once and Only-Once (FIFO) modes available
+- Scalable / transparent
+- Customizable: each queue can be different (delays, use S3 or dynamo for larger items, split messages, etc.)
+- 2 types
+  1. Standard
+    - Unlimited Throughput
+    - At least once delivery (ie the same message might get enqueued more than once)
+    - Best effort ordering
+    - Use case: when throughput is the most important
+  2. FIFO
+    - High throughput (3000 mesgs/sec)
+    - Exactly once processing (ie no duplicate messages are enqueued ever)
+    - First-in, First-out
+    - Use case: order is important
+- Walkthrough
+  - When you name your queue, you should suffix the type of queue (e.g. fifo) to keep things clear
+  - Configuration options (for a FIFO queue)
+    - Default Visibility Timeout: the length of time that a message received from a queue will be invisible to other receiving components
+      - Because to remove the message- this means a component has to delete it from the queue
+    - Message retention period: how long it holds a message before deleting it (1-14 days)
+    - Maximum message size (256 KB is system max)
+    - Delivery Delay: Amount of time to delay the first delivery of all messages added to the queue (freshness / cool-down period)
+    - Receive Message wait time: max time that a long polling receive call will wait for a message to become available before returning an empty response
+      - Long polling is a technique to reduce costs which avoids unnecessary calls to the q service (which usually result in empty response)
+      - Short polling is the default
+    - Content-based de-duplication: You set a de-dupe interval and any messages whose hashes (based on content) have already been seen, will not be delivered
+    - Dead-letter queues: what to do with messages have been unsuccessfully processed
+    - Server side encryption
+      - whether you encrypt and how long you cache the KMS key
+  - With queue actions in console, you can...
+    - send a message
+      - Message Group Id: Specifies that  message belongs in a specific message group.   
+        - Messages in the same message group are always processed sequentially
+        - Messages in a different message group might be processed out of order
+      - You can manually specify a deduplication id too (it doesn't have to be content-based)
+    - view / delete a message
+  - You can use the CLI / SDK to poll for messages too
+    - Get the URL of the SQS
+    - cli: `aws sqs receive-message --queue-url <url>`
+
+## SNS
+- Simple NOtification Service
+- Coordinates and manages the delivery of messages to subscribing endpoints / clients
+- 2 types of clients
+  1. Publishers / Producers
+  2. Subscribers / Consumers
+    - E.G. Webservers, Email Addresses, SQS queues, Lambda functions
+- Consumers use of a few transport protocol:
+  - SQS
+  - Http(s)
+  - Email
+  - SMS
+  - Lambda (when subscribed to topic)
+- You deploy a particular SNS topic
+  - Each topic has a particular URL endpoint for publishers AND subscribers
+- Walkthrough
+  - Publishing from the CLI (good for Cloud9): `aws sns publish --topic-arn <arn> --message file://message.txt`
+
+## API Gateway
+- Create, publish, maintain, monitor, secure, and scale API's
+- Bridges the external world with AWS resources through a restful api
+- It doesn't handle the backends - only how you connect to them
+- It covers 
+  - authorization, access control
+  - traffic mgmt
+  - monitoring
+  - version mgmt
+  - sdk generation
+- Key Components
+  - API Gateway API: The end-points that connect to backing services
+    - Collection can be deployed
+    - Permissions to invoke: IAM roles or API Gateway Lambda Authorizers    
+  - API Deployment: Snapshot of your API
+  - API Endpoints: When you deploy your API Gateway to a specific region
+  - Method Request:  Public interface of an API method (parameters & body) request
+  - Method Response: Public interface that an API method returns
+
+
+
 
 
 
