@@ -951,7 +951,53 @@ AWS Certifcation Notes
   - Method Request:  Public interface of an API method (parameters & body) request
   - Method Response: Public interface that an API method returns
 
-
+## Developer tools
+- **CodePipeline**
+  - CI/CD Tool
+  - Starting with your source, you can build/test/release
+  - You can have manual approvals gating actions if you want
+  - You can integrate your favorite dev tools (source, dev, CI/CD) into Code Pipeline
+  - Real-time dashboard, view build details, status, rerun
+  - Each stage may end up using lots of different AWS resources (lambda, othrt stuff)
+  - Stages use input and output artifacts that are stored in S3 buckets you choose when you create the pipeline
+- **CodeCommit**
+  - Private Git SCM in the cloud
+  - Secure, highly scalable
+  - Supports src code amd binaries
+  - Pull Requests, reviews, notifications
+  - Integrate well with Code Pipeline, IAM
+  - Supports git commands and its own CLI
+- **CodeDeploy**
+  - Handles deployments to EC2 (incl. on-prem) and Lambda
+  - Any types of app content supported:
+    - Source code
+    - Configuration files
+    - Lambdas
+    - Executables
+    - Packages
+    - Scripts
+    - Multimedia
+  - That content can be provided via
+    - S3
+    - Github repo
+    - Butbucket repo
+  - works on any dev/tst/prd environment
+  - works on any scale of your infrastructure
+  - maximizes availability in an in-place deployment
+    - rolling update across ec2 instances
+    - you can specify the number of instances to take offline for updates
+  - same with a blue-green deployment
+    - handles re-routing traffic, etc
+  - rollbacks are supported
+  - components
+    - **deployment group**: deploys to a new group of resources described in this section
+    - **deployments**: history of deployments, includes the application and an app-spec file
+      - app-spec file describes how to deploy to the app instances in the deployment group
+    - **deployment configurations**: specify deployment speed and the minimum number of instances that must be healthy at a given time
+    - **application**: deployment groups and revisions
+  - **CodeStar**
+    - AWS Project Template Service
+    - Helps you set up a project with repos, build pipelines, infrastructure, etc.
 
 
 
