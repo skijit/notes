@@ -995,9 +995,124 @@ AWS Certifcation Notes
       - app-spec file describes how to deploy to the app instances in the deployment group
     - **deployment configurations**: specify deployment speed and the minimum number of instances that must be healthy at a given time
     - **application**: deployment groups and revisions
-  - **CodeStar**
-    - AWS Project Template Service
-    - Helps you set up a project with repos, build pipelines, infrastructure, etc.
+- **CodeStar**
+  - AWS Project Template Service
+  - Helps you set up a project with repos, build pipelines, infrastructure, etc.
+- Blue/Green Deployments
+  - Cutover traffic between 2 identical environments but with different versions
+  - Cutover can be managed with
+    - Route 53 DNS  
+  - Advantages of Blue/Green Deployments
+    - Easy rollback
+    - Cloud provisioning of additional environment is inexpensive
+    - Cloud provisioning of environments is easy with an immutable architecture approach
+    - You use scaling groups to scale out and in (in either environment)
+    - No downtime
+    - Supports canary testing, where you shift over a portion of traffic to the new environment
+    - Work well with CI/CD workflows
+  - Services which Support Blue/Green
+    - **Route 53**
+      - DNS, HA, Global 
+        - Routes based on geography, health checks, and latency
+        - Let's you specify a shorter TTL, which allows quicker propagation of the new mapping
+    - **Elastic Load Balancing**
+    - **AutoScaling**
+      - You can attach different launch configuration versions to enable auto-scaling
+      - Also lets you put an instance in Standby mode, which is great in the event of a rollback
+    - **Elastic Beanstalk**
+      - OOB support of load balancing and autoscaling
+    - **OpsWorks** 
+      - (based on chef)
+      - configuration management service
+      - helps cloning entire environments for when you prepare blue/green environments
+    - **Cloud Formation**
+      - Infrastructure as code
+      - Good automation for cutovers with route 53 or autoscaling
+    - **CloudWatch**
+      - Monitoring service
+      - Collect metrics, generate alarms
+  - Techniques
+    - 1: Swapping the auto-scaling group behind an elastic load balancer
+      - Initially, you have a blue auto-scaling group behing the load balancer
+      - Then you have a green auto-scaling group which is staged with the new code
+      - At deploy time, you attach the green asg to the load balancer
+      - Bc the ELB uses a least-outstanding-requests algorithm, it will favor the new green environment initially
+      - You can also control how quickly it cuts over by setting the initial size of the green ASG
+      - Then you can remove the old EC2 instances, or better, put them in standby mode if you need a possible rollback
+      - Other notes:
+        - You set the maximum instance count in your ASG's
+        - Any new instances are added to the ELB's pool, as long as they pass a health check
+        - The health check can be a custom test or just a ping
+        - When an instance fails a health check, it will be reported as 'out of service' and then replaced by the ASG, if configured as such
+        - When you scale in a group, the load balancer will remove the instance from the pool and drain current connections before they terminate
+    - 2: Updating ASG Launch configurations
+      - ASG's have their own Launch configs (and only 1)
+      - Launch configs include AMI, instance type, keypairs, security groups, block device mapping
+      - You can replace the launch configuration associated with an ASG, such that it refers to new code
+        - Old instances will not be removed but they won't be created either
+        - When ASG replaces instances, it will remove those with the oldest launch configuration
+      - You can scale the ASG to twice it's orig size once you've associated it with the new launch config
+      - Then you shrink it back to the original size
+    - 3: Swap the environment of an elastic beanstalk environment
+      - Clone the existing environment and use Route 53 to point to a new ELB pointing to the new environment
+    - 4. CLone a stack in OpsWorks and Update DNS
+      - OpsWorks has the concept of stacks
+        - 1 or more layers
+        - Layer = set of 1 or more EC2 instances
+  - Best Practices with Blue/Green
+    - Exclude Schema changes from the application boundary
+      - Schema changes should be backwards compatible (ie the old client code can use them)
+  - When not to use B/G deployments
+    - When the app components are in different zones
+    - Schema changes which are coupled with code
+    - When you have a 3rd party product which is designed with a different update process
+
+## ECS 
+- Elastic Container Service
+- Helps you run, stop, and manage docker containers on a cluster 
+  - With a LaunchType of Fargate, your clusters can be serverless
+  - Otherwise, use a LaunchType of EC2, and you'll manage the cluster
+- Based on resource needs, isolation requirements, etc. you can 'schedule' which tasks go on which EC2 instances
+- Eliminates the need to operate your own cluster/configuration management or worry about scaling management infrastructure
+- Regional service- you can use multiple AZ's in your cluster
+- Clusters can be in a new or existings VPC's
+- Task definitions and services define which containers to run
+- Container images are stored in registries which may exist within (ECR) or outside (DockerHub) your AWS infrastructure
+- Task Definition File
+  - Json file
+  - Describes up to 10 container images that form your application
+  - Specify any number of parameters for your application (launch types to use, ports, data volumes, etc.)
+  - The specific parameters you use depend on your launch type
+- Task
+  - The instantiation of a task definition in a cluster
+  - You can specify the number of tasks that will run on your cluster (handled by the 'task scheduler')
+- Cluser
+  - Logical grouping of resources
+- Container Agent
+  - Runs on each EC2 instance in your cluster that reports on its' status/health/etc.
+  - It also starts and stops tasks
+- Microservices Notes
+  - "Tasks" to ECS are "Pods" to Kubernetes
+  - Schedulers maintain the service/task counts
+  - Each microservice should have its own CI/CD pipeline
+  - "Design for Failure"
+
+## Elastic Beanstalk
+- Quickly deploy and manage without worrying about infrastructure
+- The system will handle scaling, load balancing, provisioning, health monitoring
+- Support for all sorts of runtimes (go, java, node, python, .net, ruby, php)
+
+## White Papers
+- [Certified Developer Associate info](https://aws.amazon.com/certification/certified-developer-associate/)
+- Read the whitepapers that are linked there, especially
+  - Shared Security
+  - IAM
+  - Protecting data at rest
+  - VPC infrastructure
+  - Managing security monitoring
+
+
+
 
 
 
