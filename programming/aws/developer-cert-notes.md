@@ -1110,6 +1110,16 @@ AWS Certifcation Notes
   - Protecting data at rest
   - VPC infrastructure
   - Managing security monitoring
+  - Pillars of the well architected framework
+    - Operational Excellence
+    - Security
+    - Reliability
+    - Performance Efficiency
+    - Cost Optimization
+  - Cloud Architecting Best Practices
+  - CI/CD
+  - Serverless
+  - Blue/Green Deployment
 
 
 
