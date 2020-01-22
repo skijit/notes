@@ -1121,7 +1121,124 @@ AWS Certifcation Notes
   - Serverless
   - Blue/Green Deployment
 
-
+## Well-Architected Framework
+- [Corresponding White Paper](https://d1.awsstatic.com/whitepapers/architecture/AWS_Well-Architected_Framework.pdf)
+- General Design Principles
+  - Stop Guessing about capacity: just scale elastically
+  - Test at Production Scale- spin up your production scale environment and then destroy it
+  - Automate you infrastrcture changes, and log
+  - Allow for Evolution of the system
+  - Data-Driven Architecture: Collect data on your architecture choices and change
+  - Improve through Game-Days: Simulate production events
+- 5 Pillars of Well-Architected Framework
+  - operational excellence
+  - Security
+  - Reliability
+  - Performance Efficiency
+  - Cost Optimization
+- **Operational Excellence**  
+  - Design Principles
+    - Perform infrastructure operations as code
+    - Annotated Documentation: should be created with each build
+    - Make Frequent, small, reversible changes
+    - Refine operations procedures regularly
+    - Anticipate Failure
+    - Learn from all Organization Failures
+  - Best Practices (this is fluff)
+    - Prepare
+    - Operate
+    - Evolve
+  - Key Services
+    - CloudFormation
+    - AWS Config
+    - CloudWatch
+    - Amazon ElasticSearch Service (Amazon ES): helps you analyze log data to gain actionable insights
+- **Security**
+  - Design Principles
+    - Implement a strong identity foundation
+      - Implement principle of least permission
+      - Enforce a separation of duties
+      - Eliminate long term credentials
+    - Enable Traceability
+      - Monitor, alert, and audit actions and changes to your environment in real-time
+      - Integrate logs and metrics with systems to automatically respond
+    - Apply Security at all levels
+      - Not just the outer layer
+    - Automate Security Best Practices
+    - Protect data in transit and at rest
+      - classify data into sensitivity levels and use mechanisms like encryption, tokenization, and access-control
+    - Avoid manual handling of data in any way
+    - Prepare for security Events
+  - Best Practices
+    - Identity and Access Management
+      - Predefine Principals (e.g. users, groups, services, and roles) and assign them approprate policies
+      - Programmatic access (e.g. API calls) should be performed with temporary and limited-priveledge credentials such as those issued by AWS Security Token Service
+    - Detective Controls
+      - processing logs, events, and monitoring that allows for auditing, automated analysis, and alarming      
+    - Infrastructure Protection
+    - Data Protection
+    - Incident Response  
+  - Key Services
+    - AWS Cloud Trail and AWS Cloud Watch
+      - CloudWatch is about activity of services and resources
+      - CloudTrail is a log of ALL actions inside your cloud
+    - AWS GuardDuty is a threat detection service that looks for unauthorized behaviors
+    - S3 lets you log access requests
+    - AWS Key Management Service (KMS) makes it easy to create/control encryption keys
+- **Reliability**
+  - Design Principles
+    - Test Recovery Procedures
+    - Automatically Recover from failures
+    - Scale horizontally
+    - Manage change in automation
+    - Don't guess about capacity
+  - Best Practices
+    - Foundations
+    - Change Management
+    - Failure Management
+  - Key Services
+    - IAM
+    - VPC
+    - CloudTrail (records AWS API calls)
+    - AWS Config
+    - CloudFormat
+    - Glacier
+    - KMS
+- **Performance Efficiency**
+  - Design Principles
+    - Use 3rd party services where there is lacking knowledge (e.g. NoSql, ML, media transcoding)
+    - Deploy your solution in multiple regions
+    - Use Serverless
+    - Experiment often
+    - Use the tech that best aligns with your use case
+  - Best Practices
+    - Selection
+      - Multiple optimization approaches are often necessary to fit the system to the workload(s)
+      - Compute
+        - Instance vs Containers vs Functions
+      - Storage Considerations
+        - Access Methods:
+          - block
+          - file
+          - object
+        - Patterns of Access:
+          - random
+          - sequential
+        - Throughput
+        - Frequency of Access 
+          - online
+          - offline
+          - archival
+        - Frequency of Update
+          - WORM
+          - Dynamic
+        - Durability constraints        
+    - Review
+    - Monitoring
+    - Tradeoff
+  - Services
+    - S3 lets you change from SSD to HDD
+- **Cost Optimization**
 
 
 
