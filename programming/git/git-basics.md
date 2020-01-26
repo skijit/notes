@@ -84,18 +84,28 @@ Git
 
 ### Tag
 - A tag is used to label and mark a specific commit in the history.  
+- `git tag` to view existing tags
 - Typically this is used to mark release points.
 - Two types of tags in Git:
 	- **Lightweight tag**
 		- Temporary tag that doesn't change
 		- Has a name
 		- Typically used for local workspace
+		- `git tag <tag-name>` to create a tag
+			- `git tag <tag-name> <commit-hash>` to create a tag for an older commit
 	- **Annotated tag**
 		- Add taggers name, email, date
 		- Has a name
 		- Has a comment
 		- Has a signature
 		- Typically used to mark a comit for a release
+		- `git tag -a <tag-name> -m <msg>`
+			- `git tag -a <tag-name> <commit-hash> -m <msg>` to create an annotated tag for an older commit
+- `git push origin <tag-name>`: push tags to remote
+	- or `git push origin --tags` to push all tags
+- `git tag -d <tag-name>` to delete tags
+	- `git push origin -d <tag-name>`: to delete tags from remote
+- `git checkout -b <branchname> <tagname>` to checkout tags
 
 ## Short Introduction To git-flow
 Screencast [here](https://vimeo.com/16018419)
@@ -642,3 +652,89 @@ from [this](http://www.developerhandbook.com/git/git-for-net-developers/) blog p
 ## Misc
 - How to discard changes on a single file: `git checkout -- <file>`  
 - Discard **All** changes in working area `git clean -nfd`  (this is the dry-run... to finalize, remove the `-n` parameter)
+
+## Git Log
+- Paging through the output (w `less`)
+	- `git log` output is piped through a pager (not an editor- like `vim`)
+	- usually, the pager is `less`
+	- `less` is compatible with many search patterns from `vim`
+	- `less` cheat sheet
+		- Scroll: up/down arrow buttons (or j and k)
+		- Get current position: `ctrl + G`
+		- Search:
+			- `/` text (`/skj`) or regexp `/p{2}` to search *forward*
+			- `?` text (`/skj`) or regexp `/p{2}` to search *backward*
+				- also good when you don't want to have to escape subsequent slashes (ie in a URL)
+			- `n` for next match
+			- `N` for prev match
+		- Specific position in output:
+			- Beginning: `g`
+			- End: `G`
+			- Specific line: `<any number> + g`
+		- Mark a position: `ma` (is marked as 'a')
+		- Return to a marked position `'a`
+		- Exit: `q`
+	- you can set the pager to vim with git config --global core.pager 'vim -'
+		- use `git config --list` 
+- Multifile:
+	- Controlling output:
+
+	- Filtering:
+		- `git log --author jschmoe`
+		- `git log -n 20` only shows 20 commits
+- Single File:
+	- Controlling output:
+
+	- Filtering:
+
+	
+
+- `git log <directory>`: restricts to commits with a changed file in that directory
+- `git log <branch-name>`: restricts to just that branch
+- `git log --no-merges`: doesn't show merge commits
+	- or `git log --merges` to show only merges
+- `git log -- <filename1> <filename2>`: to isolate to just commits which affect those files
+- `git log --since=8am` or `5 minutes ago`
+- `git log --since=yesterday`
+- `git log --before={2017-12-31}`
+- `git log --before={2017-12-31} --after={2017-06-01}`
+	- or `git log <since>..<until>`
+	- the since can also be a branch name, so `git log master..feature` will till you any commits in feature that are not in master.
+	- likewise `git log feature..master` will show you all of the commits in feature but not master
+	- or you can use `git diff master..feature` to see the diffs
+- `git log --grep="search-term"`  - only searches the commit message
+- `git log -p` will show you each of the diffs (patch)
+	- alternately, you can use `git show <sha>` to see the details or `git show <sha> --stat`
+- `git log --graph --decorate --all` shows a graphical version of commit, and decorate shows you the branch names.  --all helps with resolving the branch names (since each commit can be a part of multiple branches, you want to find the one that was on the original command line) and tags
+
+- `--one-line` is nice, but if you want to show the date
+
+- a populate `pretty` format: `git log --pretty=format:"%h %ad | %s%d [%an]" --graph --date=short`
+	- `%h`: abbreviated hash
+	- `%d`: commit decorations
+	- `%ad`: commit date
+	- `%s`: comment
+	- `%an`: author name
+	- todo: google the pretty formats 
+
+- `git shortlog` is a special format of log which groups each commit by author and displays the first line of each commit.
+	- use the `-n` flag to get more than the default (5) number of commits per author
+
+- to add an alias:
+	- `git config --global alias.<name-of-alias> "<command">`
+	- then you can add any number of additional parameters when you invoke `git <name-of-alias>`
+- todo: 
+	- git alias examples and can you add to it?
+	- git structure notes
+
+
+
+
+## Git Config
+- View your git config settings: `git config --list`
+- To set global settings: `git config --global user.email "blah@email.org"`
+- To set global settings: `git config --local user.email "blah@email.org"`
+	- only applies to the current git repo
+
+
+
