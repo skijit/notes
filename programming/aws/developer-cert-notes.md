@@ -1148,7 +1148,7 @@ AWS Certifcation Notes
     - Prepare
     - Operate
     - Evolve
-  - Key Services
+  - Key Services  
     - CloudFormation
     - AWS Config
     - CloudWatch
@@ -1230,16 +1230,90 @@ AWS Certifcation Notes
           - offline
           - archival
         - Frequency of Update
-          - WORM
+          - Write-Once Read-Many (WORM)
           - Dynamic
-        - Durability constraints        
+      - Database
+        - Availability
+        - Consistency
+        - Partition Tolerance
+        - Latency
+        - Durability
+        - Scalability
+        - Query Capability
+        - Other considerations
+          - RDBMD vs NoSql
+          - Search Engine (or data warehouse) instead of Database      
     - Review
-    - Monitoring
+    - Monitoring - use CloudWatch, and/or Kinesis/SQS/AWS Lambda
     - Tradeoff
+      - Caching solutions
+        - Elasticache
+        - DynamoDB Accelerator (DAX)- distributed caching in front of Dynamo
+      - CloudFront: CDN
   - Services
     - S3 lets you change from SSD to HDD
-- **Cost Optimization**
+    - CloudWatch
+    - RDS allows read-only replicas, Dynamo works at any scale
+    - VPC Endpoints and AWS Direct Connect can reduce nw distance and jitter
+    - AWS Snowball- Physical devices for transporting large datasets into the cloud
+- **Cost Optimization**  (basically emphasizing using higher-level PAAS, FAAS, etc. over IAAS)
+  - Design Principles
+    - Adopt a consumption model
+      - Rather than elaborate forecasting, just turn stuff off when you don't use it (like dev/test environments)
+    - Measure Overall efficiency
+    - Stop Spending mondy on data centers
+    - Analyze and attribute expenditure
+    - Use managed and application level services to reduce the cost of ownership
+  - Best Practices
+    - Expenditure Awareness
+      - AWS Cost Explorer to track your spend 
+      - AWS Budges lets you send notications if your usages  or costs are not inline with forecasts
+      - Tag resources (esp S3 and EC2 instances) withthings like cost centers, workload names or owners   
+    - Cost Effective resrouces
+      - You might run a task on a smaller instance, which by virtue of taking longer, will incur higher cost than a larger instance
+      - On-Demand Instances let you pay for compute by the hour
+      - Reserved Intances let you resere capactity and off savings up to 75% of On-Demand
+      - Spot instances lets you leverage unused EC2 capacity and offer savings up to 90% off On-Demand pricing
+        - appropriate where system can tolerate a fleet of servers which individual servers can come and go dynamically, like stateless web servers, batch processing, or HPC and big data
+    - Matching Supply and demand    
+    - Optimizing over time
+      - Be aware of new managed AWS services which provide additional savings
+    - Key Services
+      - AWS Cost Explorer
+      - AWS Budgets
+      - CloudWatch 
+      - Trusted Advisor 
+      - Aurora on RDS to remove licensing costs
+      - Direct Connect + Cloud Front to optimize data transfer
+      - AWS News Blog and What's New section on the website
 
+## Useful Information
+- **Secure Initial Account Setup**
+  - Plan for Least Priviledges by attaching users to groups
+    - Including at billing and account level
+  - Monitor Users (see below for more info)
+  - Use CloudFormation (or similar) to automatically standing up logging and monitoring features for new solutions
+    - For consistency across multiple accounts too
+  - IAM Best Practices
+    - DOn't use the root account
+    - Enable MFA for the root acount
+    - Automate creation of IAM users/groups
+    - Use AWS or User-managed policies to grant permissions
+    - Use AWS Security Token Service if you have an existing identity federation provider to grant external identities secure access to AWS resources without creating IAM Users
+  - Best Practices
+    - Create a security email list
+    - Create a SNS topic and subscribe the security email list to it
+      - Follow this same procedure for billing too
+    - Enable CloudTrail (in all region) which captures global (security) application events
+      - Send logs to a S3 bucket that your security team owns
+    - Create CloudWatch Alarms for security / nw related API activity
+    - AWS Config: monitors history of resource fonciguration changes (for monitoring)
+    - Use AWS Budgets
+- **Proper IAM Setup**
+  - 
+
+
+- **Proper IAM Setup**
 
 
 
