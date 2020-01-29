@@ -517,7 +517,7 @@ AWS Certifcation Notes
 - VPC is a Virtual Private Cloud
 - It may share the same physical network as others but it is logically isolated
 - You can
-  - Specify an IP addres range
+  - Specify an IP address range
   - Add subnets
   - Associate security groups
   - Configure route tables
@@ -1365,7 +1365,45 @@ AWS Certifcation Notes
     - CloudWatch provides an alternative central logging facility
       - has alerts
       - has built in analysis features and AWS partners have all sorts of additional options 
-    
+- **VPC Design Best Practices**
+  - The variety of networking options in AWS can be challenging if you're not a nw pro
+  - Universal NW Principles which apply...
+    - Implement non-overlapping nw ranges for private (on-prem) nws to simplify ability to route bewteen remote nws
+  - Ensure that VPC nw range doesn't overlap with your networks other private (on-prem) nw ranges
+  - Don't allocate all your IP's at once - keep some capacity
+  - Divide your VPC nw range evenly across all AZ's in a region
+  - Create 1 subnet per AZ for each group of hosts that have unique routing requirements (e.g. public and private)
+  - Size your VPC CIDR and subnets to support significant growth from expected workflow
+  - Read the VPC docs for Amazon
+- **Tagging Strategies** 
+  - Implement automated tools to manage tags - see Resource Groups Tagging API
+  - Better to have too many tags
+  - Cost Explorer lets you break down costs by tag
+  - Use a consistent naming / casing convention
+  - IAM Conditions can include tags... ex...
+    - Limit API calls to specific environments    
+  - Some common examples of tags:
+    - Technical Tags
+      - Name
+      - Application ID - identify disparate resources for an application
+      - Application Role - function of a particular resrouce (e.g. web server, database, etc.)
+      - Cluster - Resource farms that share a common configuration
+      - Environment - dev/tst/prd
+      - Version 
+    - Tags for Automation
+      - Date/Time - time a resource should be started, stopped, deleted, rotated, etc
+      - Opt-in/Opt-out 
+      - Security - whether to enable encryption, VPC Flow Logs, etc.
+    - Business Tags
+      - Owner
+      - Cost Center/Business Unit
+      - Customer
+      - Project
+    - Security Tags
+      - Confidentiality
+      - Compliance
+- **CLI Tips**
+
 
 
 
