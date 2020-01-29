@@ -1310,10 +1310,63 @@ AWS Certifcation Notes
     - AWS Config: monitors history of resource fonciguration changes (for monitoring)
     - Use AWS Budgets
 - **Proper IAM Setup**
-  - 
+  - These are techniques in addition to what was mentioned before
+  - Define groups based on organizational role rather than technical commonality
+  - Use MFA (something you have vs something you know) for admin or privileges accounts
+  - Rotate credentials regularly
+  - Use Managed Policies (presets) over group and user policies
+  - Policies should be granular (each should have only a few permissions)
+  - For EC2 credentials, use roles instead of access keys
+    - IAM roles provide a temporary access/secret key to an instance, which are what you need to do manually anways
+  - Use roles rather than user user credentials to grant cross-account access
+    - You create a role and assign to another account
+    - Then the account can delegate the role to any of its users
+    - No need for keypair rotation, etc.
+  - Use IAM conditions to make permissions more policies
+    - Examples
+      - Limiting developer IAM accounts to only work in a given subnet
+      - Locking down admin accounts to only work from a specific IP range
+      - Granting a permission for a specific time window
+- **Security Logging Capabilities**
+  - All AWS Services provides operational log files or metrics
+  - Many AWS Services generate security log data
+    - Audit logs for access
+    - Configuration Changes
+    - Build Events
+  - Best Practices
+    - Enable Audit logging wherever available
+    - Use secure, durable storage for log files
+    - Develop log lifecycle policies (storage, deletion, aggregation, etc.)
+    - Analyze your logs 
+  - CloudTrail
+    - Provides a history of API calls for an account
+    - Facilitates
+      - Security Analysis
+      - Resource Change Tracking
+      - Compliance Auditing
+    - Enable always!
+    - Delivers log files to S3 every 5 min
+    - Integrates with CloudWatch and Lambda
+  - AWS Config (different from AWS Systems Manager Parameter Store)
+    - Resource Inventory
+    - Configuration Change Notification and History
+    - Change snapshots are sent to S3 buckets
+    - To enable in S3: goto Server Access Logging
+  - Elastic Load Balancing, CloudFront, RDS, RedShift Logs
+    - also can be turned on and drop data into S3 buckets
+  - VPC Flow Logs
+    - Captures IP traffic in and out of the VPC
+    - Can be applied at the VPC, Subnet, or individual NIC-level
+    - Stored with CloudWatch logs (not S3!)
+    - Good for network debugging
+  - Centrally Managed Log Data in AWS
+    - Most of the services will log to S3 buckets
+    - You choose the bucket and tell the service what prefix to use
+    - CloudWatch provides an alternative central logging facility
+      - has alerts
+      - has built in analysis features and AWS partners have all sorts of additional options 
+    
 
-
-- **Proper IAM Setup**
 
 
 
