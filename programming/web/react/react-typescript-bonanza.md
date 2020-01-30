@@ -485,6 +485,9 @@ type ButtonProps = React.ComponentProps<typeof Button>; // no problem! grab your
   - Sometimes when you have functions defined within a function component, they'll be redefined as part of the render cycle 
     - That's lame
   - Difference between useCallback and useMemo is basically that useMemo will cache the return values
+  - **Important**:  Don't declare and consume the memo/async in the same component.
+    - see [this](https://kentcdodds.com/blog/usememo-and-usecallback) blogpost
+    - TL/DR: the benefit of useMemo/useAsync is to cache a value/function to avoid triggering unnecessary re-renders in a **child component** which receives them (as props).  
   - Don't use side-effect hooks in callbacks or memos
   - see [this blog](https://nikgrozev.com/2019/04/07/reacts-usecallback-and-usememo-hooks-by-example/) for more context, but here's a quick example:
 

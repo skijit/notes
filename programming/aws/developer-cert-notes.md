@@ -1403,7 +1403,10 @@ AWS Certifcation Notes
       - Confidentiality
       - Compliance
 - **CLI Tips**
-
+  - [see ref](https://docs.aws.amazon.com/cli/latest/reference)
+  - `aws [options] <command> <subcommand> [parameters]`
+  - `[options]` will refer to your difference services (e.g. `ec2`)
+  
 
 
 
