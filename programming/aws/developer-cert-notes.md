@@ -1407,6 +1407,30 @@ AWS Certifcation Notes
   - `aws [options] <command> <subcommand> [parameters]`
   - `[options]` will refer to your difference services (e.g. `ec2`)
   
+## Practice Questions
+- For Certified Developer Associate Exam
+- AMI's are stored in a particular region
+- IAM roles are available across all regions
+- Cloud Formation templates can be launched in different regions, but if you're using a region-specific resource like AMI's it might require changes
+- In SQS, after a maximum number of retries, you can send a message to a dead-letter queue
+- S3 Overwrite PUT's and DELETE's: Eventual Consistency
+- Concurrency model 
+  - Optimistic Concurrency: checking a value upon save that it hasn't changed
+  - Pessimistic Concurrency: locks the row or column
+  - But DynamoDB doesn't support item locking
+- SNS: Publish/Subscribe
+- You can have an SQS subscribe to SNS events
+- Use support center in AWS Console to increase limits
+- Timeouts usually indicate a SG issue
+- All subnets in a VPC have default routes to all other subnets in the VPC
+
+- Todo Study
+  - `Fn:FindInMap`
+    - always looks in "mappings" section of template
+    - is just an array of references: `{"Fn::FindInMap": [ "RegionMap", { "Ref": "AWS::Region }, "32"]}`
+  - Conditional Writes in DynamoDB
+
+## Blue / Green Deployment Solution
 
 
 
