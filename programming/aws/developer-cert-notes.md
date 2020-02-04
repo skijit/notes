@@ -1439,7 +1439,13 @@ AWS Certifcation Notes
   - Conditional Writes in DynamoDB
 
 ## Blue / Green Deployment Solution
-- Continue here
+- One example:
+  - Elastic Beanstalk solution which clones the current environment and dose an in-place installation on the old, then swaps again
+  - AWS CodePipeline Pipeline is triggered when you deposit a new build on an S3 Bucket
+  - Lambda functions handle cloning the EC2, to swap URL's, and terminating that cloned environment when complete
+  - AWS CodeBuild projects can swap URL's also and run tests
+  - 
+
 
 ## Notes From Sample Questions
 - Store database credentials in `AWS Secrets Manager`

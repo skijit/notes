@@ -40,3 +40,5 @@ Lambda
 - Learn about stage variables: https://docs.aws.amazon.com/apigateway/latest/developerguide/stage-variables.html
 
 - Referencing different version of a lambda: https://aws.amazon.com/blogs/compute/using-api-gateway-stage-variables-to-manage-lambda-functions/
+
+- continue here https://aws.amazon.com/serverless/
