@@ -1105,6 +1105,12 @@ AWS Certifcation Notes
   - Each microservice should have its own CI/CD pipeline
   - "Design for Failure"
 
+## CodeBuild
+- pay only for the time you use it
+- works on multiple runtimes
+- Continuous Integration Service
+- You can use existing CI/CD tools, like Jenkins, and CodeBuild is just for the worker nodes
+
 ## Elastic Beanstalk
 - Quickly deploy and manage without worrying about infrastructure
 - The system will handle scaling, load balancing, provisioning, health monitoring
