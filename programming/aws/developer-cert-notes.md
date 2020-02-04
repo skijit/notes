@@ -1110,6 +1110,8 @@ AWS Certifcation Notes
 - works on multiple runtimes
 - Continuous Integration Service
 - You can use existing CI/CD tools, like Jenkins, and CodeBuild is just for the worker nodes
+- Vs CodeDeploy
+  - CodeDeploy is for Ec2 instances
 
 ## Elastic Beanstalk
 - Quickly deploy and manage without worrying about infrastructure
