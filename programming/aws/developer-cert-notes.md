@@ -2,7 +2,8 @@ AWS Certifcation Notes
 ==============
 
 - [source](https://learning.oreilly.com/videos/aws-certified-developer)
-- [certification notes](https://aws.amazon.com/certification/certified-developer-associate/)
+- [certification documentation](https://aws.amazon.com/certification/certified-developer-associate/)  
+- [certifcation study sources](https://aws.amazon.com/certification/certification-prep/)
 
 ## Basics
 - Cloud9 is a browser-based development environment for AWS
@@ -877,6 +878,7 @@ AWS Certifcation Notes
   5. View in Console
 
 ## SQS
+- [sqs faq](https://aws.amazon.com/sqs/faqs/)
 - Simple Queue Service
 - Secure, durable, HA, hosted queue for decoupling distributed component
 - Security
@@ -885,7 +887,7 @@ AWS Certifcation Notes
 - At-least-once and Only-Once (FIFO) modes available
 - Scalable / transparent
 - Customizable: each queue can be different (delays, use S3 or dynamo for larger items, split messages, etc.)
-- 2 types
+- 2 types: Trade off scalability for sequential consistency
   1. Standard
     - Unlimited Throughput
     - At least once delivery (ie the same message might get enqueued more than once)
@@ -899,28 +901,57 @@ AWS Certifcation Notes
 - Walkthrough
   - When you name your queue, you should suffix the type of queue (e.g. fifo) to keep things clear
   - Configuration options (for a FIFO queue)
-    - Default Visibility Timeout: the length of time that a message received from a queue will be invisible to other receiving components
-      - Because to remove the message- this means a component has to delete it from the queue
-    - Message retention period: how long it holds a message before deleting it (1-14 days)
+    - `Default Visibility Timeout`: the length of time that a message received from a queue will be invisible to other receiving components.
+      - Consumers have 2 operations: Read and Delete.  But the queue doesn't know if a consumer has successfull received or processed a message it has served on a read, so it's up to the consumer to delete it.  This timeout hides the message in the queue from other consumers while it waits for a Delete message from the given consumer.
+      - Basically- it's a mutex
+      - Default value is 30sec
+    - `Message retention period`: how long it holds a message before deleting it (1-14 days)
     - Maximum message size (256 KB is system max)
-    - Delivery Delay: Amount of time to delay the first delivery of all messages added to the queue (freshness / cool-down period)
-    - Receive Message wait time: max time that a long polling receive call will wait for a message to become available before returning an empty response
-      - Long polling is a technique to reduce costs which avoids unnecessary calls to the q service (which usually result in empty response)
+    - `Delivery Delay`: Amount of time to delay the first delivery of all messages added to the queue (freshness / cool-down period)
+    - `Receive Message wait time`: max time that a long polling receive call will wait for a message to become available before returning an empty response
+      - Long polling is a technique to reduce costs which avoids unnecessary calls to the q service (which usually result in empty response).  It only returns on timeout or when you have a message.
       - Short polling is the default
-    - Content-based de-duplication: You set a de-dupe interval and any messages whose hashes (based on content) have already been seen, will not be delivered
-    - Dead-letter queues: what to do with messages have been unsuccessfully processed
+    - `Content-based de-duplication`: You set a de-dupe interval and any messages whose hashes (based on content) have already been seen, will not be delivered
+    - `Dead-letter queues`: what to do with messages have been unsuccessfully processed
     - Server side encryption
       - whether you encrypt and how long you cache the KMS key
   - With queue actions in console, you can...
     - send a message
       - Message Group Id: Specifies that  message belongs in a specific message group.   
         - Messages in the same message group are always processed sequentially
+          - It will only serve messages in the same message group to one consumer at a time
         - Messages in a different message group might be processed out of order
       - You can manually specify a deduplication id too (it doesn't have to be content-based)
     - view / delete a message
   - You can use the CLI / SDK to poll for messages too
     - Get the URL of the SQS
     - cli: `aws sqs receive-message --queue-url <url>`
+- SQS has poison pill functionality - a standard way a of enqueuing a message which, when processed by the consumer will instruct the consumer to shut down/stop
+- Vs SNS
+  - SNS is a push to multiple subscribers
+  - SQS is a polling model for decoupling send/receive components
+  - But SQS can receive notifications from SNS
+- Vs Kinesis Streams
+  - Kinesis stream is real-time processing of big data
+- Billing
+  - per request plus data egress (if outside region)
+  - Free Tier provides 1 million requests per month
+- Enqueueing and Dequeueing
+  - On enqueue: you'll get an ID which confirms it was delivered to the queue
+  - On reading a message: you'll get a reciept handle that you have to provide when deleting the message
+- Queue type (fifo vs standard) is ummutable
+- Inflight messages: messages that a received by a consumer but not yet deleted.
+  - There are system limits for this
+- Messages can stay in the queue between 1-14 days (default is 4)
+- Anonymous access is possible in a message queue
+
+
+
+
+
+- [AWS MQ](https://aws.amazon.com/amazon-mq/) is to port your existing message queue to the cloud
+  - Supports the industry-standard APIs and Protocols
+
 
 ## SNS
 - Simple NOtification Service
@@ -1447,6 +1478,7 @@ AWS Certifcation Notes
   - Conditional Writes in DynamoDB
 
 ## Blue / Green Deployment Solution
+[whitepaper](https://d1.awsstatic.com/whitepapers/AWS_Blue_Green_Deployments.pdf)
 - One example:
   - Elastic Beanstalk solution which clones the current environment and dose an in-place installation on the old, then swaps again
   - AWS CodePipeline Pipeline is triggered when you deposit a new build on an S3 Bucket
