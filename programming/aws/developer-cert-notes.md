@@ -438,6 +438,7 @@ AWS Certifcation Notes
   - Easy monitoring and metrics dashboard
   - Easy/scheduled backups and point-in-time recovery (within last 35 days)
   - Built-in durability and high-availability
+    - Automatically replicates data across 3 facilities in an AWS region
   - You can use global tables to keep regions in sync
 - Basics
   - Collections are called 'Tables'
@@ -473,6 +474,10 @@ AWS Certifcation Notes
   - Dynamo manages updating the index table as changes get made
   - When you create an index, you specify which other attributes should get projected from the base table
     - at a min, you get the table primary key attribute(s)
+- Consistency Model
+  - **Eventually Consistent Reads (default)**  (full consistency is usually within a second)
+  - **Strongly Consistent Reads**
+  - Transactions can be used when coordinating CRUD across multiple tables
 - Read/Write throughput capacity
   - When you specify an index, you have to set throughput capacity which affects the cost
   - This is so AWS can reserve the appropriate resources to meet the capacity, of course
@@ -496,10 +501,18 @@ AWS Certifcation Notes
   - Throughput calculations (for provisioned throughput) Examples:
     - Objective: strongly consistent read 80 items, each 3KB, per second from a table
       - Each read gets 1 read capacity unit bc 3KB/4KB rounds up to 1
-      - 1 rad capacity unit per item * 80 reads per second = 80 read capacity units
+      - 1 read capacity unit per item * 80 reads per second = 80 read capacity units
     - Objective: write 100 items (512 B) per second for a table
       - 512B / 1B rounds up to 1 capacity unit per item
       - 1 * 100 writes per second = 100 capacity units
+  - Billing
+    - You pre-defined (provision) your read/write throughput, after which you are billed by the hour when exceeding the free tier.
+      - Although, you specify throughput on the table-level, you exceed the free tier when the cumulative amount goes over.
+      - Min table throughput: 1 write CU and 1 read CU.
+      - Total free tier threshold: 25 write CU, 25 read CU
+    - So: it's a provisioned model.  You reserve in advance.  
+    - But: you still have auto-scaling.  You can set a scaling policy such that a table scales up or down based on it's utilization.
+    
 - Point in Time Recovery
   - You can restore to any time in the last 35 days
   - Enable using the management console, dynamo API, or AWS API
@@ -513,7 +526,13 @@ AWS Certifcation Notes
     - but:
       - you need to reset autoscaling
       - any other services, such as monitoring
-
+- API's
+  - [PutItem](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_PutItem.html)
+  - [BatchWriteItem](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchWriteItem.html)
+  - [GetItem](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_GetItem.html)
+  - [BathGetItem](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchGetItem.html)
+    - You get up to 100 items from 1 (or more!) tables by specifying the corresponding ID's
+  
 ## VPC
 - You create a virtual network that resembles a physical network, but with the scalable infrastructure
 - VPC is a Virtual Private Cloud
@@ -1613,8 +1632,24 @@ AWS Certifcation Notes
 - SNS Details/Use cases
 
 
-
-
+## Multi-Region Architectures
+- (This is a big topic, and deserves more details, but at a superficially high level...)
+- Why?
+  - Reduced latency for global users
+  - Local compliance on data storage
+  - Regional Failover solutions
+- 2 architectures
+  - Completely Distinct, isolated instances in each region
+  - Multi-tenancy: all users access same URL but system can redirect to closest region
+    - Better option for accomplishing the 3 goals listed above
+- Main challenge is dealing with data replication, bc services are stateless and be scaled out pretty easily.
+  - First partition you data sets into those which can be region-specific and those which need replication across the entire architecture (master data)
+  - For the ones which need replication, choose one master data region and set up read-only replicas for the other regions
+  - Services can be instantiated in each region as appropriate
+  - A service which writes master data and is deployed in the master data region can write directly to it.  Then this data will propagate to the other regions' replicas.
+  - That same service in the non-master-data region would need to place a message on a queue in the master-data-region, which will be eventually processed and update the master data, and then this data will propagate back to the other regions.
+- You can configure Route53 DNS to use Geoproximity routing to make sure users accessing the same URL will be routed to the appropriate region.
+  
 
 
 
