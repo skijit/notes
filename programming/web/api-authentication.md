@@ -41,6 +41,7 @@ Securing an API
 ## Cookies
 - Generally, the same origin policy prevents sites from reading other sites cookies
 - Ads work usually by the federation of individual sites' cookie data in an ad network
+- Third party cookies involve cookies which are set by requests (e.g. images, iframes, scripts, etc.) to a different domain than the main document
 
 ## Big themes
 - Vs Cookie-based sessions

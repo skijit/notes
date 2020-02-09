@@ -36,11 +36,6 @@ Lambda
 - using other frameworks - check the blueprints
 - big picture: we're not running locally so much anymore (hence sandbox environments)
 
-
-- Learn about stage variables: https://docs.aws.amazon.com/apigateway/latest/developerguide/stage-variables.html
-
-- Referencing different version of a lambda: https://aws.amazon.com/blogs/compute/using-api-gateway-stage-variables-to-manage-lambda-functions/
-
 - continue here https://aws.amazon.com/serverless/
 
 ## Integration with Other AWS Services
@@ -51,29 +46,43 @@ Lambda
   - Run on a schedule
 - Each of these services will send an event (each with a different structure) formatted as JSON and the runtime will deserialize to an object which gets passed to your function handler.
 - For compiled languages (C#, Java, Go), Lambda libraries provide definitions for event types
-- [Event Source mapping](https://docs.aws.amazon.com/lambda/latest/dg/invocation-eventsourcemapping.html) is closer to a 'pull' trigger where Lambda will read data from another service (e.g. SQS, DynamoDB, Kinesis) and generate an event and invoke the function.
+- **Pull**: [Event Source mapping](https://docs.aws.amazon.com/lambda/latest/dg/invocation-eventsourcemapping.html) is closer to a 'pull' trigger where Lambda will read data from another service and generate an event and invoke the function.
+  - SQS
+  - DynamoDB
+  - Kinesis
   - Requires Lambda to have the `execution role` on the other service
-- Other triggers are more 'push' oriented
+- **Push**: Other triggers are more 'push' oriented
   - To set this up:
     - Grant the other service permission in the function's resource-based policy
     - Configure service to generate events and invoke your function
   - Invocations can be synchronous or asynchronous
     - Synchronous:
       - Might retry on errors
+      - Elastic Load Balancing
+      - Cognito
+      - Lex
+      - Alexa
+      - API Gateway
+      - CloudFront
+      - Kinesis
+      - Step Functions
     - Aynchronous:
-      - Lambda queues the event before passing it to function
+      - Lambda queues (internally) the event before passing it to function
       - Other services gets a success on queue
-      - If Error, Lambda retires and can send failed events to a dead-letter queue that you have to configure
-  - Synchrnous Services:
-    - Elastic Load Balancing
-    - Cognito
-    - Lex
-    - Alexa
-    - API Gateway
-    - CloudFront
-    - Kinesis
-    - Step Functions
-  - Asynch Services
-    - https://docs.aws.amazon.com/lambda/latest/dg/lambda-services.html#intro-core-components-event-sources
+      - If Error, Lambda retires and can send failed events to a dead-letter queue that you have to configure 
+      - S3
+      - SNS
+      - Simple Email Service
+      - CloudFormation
+      - CloudWatch
+      - CodeCommit
+      - Config
+      - Iot
+      - CodePipeline
+
+## Integration with API Gateway
+- Learn about stage variables: https://docs.aws.amazon.com/apigateway/latest/developerguide/stage-variables.html
+- Referencing different version of a lambda: https://aws.amazon.com/blogs/compute/using-api-gateway-stage-variables-to-manage-lambda-functions/
+
 
 

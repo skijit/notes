@@ -730,6 +730,16 @@ AWS Certifcation Notes
 - Groups vs Roles
   - Groups: For Users
   - Roles: Attach to entities, like an EC2 instance
+- Misc Notes
+  - Actions are the atomic-level security information
+    - They're available OOTB for the platform
+  - A Permission connects an action to a resource
+    - (...and other things, like conditions, effect (ie allow or deny))
+  - A policy is a group of permissions
+  - You can define your own policy or use pre-defined ones
+  - The IAM Permissions Visual Editor is really useful (the alternative is using JSON editing directly)
+  - Groups are collections of users
+  - Groups are assigned policies (if you follow best practices)
 
 ## Lambda
 - Serverless runtime
@@ -920,9 +930,10 @@ AWS Certifcation Notes
 - Walkthrough
   - When you name your queue, you should suffix the type of queue (e.g. fifo) to keep things clear
   - Configuration options (for a FIFO queue)
-    - `Default Visibility Timeout`: the length of time that a message received from a queue will be invisible to other receiving components.
+    - `Default Visibility Timeout`: the length of time that a message received from a queue will be invisible to other receiving components, after it is consumed once.
+      - it's a mutex
       - Consumers have 2 operations: Read and Delete.  But the queue doesn't know if a consumer has successfull received or processed a message it has served on a read, so it's up to the consumer to delete it.  This timeout hides the message in the queue from other consumers while it waits for a Delete message from the given consumer.
-      - Basically- it's a mutex
+      
       - Default value is 30sec
     - `Message retention period`: how long it holds a message before deleting it (1-14 days)
     - Maximum message size (256 KB is system max)
@@ -999,7 +1010,7 @@ AWS Certifcation Notes
   - traffic mgmt
   - monitoring
   - version mgmt
-  - sdk generation
+  - sdk generation (<- Wow!)
 - Key Components
   - API Gateway API: The end-points that connect to backing services
     - Collection can be deployed
@@ -1503,8 +1514,6 @@ AWS Certifcation Notes
   - AWS CodePipeline Pipeline is triggered when you deposit a new build on an S3 Bucket
   - Lambda functions handle cloning the EC2, to swap URL's, and terminating that cloned environment when complete
   - AWS CodeBuild projects can swap URL's also and run tests
-  - 
-
 
 ## Notes From Sample Questions
 - Store database credentials in `AWS Secrets Manager`
@@ -1627,7 +1636,6 @@ AWS Certifcation Notes
       - Trigger on the change of status in your environment
 
 ## Other Todos
-- When/how to use a multi-region application
 - SQS 
 - SNS Details/Use cases
 
