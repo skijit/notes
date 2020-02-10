@@ -83,6 +83,9 @@ Lambda
 ## Integration with API Gateway
 - Learn about stage variables: https://docs.aws.amazon.com/apigateway/latest/developerguide/stage-variables.html
 - Referencing different version of a lambda: https://aws.amazon.com/blogs/compute/using-api-gateway-stage-variables-to-manage-lambda-functions/
+- What is th point of lambda aliases?
+- what about lambda timeouts? cold start, etc?
+- when to use lambda callback (for return values) in node platform?
 
 
 

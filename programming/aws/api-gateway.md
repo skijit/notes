@@ -82,14 +82,61 @@ API Gateway
   - This is a global setting for your entire API
 - Generating an API Key
   - For each method, you can specify whether an API Key is required
-- Access Control for API
-  - One example: Letting a user view (only) the API in the console
-    - Create an IAM user with access to the console (ie has a password)
-    - Assign a group to the user
-    - Attach a policy to the group
-      - Provided policies aren't specific enough so create a new policy
-      - Visual Editor for Policy is more informative (better for exploratory work) than entering JSON manually
+### Access Control for API
+- Example: Letting a user view (only) the API in the console
+  - Create an IAM user with access to the console (ie has a password)
+  - Assign a group to the user
+  - Attach a policy to the group
+    - Provided policies aren't specific enough so create a new policy
+    - Visual Editor for Policy is more informative (better for exploratory work) than entering JSON manually
+- Example:
+  - You can create a permission to allow access to only one method (e.g. a GET on a resource)
+  - Then in the API Gateways method request (in the diagram), set Authorization to AWS_IAM
+- Default authentication for a method is "none"
+- We can use PostMan to send API requests with IAM users (ie w credentials)
+  - In the Authorization tab, you select "AWS Signature"
+  - Then insert your AccessKey, SecretKey, AWSRegion, ServiceName, SessionToken
+- ARN shortcuts
+  - `arn:aws:apigateway:region::/restapis/*` : use this when you want to give access to all models, stages, resources, and methods in the region
+  - `arn:aws:apigateway:region::/restapis/api-id/*`: full access for a particular api
+  - `arn:aws:apigateway:region::/restapis/api-id/resources/resource-id/*`: full access for a particular resource
+  - `arn:aws:apigateway:region::/restapis/api-id/resources/resource-id/methods/GET`: restrict to a particular method
+- CORS controls: Enable and specify the domains you want to provide access to
+- API Keys: you assign a usage plan for each key which defines a usage plan:
+  - Bandwidth
+  - Throttling
+- Custom Authentication using AWS Lambda
+  - also possible
+
+### Lambda-API Gateway Integration
+- Lambda Proxy Integration: whatever payload (body, headers, query string) comes over in the API Gateway, it will be available in the lambda
+  - exposed in `event`
+    - `event.body`
+    - `event.queryStringParameters`
+  - response has to have a particular shape
     
+    ```(typescript)
+    {
+      statusCode: number,
+      headers: {
+        [key:any]: string
+      },
+      body: string,
+      isBase64Encoded: boolean
+    }
+    ```
+  
+- Todo: 
+  - what about using SQS, API Gateway with ECS or other container solution?
+  - mixing serverless and container solutions:
+    - https://www.cloudflare.com/learning/serverless/serverless-vs-containers/
+    - https://www.sumologic.com/blog/serverless-vs-containers/
+    - https://medium.com/@TechMagic/serverless-vs-docker-what-to-choose-in-2019-80cb80f4b680
+    - https://serverless.com/blog/serverless-faas-vs-containers/
+    - https://serverless.com/blog/why-we-switched-from-docker-to-serverless/
+
+  
+  
 
 ## Todo
 - Http2?
