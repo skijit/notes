@@ -67,7 +67,7 @@ API Gateway
     - API Throttling
     - CloudWatch Logs and Metrics
     - Deployment History
-  - When you deploy and API and associate it with a stage, you get a DNS name you can use
+  - When you deploy an API and associate it with a stage, you get a DNS name you can use
     - It probably includes the stage name in the URL (at the end)
 - Map Request Parameters
   - When you look at the diagram in API Gateway, you'll see two hops in the request phase:
@@ -82,6 +82,7 @@ API Gateway
   - This is a global setting for your entire API
 - Generating an API Key
   - For each method, you can specify whether an API Key is required
+
 ### Access Control for API
 - Example: Letting a user view (only) the API in the console
   - Create an IAM user with access to the console (ie has a password)
@@ -125,19 +126,12 @@ API Gateway
       isBase64Encoded: boolean
     }
     ```
-  
-- Todo: 
-  - what about using SQS, API Gateway with ECS or other container solution?
-  - mixing serverless and container solutions:
-    - https://www.cloudflare.com/learning/serverless/serverless-vs-containers/
-    - https://www.sumologic.com/blog/serverless-vs-containers/
-    - https://medium.com/@TechMagic/serverless-vs-docker-what-to-choose-in-2019-80cb80f4b680
-    - https://serverless.com/blog/serverless-faas-vs-containers/
-    - https://serverless.com/blog/why-we-switched-from-docker-to-serverless/
 
-  
-  
+## Supporting older API Versions in API Gateway
+- Not sure the best way to handle this yet.
+- One possibility is to create a totally different API (for major versions) and wrap each one in a generated SDK
 
 ## Todo
 - Http2?
+- what about using SQS, API Gateway with ECS or other container solution?
 

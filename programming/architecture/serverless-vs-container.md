@@ -35,22 +35,3 @@ Comparison of Serverless and Container Solutions
 
 ### WASM as a Service
 
-### Todo: 
-- Cold Start issues
-https://levelup.gitconnected.com/aws-lambda-cold-start-language-comparisons-2019-edition-%EF%B8%8F-1946d32a0244
-https://serverless.com/blog/keep-your-lambdas-warm/
-- For AWS Lambda
-  - After a period of inactivity, typically 15 minutes, your lambda container is destroyed
-  - A cold start occurs when you request the lambda where none is warm (active)
-  - This can take >5 sec
-  - Running in a private VPC can exacerbate the latency
-  - Runtime and memory size don't affect cold start times (this is controversial)
-  - If you have a chain of lambdas, it could be any of those which requires a cold-start (weakest link problem)
-  - Common workarounds
-    - Warm-up lambdas running on a schedule: calls each of your lambda's once every X minutes
-
-  - See [this](https://hackernoon.com/im-afraid-you-re-thinking-about-aws-lambda-cold-starts-all-wrong-7d907f278a4f)
-- Would you run a website, with all its static assets, etc. from lambda?
-
-
-- can you use typescript with lambdas?
