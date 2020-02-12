@@ -106,6 +106,7 @@ Lambda
 ## Versioning, Environments, and Configuration Data w Lambda
 - [src](https://docs.aws.amazon.com/lambda/latest/dg/configuration-versions.html)
 - [medium article](https://medium.com/aaptiv-engineering/https-medium-com-aaptiv-engineering-getting-started-with-versioning-in-aws-lambda-92c617e2f5f1)
+- [configuration](https://www.concurrencylabs.com/blog/configure-your-lambda-function-like-a-champ-sail-smoothly/)
 - Versioning is based off 2 concepts:
   - Versions
   - Aliases
