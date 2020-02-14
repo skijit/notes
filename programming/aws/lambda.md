@@ -55,8 +55,8 @@ Lambda
     - Grant the other service permission in the function's resource-based policy
     - Configure service to generate events and invoke your function
   - Invocations can be synchronous or asynchronous
-    - Synchronous:
-      - Might retry on errors
+    - Synchronous: (Request/Response Contract)
+      - Might retry on errors, but that's up to the caller
       - Elastic Load Balancing
       - Cognito
       - Lex
@@ -65,10 +65,12 @@ Lambda
       - CloudFront
       - Kinesis
       - Step Functions
-    - Aynchronous:
+      - API Gateway (default)
+    - Aynchronous: (Event Contract)
       - Lambda queues (internally) the event before passing it to function
       - Other services gets a success on queue
       - If Error, Lambda retires and can send failed events to a dead-letter queue that you have to configure 
+        - You want to design these as idempotent
       - S3
       - SNS
       - Simple Email Service
@@ -78,6 +80,7 @@ Lambda
       - Config
       - Iot
       - CodePipeline
+      - API Gateway (non-default)
 
 ## Integration with API Gateway
 - Learn about stage variables: https://docs.aws.amazon.com/apigateway/latest/developerguide/stage-variables.html
@@ -102,6 +105,8 @@ Lambda
   - Solutions:
     - Warm-up lambdas running on a schedule: calls each of your lambda's once every X minutes
     - You might specify a header to avoid the normal execution path
+    - Or set up a CloudWatch Event Rule (cron) that pings the lambda
+      - You need to concurrently invoke these events if you want multiple containers warmed
 
 ## Versioning, Environments, and Configuration Data w Lambda
 - [src](https://docs.aws.amazon.com/lambda/latest/dg/configuration-versions.html)
@@ -111,21 +116,24 @@ Lambda
   - Versions
   - Aliases
 - Versions
-  - Each time you publish changes to your function, Lambda creates a new version
+  - Each time you publish changes to your function, Lambda creates a new (immutable) version
   - This includes:
     - Unique ARN
     - Code and dependencies
     - Runtime
     - Function settings, including environment variables
-      - **Note**: Once you've published it, the function's settings are immutable
+      - **Note**: Once you've published it, the function's settings (and everything else) are immutable
 - Aliases
   - Triggers for Lambdas should refer to a specific version (referring to different environments)
   - But you don't want to have to change trigger configurations each time you publish a new version of your lambda
   - Triggers should refer to aliases, which are pointers to specific versions
   - You create an alias for a particular lambda version (e.g. DEV, TST, PRD) and you're done
+- Versioning in real life
+  - The entire environment (IAC) is deployed together (immutable architecture)
+  - The stage is piped into the build
 - Configuration Data
   - here: https://www.concurrencylabs.com/blog/configure-your-lambda-function-like-a-champ-sail-smoothly/
-
+  - todo: also look into the AWS Parameter Store for secrets or secret manager, which are more usable in a IAC scenario
 
 ## TypeScript Support
 - [Totally doable](https://scotch.io/@nwayve/how-to-build-a-lambda-function-in-typescript)  
@@ -134,6 +142,21 @@ Lambda
 
 ## Other Design considerations
 - [read this: todo](https://www.jeffersonfrank.com/aws-blog/aws-lambda-design-considerations/)
+- Memory
+  - You choose how much memory you want to reserve for each execution
+  - This determines the unit price
+  - By choosing a low memory amount, you may increase exectuion time and ultimately pay more
+  - In general, you'll want to figure out your memory amount experimentally and it's not a key design consideration
+  - Lambda's scale horizontally, so that's a more important design factor
+    - Also how you decompose your problem into smaller, more managable pieces
+- VPC
+  - If the lambda doesn't need resources inside the VPC, leave it outside
+  - To go in a VPC:
+    - You need to assign the lambda an Elastic Network Interface (ENI) 
+    - ENI scaling is not great, esp bc Lambda could scale horizontally, exhausting it's IP addresses
+    - ENI only has private IP addresses
+- Use Principle of Least Permission
+  - Explicitly enumerate each resource available to each IAM role
 
 ## Other Questions:
 - Would you run a website, with all its static assets, etc. from lambda?

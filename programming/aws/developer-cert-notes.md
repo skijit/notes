@@ -1638,6 +1638,7 @@ AWS Certifcation Notes
 ## Other Todos
 - SQS 
 - SNS Details/Use cases
+- S3 Events
 
 
 ## Multi-Region Architectures
