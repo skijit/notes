@@ -83,10 +83,7 @@ Lambda
       - API Gateway (non-default)
 
 ## Integration with API Gateway
-- Learn about stage variables: https://docs.aws.amazon.com/apigateway/latest/developerguide/stage-variables.html
-- Referencing different version of a lambda: https://aws.amazon.com/blogs/compute/using-api-gateway-stage-variables-to-manage-lambda-functions/
-- What is th point of lambda aliases?
-- when to use lambda callback (for return values) in node platform?
+- See API gateway notes
 
 ## Cold Start Issues
 - [cold start language comparison](https://levelup.gitconnected.com/aws-lambda-cold-start-language-comparisons-2019-edition-%EF%B8%8F-1946d32a0244)
@@ -124,16 +121,34 @@ Lambda
     - Function settings, including environment variables
       - **Note**: Once you've published it, the function's settings (and everything else) are immutable
 - Aliases
-  - Triggers for Lambdas should refer to a specific version (referring to different environments)
-  - But you don't want to have to change trigger configurations each time you publish a new version of your lambda
-  - Triggers should refer to aliases, which are pointers to specific versions
-  - You create an alias for a particular lambda version (e.g. DEV, TST, PRD) and you're done
+  - Alaises are pointers to specific version of a lambda, representing an environment    
+  - When you publish a version, you can update the aliases to point at the appropriate version
+  - Triggers will refer to the lambda's alias
+  - A lambda version can know what alias it's using because:
+    - When you invoke/trigger the lambda through its alias, it has a unique ARN
+      - e.g. `arn:aws:lambda:us-east-1:123456789012:function:helloStagedWorld:DEV`
+    - This ARN can be accessed via the `context` object from within the Lambda
+      - `context.invokedFunctionArn`        
 - Versioning in real life
   - The entire environment (IAC) is deployed together (immutable architecture)
-  - The stage is piped into the build
+  - The alias is piped into the build
 - Configuration Data
-  - here: https://www.concurrencylabs.com/blog/configure-your-lambda-function-like-a-champ-sail-smoothly/
-  - todo: also look into the AWS Parameter Store for secrets or secret manager, which are more usable in a IAC scenario
+  - [src](https://www.concurrencylabs.com/blog/configure-your-lambda-function-like-a-champ-sail-smoothly/)
+  - The Lambda knows which environment it is running in via the `context` object (see above)
+  - But there are a variety of places you might put this data
+  - **Lambda Environment Variables**
+    - Env variables, like the Lambda are immutable
+    - In some cases, that might mean you have to have one version of each variable per environment (e.g. `PRD_ConnectionString`, `TST_ConnectionString`, etc.)
+      - I'm not sure this can't be overcome with your IAC setup (T4, CloudFormation, CLI, SAM, etc.)
+    - Lambda has 'encryption helpers' available which can let you use KMS to encrypt secrets
+  - **S3**
+    - One bucket for each application configuration with a separate folder for each environment
+    - be sure to enable versioning in S3    
+    - Simple, but extra latency, also not the most flexibility for shared secrets
+  - **DynamoDB**:
+    - One table for config data with hash key named `stage` and values like `key1_PRD`, `key1_TST`, etc.
+    - A bit faster than S3, and somewhat more expensive (not a lot though)
+
 
 ## TypeScript Support
 - [Totally doable](https://scotch.io/@nwayve/how-to-build-a-lambda-function-in-typescript)  
@@ -141,7 +156,7 @@ Lambda
 - Probably some good type definition files out there to leverage...
 
 ## Other Design considerations
-- [read this: todo](https://www.jeffersonfrank.com/aws-blog/aws-lambda-design-considerations/)
+- [excellent source](https://www.jeffersonfrank.com/aws-blog/aws-lambda-design-considerations/)
 - Memory
   - You choose how much memory you want to reserve for each execution
   - This determines the unit price
@@ -157,9 +172,34 @@ Lambda
     - ENI only has private IP addresses
 - Use Principle of Least Permission
   - Explicitly enumerate each resource available to each IAM role
+- Coupling Lambdas
+  - When you have a series of Lambdas, you should not invoke them directly but use an SQS between them
+  - You can use synch (req/response model) with a pull
+  - This enables you to send failed messages to Dead-Letter-Queue and try to replay them when fixed (or working on repro)
+  - Also enables you to support multiple message format version (per queue) or have lambdas that handle both
+  - Include message format version in message
+  - You want to set the SQS visibility timeout to at least 6x the timeout of the lambda and maxRecieveCount to at least 5
+- Batching
+  - Available for SQS and Kinesis
+  - Lets you specify batches of messages at once
+  - Lowers bill, complicates error processing
+  - You should also have them work in parallel (but increase their memory)
+- Always be idempotent
+- Consider using `/tmp` for a cache instead of making a nw call
+- Keep data inside the same region
+- If you use a VPC for your Lambda, consider S3 and Dynamo Gateway Endpoints - they're free!  Otherwise, since S3 and DynamoDB are publicly available, you have to pay for data to go through the NAT
+- Big files can be streamed from S3
+- Keep your shared Lambda code in one place (symlinked) or use a Lambda Layer
+- Consider how you might couple one service which scales with another which doesnt (e.g. lambda with MySQL).  Implement queues between them.
+- Use IAC
+- If you're only using Lambda as an intermediary between API Gateway and DynamoDB, you could also try mapping the request (through Velocity Mapping Templates) directly to the API call required by DynamoDB - and therefore, you wouldn't need the Lambda
+- 
+
+- HERE: continue the above question
 
 ## Other Questions:
 - Would you run a website, with all its static assets, etc. from lambda?
+- HERE
 
 
 

@@ -407,7 +407,7 @@ AWS Certifcation Notes
     - encoded as plain text or encrypted
     - you can refer to these parameters with the names assigned in the store
     - you can tag the parameters
-    - you can also restrict access to these parameters by 
+    - you can also restrict access to these parameters
     - to consume a parameter for parameter store in your template, you define the type of the parameter to a reserved string (eg. AWS::SSM::Parameter::Name)
   - Navigate to 'Systems Manager' -> 'Parameter Store'
   - If you update a value in the Systems Manager Parameter Store, this will take effect when you click 'Update' on the consuming Cloud Formation Stack
@@ -851,6 +851,17 @@ AWS Certifcation Notes
     - Upgrade policies
     - Deletion Protection
   - You can create any number of alarm types as well
+- **RedShift**: Datawarehouse & Data Lake
+  - Fully managed
+  - Petabyte scale
+  - Has Nodes in a cluster
+  - Each cluster runs a RedShift engine and has one or more databases
+  - **Value proposition**: 10x faster than other DB tech
+  - Can cost 1/10 the cost of on-prem datawarehouses
+- **Elasticache**
+  - In-memory clone of memcached or redis
+  - Fully-managed & scaleable
+
 
 ## KMS
 - Key mgmnt store
@@ -869,16 +880,6 @@ AWS Certifcation Notes
     - CHoose Users/Roles that can use the key for encryption/decryption
   - Goto S3 -> Create Bucket 
     - Enable Default Encryption and choose the KMS key      
-- **RedShift**: Datawarehouse & Data Lake
-  - Fully managed
-  - Petabyte scale
-  - Has Nodes in a cluster
-  - Each cluster runs a RedShift engine and has one or more databases
-  - **Value proposition**: 10x faster than other DB tech
-  - Can cost 1/10 the cost of on-prem datawarehouses
-- **Elasticache**
-  - In-memory clone of memcached or redis
-  - Fully-managed & scaleable
 
 ## SWF
 - Simple Workflow Service
@@ -974,11 +975,6 @@ AWS Certifcation Notes
   - There are system limits for this
 - Messages can stay in the queue between 1-14 days (default is 4)
 - Anonymous access is possible in a message queue
-
-
-
-
-
 - [AWS MQ](https://aws.amazon.com/amazon-mq/) is to port your existing message queue to the cloud
   - Supports the industry-standard APIs and Protocols
 
@@ -1500,7 +1496,6 @@ AWS Certifcation Notes
 - Use support center in AWS Console to increase limits
 - Timeouts usually indicate a SG issue
 - All subnets in a VPC have default routes to all other subnets in the VPC
-
 - Todo Study
   - `Fn:FindInMap`
     - always looks in "mappings" section of template
@@ -1635,10 +1630,40 @@ AWS Certifcation Notes
       - You can write your own and implement them in a lambda
       - Trigger on the change of status in your environment
 
+## Parameter Store vs Secrets Manager vs KMS vs Vault (non AWS)
+- [src](https://linuxacademy.com/blog/amazon-web-services-2/an-inside-look-at-aws-secrets-manager-vs-parameter-store/)
+
+- Secrets Manager is a new service, which presently doesn't have a big advantage over parameter store (yet)
+- KMS keeps the keys you use to encrypt values (secrets)
+- Parameter store and Secrets Manager both intergrate with KMS and IAM to allow who can access a value and decrypt it (from KMS)
+- Parameter stores lets you keep unencrypted or encrypted values wherase Secrets Manager only lets you store encrypted
+- Parameter Store and Secrets Manager
+  - Similarities:
+    - Store values under a Name or Key (prefixable)
+    - Values are up to 4096 char long
+    - Values are referenceable in CloudFormation templates
+  - Differences:
+    - Parameter Store is free up to 10,000
+    - SM integrates with RDS and lets you auto-rotate your keys
+      - You can use lambda to rotate you keys for other (non-RDS) services
+    - SM lets you share secrets across accounts
+    - SM has an API for random generation of passwrods
+- Vault
+  - Lots of differences with Parameter Store and Secrets Manager
+  - Not a managed service: you manage the application and it has tons of configurations
+  - Integrates directly with TerraForm (though not as nicely as many would like)
+
+## Step Functions
+
+
 ## Other Todos
-- SQS 
+- lambda finish notes
+- step functions
 - SNS Details/Use cases
-- S3 Events
+- S3 API/Events
+- Review Intrinsic CloudFormation Functions
+- Cards on service reminders, limits, weird stuff
+- [do a practice test](https://www.aws.training/certification?src=exam-prep)
 
 
 ## Multi-Region Architectures
@@ -1659,7 +1684,3 @@ AWS Certifcation Notes
   - That same service in the non-master-data region would need to place a message on a queue in the master-data-region, which will be eventually processed and update the master data, and then this data will propagate back to the other regions.
 - You can configure Route53 DNS to use Geoproximity routing to make sure users accessing the same URL will be routed to the appropriate region.
   
-
-
-
-
