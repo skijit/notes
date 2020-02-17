@@ -990,12 +990,30 @@ AWS Certifcation Notes
   - SQS
   - Http(s)
   - Email
-  - SMS
+  - SMS (messaging)
   - Lambda (when subscribed to topic)
 - You deploy a particular SNS topic
   - Each topic has a particular URL endpoint for publishers AND subscribers
 - Walkthrough
   - Publishing from the CLI (good for Cloud9): `aws sns publish --topic-arn <arn> --message file://message.txt`
+- [tutorial notes](https://www.youtube.com/watch?v=PsJsP-7cydk)
+  - **Publish**: A component `pushes` to an SNS topic
+  - **Subscription**: registered consumer takes action
+- Use case: "Fan Out Applications"
+- You can have S3 Puts trigger an SNS topic
+- DynamoDB table changes can trigger SNS topic
+- Topic Configurations:
+  - Who can publish or consume events
+    - Topic owner
+    - Everyone in the AWS Account
+    - Specified AWS Accounts
+    - Requesters with certain external endpoints
+  - Retry Policy
+    - If the execution of the consumer results in an exception, SNS considers this a fail and applies retry policy
+    - Config: Max retries, delay timing, etc.
+    - If you're invoking a Lambda, you can associate a DLQ
+      - You set this up in the normal lambda configuration (like with memory)
+      - Just specify the name/queue and it'll be connected
 
 ## API Gateway
 - Create, publish, maintain, monitor, secure, and scale API's
@@ -1654,12 +1672,19 @@ AWS Certifcation Notes
   - Integrates directly with TerraForm (though not as nicely as many would like)
 
 ## Step Functions
-
+- Vs Series of Lambdas Connected by SQS
+  - Step Functions gives you a defined backbone/orchestration to see the zoomed out picture
+- Individual steps in a Step Function can be custom components (on prem or in cloud) or other AWS Services
+  - You only need to communicate with custom components via HTTP 
+- Vs Simple Workflow Service:
+  - Use Step Functions (they're newer)
+- Express workflows: high-event rates and short workflows
+- Standard Workflows: long running auditable workflows
+- Step functions can be triggered by API Gateway
 
 ## Other Todos
-- lambda finish notes
-- step functions
 - SNS Details/Use cases
+- Does DynamoDB get deployed to a VPC or are serverless not associated
 - S3 API/Events
 - Review Intrinsic CloudFormation Functions
 - Cards on service reminders, limits, weird stuff
