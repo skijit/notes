@@ -1682,9 +1682,17 @@ AWS Certifcation Notes
 - Standard Workflows: long running auditable workflows
 - Step functions can be triggered by API Gateway
 
+## Serverless and VPC's
+- There are a variety of performance issues connecting serverless components (DynamoDB, Lambda, etc.) and VPC's
+- VPC's are infrastructure-level constructs which deal with performance, isolation, security concerns of primarily EC2 resources
+- Serverless components, by default, at a completely different level of abstraction so they don't naturally fit into a VPC
+  - Previous solutions involved for Dynamo using a NAT Gateway or creating a VPN
+  - Lambda (see notes) creates an Elastic Network Interface, which has scaling/cold-start issues
+- AWS has tools to connect serverless components into VPC's but it depends on the resource how effective they are
+  - Still a lot of innovations going into this space
+
 ## Other Todos
-- SNS Details/Use cases
-- Does DynamoDB get deployed to a VPC or are serverless not associated
+
 - S3 API/Events
 - Review Intrinsic CloudFormation Functions
 - Cards on service reminders, limits, weird stuff
