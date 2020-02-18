@@ -126,10 +126,22 @@ API Gateway
       isBase64Encoded: boolean
     }
     ```
-
-## Supporting older API Versions in API Gateway
-- Not sure the best way to handle this yet.
-- One possibility is to create a totally different API (for major versions) and wrap each one in a generated SDK
+- Environmental Integration
+  - Recall Lambda has both:
+    - Versions (unique for each published version)
+    - Aliases (pointers for each environment (e.g. DEV,TST,PRD))
+  - Each API Gateway deployment has a stage (e.g. DEV,TST,PRD)
+    - Each stage also has corresponding **stage variables**
+  - When you create a method and choose a lambda to execute, it will ask you the function name
+  - You can choose the name, followed by a variable, which indicates the alias:
+    - `GetHelloWithName:${stageVariables.lambdaAlias}`
+    - Then define a stage variable called `lambdaAlias` and assign it to DEV or whatever works
+  - You could use stage variables to point to completely different back-ends (lambda or otherwise)
+  - Conditionally targeting a different back-end
+    - E.G. Supporting older API Versions in API Gateway
+    - In versioned API's, you usually specify the version in the URL (which makes sense)
+    - So you can just clone the earlier API and re-point it at the new version, which targets the updated back-end
+    - Another possibility is to create a totally different API (for major versions) and wrap each one in a generated SDK
 
 ## Todo
 - Http2?

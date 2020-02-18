@@ -4,6 +4,7 @@ AWS Certifcation Notes
 - [source](https://learning.oreilly.com/videos/aws-certified-developer)
 - [certification documentation](https://aws.amazon.com/certification/certified-developer-associate/)  
 - [certifcation study sources](https://aws.amazon.com/certification/certification-prep/)
+- [practice test](https://www.aws.training/certification?src=exam-prep)
 
 ## Basics
 - Cloud9 is a browser-based development environment for AWS
@@ -324,6 +325,30 @@ AWS Certifcation Notes
             - Either "Allow" or "Deny"
           - Principal
             - The account, user, service, etc that the policy applies to
+- S3 Events
+  - Triggers:
+    - Newly created objects
+    - Objects removed
+    - Restore objects
+    - Reduced Redundancy Class Object lost
+    - Any replication events
+  - Targets:
+    - SNS
+    - SQS
+    - Lambda
+- You can stream large S3 files
+- Replication
+  - Asynch copying of objects between buckets
+  - Specify:
+    - Whether Cross-Region-Replication (CRR) or Same-Region-Replication (SRR)
+    - Destination Bucket
+    - IAM role to assume during copying
+    - Account to replicate to
+  - Use Cases
+    - Replication while maintaining metadata
+    - Replicate into different storage classes
+    - Replicate into different ownership
+    - Replication within 15 minutes
 
 ## Cloud Formation
 - Service that helps you set up your resources so you can spend less time on config, more on application
@@ -364,8 +389,8 @@ AWS Certifcation Notes
 - Pseduo-Parameters are auto-resolved by AWS (basically keywords)
   - Ex: `AWS::Region` -> will resolve to whatever the region was active when the stack was created
 - There are a variety of functions available in the template, including:
-  - `Fn::GetAtt`
-  - `Fn::FindInMap`
+  - `Fn::GetAtt`  
+  - `Fn::FindInMap`  (see bottom for more info)
 - Outputs: ways to export different values when you instantiate using the template
   - use cases:
     - Good for organization
@@ -407,7 +432,7 @@ AWS Certifcation Notes
     - encoded as plain text or encrypted
     - you can refer to these parameters with the names assigned in the store
     - you can tag the parameters
-    - you can also restrict access to these parameters by 
+    - you can also restrict access to these parameters
     - to consume a parameter for parameter store in your template, you define the type of the parameter to a reserved string (eg. AWS::SSM::Parameter::Name)
   - Navigate to 'Systems Manager' -> 'Parameter Store'
   - If you update a value in the Systems Manager Parameter Store, this will take effect when you click 'Update' on the consuming Cloud Formation Stack
@@ -851,6 +876,17 @@ AWS Certifcation Notes
     - Upgrade policies
     - Deletion Protection
   - You can create any number of alarm types as well
+- **RedShift**: Datawarehouse & Data Lake
+  - Fully managed
+  - Petabyte scale
+  - Has Nodes in a cluster
+  - Each cluster runs a RedShift engine and has one or more databases
+  - **Value proposition**: 10x faster than other DB tech
+  - Can cost 1/10 the cost of on-prem datawarehouses
+- **Elasticache**
+  - In-memory clone of memcached or redis
+  - Fully-managed & scaleable
+
 
 ## KMS
 - Key mgmnt store
@@ -869,16 +905,6 @@ AWS Certifcation Notes
     - CHoose Users/Roles that can use the key for encryption/decryption
   - Goto S3 -> Create Bucket 
     - Enable Default Encryption and choose the KMS key      
-- **RedShift**: Datawarehouse & Data Lake
-  - Fully managed
-  - Petabyte scale
-  - Has Nodes in a cluster
-  - Each cluster runs a RedShift engine and has one or more databases
-  - **Value proposition**: 10x faster than other DB tech
-  - Can cost 1/10 the cost of on-prem datawarehouses
-- **Elasticache**
-  - In-memory clone of memcached or redis
-  - Fully-managed & scaleable
 
 ## SWF
 - Simple Workflow Service
@@ -974,11 +1000,6 @@ AWS Certifcation Notes
   - There are system limits for this
 - Messages can stay in the queue between 1-14 days (default is 4)
 - Anonymous access is possible in a message queue
-
-
-
-
-
 - [AWS MQ](https://aws.amazon.com/amazon-mq/) is to port your existing message queue to the cloud
   - Supports the industry-standard APIs and Protocols
 
@@ -994,12 +1015,30 @@ AWS Certifcation Notes
   - SQS
   - Http(s)
   - Email
-  - SMS
+  - SMS (messaging)
   - Lambda (when subscribed to topic)
 - You deploy a particular SNS topic
   - Each topic has a particular URL endpoint for publishers AND subscribers
 - Walkthrough
   - Publishing from the CLI (good for Cloud9): `aws sns publish --topic-arn <arn> --message file://message.txt`
+- [tutorial notes](https://www.youtube.com/watch?v=PsJsP-7cydk)
+  - **Publish**: A component `pushes` to an SNS topic
+  - **Subscription**: registered consumer takes action
+- Use case: "Fan Out Applications"
+- You can have S3 Puts trigger an SNS topic
+- DynamoDB table changes can trigger SNS topic
+- Topic Configurations:
+  - Who can publish or consume events
+    - Topic owner
+    - Everyone in the AWS Account
+    - Specified AWS Accounts
+    - Requesters with certain external endpoints
+  - Retry Policy
+    - If the execution of the consumer results in an exception, SNS considers this a fail and applies retry policy
+    - Config: Max retries, delay timing, etc.
+    - If you're invoking a Lambda, you can associate a DLQ
+      - You set this up in the normal lambda configuration (like with memory)
+      - Just specify the name/queue and it'll be connected
 
 ## API Gateway
 - Create, publish, maintain, monitor, secure, and scale API's
@@ -1500,7 +1539,6 @@ AWS Certifcation Notes
 - Use support center in AWS Console to increase limits
 - Timeouts usually indicate a SG issue
 - All subnets in a VPC have default routes to all other subnets in the VPC
-
 - Todo Study
   - `Fn:FindInMap`
     - always looks in "mappings" section of template
@@ -1635,11 +1673,108 @@ AWS Certifcation Notes
       - You can write your own and implement them in a lambda
       - Trigger on the change of status in your environment
 
-## Other Todos
-- SQS 
-- SNS Details/Use cases
+## Parameter Store vs Secrets Manager vs KMS vs Vault (non AWS)
+- [src](https://linuxacademy.com/blog/amazon-web-services-2/an-inside-look-at-aws-secrets-manager-vs-parameter-store/)
 
+- Secrets Manager is a new service, which presently doesn't have a big advantage over parameter store (yet)
+- KMS keeps the keys you use to encrypt values (secrets)
+- Parameter store and Secrets Manager both intergrate with KMS and IAM to allow who can access a value and decrypt it (from KMS)
+- Parameter stores lets you keep unencrypted or encrypted values wherase Secrets Manager only lets you store encrypted
+- Parameter Store and Secrets Manager
+  - Similarities:
+    - Store values under a Name or Key (prefixable)
+    - Values are up to 4096 char long
+    - Values are referenceable in CloudFormation templates
+  - Differences:
+    - Parameter Store is free up to 10,000
+    - SM integrates with RDS and lets you auto-rotate your keys
+      - You can use lambda to rotate you keys for other (non-RDS) services
+    - SM lets you share secrets across accounts
+    - SM has an API for random generation of passwrods
+- Vault
+  - Lots of differences with Parameter Store and Secrets Manager
+  - Not a managed service: you manage the application and it has tons of configurations
+  - Integrates directly with TerraForm (though not as nicely as many would like)
 
+## Step Functions
+- Vs Series of Lambdas Connected by SQS
+  - Step Functions gives you a defined backbone/orchestration to see the zoomed out picture
+- Individual steps in a Step Function can be custom components (on prem or in cloud) or other AWS Services
+  - You only need to communicate with custom components via HTTP 
+- Vs Simple Workflow Service:
+  - Use Step Functions (they're newer)
+- Express workflows: high-event rates and short workflows
+- Standard Workflows: long running auditable workflows
+- Step functions can be triggered by API Gateway
+
+## Serverless and VPC's
+- There are a variety of performance issues connecting serverless components (DynamoDB, Lambda, etc.) and VPC's
+- VPC's are infrastructure-level constructs which deal with performance, isolation, security concerns of primarily EC2 resources
+- Serverless components, by default, at a completely different level of abstraction so they don't naturally fit into a VPC
+  - Previous solutions involved for Dynamo using a NAT Gateway or creating a VPN
+  - Lambda (see notes) creates an Elastic Network Interface, which has scaling/cold-start issues
+- AWS has tools to connect serverless components into VPC's but it depends on the resource how effective they are
+  - Still a lot of innovations going into this space
+
+## CloudFormation Intrinsic Functions
+- **Ref**
+  - `{ "Ref" : "logicalName" }`
+  - Returns the value of the specified parameter or resource (esp if a pseudo-parameter)
+
+- **FindInMap**: this example will return `ami-0ff8a91507f77f867`
+  - `{ "Fn::FindInMap" : [ "MapName", "TopLevelKey", "SecondLevelKey"] }`
+    - MapName: RegionMap
+    - TopLevelKey: AWS::Region PseudoParameter
+    - SecondLevelKey: The main thing you're looking for
+  - Ref
+```(json)
+{
+  ...
+  "Mappings" : {
+    "RegionMap" : {
+      "us-east-1" : { 
+        "HVM64" : "ami-0ff8a91507f77f867", "HVMG2" : "ami-0a584ac55a7631c0c" 
+      },
+      "us-west-1" : { 
+        "HVM64" : "ami-0bdb828fd58c52235", "HVMG2" : "ami-066ee5fd4a9ef77f1" 
+      },
+      "eu-west-1" : { 
+        "HVM64" : "ami-047bb4163c506cd98", "HVMG2" : "ami-0a7c483d527806435" 
+      },
+      "ap-southeast-1" : { 
+        "HVM64" : "ami-08569b978cc4dfa10", "HVMG2" : "ami-0be9df32ae9f92309" 
+      },
+      "ap-northeast-1" : { 
+        "HVM64" : "ami-06cd52961ce9f0d85", "HVMG2" : "ami-053cdd503598e4a9d" 
+      }
+    }
+  },
+
+  "Resources" : {
+    "myEC2Instance" : {
+      "Type" : "AWS::EC2::Instance",
+      "Properties" : {
+        "ImageId" : { 
+          "Fn::FindInMap" : [ 
+            "RegionMap", 
+            { 
+              "Ref" : "AWS::Region" 
+            }, 
+            "HVM64"
+          ]
+        },
+        "InstanceType" : "m1.small"
+      }   
+    }
+  }
+}
+```
+
+- **Fn::GetAtt**: gets an attribute from a resource
+  - `{ "Fn::GetAtt" : [ "logicalNameOfResource", "attributeName" ] }`
+  - example: eturns a string containing the DNS name of the load balancer with the logical name myELB.
+    - `"Fn::GetAtt" : [ "myELB" , "DNSName" ]`
+  
 ## Multi-Region Architectures
 - (This is a big topic, and deserves more details, but at a superficially high level...)
 - Why?
@@ -1658,7 +1793,3 @@ AWS Certifcation Notes
   - That same service in the non-master-data region would need to place a message on a queue in the master-data-region, which will be eventually processed and update the master data, and then this data will propagate back to the other regions.
 - You can configure Route53 DNS to use Geoproximity routing to make sure users accessing the same URL will be routed to the appropriate region.
   
-
-
-
-
