@@ -4,6 +4,7 @@ AWS Certifcation Notes
 - [source](https://learning.oreilly.com/videos/aws-certified-developer)
 - [certification documentation](https://aws.amazon.com/certification/certified-developer-associate/)  
 - [certifcation study sources](https://aws.amazon.com/certification/certification-prep/)
+- [practice test](https://www.aws.training/certification?src=exam-prep)
 
 ## Basics
 - Cloud9 is a browser-based development environment for AWS
@@ -324,6 +325,30 @@ AWS Certifcation Notes
             - Either "Allow" or "Deny"
           - Principal
             - The account, user, service, etc that the policy applies to
+- S3 Events
+  - Triggers:
+    - Newly created objects
+    - Objects removed
+    - Restore objects
+    - Reduced Redundancy Class Object lost
+    - Any replication events
+  - Targets:
+    - SNS
+    - SQS
+    - Lambda
+- You can stream large S3 files
+- Replication
+  - Asynch copying of objects between buckets
+  - Specify:
+    - Whether Cross-Region-Replication (CRR) or Same-Region-Replication (SRR)
+    - Destination Bucket
+    - IAM role to assume during copying
+    - Account to replicate to
+  - Use Cases
+    - Replication while maintaining metadata
+    - Replicate into different storage classes
+    - Replicate into different ownership
+    - Replication within 15 minutes
 
 ## Cloud Formation
 - Service that helps you set up your resources so you can spend less time on config, more on application
@@ -364,8 +389,8 @@ AWS Certifcation Notes
 - Pseduo-Parameters are auto-resolved by AWS (basically keywords)
   - Ex: `AWS::Region` -> will resolve to whatever the region was active when the stack was created
 - There are a variety of functions available in the template, including:
-  - `Fn::GetAtt`
-  - `Fn::FindInMap`
+  - `Fn::GetAtt`  
+  - `Fn::FindInMap`  (see bottom for more info)
 - Outputs: ways to export different values when you instantiate using the template
   - use cases:
     - Good for organization
@@ -1691,14 +1716,65 @@ AWS Certifcation Notes
 - AWS has tools to connect serverless components into VPC's but it depends on the resource how effective they are
   - Still a lot of innovations going into this space
 
-## Other Todos
+## CloudFormation Intrinsic Functions
+- **Ref**
+  - `{ "Ref" : "logicalName" }`
+  - Returns the value of the specified parameter or resource (esp if a pseudo-parameter)
 
-- S3 API/Events
-- Review Intrinsic CloudFormation Functions
-- Cards on service reminders, limits, weird stuff
-- [do a practice test](https://www.aws.training/certification?src=exam-prep)
+- **FindInMap**: this example will return `ami-0ff8a91507f77f867`
+  - `{ "Fn::FindInMap" : [ "MapName", "TopLevelKey", "SecondLevelKey"] }`
+    - MapName: RegionMap
+    - TopLevelKey: AWS::Region PseudoParameter
+    - SecondLevelKey: The main thing you're looking for
+  - Ref
+```(json)
+{
+  ...
+  "Mappings" : {
+    "RegionMap" : {
+      "us-east-1" : { 
+        "HVM64" : "ami-0ff8a91507f77f867", "HVMG2" : "ami-0a584ac55a7631c0c" 
+      },
+      "us-west-1" : { 
+        "HVM64" : "ami-0bdb828fd58c52235", "HVMG2" : "ami-066ee5fd4a9ef77f1" 
+      },
+      "eu-west-1" : { 
+        "HVM64" : "ami-047bb4163c506cd98", "HVMG2" : "ami-0a7c483d527806435" 
+      },
+      "ap-southeast-1" : { 
+        "HVM64" : "ami-08569b978cc4dfa10", "HVMG2" : "ami-0be9df32ae9f92309" 
+      },
+      "ap-northeast-1" : { 
+        "HVM64" : "ami-06cd52961ce9f0d85", "HVMG2" : "ami-053cdd503598e4a9d" 
+      }
+    }
+  },
 
+  "Resources" : {
+    "myEC2Instance" : {
+      "Type" : "AWS::EC2::Instance",
+      "Properties" : {
+        "ImageId" : { 
+          "Fn::FindInMap" : [ 
+            "RegionMap", 
+            { 
+              "Ref" : "AWS::Region" 
+            }, 
+            "HVM64"
+          ]
+        },
+        "InstanceType" : "m1.small"
+      }   
+    }
+  }
+}
+```
 
+- **Fn::GetAtt**: gets an attribute from a resource
+  - `{ "Fn::GetAtt" : [ "logicalNameOfResource", "attributeName" ] }`
+  - example: eturns a string containing the DNS name of the load balancer with the logical name myELB.
+    - `"Fn::GetAtt" : [ "myELB" , "DNSName" ]`
+  
 ## Multi-Region Architectures
 - (This is a big topic, and deserves more details, but at a superficially high level...)
 - Why?
