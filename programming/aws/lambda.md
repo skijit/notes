@@ -123,6 +123,7 @@ Lambda
   - Triggers should refer to aliases, which are pointers to specific versions
   - You create an alias for a particular lambda version (e.g. DEV, TST, PRD) and you're done
 - Configuration Data
+https://www.concurrencylabs.com/blog/configure-your-lambda-function-like-a-champ-sail-smoothly/
 
 
 ## TypeScript Support
