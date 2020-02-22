@@ -1205,13 +1205,6 @@ AWS Certifcation Notes
   - Each microservice should have its own CI/CD pipeline
   - "Design for Failure"
 
-## CodeBuild
-- pay only for the time you use it
-- works on multiple runtimes
-- Continuous Integration Service
-- You can use existing CI/CD tools, like Jenkins, and CodeBuild is just for the worker nodes
-- Vs CodeDeploy
-  - CodeDeploy is for Ec2 instances
 
 ## Elastic Beanstalk
 - Quickly deploy and manage without worrying about infrastructure
@@ -1553,21 +1546,6 @@ AWS Certifcation Notes
   - Lambda functions handle cloning the EC2, to swap URL's, and terminating that cloned environment when complete
   - AWS CodeBuild projects can swap URL's also and run tests
 
-## Notes From Sample Questions
-- Store database credentials in `AWS Secrets Manager`
-- `AWS AppSync`
-  - https://aws.amazon.com/appsync/
-  - Build an API which combines data from multiple sources
-  - Managed service
-  - Uses GraphQL
-  - Satisfies Real-Time Requirements
-  - AppSync is different from API Gateway bc API Gateway only supports a standard REST API
-- API Gateway
-  - Users can create a WebSocket based API as a stateful frontend for an AWS service
-  - Often compared to Application Load Balancers
-  - You would NOT use graphql with API Gateway - only AppSync
-- `CloudWatch Agent` can stream logs and metrics to CloudWatch
-
 ## API Gateway vs Application Load Balancers
 - API Gateway supports:
   - native IAM integration
@@ -1792,4 +1770,112 @@ AWS Certifcation Notes
   - A service which writes master data and is deployed in the master data region can write directly to it.  Then this data will propagate to the other regions' replicas.
   - That same service in the non-master-data region would need to place a message on a queue in the master-data-region, which will be eventually processed and update the master data, and then this data will propagate back to the other regions.
 - You can configure Route53 DNS to use Geoproximity routing to make sure users accessing the same URL will be routed to the appropriate region.
-  
+
+## CodeSuite Service Comparison
+- [one blog](https://aws.amazon.com/blogs/devops/implementing-gitflow-using-aws-codepipeline-aws-codecommit-aws-codebuild-and-aws-codedeploy/)
+- [some comparisons](https://blog.symphonia.io/posts/2019-01-21_continuous-integration-continuous-delivery-on-aws)
+- Recall [Continuous Integration vs Continuous Delivery vs Continuous Deployment](https://www.atlassian.com/continuous-delivery/principles/continuous-integration-vs-delivery-vs-deployment)
+  - CI: Automation of Merge/Build process.  Runs automated tests against the build.  Encourages early merging (trunk-level development), which prevents all sorts of issues.
+  - Continuous Delivery: Automation of Deployment process.  Releases are batched.
+  - Continuous Deployment: Each change (assuming it passes the required tests) is released.  Requires highest levels of testing infrastructure.
+- CodeCommit: github-light
+- CodeBuild vs CodePipeline
+  - CodeBuild: 
+    - CI Tool: Builds/Tests
+    - You Specify:
+      - where to get code
+      - various scripts: build, test, package
+    - It runs these stages in a container or EC2 AMI you specify
+    - Pretty cheap and simple
+    - Can be defined with CloudFormation
+  - CodePipeline:
+    - Full CD Pipeline / Orchestrator
+    - Unlike CodeBuild, you don't give it scripts to run.  You give it a sequence of actions.
+    - Example actions:
+      - Source
+        - EG integration with CodeCommit, GitHub
+      - Build + Test
+      - Deploy
+        - EG CloudFormation
+          - Might involve CodeDeploy under hood
+      - Manual Actions
+    - Can be defined with CloudFormation
+    - CodePipeline can include CodeBuild, and CodeBuild can handle simple CI/CD.
+      - Use CodePipeline when you want fancier stuff like parallel actions, retry, overlapping executions
+    - Doesn't have branches
+  - Both are not good with monorepos  
+- CodeDeploy: deployment automation tool for EC2 centered
+  - You can hook this into a larger CI/CD orchestrator like CodePipeline but CodePipeline can handle a much broader range of deployment targets (serverless, etc.) and actions
+  - CodeDeploy also helps you track rolling updates and application health based on configurable rules
+- CodeStar: wraps CodeCommit, CodeBuilt, CodeDeploy, and CodePipeline into a friendly-ish package
+  - Integrates with JIRA
+  - You only pay for the other services you tie into
+  - Target EC2, Beanstalk, or Lambda deployments
+  - Dashboard available
+
+## Notes From Sample Questions
+- Store database credentials in `AWS Secrets Manager`
+- `AWS AppSync`
+  - https://aws.amazon.com/appsync/
+  - Build an API which combines data from multiple sources
+  - Managed service
+  - Uses GraphQL
+  - Satisfies Real-Time Requirements
+  - AppSync is different from API Gateway bc API Gateway only supports a standard REST API
+- API Gateway
+  - Users can create a WebSocket based API as a stateful frontend for an AWS service
+  - Often compared to Application Load Balancers
+  - You would NOT use graphql with API Gateway - only AppSync
+- `CloudWatch Agent` can stream logs and metrics to CloudWatch
+- S3 multipart upload API enables you to upload large objects in parts
+- Elastic Beanstalk Configuration Changes
+  - Managed with Environment Management Console
+    - Compare to Create New Environment Page which 
+  - Also supported by CloudFormation
+  - Some config changes (e.g. Health Monitoring Checks) are propagated to running instances
+  - Others (e.g. launch config, VPC settings) require terminating instances
+    - **Rolling Updates**: to minimize downtime, AWS applies these patches to batches of instances
+    - **Immutable Updates**: new instances are launched outside your ASG, and both new and old sets of instances serve traffic until the new set passes health checks, and is then moved into the original ASG, and the old instances are terminated
+- Amazon DynamoDB Accelerator: in-memory cache to improve 10x performance improvement.  Good way to read-optimize your instance.
+- Cloudwatch High Resolution Metrics are 1-second level granularity and alarms are 10-second
+  - Standard Resolution alarms are 1-minute
+- Don't use Recursion with Lambda
+  - [other best practices](https://docs.aws.amazon.com/lambda/latest/dg/best-practices.html)
+- Elasticache
+  - Supports Redis and Memcached
+  - Typically placed between a backend server and a database
+  - Caching Strategies
+    - Lazy Loading:
+      - Application requests data from cache and it is missing
+      - Cache returns null to the application and then loads the corresponding data
+      - Good bc it's easy to rebuild the cache and only caches stuff you use, saving memory
+      - You could still have stale data if another process accesses the database 
+        - You can address through TTL
+    - Write-through
+      - Any time a process needs to write data, it writes to the DB and then updates the cache with the corresponding data
+      - So there's no stale data (compare to Lazy Loading)
+      - Typically make the cache-call non-blocking      
+  - Storing session state
+    - Storing session data on the webserver means you need to have server affinity- which is hard as you scale out
+    - Cookies are ok if you plan on not storing sensitive data.  Otherwise, this is a good use case for server-side info and elasticache.
+- API Gateway Request Pipeline Stages:
+  - Method Request
+  - Integration Request
+- CloudWatch
+  - TODO: More tutorials here
+    - metrics, concepts, alarms, application and OS logs
+  - CloudWatch doesn't aggregate across regions
+  - Cloud Watch Statistic Set is for a high volume metric where you only want to send some statistic (count, avg, etc.) to CW rather than individual data points (e.g. request time)
+  - [Review this](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html)
+  - [Container Insights - New integration options with ECS](https://aws.amazon.com/blogs/mt/introducing-container-insights-for-amazon-ecs/)
+- CodeBuild concepts
+  - TODO: Watch some tutorials
+- If you want to assume an IAM Role (i.e. for service accounts), you'll want to use the STS (Secure Token Service) which will provide you with temporary credentials for your SDK calls
+
+
+## Practice Test Notes
+https://chercher.tech/aws-certification/aws-dva-c00-certified-developer-associate-practice-exam-set-2
+https://chercher.tech/aws-certification/aws-dva-c00-certified-developer-associate-practice-exam-set-3
+https://chercher.tech/aws-certification/aws-dva-c00-certified-developer-associate-practice-exam-set-4
+https://aws.amazon.com/iam/faqs/
+

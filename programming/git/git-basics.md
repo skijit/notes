@@ -134,6 +134,8 @@ Screencast [here](https://vimeo.com/16018419)
 		- Names typically prefixed with "hotfix-"
 		- When complete, merge the hotfix branch into *develop* and *master* and retag master.
 	- git-flow are a bunch of git commands which you can install to help execute this model.
+		- Although initially popular, git-flow has critics who think of it as 'branch-development' rather than 'trunk-development'.  
+		- More specifically, it encourages less frequent merging to the mainline (master) branch, in favor of isolated feature branches.
 	- **Examples**:
         -  Create the local repo
             ```

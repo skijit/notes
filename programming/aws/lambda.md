@@ -5,7 +5,9 @@ Lambda
 - [src](https://docs.aws.amazon.com/lambda/latest/dg/getting-started.html)
 - The handler is what gets run each time an event comes in
   - It receives the event and a context object
-- If your handler completes successfully, the runtime will cache all the code/variables defined outside of your handler so that new events only have to re-compile/execute your handler
+- If your handler completes successfully, the runtime will cache all the code/variables defined outside of your handler so that new events only have to re-compile/execute your handler.
+  - This lasts for the lifetime of the lambda and minimizes cold starts
+  - All of these things are added to the 'execution context'
 - You have access to local storage in `/tmp` directory
 - Layers are so that you only have to redeploy your function- because otherwise you have to send up all the dependencies.  This is most useful in a dev/test scenario.
 - to process items from a stream or queue, use *event source mapping*
@@ -193,13 +195,11 @@ Lambda
 - Consider how you might couple one service which scales with another which doesnt (e.g. lambda with MySQL).  Implement queues between them.
 - Use IAC
 - If you're only using Lambda as an intermediary between API Gateway and DynamoDB, you could also try mapping the request (through Velocity Mapping Templates) directly to the API call required by DynamoDB - and therefore, you wouldn't need the Lambda
-- 
+- In general, Lambda makes most sense as a utility function for cloud resources (esp considering how it integrates with evertying)
+  - It's not great for an application framework - configuration and scaling is suspect
+  - Big application frameworks (java, .net) also have a longer cold start time
 
-- HERE: continue the above question
 
-## Other Questions:
-- Would you run a website, with all its static assets, etc. from lambda?
-- HERE
 
 
 

@@ -35,7 +35,7 @@ AWS Credential Types
 - Generally favor roles over Access Keys because there's less requirement for rotation
 
 ### Signing Requests
-- Your API requests through an AWS SDK and your CLI requests will be signed automatically
+- When you call through the SDK or CLI, the underlying API requests are signed automatically
 - You can make API requests and manually sign them too
   - Good when there's no SDK for the language you're using
 - In any of these scenarios, you're sending a signed HTTP request
