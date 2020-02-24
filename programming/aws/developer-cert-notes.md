@@ -1555,11 +1555,7 @@ AWS Certifcation Notes
   - Lets you set a resource policy to allow IAM users in another account access to the API, based on Signature Vesion 4 protocols
   - Lets you deny traffic based on address IP or range
   - Allow private API traffic based on source VPC or VPC endpoint
-  - **Deployment stages**, letting users manage multiple release stages for each API (alpha, beta, production).
-  - **Stage Variables**, which lets it interact with different backend endpoints
-    - Stage varibales can reference a single lambda with multiple version and aliases
-      - Todo: [how can a Lambda have multiple version and aliases](https://aws.amazon.com/blogs/compute/using-api-gateway-stage-variables-to-manage-lambda-functions/)
-      - What about serverless web api's? ie with C#
+  - See other notes...  
 - Todo: more comparisons of ALB and API Gateway
 
 ## Amazon Athena
@@ -1645,11 +1641,11 @@ AWS Certifcation Notes
       - **Glue** (ETL Tool): Output of glue crawlers is written by default to CloudWatch
       - **Lambda**: all std out and error written to CloudWatch Log Streams
       - **Route 53**: All the requests can be logged in CloudWatch
-  - AWS Config
-    - **Managed Config Rules**
-      - Lets you specify custom rules to make sure your resources conform to (e.g. Iam policy, S3 bucket config, etc.)  
-      - You can write your own and implement them in a lambda
-      - Trigger on the change of status in your environment
+- AWS Config
+  - **Managed Config Rules**
+    - Lets you specify custom rules to make sure your resources conform to (e.g. Iam policy, S3 bucket config, etc.)  
+    - You can write your own and implement them in a lambda
+    - Trigger on the change of status in your environment
 
 ## Parameter Store vs Secrets Manager vs KMS vs Vault (non AWS)
 - [src](https://linuxacademy.com/blog/amazon-web-services-2/an-inside-look-at-aws-secrets-manager-vs-parameter-store/)
