@@ -814,7 +814,7 @@ AWS Certifcation Notes
   - Basically, you just zip up your entire project (including, for example, your expanded node_modules dir)
 - Some SDK Notes
   - [boto docs](https://boto3.amazonaws.com/v1/documentation/api/latest/index.html) 
-    - Boto is the Amazon Web Services (AWS) SDK for Python. It enables Python developers to create, configure, and manage AWS services, such as EC2 and S3. Boto provides an easy to use, object-oriented API, as well as low-level access to AWS services.Boto is the Amazon Web Services (AWS) SDK for Python. It enables Python developers to create, configure, and manage AWS services, such as EC2 and S3. Boto provides an easy to use, object-oriented API, as well as low-level access to AWS services.
+    - Boto is the Amazon Web Services (AWS) SDK for Python. It enables Python developers to create, configure, and manage AWS services, such as EC2 and S3. Boto provides an easy to use, object-oriented API, as well as low-level access to AWS services.
 - [AWS SDK for Node](https://aws.amazon.com/sdk-for-node-js/)
   - New version is 3.x (currently developer preview) which includes typescript and has modules
   - [api documentation](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/index.html)
