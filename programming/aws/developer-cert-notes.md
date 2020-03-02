@@ -1643,6 +1643,13 @@ AWS Certifcation Notes
       - **Glue** (ETL Tool): Output of glue crawlers is written by default to CloudWatch
       - **Lambda**: all std out and error written to CloudWatch Log Streams
       - **Route 53**: All the requests can be logged in CloudWatch
+    - **CloudWatch Events**
+      - Events respond to particular resource actions and have a variety of targets (SNS, SQS, Lambda, etc.)
+        - They also can follow a cron schedule
+      - Different from Alarms bc
+        - Alarms are only for sustained changes
+        - Alarms are based on Metrics
+      - Metrics are more application/system-leve and Events are more Resource-Level
 - AWS Config
   - **Managed Config Rules**
     - Lets you specify custom rules to make sure your resources conform to (e.g. Iam policy, S3 bucket config, etc.)  
