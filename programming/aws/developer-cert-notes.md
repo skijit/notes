@@ -172,7 +172,7 @@ AWS Certifcation Notes
           - Keep the group at it's initial size
           - Use scaling policies to define how to scale up  
         - You can set separate policies to scale out or in based on any number of server metrics
-        - You can set alarms on scale actions by posting to (user-defined) topics in ANS (Amazon Notification Service - covered later)
+        - You can set alarms on scale actions by posting to (user-defined) topics in SNS (Amazon Notification Service - covered later)
   - `Target Groups`
     - Middle man between the Auto-scaling group and the Load Balancer
     - Each target group can only be associated with one Load Balancer
@@ -609,6 +609,8 @@ AWS Certifcation Notes
   - Let instances connect to the internet, but prevent the internet from initiating those connections
   - Instances in a private subnet can connect to the internet (e.g. for patches) but they need to access this through a NAT gateway 
     - That NAT Gateway needs to be hosted in a public subnet
+  - A public subnet is just one which has a route table entry that goes directly to the internet gateway (which is the default)
+  - A private subnet will only have a route to get to the public subnet, and specifically to the NAT Gateway
 - Aside on the 0.0.0.0 address:
   - Called the 'wildcard address' or 'unspecified address'
   - If we're on a server, it means:
