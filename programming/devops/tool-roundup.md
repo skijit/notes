@@ -133,7 +133,7 @@ Devops Tool Roundup
 
 - Terraform and Kubernetes
   - [this looks like a good read](https://gruntwork.io/guides/kubernetes/how-to-deploy-production-grade-kubernetes-cluster-aws/#what-is-kubernetes)
-
+  - [also this](https://www.hatboysoftware.com/blog/kubernetes-helm-terraform/)
 
 
 
