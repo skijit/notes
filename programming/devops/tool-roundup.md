@@ -1,6 +1,8 @@
 Devops Tool Roundup
 ===============
 
+
+
 ## IAC Concepts
 - **Configuration Management vs Provisioning**
   - Config Mgmt: Manage the software on *existing* servers
@@ -129,7 +131,8 @@ Devops Tool Roundup
   - [read this](https://alex.dzyoba.com/blog/packer-for-docker/)
   - [and this](https://packer.io/intro/getting-started/install.html)
 
-
+- Terraform and Kubernetes
+  - [this looks like a good read](https://gruntwork.io/guides/kubernetes/how-to-deploy-production-grade-kubernetes-cluster-aws/#what-is-kubernetes)
 
 
 
