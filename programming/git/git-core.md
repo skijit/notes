@@ -43,6 +43,8 @@ Git Core Concepts
     - The unique commits on branch 2
     - Their shared ancestor
 - Merge conflicts arise when commits from different branches have modified the same lines in the same files
+- Best Practice: The usual way of reporting merge conflicts can be confusing, so if you change to using diff3, you'll get both versions of the line AND the shared ancestor.
+ - `git config --global merge.conflictstyle diff3`
 - Detached HEAD
   - Usually HEAD points to a branch, but if it's pointing to a commit, then you're in a Detached HEAD state
   - If you get a detached HEAD, it is best to create a branch off of it directly
