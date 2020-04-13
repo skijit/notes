@@ -26,6 +26,9 @@
     - **remember**- the last branch is the one you're including
 	- or compare branches with diff: `git diff master..feature` to see the diffs
 
+- Comparing a file on different branches
+  - `git diff release master -- package.json`
+
 ## Paging
 - `git log` output is piped through a pager (not an editor- like `vim`)
 - usually, the pager is `less`

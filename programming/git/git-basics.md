@@ -662,4 +662,13 @@ from [this](http://www.developerhandbook.com/git/git-for-net-developers/) blog p
 	- only applies to the current git repo
 
 
-
+## Ignoring Local Changes for files already added
+- Skip Worktree Method
+	- `git update-index --skip-worktree path/to/file`
+	- to undo: `git update-index --no-skip-worktree path/to/file`
+	- This tells git not to track changes to this file
+- Assume Unchanged Method
+	- `git update-index --assume-unchanged path/to/file`
+	- to undo: `git update-index --no-assume-unchanged path/to/file`
+	- This tells git to ignore the local changes (reset hard will still overwrite)
+	
