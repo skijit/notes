@@ -107,7 +107,19 @@ exec "$@"
   - You can create a user and set group with something like: `RUN groupadd -r postgres && useradd --no-log-init -r -g postgres postgres.`
 - use absolute paths for your `WORKDIR`
 
-- TODO: look into how Docker uses it's cache
+- Caching
+  - only RUN, COPY, and ADD statments are cached
+  - COPY and ADD will perform a checksum on the corresponding file contents
+  - RUN will only attempt to match by the command name
+  - Once 1 cache layer is invalidated, everything dockerfile statement after it is run dynamically (not cached)
+    - So if you copy your source code in and it has changed, everything else after that is rebuilt
+    - Some people inject a specifically cache-busting layer:
+      - `docker build --build-arg CACHE_BUST=$(date +%s) .`
+      
+      ```(dockerfile)
+      ARG CACHE_BUST
+      RUN echo "command with external dependencies"
+      ```
 
 - DOckerfile vs Docker-Compose
   - From somebody on [DOcker Team](https://github.com/docker/compose/issues/5523)
