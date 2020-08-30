@@ -1,0 +1,74 @@
+## Linux Folder Structures
+- Single vs MultiUser Mode
+  - Single gives you root (for system repairs, updgrade)- but nw is disabled for security reason
+- FHS: Filesystem Hierarchy Standard
+  - defines how/where stuff gets placed in a linux/unix system
+- `bin`
+  - binaries like `ls` and `cat`
+  - available in single user mode
+- `sbin`
+  - system binaries that a standard user wouldn't use, but sysadmin would
+  - available in single user mode 
+- `boot`
+  - bootloaders- everything your system needs to boot
+- `dev`
+  - devices: each piece of hardware is exposed as a file (per Unix) (really pseudofile)
+- `etc`
+  - all your configurations for system-wide stuff are stored here (e.g. apt)
+- `home`
+  - user home directories
+  
+- `lib`, `lib32`, and `lib64`
+  - static libraries, required by (at least) bin and sbin
+- `mnt`
+  - where you mount stuff directly
+- `media`
+  - where the OS typically automounts to
+- `opt`
+  - where vendor software, which is manually installed gets stored
+  - cross-platform and commerical software usually goes here
+- `proc`
+  - pseudofiles that contain info about processes
+  - every process has a directory with various metadata
+- `root`
+  - root users home folder
+- `run`
+  - tmpfs filesystem: it runs in RAM
+  - processes what start in the boot procedure
+- `snap`
+  - self-contained applications that run in ubuntu
+- `srv`
+  - this is where you store files that are served by processes such as a webserver
+- `sys`
+  - way to interact with the kernel
+  - similar to `run`- it's created every time the system boots
+- `tmp`
+  - files are temporarily saved here by applications
+- `usr`
+  - non-essential applications are installed here (but which might be part of the OS distro, unlike `/opt`)
+  - `usr/local` is for local copies of stuff which might be installed OS-wide (e.g. bash, something built with `make`, etc.)
+- `var`
+  - any files which are expected to grow in file (variable size)
+  - `/var/crashes`- crash info
+  - `/var/log` - log files
+
+
+## Mounting
+- `mount` command will make an already created filesystem (e.g. a hard-drive partition, dvd, etc.) and make it useable to the OS
+- `mount -t <fstype> <fs_source> <fs_target>`  <- fs_target must already exist
+  - `mount -t ext4 /dev/sdb1 /mnt/shared`
+- `mount -a ...` when you don't know what the filesystem type is
+  - mount tries to figure it out
+- `/mnt` is typically where you would mount a local filesystem to
+- `/media` is typically where you would mount a filesystem on nw to
+  - also removable media often is mounted here
+- you can specify permissions (ie to make it readonly) when mounting
+- viewing current mounted filesystems
+  - `mount` called alone will print a table that shows how things are mounted
+  - `/etc/mtab` <- whenever you mount or unmount, this text file gets updated
+  - `/proc/mounts` <- similar to etc/mtab
+- `umount` is for unmounting
+  - cannot be unmounted if it is 'busy' (ie have active handles)
+- `/etc/fstab`
+  - add mounting info to run at bootup
+  - there are a ton of mounting options you can specify here
