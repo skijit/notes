@@ -186,6 +186,69 @@ Kubernetes in 3 Weeks
     - e.g. if you're running .NET full frameowk, you want a wnidows server (host)
     - something with a GPU
   
+- Config Maps and Secrets ('Context')
+  - [see katacoda for config maps and secrets](https://learning.oreilly.com/scenarios/kubernetes-fundamentals-configmaps/9781492078869/)
+  - config maps and secrets are very similar - go towards defining 'context'
+  - 12 factor app- 3rd principles - config that varies between environments should be stored in environments
+  - there is a config map section in k8s dashboard by default- but these are namespaced to the system
+  - when you create configmap- they get stored in etcd - the HA, distributed in-memory store which you can use to look for k/v pairs
+    - there are other distributed memory stores which you could swap out for etcd 
+    - most architects would use a helm chart to get a different system for storing configmaps and secrets (in prod)
+    - you can use the API to create configmaps or author your own yaml of kind `ConfigMap` (or use the API to dump the corresponding YAML if it was generated)
+      - `kubectl create -f my-config-map.yaml`
+
+  - 3 ways to get ConfigMap data into your Containers
+    1. Pass in via commandline (for container)
+    2. Pass in as ENV variable (most popular)
+    3. Mount to a r/o file on the filesystem (and that file is created by k8s) (good for when this is dynamically changing (e.g. connection string)- since env variables are fixed in a container)
+  
+  - Creating/managing secrets
+    - `kubectl create secret generic db-password --from-literal=password=myDbPassword`
+    - `kubectl get secret db-password`
+    - `kubectl get secret db-password -o yaml`
+
+  - Similar to the swapping out etcd for ConfigMaps, if you don't want to use etcd for passwords, you can swap out something like vault (there's a helm chart for it) and still use the same secrets api (just like configmap)
+  - once you have a secret injected into your container, you can use:
+    - environment variable
+    - encrypted file
+    - call vault directly 
+  
+## Pod Quality of Service
+- Top reasons why clusters fail: size your pods correctly 
+  - Prometheus: Will analyze the CPU/Mem consumed by your your containers
+- 3 ways to specify CPU/Mem needs of Pods to K8s
+  1. BestEffort
+    - Default when you don't specify
+    - k8s will guess randomly
+  2. Burstable
+    - specify the minimum amount
+    - also specify a highest amount
+  3. Guaranteed
+    - safest way, but fixed size and may overallocate resources
+- See [Horizontal Pod Autoscalar katacoda](https://learning.oreilly.com/scenarios/kubernetes-observability-scaling/9781492079002/)
+  - There are 3 ways to scale in k8s
+    - Horizonal Pod Scaling- additional pod instances
+    - Cluster Node Scaling- adjusts the entire size of the cluster so that all pods have a place to run and there are no unneeded nodes
+    - Vertical Pod Scaling- increasing resources to pods
+  - For Horizontal Pod Scaling
+    - you specify a min and max number of pods to scale up, and min pod number to scale down
+    - a control-loop compares metrics against these declared states and scales appropriately
+  - Procedure
+    - Install (via helm) the `metrics-server` application for k8s.  It discovers all nodes and queries the kubelets for CPU/memory.  (it only holds latest metrics- no history).
+      - You can call the corresponding rest endpoint (pipe thru jq) or call `kubectl top node`
+      - If you want to accumulate these metrics over time, you typically add the time-series database, `prometheus`
+    - If your pod's deployment is a DaemonSet, StatefulSet, Job, or CronJob, then none of this applies.  It only applies to ReplicaSet deployments.    
+    - You submit a yaml file kind: `HorizonatlPodAutoscaler`
+
+
+    
+
+
+## Resources
+- [scaling](https://learning.oreilly.com/scenarios/kubernetes-observability-scaling/9781492079002/)
+- [sidecar deployments](https://learning.oreilly.com/scenarios/kubernetes-fundamentals-sidecar/9781492078845/)
+- [helm](https://learning.oreilly.com/scenarios/kubernetes-pipelines-helm/9781492078968/)
+- [k8s jobs](https://learning.oreilly.com/scenarios/kubernetes-fundamentals-jobs/9781492078852/)
 
 
 
