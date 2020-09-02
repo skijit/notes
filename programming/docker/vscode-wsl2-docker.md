@@ -1,6 +1,8 @@
 Getting Containery with WSL2 and VSCode
 ====================
 
+## Todo:
+- [Review new post about developing in a container, in wls](https://code.visualstudio.com/blogs/2020/07/01/containers-wsl)
 
 ## Intro
 - We can do remote development with VSCode and the Remote Development Extension.  This enables...

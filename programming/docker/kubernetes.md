@@ -273,7 +273,7 @@ Kubernetes
 - Use cases
   - local cache managers
   - compression, snapshotting, rotation
-  - moditors
+  - monitors
 - Pods are generally not replicated
 - Pods can also have **Init Containers** which run before the app Container(s) are started
   - They run sequentially if you have multiple
@@ -314,7 +314,7 @@ Kubernetes
 - This is a kind of controller
 - Note also that you'll usually use **Deployments** instead of **ReplicaSets** because **Deployments** are a higher-level controller abstraction that manage **ReplicaSets**
 - Basic idea for ReplicaSet is:
-  - maintain a stable set of replicate pods running at any given time
+  - maintain a stable set of replicated pods running at any given time
   - The replicaset yaml will (often?) include the pod template
   - They'll use label selectors to identify the pods they want to control
 - Example replica set configuration:
@@ -410,12 +410,12 @@ spec:
 
 ### Jobs
 - This is a kind of controller
-- Job creates one ormore pods and ensures that a specified number of them succesfful terminates, at which point the Job is complete
+- Job creates one or more pods and ensures that a specified number of them sucessfully terminates, at which point the Job is complete
 
 ### CronJob 
 - This is a kind of controller
 - A Cron Job creates Jobs (above) on a time-based schedule
-- One CronJob object is like one line of  crontab file.
+- One CronJob object is like one line of crontab file.
 
 ### Services
 - Use case:

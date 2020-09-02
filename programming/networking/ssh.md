@@ -111,6 +111,18 @@ SSH Notes
 - https://help.github.com/articles/generating-ssh-keys#platform-windows
 - https://docs.microsoft.com/en-us/azure/virtual-machines/linux/ssh-from-windows
 
-  
+## SSH Tools (somewhat duplicative)
+- **ssh-agent**:
+    - main purpose is to cache your keys and passphrases so you can directly log into systems
+    - typically run at login time, but you can run manually
+    - generates a bunch of environment variables that are shortcuts for setting up ssh connections
+    - the reason it's typically executed with `eval` in front of of it is to set these in your current session
+    - when using **agent forwarding**, all your identities are propagated into each ssh server you log into - this works through the remote ssh-agent communicating with the client ssh-agent
+- **ssh-add**
+    - usually ssh-agent will use whatever keys are in your `.ssh` directory, but you can use ssh-add to add additional ones
+
+- **ssh-copy-id**
+    - lets you copy keypairs to remote systems
+
 
 

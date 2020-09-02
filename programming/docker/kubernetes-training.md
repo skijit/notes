@@ -13,7 +13,7 @@ Kubernetes in 3 Weeks
   - latency is zero
   - bandwidth is infinite
   - nw is secure
-  - topology doesn't hcane
+  - topology doesn't change
   - only one admin
   - transport cost is zero
   - nw is homogenous
@@ -23,7 +23,7 @@ Kubernetes in 3 Weeks
 - kubernetes replaced swarm, accepted by docker
   - kubernetes has 10+ years of building orchestrators, so swarm couldn't compete
 - nomad is a good simple container orchestrator from Hashicorp
-- look into meshing, istio, k3s
+- Todo: look into meshing, istio, k3s
 - there are kubernetes app developer certs
 - players
   - amazon, MS, Google, IBM
@@ -63,14 +63,15 @@ Kubernetes in 3 Weeks
     - you want minimal number of containers inside your ppds
   - services load balance betwen load replicated pods and do service discovery
     - basically- you have a service that are interface to pods
-  - kubelet is sintalled on each node and is responsible for lifecycle of pods
+  - kubelet is installed on each node and is responsible for lifecycle of pods
     - it doesn't inherently know about the containers
     - it uses Container Runtime Interface (CRI) to start the containers
-    - the container just needs to follow the Open Cainter Initiative (OCI)
+    - the container just needs to follow the Open Container Interface (OCI)
       - Docker
       - cri-o
       - cri-containerd
       - crun
+      - webassembly?!
   - network plane ties everything together
   - etcd: kubernetes state (real and desired)
     - you need at least 3 replicated versions of this
@@ -113,19 +114,18 @@ Kubernetes in 3 Weeks
   - group a set of yaml files and bundle them together
 - katakoda
   - search for 'first app' for kubernetes
-- subscribe to alex ellis
+- Todo: subscribe to alex ellis
 - helm packages are called 'charts'
   - there are tons for things like kafka, rabbitmq, etc
-- 
 
 - Container Architecture
   - [read this](https://medium.com/@saschagrunert/demystifying-containers-part-i-kernel-space-2c53d6979504)
-  - 
+ 
 
 ## Session 2
 - kubelet on each node connects to the CRI (container runtime interface) and that interfaces with container runtime
   - The container type just needs to implement OCI (open container interface)
-- check out katacoda to see what a container looks like search 'decomposing'
+- todo: check out katacoda to see what a container looks like search 'decomposing'
 - see the tool 'Dive' for exploring layers in a container
   - you can use it to shrink your image size too
 - CI/CD pipelines create issues for kubernetes and docker
@@ -239,8 +239,15 @@ Kubernetes in 3 Weeks
       - If you want to accumulate these metrics over time, you typically add the time-series database, `prometheus`
     - If your pod's deployment is a DaemonSet, StatefulSet, Job, or CronJob, then none of this applies.  It only applies to ReplicaSet deployments.    
     - You submit a yaml file kind: `HorizonatlPodAutoscaler`
+- To understand units in resource requests:
+  - [Explanation of MiB vs MB](https://en.wikipedia.org/wiki/Mebibyte)
+  - [Explanation of units in k8s docs](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)
 
-
+## Pod Species
+7 forms (deployments) of what you can put your Pod into
+- ReplicaSet
+  - lets you declare how many instances of a pod you want
+- Deployment
     
 
 
