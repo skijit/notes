@@ -43,7 +43,7 @@ AWS Credential Types
   - You have a request payload
   - You calculate a hash of the request
     - Benefit: prevents any tampering with the request
-  - You create a new hash with your secret key which includes the oriinal hash and some other info from your request 
+  - You create a new hash with your secret key which includes the original hash and some other info from your request 
     - This is known as the signature
     - Benefit: Verifies your identity
     - Benefit: The timestamp is also encoded, and so this prevents replay attacks

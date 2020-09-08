@@ -147,7 +147,7 @@ Kubernetes in 3 Weeks
 - Distillation Pattern (8 factors)
   - "making containers as efficient and secure as possible on k8s"
   1. high cohesion 
-  2.low coupling
+  2. low coupling
   3. Immutable
   4. Idempotent
     - antipattern for idempotence: tagging with "latest"
@@ -244,10 +244,131 @@ Kubernetes in 3 Weeks
   - [Explanation of units in k8s docs](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)
 
 ## Pod Species
-7 forms (deployments) of what you can put your Pod into
+7 forms:
 - ReplicaSet
-  - lets you declare how many instances of a pod you want
+  - declare how many instances of a pod you want
+  - you can specify multiple containers within a replicateset
+  - do not use with HorizontalPodAutoscaler as these would be somewhat in contention.  
+    - the more "mature" solution is Deployment (of 1) + HorizontalPodAutoScaler
 - Deployment
+  - most common
+  - supports rollouts
+  - Pause
+  - Image updates
+  - rollbacks
+  - inside the deployment is:
+    - replicas
+    - pod template
+- DaemonSet
+  - Run a pod on every node in the cluster (that matches a label)
+  - Use cases: logging/log extraction, observability, anything you want to control at the node level, more system/cluster level than application level
+- StatefulSet
+  - Compare to Deployment:
+    - Deployment are just clones of instances
+    - StatefulSet is a set of instances, each one with a distinct identity
+      - if one goes down, another one with the same identity will be brought back up  
+  - Sticky Identity    
+  - Connected volumes
+  - Distributed managers
+  - Consistent ID on a pod reconstruction
+  - Ordered members
+  - Use cases: things like Redis, RabbitMQ (see katacoda)
+- Job
+  - Use case: execute something and end
+- CronJob
+  - Same as job but reoccurring work (timing-based trigger)
+  - smallest time resolution is 1 min
+
+## K8S Design Patterns
+- Operators:
+  - [src](https://www.redhat.com/en/topics/containers/what-is-a-kubernetes-operator)
+  - A kubernetes application design pattern
+  - A higher-level abstraction, usually involving Custom Resource Definitions (CRD), that let's you encapsulate your application into a unit that can be managed through (your custom extension of) the k8s API.  
+  - It builds in application logic (business logic) to determine when to scale something - so it's useful for stateful logic
+  - In K8S, the controllers of the control plane implement control loops to compare actual and desired state based on generic concerns.  But operators provide a higher-level abstraction to let you manage them at a business logic level.
+- Scatter/Gather
+- You can run multiple containers in Pods
+  - Pods are the atomic unit in K8S
+  - You can run multiple containers in a pd
+  - If you have a problem with a container, the entire pod will be crashed
+    - So that creates some risks with colocating them, even though you get communication speed benefits
+  - If the containers are on the same pod, that means they're on the same node too
+  - When do you group containers in a single pod?
+    - Communication efficiency:
+      - Take advantage of IPC, communicating through localhost      
+    - share filesystem
+      - When you create a pod it gets an IP and a filesystem which is available to all containers in that pod
+      - Individual containers on the pod can communicate via the filesystem
+    - "Sidecar" is when you have a second or other container in a pod
+      - But it's not part of the primary transaction handling for the pod
+      - Applications Logging, pulling data, etc.
+  - "Ambassador"
+    - Not a sidecar 
+    - Not specific to k8s
+    - Represent and proxy to other services
+    - Primary App talks to ambassador and the ambassador handles all the other back-ends
+  - Adapter
+    - Similar to ambassador pattern
+      - But NOt a facade/proxy for a bunch of other services
+- 4 ways to do Pod Composites (Sidecars)
+  - Side car
+    - the order in which containers in a shared pod start up is arbitrary
+    - they're started in parallel
+    - the more you put in, the slower they start up
+  - Ambassador
+  - Adapter
+  - CQRS
+    - Put the query model and command model in the same pod, but separate containers
+- Services
+  - these are necessary to open up a pod to be interacted with
+  - typically, you'll expose a service with a `NodePort` type
+    - `kubectl expose pod <podname> --type=NodePort --port=8`
+    - you might create a service with a random port, here is a way to change it to a fixed value: `kubectl patch service <podname> --type='json' --patch='[{"op": "replace", "path": "/spec/ports/0/nodePort", "value":31111}]'`
+- Storage
+  - CSI (Common storage interface) drivers: for different storage services (e.g. Google cloud filesystem, Azure filesystem, etc.)
+  - kind: PersistentVolume, PersistentVolumeClaims, etc
+  - search for 'volumes' in the k8s documentation
+- Ingress
+  - Incoming Traffic
+  - kind: Ingress
+  - You create rules to match the request to a particular service
+
+## Helm
+- There are other package managers (Ballerina, metaparticle, pulumi)
+  - but helm is the most popular
+- use helm version 3 only
+- charts are stored in private and public registries
+- injects values into k8s YAML templates
+  - `helm version`
+  - `helm create`
+  - `helm install`
+  - `helm update`
+  - `helm delete`
+  - `helm test`
+  - `helm search hub` search helm hub from CLI
+  - `helm show readme <chartname>`
+- [Helm Hub](hub.helm.sh)
+  - Public repository
+- A common pattern is to install an operator for a particular application via helm, then you configure it with a YAML file and that will leave it to the operator to install the actual application (e.g. Kafka)
+- chartmuseum is like a repository hub
+  - following a dockerhub-like example
+- easiest way to install helm is with a curl script
+- `helm env` shows your environment
+- you'll typically call `helm install <nameOfChart> <name-of-properties-file>`
+  - properties file has all the installation/runtime parameters
+  - you would check it into your IAC code
+- you typically want ton install a helm chart into a namespace
+- `helm list --all-namespaces`
+  - show every chart that is installed
+- you can run container registries in kubernetes
+  - it's quite easy
+
+
+
+
+
+
+
     
 
 
@@ -256,6 +377,8 @@ Kubernetes in 3 Weeks
 - [sidecar deployments](https://learning.oreilly.com/scenarios/kubernetes-fundamentals-sidecar/9781492078845/)
 - [helm](https://learning.oreilly.com/scenarios/kubernetes-pipelines-helm/9781492078968/)
 - [k8s jobs](https://learning.oreilly.com/scenarios/kubernetes-fundamentals-jobs/9781492078852/)
-
-
+- [stateful sets-rabbit mq](https://learning.oreilly.com/scenarios/kubernetes-applications-rabbitmq/9781492078913/)
+- [stateful services](https://learning.oreilly.com/scenarios/run-stateful-services/9781492062103/)
+- [storage]()
+- ingress: search for 'ingress'
 

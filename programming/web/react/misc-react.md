@@ -136,7 +136,7 @@ export default function configureStore(initialState) {
   - generate dispatchable objects (i.e. non-functions)  
 - a big use case here is for action creators which perform async side-effects, and thus will return promises.
   - **TODO**: how does thunk handle action creators which return promises?
-  - probably ignores them?
+  - see Thunkromise
 
 
 ## Error Boundaries
