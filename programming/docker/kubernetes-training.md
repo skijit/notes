@@ -381,4 +381,4 @@ Kubernetes in 3 Weeks
 - [stateful services](https://learning.oreilly.com/scenarios/run-stateful-services/9781492062103/)
 - [storage]()
 - ingress: search for 'ingress'
-
+- [chaos engineering in kubernetes](https://www.katacoda.com/javajon/courses/kubernetes-chaos)
