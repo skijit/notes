@@ -48,7 +48,8 @@ Iterable Model and API
     - defining a segmentation query whose results go in your list
     - the API: create list with `POST /api/lists` and update users with `POST /api/lists/subscribe` 
 - Dynamic
-  - basically a user query
+  - basically built off a segmentation query
+  - two useful properties to base your query from are: `Contact Property` and `Custom Events` <- since these are two places the data is collected
 - List Colums **IMPORTANT**
   - Lists are just storing the email address
   - The columns are just the associated values in the User Profile
