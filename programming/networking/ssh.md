@@ -124,5 +124,39 @@ SSH Notes
 - **ssh-copy-id**
     - lets you copy keypairs to remote systems
 
+## Port Fowarding 
+- Remote Forward (think: Incoming Connections- You forward a remote port to a local port)
+    - Scenario: You're running something on Port 80 Locally and your machine is behind a firewall
+        - Option 1: Do some port forwarding on your firewall (e.g. port X on firewall will communicate with port 80 on your machine)
+        - Option 2: Set up an SSH tunnel so that when you access port X on a remote server, it will connect to your local machine on port 80 through an ssh tunnel
+            - `ssh -R 8080:localhost:80 username@hostname`
+            - `-R` = remote
+            - user makes http request to hostname:8080 -> TUNNEL -> localhost:80
+            - so you ssh into the remote server to fwd it's port (Remote forward)
+        - Good solution for exposing functionality on a server you don't otherwise want to expose
+
+- Local Forward (think: Outgoing Connections- you forward a local port to a remote port)
+    - Scenario: You're running a VNC client and want to remote desktop into remote server
+        - Option 1: You connect over an unsecured network, where your username/password could be sniffed 
+        - Option 2: Create an SSH tunnel so that any activity on your local port goes through a tunnel to the remote server
+            - `ssh -L 5901:localhost:5901 username@host`
+            - `-L` = local
+            - user makes requests on 5901, but it goes through the tunnel and ends up connecting to port 5901 (or other) on the remote server
+
+- Dynamic Forwarding (think: Outgoing connection- a proxy server)
+    - This requires special SOCKS software on both the client and server
+    - basic idea isall of your traffic will leave one port and go through a tunnel to the proxy
+    - From the remote, your connections can fan out into any number of ports (unlike local forwarding which only gave you commnd of one remote port) 
+    - `ssh -D 5000 remotehost`
+        - `-D` = Dynamic
+## SSH Config Options
+- `Hostname` the DNS name or IP should work
+- `Port` the port
+- `User` the user you want to connect as
+- `IdentityFile` the preferred key to use.  Point at the private key and make sure you have the right permissions set.
+- `LocalForward` see forwarding info above
+- `DynamicForward` see forwarding info above
+- `ProxyJump <hostX>` when you try to connect to the host associated with thie config entry, you first have to go through <hostX>
+
 
 
