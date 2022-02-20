@@ -597,6 +597,7 @@ AWS Certifcation Notes
   - When you create a VPC, it automatically has a route table
     - In route tables page in AWS VPC dashboard, you can view the VPC-specific route table by looking for "Yes" in the main column
     - The main route table is the default route table for any subnets which don't have their own route table
+  - [various use cases](https://docs.aws.amazon.com/vpc/latest/userguide/route-table-options.html)
 - Internet Gateways
   - Make it possible for subnets and EC2 instances to be publicly routable
   - It's a horizontally scaled, redundant, HA VPC component that allows communication between EC2 instances and the internet
